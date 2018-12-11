@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2999e87e7e419b9eea7477d9752ab085d276023acb1ac1b6738dccb4b7c7be40"
+            "sha256": "58dbd3202ff2bd0a5f489367d411f4fe4061bbc7a75ef580e455bbe0641bc587"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,18 @@
     "default": {
         "peewee": {
             "hashes": [
-                "sha256:a91c3ccff43ab71f08196aba1d17dd2548079744d54adc33d511db1c30b446ba",
-                "sha256:d58f766842ea8b51b30d634a4907651aca1677f01a1ad167de9b17ba9600b4a3"
+                "sha256:a91c3ccff43ab71f08196aba1d17dd2548079744d54adc33d511db1c30b446ba"
             ],
             "index": "pypi",
             "version": "==3.7.1"
+        },
+        "python-dotenv": {
+            "hashes": [
+                "sha256:4f3582904d08dac5ab4c9aa44cb17ce056c9a35e585cfda6183d80054d247307",
+                "sha256:cb8cd327109898c7725f76c5256a081e8a9efe72ebbf127f8d1221ceb7f38bf2"
+            ],
+            "index": "pypi",
+            "version": "==0.10.0"
         },
         "tornado": {
             "hashes": [

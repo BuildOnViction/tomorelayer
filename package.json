@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "backend": "pipenv run python ./backend/app.py"
+    "backend": "pipenv run python ./backend/app.py",
+    "db": "docker-compose -f docker-compose.dev.yaml up -d"
   },
   "author": "",
   "license": "ISC",

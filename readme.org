@@ -7,9 +7,19 @@
 * Content                                                               :TOC:
 - [[#introduction][Introduction]]
 - [[#first][First]]
+  - [[#pre-requisite][Pre-requisite]]
+  - [[#setup][Setup]]
+  - [[#start-hacking][Start hacking]]
 
 * Introduction
 A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructure at will
 
 * First
-under development
+** Pre-requisite
+- Python 3.7 (recommended installing with pyenv)
+- pipenv
+- node 10 & nvm
+- Docker
+
+** Setup
+** Start hacking
