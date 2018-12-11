@@ -6,6 +6,8 @@ verify_ssl = true
 [dev-packages]
 jedi = "*"
 flake8 = "*"
+pylint = "*"
+autopep8 = "*"
 
 [packages]
 tornado = "*"
