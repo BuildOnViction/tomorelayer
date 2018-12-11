@@ -1,17 +1,10 @@
-import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application
-from route import route, Default404Handler
+from route import route
+from settings import settings
 
 
 if __name__ == "__main__":
-    port = os.getenv('BE_PORT')
-    stg = os.getenv('STG')
-
-    if stg != 'production':
-        print('APP_PORT:' + port)
-        print('APP_STAGE:' + stg)
-
-    app = Application(route, default_handler_class=Default404Handler)
-    app.listen(port)
+    app = Application(route, **settings)
+    app.listen(settings['port'])
     IOLoop.current().start()
