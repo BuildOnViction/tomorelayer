@@ -1,5 +1,15 @@
 import tornado.web
+import json
+import traceback
+import logging
 import template
+
+logger = logging.getLogger()
+handler = logging.FileHandler('error.log')
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -8,15 +18,18 @@ class BaseHandler(tornado.web.RequestHandler):
     """
 
     def write_error(self, status_code, **kwargs):
-        if status_code == 404:
-            self.render(template._404)
-        else:
-            self.set_status(status_code)
-            error = kwargs['exc_info']
-            import pdb
-            pdb.set_trace()
+        self.set_header('Content-Type', 'application/json')
 
-            print(error)
+        if 'exc_info' in kwargs and len(kwargs['exc_info']) >= 3:
+            traceback.print_tb(traceback.print_tb(kwargs['exc_info'][2]))
+            logger.debug(traceback.format_exception(kwargs['exc_info'][1]))
+
+        error = {
+            'code': status_code,
+            'message': self._reason,
+        }
+
+        self.finish(json.dumps({'error': error}))
 
 
 class ErrorHandler(tornado.web.ErrorHandler, BaseHandler):
