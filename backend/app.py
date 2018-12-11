@@ -1,16 +1,17 @@
-import tornado.ioloop
-import tornado.web
+import os
+from tornado.ioloop import IOLoop
+from tornado.web import Application
+from route import route, Default404Handler
 
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write("Hello, world")
-
-def make_app():
-    return tornado.web.Application([
-        (r"/", MainHandler),
-    ])
 
 if __name__ == "__main__":
-    app = make_app()
-    app.listen(8888)
-    tornado.ioloop.IOLoop.current().start()
+    port = os.getenv('BE_PORT')
+    stg = os.getenv('STG')
+
+    if stg != 'production':
+        print('APP_PORT:' + port)
+        print('APP_STAGE:' + stg)
+
+    app = Application(route, default_handler_class=Default404Handler)
+    app.listen(port)
+    IOLoop.current().start()
