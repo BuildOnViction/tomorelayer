@@ -1,0 +1,12 @@
+:url = http://localhost:8888
+:res = test
+
+# Test async get
+:query = 1
+GET :url/:res?id=:query
+
+# Test async post
+POST :url/:res
+Content-Type: application/json
+Authorization: some-bearer
+{body}
