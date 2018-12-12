@@ -5,6 +5,9 @@
 :query = 1
 GET :url/:res?id=:query
 
+# Test async get
+GET :url/t
+
 # Test async post
 POST :url/:res
 Content-Type: application/json

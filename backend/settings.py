@@ -22,7 +22,7 @@ objects = Manager(database)
 settings = {
     'autoreload': True,
     'db': {'name': db_name, **db_config},
-    'debug': True,
+    'debug': getenv('STG') != 'production',
     'login_url': '/login',
     'objects': objects,
     'port': getenv('APP_PORT'),
