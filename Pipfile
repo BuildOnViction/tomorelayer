@@ -13,6 +13,8 @@ autopep8 = "*"
 tornado = "*"
 peewee = "*"
 python-dotenv = "*"
+peewee-async = "*"
+aiomysql = "*"
 
 [requires]
 python_version = "3.7"
