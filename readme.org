@@ -18,8 +18,28 @@ A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructur
 ** Pre-requisite
 - Python 3.7 (recommended installing with pyenv)
 - pipenv
-- node 10 & nvm
+- nvm
+- yarn
 - Docker
 
 ** Setup
+- Install required dependencies
+  #+begin_src sh
+  $ yarn
+  #+end_src
+- Fireup database with Docker
+  #+begin_src sh
+  $ yarn db
+  #+end_src
+- Install backend dependencies
+  #+begin_src sh
+  $ pipenv install
+  #+end_src
+- Start the app
+  #+begin_src sh
+  $ yarn backend
+  #+end_src
+
+(...frontend setup underdevelopment)
+
 ** Start hacking
