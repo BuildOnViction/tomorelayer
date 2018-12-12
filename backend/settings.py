@@ -19,6 +19,7 @@ database = PooledMySQLDatabase(db_name, **db_config)
 objects = Manager(database)
 
 # APPLICATION BACKEND SETTINGS
+base_path = path.dirname(__file__)
 settings = {
     'autoreload': True,
     'db': {'name': db_name, **db_config},
@@ -26,7 +27,8 @@ settings = {
     'login_url': '/login',
     'objects': objects,
     'port': getenv('APP_PORT'),
-    'template_path': path.dirname(path.abspath(__file__)) + '/template',
-    'xsrf_cookies': True,
+    'static_path': base_path + '/static',
     'stg': getenv('STG'),
+    'template_path': base_path + '/template',
+    'xsrf_cookies': True,
 }
