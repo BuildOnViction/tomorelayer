@@ -9,7 +9,7 @@ settings = {
     "template_path": os.path.dirname(os.path.abspath(__file__)) + '/template',
     "login_url": "/login",
     "xsrf_cookies": True,
-    "autoreload": os.getenv('STG') != 'production',
+    "autoreload": True,
     "port": os.getenv('port'),
     "stg": os.getenv('stg'),
 }

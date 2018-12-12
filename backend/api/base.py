@@ -19,9 +19,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def write_error(self, status_code, **kwargs):
         self.set_header('Content-Type', 'application/json')
+        traceback.print_tb(traceback.print_tb(kwargs['exc_info'][2]))
 
-        if 'exc_info' in kwargs and len(kwargs['exc_info']) >= 3:
-            traceback.print_tb(traceback.print_tb(kwargs['exc_info'][2]))
+        if not self._reason:
             logger.debug(traceback.format_exception(kwargs['exc_info'][1]))
 
         error = {
