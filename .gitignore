@@ -1,5 +1,6 @@
 node_modules/
 .sqldb/
 .DS_Store
-error.log
 .fusebox
+frontend/dist/
+error.log
