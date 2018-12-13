@@ -2,3 +2,4 @@ node_modules/
 .sqldb/
 .DS_Store
 error.log
+.fusebox

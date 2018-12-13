@@ -4,13 +4,14 @@
   "description": "relayer-management-system - frontend",
   "main": "index.js",
   "scripts": {
-    "frontend": "node -r dotenv/config -r ts-node/register fuse.ts",
+    "frontend": "node -r dotenv/config -r ts-node/register frontend/fuse.ts",
     "backend": "pipenv run python ./backend/app.py",
     "db": "docker-compose -f docker-compose.dev.yaml up -d"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^10.12.14",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
     "@types/react-router-dom": "^4.3.1",
@@ -27,6 +28,7 @@
     "dotenv": "^6.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "wretch": "^1.4.2"
   }
 }
