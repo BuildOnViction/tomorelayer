@@ -3,7 +3,7 @@ from api.test import TestHandler
 from api.test import AsyncHandler
 
 route = [
-    (r"/", MainHandler),
-    (r"/t", TestHandler),
-    (r"/test", AsyncHandler),
+    (r"/api", MainHandler),
+    (r"/api/t", TestHandler),
+    (r"/api/test", AsyncHandler),
 ]
