@@ -23,23 +23,28 @@ A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructur
 - Docker
 
 ** Setup
-- Install required dependencies
+- Install required & frontend dependencies
   #+begin_src sh
   $ yarn
-  #+end_src
-- Fireup database with Docker
-  #+begin_src sh
-  $ yarn db
   #+end_src
 - Install backend dependencies
   #+begin_src sh
   $ pipenv install
   #+end_src
+- Fireup database with Docker
+  #+begin_src sh
+  $ yarn db
+  #+end_src
 - Start the app
   #+begin_src sh
-  $ yarn backend
+  $ yarn up
   #+end_src
 
-(...frontend setup underdevelopment)
-
+...or you can start frontend and backend in two separate terminal windows
+#+begin_src sh
+$ yarn frontend
+$ yarn backend
+#+end_src
 ** Start hacking
+Both frontend & backend have the similar entry point called "app".
+Those are where you get started.
