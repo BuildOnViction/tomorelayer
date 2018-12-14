@@ -10,8 +10,13 @@ export default function fuseConfig(isProduction = false) {
     homeDir: '.',
     output: 'dist/$name.js',
     target: 'browser@esnext',
+    useTypescriptCompiler: true,
     hash: false,
     cache: !isProduction,
+    allowSyntheticDefaultImports: true,
+    autoImport: {
+      React: "react",
+    },
     log: {
       showBundledFiles: false,
       clearTerminalOnBundle: true,
