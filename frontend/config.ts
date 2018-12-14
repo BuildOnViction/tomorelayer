@@ -1,5 +1,6 @@
 import {
   CSSPlugin,
+  CSSResourcePlugin,
   QuantumPlugin,
   SassPlugin,
   WebIndexPlugin,
@@ -18,7 +19,7 @@ export default function fuseConfig(isProduction = false) {
       r: "ramda",
     },
     log: {
-      showBundledFiles: false,
+      showBundledFiles: !isProduction,
       clearTerminalOnBundle: true,
     },
     plugins: [
@@ -27,15 +28,23 @@ export default function fuseConfig(isProduction = false) {
         SassPlugin(),
         CSSPlugin({
           inject: file => `${file}`,
-          outFile: file => `dist/asset/${file}`,
+          outFile: file => `dist/${file}`,
+          minify: isProduction
+        })
+      ],
+      [
+        /node_modules.*\.css$/,
+        CSSResourcePlugin(),
+        CSSPlugin({
+          inject: file => `vendor/${file}`,
+          outFile: file => `dist/vendor/${file}`,
           minify: isProduction
         })
       ],
       isProduction && QuantumPlugin({
-        bakeApiIntoBundle: 'root',
+        bakeApiIntoBundle: 'app',
         css: true,
         ensureES5: true,
-        removeExportsInterop: true,
         treeshake: true,
         uglify: true,
       }),

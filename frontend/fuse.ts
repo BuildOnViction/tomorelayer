@@ -2,7 +2,7 @@ import { FuseBox } from 'fuse-box'
 import { src, task } from 'fuse-box/sparky'
 import fuseConfig from './config'
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.STG === 'production'
 
 task('clean_all', () => src('dist').clean('dist').exec())
 task('default', ['clean_all'], () => {
@@ -10,7 +10,7 @@ task('default', ['clean_all'], () => {
   const fuse = FuseBox.init(config)
   fuse.dev({ httpServer: !isProduction, hmr: true, port: 4444 })
   fuse.bundle('app')
-    .watch('/**/*.(tsx|ts)')
+    .watch('/**/*.(tsx|ts|scss)')
     .hmr()
     .instructions('> app.tsx')
   return fuse.run()
