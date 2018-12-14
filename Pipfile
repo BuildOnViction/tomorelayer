@@ -14,7 +14,7 @@ tornado = "*"
 peewee = "*"
 python-dotenv = "*"
 peewee-async = "*"
-aiomysql = "*"
+aiopg = "*"
 
 [requires]
 python_version = "3.7"

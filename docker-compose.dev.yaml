@@ -4,10 +4,8 @@ services:
     image: postgres:10-alpine
     container_name: relayerms
     volumes:
-      - /db/
+      - ./.db
     environment:
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=relayerms
-      - POSTGRES_USER=root
     ports:
       - 5432:5432
