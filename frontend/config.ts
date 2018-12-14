@@ -16,6 +16,7 @@ export default function fuseConfig(isProduction = false) {
     allowSyntheticDefaultImports: true,
     autoImport: {
       React: "react",
+      r: "ramda",
     },
     log: {
       showBundledFiles: false,
