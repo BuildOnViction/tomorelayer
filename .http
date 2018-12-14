@@ -1,4 +1,4 @@
-:url = http://localhost:8888
+:url = http://localhost:8888/api
 :res = test
 
 # Test async get
