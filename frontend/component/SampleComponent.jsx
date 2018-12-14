@@ -1,6 +1,8 @@
 const SampleComponent = ({ text }) => (
   <div>
-    <p>Text goes here: {text}</p>
+    <p>
+      Text goes here: {text}
+    </p>
   </div>
 )
 
