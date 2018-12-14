@@ -17,9 +17,7 @@ export default function fuseConfig(isProduction = false) {
       clearTerminalOnBundle: true,
     },
     plugins: [
-      WebIndexPlugin({
-        template: 'index.html'
-      }),
+      WebIndexPlugin({ template: 'index.html' }),
       [
         SassPlugin(),
         CSSPlugin({
