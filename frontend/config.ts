@@ -10,8 +10,7 @@ export default function fuseConfig(isProduction = false) {
     homeDir: '.',
     output: 'dist/$name.js',
     target: 'browser@esnext',
-    useTypescriptCompiler: true,
-    hash: false,
+    hash: isProduction,
     cache: !isProduction,
     allowSyntheticDefaultImports: true,
     autoImport: {
