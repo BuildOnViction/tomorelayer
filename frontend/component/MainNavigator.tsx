@@ -1,3 +1,4 @@
+import React from 'react'
 import EmojiAtlassianIcon from '@atlaskit/icon/glyph/emoji/atlassian'
 import {
   GlobalItem,

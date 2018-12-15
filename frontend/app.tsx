@@ -1,7 +1,13 @@
+import React from 'react'
 import ReactDOM from 'react-dom'
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import SampleComponent from './component/SampleComponent'
+
 import MainNavigator from './component/MainNavigator'
+import Private from './component/util/Private'
+import SampleComponent from './component/SampleComponent'
+import Welcome from './component/Welcome'
+
 import '@atlaskit/css-reset/dist/bundle.css'
 import './style/app.scss'
 
@@ -10,7 +16,7 @@ const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutr
 const InnerContent = styled.div`
   padding: 2em;
   > h1 {
-    color: red;
+  color: red;
   }
 `
 
@@ -19,16 +25,23 @@ const Divider = styled.hr`
   margin: 2em 0;
 `
 
+const Main = () => (
+  <MainNavigator>
+    <InnerContent>
+      <h1>Relayer-MS</h1>
+      <Divider />
+      <SampleComponent text={text} />
+    </InnerContent>
+  </MainNavigator>
+)
+
 const App = () => (
-  <div>
-    <MainNavigator>
-      <InnerContent>
-        <h1>Relayer-MS</h1>
-        <Divider />
-        <SampleComponent text={text} />
-      </InnerContent>
-    </MainNavigator>
-  </div>
+  <Router>
+    <Switch>
+      <Route exact path="/" component={Welcome} />
+      <Private path="/home" component={Main} auth />
+    </Switch>
+  </Router>
 )
 
 ReactDOM.render(<App />, document.getElementById('root'))

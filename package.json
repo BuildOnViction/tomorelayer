@@ -7,8 +7,7 @@
     "frontend": "node -r dotenv/config -r ts-node/register frontend/fuse.ts",
     "backend": "pipenv run python ./backend/app.py",
     "up": "run-p frontend backend",
-    "db": "docker-compose -f docker-compose.dev.yaml up -d",
-    "lint": "eslint frontend --ext=jsx"
+    "db": "docker-compose -f docker-compose.dev.yaml up -d"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +15,8 @@
     "@types/node": "^10.12.14",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/styled-components": "^4.1.4",
     "fuse-box": "^3.6.0",
     "kill-port": "^1.3.2",
     "node-sass": "^4.11.0",
@@ -28,6 +29,7 @@
     "uglify-js": "^3.4.9"
   },
   "dependencies": {
+    "@atlaskit/button": "^10.1.1",
     "@atlaskit/css-reset": "^3.0.5",
     "@atlaskit/global-navigation": "^5.3.8",
     "dotenv": "^6.2.0",
