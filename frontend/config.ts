@@ -15,8 +15,8 @@ export default function fuseConfig(isProduction = false) {
     cache: !isProduction,
     allowSyntheticDefaultImports: true,
     autoImport: {
-      React: "react",
-      r: "ramda",
+      React: 'react',
+      r: 'ramda',
     },
     log: {
       showBundledFiles: !isProduction,
@@ -29,22 +29,14 @@ export default function fuseConfig(isProduction = false) {
         CSSPlugin({
           inject: file => `${file}`,
           outFile: file => `dist/${file}`,
-          minify: isProduction
-        })
-      ],
-      [
-        /node_modules.*\.css$/,
-        CSSResourcePlugin(),
-        CSSPlugin({
-          inject: file => `vendor/${file}`,
-          outFile: file => `dist/vendor/${file}`,
-          minify: isProduction
-        })
+          minify: isProduction,
+        }),
       ],
       isProduction && QuantumPlugin({
         bakeApiIntoBundle: 'app',
         css: true,
         ensureES5: true,
+        removeExportsInterop: true,
         treeshake: true,
         uglify: true,
       }),
