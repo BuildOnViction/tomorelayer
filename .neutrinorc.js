@@ -1,20 +1,3 @@
-const template = [
-  '@neutrinojs/html-template',
-  {
-    inject: true,
-    appMountId: 'root',
-    title: 'React Application',
-    xhtml: true,
-    mobile: true,
-    minify: {
-      useShortDoctype: true,
-      keepClosingSlash: true,
-      collapseWhitespace: true,
-      preserveLineBreaks: true
-    }
-  }
-]
-
 const style = [
   '@neutrinojs/style-loader',
   {
@@ -24,14 +7,27 @@ const style = [
   }
 ]
 
+const react = [
+  '@neutrinojs/react',
+  {
+    html: {
+      title: 'Epic React App'
+    },
+    devServer: {
+      port: 3000
+    }
+  }
+]
+
 module.exports = {
   use: [
     '@neutrinojs/env',
-    '@neutrinojs/react',
-    style,
-    template
+    react,
+    (neutrino) => neutrino.config.entry('vendor').add('react').add('react-dom'),
+    style
   ],
   options: {
-    source: 'frontend'
+    source: 'frontend',
+    output: 'frontend/dist'
   }
 }

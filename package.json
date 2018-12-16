@@ -19,7 +19,6 @@
     "@neutrinojs/style-loader": "^8.3.0",
     "neutrino": "^8.3.0",
     "node-sass": "^4.11.0",
-    "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0"
   },
   "dependencies": {

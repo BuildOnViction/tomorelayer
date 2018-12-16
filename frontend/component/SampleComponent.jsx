@@ -1,6 +1,4 @@
-import React from 'react'
-
-const SampleComponent: React.FunctionComponent<{ text: string }> = ({ text }) => (
+const SampleComponent = ({ text }) => (
   <div>
     <p>
       Text goes here: {text}
