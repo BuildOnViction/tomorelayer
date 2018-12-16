@@ -1,6 +1,5 @@
 import {
   CSSPlugin,
-  CSSResourcePlugin,
   QuantumPlugin,
   SassPlugin,
   WebIndexPlugin,
@@ -29,15 +28,6 @@ export default function fuseConfig(isProduction = false) {
         CSSPlugin({
           inject: file => `${file}`,
           outFile: file => `dist/${file}`,
-          minify: isProduction
-        })
-      ],
-      [
-        /node_modules.*\.css$/,
-        CSSResourcePlugin(),
-        CSSPlugin({
-          inject: file => `vendor/${file}`,
-          outFile: file => `dist/vendor/${file}`,
           minify: isProduction
         })
       ],
