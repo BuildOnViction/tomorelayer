@@ -1,6 +1,5 @@
 import {
   CSSPlugin,
-  CSSResourcePlugin,
   QuantumPlugin,
   SassPlugin,
   WebIndexPlugin,
@@ -15,7 +14,6 @@ export default function fuseConfig(isProduction = false) {
     cache: !isProduction,
     allowSyntheticDefaultImports: true,
     autoImport: {
-      React: 'react',
       r: 'ramda',
     },
     log: {
