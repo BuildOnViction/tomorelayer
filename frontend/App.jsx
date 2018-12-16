@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -51,4 +50,4 @@ const App = () => (
   </Router>
 )
 
-ReactDOM.render(<App />, document.getElementById('root'))
+export default App

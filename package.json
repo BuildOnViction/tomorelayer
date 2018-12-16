@@ -4,7 +4,8 @@
   "description": "relayer-management-system - frontend",
   "main": "index.js",
   "scripts": {
-    "frontend": "node -r dotenv/config -r ts-node/register frontend/fuse.ts",
+    "fe-dev": "neutrino start @neutrinojs/react",
+    "fe-prod": "neutrino build @neutrinojs/react",
     "backend": "pipenv run python ./backend/app.py",
     "up": "run-p frontend backend",
     "db": "docker-compose -f docker-compose.dev.yaml up -d"
@@ -12,32 +13,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^10.12.15",
-    "@types/react": "^16.7.17",
-    "@types/react-dom": "^16.0.11",
-    "@types/react-router-dom": "^4.3.1",
-    "@types/styled-components": "^4.1.4",
-    "fuse-box": "^3.6.0",
-    "kill-port": "^1.3.2",
+    "@neutrinojs/env": "^8.3.0",
+    "@neutrinojs/html-template": "^8.3.0",
+    "@neutrinojs/react": "^8.3.0",
+    "@neutrinojs/style-loader": "^8.3.0",
+    "neutrino": "^8.3.0",
     "node-sass": "^4.11.0",
-    "npm-run-all": "^4.1.5",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-react": "^3.6.0",
-    "typescript": "^3.2.2",
-    "uglify-es": "^3.3.9",
-    "uglify-js": "^3.4.9"
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0"
   },
   "dependencies": {
     "@atlaskit/button": "^10.1.1",
-    "@atlaskit/css-reset": "^3.0.5",
     "@atlaskit/global-navigation": "^5.3.8",
-    "dotenv": "^6.2.0",
-    "ramda": "^0.26.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-router-dom": "^4.3.1",
-    "styled-components": "^4.1.2",
-    "wretch": "^1.4.2"
+    "styled-components": "^3.4.10"
   }
 }
