@@ -1,6 +1,6 @@
+import React, { lazy, Suspense } from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import styled from 'styled-components'
-import Loadable from 'react-loadable'
 import Spinner from '@atlaskit/spinner'
 import MainNavigator from './MainNavigator'
 import { Divider } from '../../shared'
@@ -22,18 +22,8 @@ const InnerContent = styled.div`
   }
 `
 
-const SampleComponent = Loadable({
-  loader: () => import('./SampleComponent'),
-  loading: Spinner,
-  render(Component) {
-    return <Component.default text={text} />
-  },
-})
-
-const AnotherComponent = Loadable({
-  loader: () => import('./AnotherComponent'),
-  loading: Spinner,
-})
+const SampleComponent = lazy(() => import('./SampleComponent'))
+const AnotherComponent = lazy(() => import('./AnotherComponent'))
 
 const Dashboard = () => (
   <MainNavigator>
@@ -45,10 +35,12 @@ const Dashboard = () => (
         <Link to="/">Go Home</Link>
       </div>
       <Divider />
-      <Switch>
-        <Route exact path="/dashboard" component={SampleComponent} />
-        <Route path="/dashboard/lazy" component={AnotherComponent} />
-      </Switch>
+      <Suspense fallback={<Spinner />}>
+        <Switch>
+          <Route exact path="/dashboard" component={SampleComponent} />
+          <Route path="/dashboard/lazy" component={AnotherComponent} />
+        </Switch>
+      </Suspense>
     </InnerContent>
   </MainNavigator>
 )
