@@ -41,6 +41,7 @@
     "function-paren-newline": 0,
     "import/no-extraneous-dependencies": 0,
     "import/no-dynamic-require": 0,
-    "global-require": 0
+    "global-require": 0,
+    "no-multiple-empty-lines": [2, { "max": 1 }]
   }
 }
