@@ -42,6 +42,6 @@ module.exports = {
   ],
   options: {
     source: 'frontend',
-    output: 'frontend/dist'
+    output: '_build'
   }
 }
