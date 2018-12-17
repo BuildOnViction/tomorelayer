@@ -1,4 +1,4 @@
-import { PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import Select from '@atlaskit/select'
 import FieldText from '@atlaskit/field-text'
 import Button from '@atlaskit/button'

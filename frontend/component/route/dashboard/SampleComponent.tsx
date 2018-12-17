@@ -1,3 +1,5 @@
+import React from 'react'
+
 const SampleComponent = ({ text }) => (
   <div>
     <h4>Helllo main</h4>
