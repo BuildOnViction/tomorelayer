@@ -5,14 +5,15 @@ import {
   NavigationProvider,
 } from '@atlaskit/navigation-next'
 import AppSwitcherIcon from '@atlaskit/icon/glyph/app-switcher'
-
 import GlobalNavigation from '@atlaskit/global-navigation'
+
+const handler = text => () => window.alert(text)
 
 const AppSwitcherComponent = props => (
   <GlobalItem
     {...props}
     icon={AppSwitcherIcon}
-    onClick={() => console.log('AppSwitcher clicked')}
+    onClick={handler('App switch..')}
   />
 )
 
@@ -21,11 +22,11 @@ const Global = () => (
   <GlobalNavigation
     productIcon={EmojiAtlassianIcon}
     productHref="#"
-    onProductClick={() => console.log('product clicked')}
-    onCreateClick={() => console.log('create clicked')}
-    onSearchClick={() => console.log('search clicked')}
-    onStarredClick={() => console.log('your work clicked')}
-    onNotificationClick={() => console.log('notification clicked')}
+    onProductClick={handler('product clicked')}
+    onCreateClick={handler('Create project')}
+    onSearchClick={handler('Search...')}
+    onStarredClick={handler('Starring...')}
+    onNotificationClick={handler('Notification')}
     appSwitcherComponent={AppSwitcherComponent}
     appSwitcherTooltip="Switch to ..."
     helpItems={() => <div />}

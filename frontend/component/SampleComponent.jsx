@@ -1,5 +1,6 @@
 const SampleComponent = ({ text }) => (
   <div>
+    <h4>Helllo main</h4>
     <p>
       Text goes here: {text}
     </p>
