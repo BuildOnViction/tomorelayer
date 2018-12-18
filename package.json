@@ -6,7 +6,7 @@
   "scripts": {
     "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
     "be": "pipenv run python ./backend/app.py",
-    "up": "run-p frontend backend",
+    "up": "run-p fe be",
     "db": "docker-compose -f docker-compose.dev.yaml up -d"
   },
   "author": "",

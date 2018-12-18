@@ -1,26 +1,28 @@
 # Table of Contents
 
-1.  [Introduction](#orgef97b8d)
-2.  [First](#orgf2fdaae)
-    1.  [Pre-requisite](#org7590eb3)
-    2.  [Setup](#org96f2328)
-    3.  [Start hacking](#org2c5686d)
+1.  [Introduction](#org5af4ab1)
+2.  [First](#orgb8065f4)
+    1.  [Pre-requisite](#org9d5cffc)
+    2.  [Setup](#org7c43281)
+    3.  [Start hacking](#org89ee27b)
+        1.  [Frontend Development](#org528f942)
+        2.  [Backend Development](#orgc1616a8)
 
 
 
-<a id="orgef97b8d"></a>
+<a id="org5af4ab1"></a>
 
 # Introduction
 
 A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructure at will
 
 
-<a id="orgf2fdaae"></a>
+<a id="orgb8065f4"></a>
 
 # First
 
 
-<a id="org7590eb3"></a>
+<a id="org9d5cffc"></a>
 
 ## Pre-requisite
 
@@ -31,7 +33,7 @@ A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructur
 -   Docker
 
 
-<a id="org96f2328"></a>
+<a id="org7c43281"></a>
 
 ## Setup
 
@@ -50,13 +52,34 @@ A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructur
 
 &#x2026;or you can start frontend and backend in two separate terminal windows
 
-    $ yarn frontend
-    $ yarn backend
+    $ yarn fe
+    $ yarn be
 
 
-<a id="org2c5686d"></a>
+<a id="org89ee27b"></a>
 
 ## Start hacking
 
-Both frontend & backend have the similar entry point called "app".
+backend has the entry point called "app", frontend "index.tsx"
 Those are where you get started.
+
+
+<a id="org528f942"></a>
+
+### Frontend Development
+
+-   Libraries for frontend development includes mainly React & Atlaskit.
+-   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as
+    it could be.
+-   Stylesheet lang is SASS's SCSS
+-   Generally, we are using **Typescript Compiler** for compiling ease & speed, also this helps eliminate the redundancy of babel
+    plugins. Technically there is nothing change with React Development, except file extension now should be **"tsx"** instead
+    of usual **"jsx"**.
+-   **Wretch** is used instead of Axios/Fetch. It provides smaller and more intuitive async code
+
+
+<a id="orgc1616a8"></a>
+
+### Backend Development
+
+-   Checkout Python Tornado docs&#x2026;
