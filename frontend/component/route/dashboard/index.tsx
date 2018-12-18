@@ -2,8 +2,8 @@ import React, { lazy, Suspense } from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Spinner from '@atlaskit/spinner'
+import { Divider } from '@shared'
 import MainNavigator from './MainNavigator'
-import { Divider } from '../../shared'
 
 const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Nunc rutrum nisl ut ante dignissim, at tempor elit pellentesque.

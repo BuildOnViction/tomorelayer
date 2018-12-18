@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import Home from './component/route/home'
-import Dashboard from './component/route/dashboard'
-import { Private } from './component/shared'
-import { SITE_MAP } from './service/constant'
+import { Private } from '@shared'
+import { SITE_MAP } from '@constant'
+import Home from '@route/home'
+import Dashboard from '@route/dashboard'
 
 import './style/app.scss'
 import './static/favicon.ico'
