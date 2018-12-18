@@ -1,5 +1,6 @@
 import {
   FuseBox,
+  CopyPlugin,
   JSONPlugin,
   SassPlugin,
   CSSPlugin,
@@ -33,6 +34,7 @@ const config = {
   },
   plugins: [
     WebIndexPlugin({ template: 'index.html' }),
+    CopyPlugin({ files: ['static/*.ico'] }),
     [
       SassPlugin(),
       CSSPlugin({
@@ -57,7 +59,7 @@ task('default', ['clean_all'], () => {
   if (!isProduction) {
     fuse.dev({ port: 3000 })
     bundle
-      .watch('(component|service|style)/**/*.(ts|tsx)')
+      .watch('(component|service|style)/**/*.(ts|tsx|scss)')
       .hmr()
   }
   bundle.instructions('> index.tsx')

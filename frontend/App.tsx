@@ -6,6 +6,7 @@ import { Private } from './component/shared'
 import { SITE_MAP } from './service/constant'
 
 import './style/app.scss'
+import './static/favicon.ico'
 
 const App = () => (
   <Router>
