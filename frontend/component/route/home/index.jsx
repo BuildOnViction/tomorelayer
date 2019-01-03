@@ -1,21 +1,20 @@
-import React from 'react'
 import { withRouter } from 'react-router-dom'
-import Button from '@atlaskit/button'
+import { Button } from '@blueprintjs/core'
 import { SITE_MAP } from '@constant'
 
-class Welcome extends React.Component {
-  goMain = () => this.props.history.push(SITE_MAP.dashboard)
+
+class Home extends React.Component {
+  go = () => this.props.history.push(SITE_MAP.dashboard)
 
   render() {
     return (
       <div>
-        <h1>Welcome</h1>
-        <Button onClick={this.goMain}>
-          Please login
-        </Button>
+        Home
+        <hr />
+        <Button large intent="warning" text="Click to go!" onClick={this.go} />
       </div>
     )
   }
 }
 
-export default withRouter(Welcome)
+export default withRouter(Home)

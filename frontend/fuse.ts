@@ -19,13 +19,15 @@ const config = {
   homeDir: '.',
   output: 'dist/$name.js',
   target: 'browser@esnext',
-  useTypescriptCompiler: true,
   allowSyntheticDefaultImports: true,
   hash: isProduction,
   cache: !isProduction,
   log: {
-    showBundledFiles: false,
+    showBundledFiles: true,
     clearTerminalOnBundle: true,
+  },
+  autoImport: {
+    React: 'react',
   },
   alias: {
     '@route': '~/component/route',
@@ -36,7 +38,7 @@ const config = {
     WebIndexPlugin({ template: 'index.html' }),
     CopyPlugin({ files: ['static/*.ico'] }),
     [
-      SassPlugin(),
+      SassPlugin({ importer: true }),
       CSSPlugin({
         inject: file => `${file}`,
         outFile: file => `dist/${file}`,

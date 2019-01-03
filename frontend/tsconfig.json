@@ -6,6 +6,12 @@
     "importHelpers": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@route/*": ["component/route/*"],
+      "@shared": ["component/shared"],
+      "@constant": ["service/constant"]
+    }
   }
 }
