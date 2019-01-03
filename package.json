@@ -23,6 +23,7 @@
     "uglify-js": "^3.4.9"
   },
   "dependencies": {
+    "@blueprintjs/core": "^3.10.0",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-router-dom": "^4.3.1",

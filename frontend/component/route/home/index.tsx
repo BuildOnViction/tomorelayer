@@ -1,21 +1,20 @@
-import { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import { Button } from '@blueprintjs/core'
+import { SITE_MAP } from '@constant'
 
-const Stuff = () => (
-  <div>
-    <p>
-      yolo
-    </p>
-  </div>
-)
 
-export default class Home extends Component {
+class Home extends React.Component {
+  go = () => this.props.history.push(SITE_MAP.dashboard)
+
   render() {
     return (
       <div>
         Home
         <hr />
-        <Stuff />
+        <Button large intent="warning" text="Click to go!" onClick={this.go} />
       </div>
     )
   }
 }
+
+export default withRouter(Home)

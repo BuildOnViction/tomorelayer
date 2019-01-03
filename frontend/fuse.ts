@@ -38,7 +38,7 @@ const config = {
     WebIndexPlugin({ template: 'index.html' }),
     CopyPlugin({ files: ['static/*.ico'] }),
     [
-      SassPlugin(),
+      SassPlugin({ importer: true }),
       CSSPlugin({
         inject: file => `${file}`,
         outFile: file => `dist/${file}`,
