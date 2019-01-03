@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
+    "start": "npm run fe",
     "be": "pipenv run python ./backend/app.py",
     "up": "run-p fe be",
     "db": "docker-compose -f docker-compose.dev.yaml up -d"
