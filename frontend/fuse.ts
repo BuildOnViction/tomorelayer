@@ -26,6 +26,9 @@ const config = {
     showBundledFiles: true,
     clearTerminalOnBundle: true,
   },
+  autoImport: {
+    React: 'react',
+  },
   alias: {
     '@route': '~/component/route',
     '@shared': '~/component/shared',

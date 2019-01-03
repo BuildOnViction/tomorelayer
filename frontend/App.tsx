@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { Private } from '@shared'
 import { SITE_MAP } from '@constant'

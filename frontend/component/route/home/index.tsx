@@ -1,21 +1,21 @@
-import React from 'react'
-import { withRouter } from 'react-router-dom'
-import Button from '@atlaskit/button'
-import { SITE_MAP } from '@constant'
+import React, { Component } from 'react'
 
-class Welcome extends React.Component {
-  goMain = () => this.props.history.push(SITE_MAP.dashboard)
+const Stuff = () => (
+  <div>
+    <p>
+      yolo
+    </p>
+  </div>
+)
 
+export default class Home extends Component {
   render() {
     return (
       <div>
-        <h1>Welcome</h1>
-        <Button onClick={this.goMain}>
-          Please login
-        </Button>
+        Home
+        <hr />
+        <Stuff />
       </div>
     )
   }
 }
-
-export default withRouter(Welcome)
