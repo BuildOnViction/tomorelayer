@@ -61,9 +61,9 @@ task('default', ['clean_all'], () => {
   if (!isProduction) {
     fuse.dev({ port: 3000 })
     bundle
-      .watch('(component|service|style)/**/*.(js|jsx|scss)')
+      .watch('(component|service|style)/**/*.(ts|tsx|scss)')
       .hmr()
   }
-  bundle.instructions('> index.jsx')
+  bundle.instructions('> index.tsx')
   return fuse.run()
 })
