@@ -19,12 +19,11 @@ const config = {
   homeDir: '.',
   output: 'dist/$name.js',
   target: 'browser@esnext',
-  useTypescriptCompiler: true,
   allowSyntheticDefaultImports: true,
   hash: isProduction,
   cache: !isProduction,
   log: {
-    showBundledFiles: false,
+    showBundledFiles: true,
     clearTerminalOnBundle: true,
   },
   alias: {
