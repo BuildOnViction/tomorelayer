@@ -14,7 +14,7 @@
 
 # Introduction
 
-A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructure at will
+A Relayer Manager
 
 
 <a id="orgb8065f4"></a>
@@ -69,12 +69,10 @@ Those are where you get started.
 ### Frontend Development
 
 -   Libraries for frontend development includes mainly React & Atlaskit.
--   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as
-    it could be.
+-   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as it could be.
 -   Stylesheet lang is SASS's SCSS
 -   Generally, we are using **Typescript Compiler** for compiling ease & speed, also this helps eliminate the redundancy of babel
-    plugins. Technically there is nothing change with React Development, except file extension now should be **"tsx"** instead
-    of usual **"jsx"**.
+    plugins.
 -   **Wretch** is used instead of Axios/Fetch. It provides smaller and more intuitive async code
 
 
