@@ -2,9 +2,9 @@
 
 1.  [Introduction](#org836984f)
 2.  [First](#org957d994)
-    1.  [Pre-requisite](#org168090e)
-    2.  [Setup](#orge4742dd)
-    3.  [Start hacking](#org30ae7c1)
+    -  [Pre-requisite](#org168090e)
+    -  [Setup](#orge4742dd)
+    -  [Start hacking](#org30ae7c1)
         1.  [Frontend Development](#org7f062cc)
         2.  [Backend Development](#orga954538)
 
@@ -19,12 +19,13 @@ A Relayer Manager
 
 <a id="org957d994"></a>
 
-# First
+# Development
 
 
 <a id="org168090e"></a>
 
-## Pre-requisite
+### Pre-requisite
+The following must be included in the development toolbelt:
 
 -   Python 3.7 (recommended installing with pyenv)
 -   pipenv
@@ -32,10 +33,7 @@ A Relayer Manager
 -   yarn
 -   Docker
 
-
-<a id="orge4742dd"></a>
-
-## Setup
+..then we go:
 
 -   Install required & frontend dependencies
 
@@ -58,7 +56,7 @@ A Relayer Manager
 
 <a id="org30ae7c1"></a>
 
-## Start hacking
+### Start hacking
 
 backend has the entry point called "app", frontend "index.tsx"
 Those are where you get started.
@@ -66,7 +64,7 @@ Those are where you get started.
 
 <a id="org7f062cc"></a>
 
-### Frontend Development
+#### Frontend Development
 
 
 -   Libraries for frontend development includes mainly React & BlueprintJS.
@@ -80,6 +78,6 @@ Those are where you get started.
 
 <a id="orga954538"></a>
 
-### Backend Development
+#### Backend Development
 
 -   Checkout Python Tornado docs&#x2026;
