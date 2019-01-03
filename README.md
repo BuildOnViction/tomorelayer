@@ -1,28 +1,28 @@
 # Table of Contents
 
-1.  [Introduction](#org5af4ab1)
-2.  [First](#orgb8065f4)
-    1.  [Pre-requisite](#org9d5cffc)
-    2.  [Setup](#org7c43281)
-    3.  [Start hacking](#org89ee27b)
-        1.  [Frontend Development](#org528f942)
-        2.  [Backend Development](#orgc1616a8)
+1.  [Introduction](#org836984f)
+2.  [First](#org957d994)
+    1.  [Pre-requisite](#org168090e)
+    2.  [Setup](#orge4742dd)
+    3.  [Start hacking](#org30ae7c1)
+        1.  [Frontend Development](#org7f062cc)
+        2.  [Backend Development](#orga954538)
 
 
 
-<a id="org5af4ab1"></a>
+<a id="org836984f"></a>
 
 # Introduction
 
 A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructure at will
 
 
-<a id="orgb8065f4"></a>
+<a id="org957d994"></a>
 
 # First
 
 
-<a id="org9d5cffc"></a>
+<a id="org168090e"></a>
 
 ## Pre-requisite
 
@@ -33,7 +33,7 @@ A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructur
 -   Docker
 
 
-<a id="org7c43281"></a>
+<a id="orge4742dd"></a>
 
 ## Setup
 
@@ -56,7 +56,7 @@ A Relayer Manager, spawning custom relayer to tomochain blockchain infrastructur
     $ yarn be
 
 
-<a id="org89ee27b"></a>
+<a id="org30ae7c1"></a>
 
 ## Start hacking
 
@@ -64,11 +64,11 @@ backend has the entry point called "app", frontend "index.tsx"
 Those are where you get started.
 
 
-<a id="org528f942"></a>
+<a id="org7f062cc"></a>
 
 ### Frontend Development
 
--   Libraries for frontend development includes mainly React & Atlaskit.
+-   Libraries for frontend development includes mainly React & BlueprintJS.
 -   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as
     it could be.
 -   Stylesheet lang is SASS's SCSS
@@ -78,7 +78,7 @@ Those are where you get started.
 -   **Wretch** is used instead of Axios/Fetch. It provides smaller and more intuitive async code
 
 
-<a id="orgc1616a8"></a>
+<a id="orga954538"></a>
 
 ### Backend Development
 

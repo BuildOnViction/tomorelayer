@@ -50,7 +50,7 @@ backend has the entry point called "app", frontend "index.tsx"
 Those are where you get started.
 
 *** Frontend Development
-- Libraries for frontend development includes mainly React & Atlaskit.
+- Libraries for frontend development includes mainly React & BlueprintJS.
 - State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as
   it could be.
 - Stylesheet lang is SASS's SCSS
