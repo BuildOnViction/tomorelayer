@@ -7,6 +7,7 @@
     -  [Start hacking](#org30ae7c1)
         1.  [Frontend Development](#org7f062cc)
         2.  [Backend Development](#orga954538)
+    -  [Development Roadmap](#roadmap)
 
 
 
@@ -68,8 +69,7 @@ Those are where you get started.
 
 
 -   Libraries for frontend development includes mainly React & BlueprintJS.
--   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as
-    it could be.
+-   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as it could be.
 -   Stylesheet lang is SASS's SCSS
 -   Generally, we are using **Typescript Compiler** for compiling ease & speed, also this helps eliminate the redundancy of babel
     plugins.
@@ -81,3 +81,20 @@ Those are where you get started.
 #### Backend Development
 
 -   Checkout Python Tornado docs&#x2026;
+
+
+<a id="roadmap"></a>
+### Development Roadmap
+
+1. Relayer Registration
+   - [ ] Signing Relayer Contract
+   - [ ] Storing Relayer Info off-chain (needed?)
+   - [ ] Registering/Adding New Tokens
+2. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
+   - [ ] List all filled orders
+   - [ ] Showing Fill Order Details
+3. Showing & Updating all supported token available for trading
+4. Listing signed & verified Relayers
+   - [ ] Counting filled orders
+   - [ ] Network volume details
+5. Make Portable/Reusable API Kit
