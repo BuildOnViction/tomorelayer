@@ -10,7 +10,7 @@ indent_style = space
 charset = utf-8
 
 # 4 space indentation
-[*.py]
+[*.{py,sol}]
 indent_size = 4
 
 [*.{js,jsx,ts,tsx,css,scss,less,sass,json,yml,yaml}]
