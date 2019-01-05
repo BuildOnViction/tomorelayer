@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a774ec3329c7e0a6d11d569d0632e25276190cfe8decf8eaf09ff961395a23b6"
+            "sha256": "cf33fd3072577a71756e1ac9c430b378c6233e58603f93dfc6a3e4ec047fb65e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -186,6 +186,14 @@
             ],
             "version": "==2.7.6.1"
         },
+        "py-solc": {
+            "hashes": [
+                "sha256:82095bdac661072f48cf2daf8a96bdb625674330d92b225be26043e8d3ef8c9a",
+                "sha256:9ec0bc36ef22a9b0f5642e7846999c4485fa2fa562a61897aeb0a4ca53d60153"
+            ],
+            "index": "pypi",
+            "version": "==3.2.0"
+        },
         "pycryptodome": {
             "hashes": [
                 "sha256:08dcfd52a6784c9ca6b8d098301326ec86a33b94e44759dac031ba71407a1a2e",
@@ -240,6 +248,13 @@
                 "sha256:b0ad3f3173dedf416565299f684717d4ae7620207d562d3ef94b818a40a48781"
             ],
             "version": "==1.0.3"
+        },
+        "semantic-version": {
+            "hashes": [
+                "sha256:2a4328680073e9b243667b201119772aefc5fc63ae32398d6afafff07c4f54c0",
+                "sha256:2d06ab7372034bcb8b54f2205370f4aa0643c133b7e6dbd129c5200b83ab394b"
+            ],
+            "version": "==2.6.0"
         },
         "six": {
             "hashes": [

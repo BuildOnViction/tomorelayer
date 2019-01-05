@@ -16,6 +16,7 @@ python-dotenv = "*"
 peewee-async = "*"
 aiopg = "*"
 web3 = "*"
+py-solc = "*"
 
 [requires]
 python_version = "3.7"
