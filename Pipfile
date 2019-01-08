@@ -17,6 +17,10 @@ peewee-async = "*"
 aiopg = "*"
 web3 = "*"
 py-solc = "*"
+peewee-migrate = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
