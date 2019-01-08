@@ -21,6 +21,6 @@ class BaseHandler(RequestHandler):
 
 class ErrorHandler(ErrorHandler, BaseHandler):
     """
-    Default handler gonna to be used in case of 404 error
+    Default handler to be used in case of 404 error
     """
     pass
