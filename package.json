@@ -4,20 +4,19 @@
   "description": "relayer-management-system - frontend",
   "main": "index.js",
   "scripts": {
-    "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
-    "start": "npm run fe",
-    "be": "pipenv run python ./backend/app.py",
-    "up": "run-p fe be",
-    "db": "docker-compose -f docker-compose.dev.yaml up -d",
-    "eb:test": "embark test",
-    "eb": "embark run --nobrowser --noserver"
+    "fe": "node fuse fe",
+    "be": "node fuse be",
+    "dock": "node fuse dock",
+    "ebc": "node fuse embark:compile"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^10.12.15",
+    "@types/shelljs": "^0.8.1",
     "fuse-box": "^3.6.0",
     "node-sass": "^4.11.0",
+    "shelljs": "^0.8.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.12.0",
     "tslint-react": "^3.6.0",
