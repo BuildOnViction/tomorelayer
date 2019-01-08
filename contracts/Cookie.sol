@@ -75,7 +75,5 @@ contract Cookie {
         } else {
             address(HostAddress).transfer(pot);
         }
-
-
     }
 }
