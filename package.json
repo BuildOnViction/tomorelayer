@@ -7,15 +7,18 @@
     "fe": "node fuse fe",
     "be": "node fuse be",
     "dock": "node fuse dock",
-    "ebc": "node fuse embark:compile"
+    "ebc": "node fuse embark:compile",
+    "dbc": "node fuse db:create"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^10.12.15",
     "@types/shelljs": "^0.8.1",
+    "chalk": "^2.4.2",
     "fuse-box": "^3.6.0",
     "node-sass": "^4.11.0",
+    "pretty-error": "^2.1.1",
     "shelljs": "^0.8.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.12.0",
