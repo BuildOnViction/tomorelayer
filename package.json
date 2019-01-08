@@ -8,7 +8,9 @@
     "start": "npm run fe",
     "be": "pipenv run python ./backend/app.py",
     "up": "run-p fe be",
-    "db": "docker-compose -f docker-compose.dev.yaml up -d"
+    "db": "docker-compose -f docker-compose.dev.yaml up -d",
+    "eb:test": "embark test",
+    "eb": "embark run --nobrowser --noserver"
   },
   "author": "",
   "license": "ISC",
