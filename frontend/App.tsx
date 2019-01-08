@@ -1,5 +1,4 @@
 import { Route, BrowserRouter, HashRouter, Switch } from 'react-router-dom'
-import { Private } from '@shared'
 import { SITE_MAP } from '@constant'
 import Home from '@route/home'
 import Dashboard from '@route/dashboard'

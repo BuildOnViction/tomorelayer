@@ -4,3 +4,6 @@ node_modules/
 .fusebox
 frontend/dist/
 error.log
+.embark
+build
+chains.json
