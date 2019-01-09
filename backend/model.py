@@ -3,8 +3,8 @@ from settings import database
 
 
 class Relayer(pw.Model):
-    name = pw.CharField()
-    address = pw.CharField()
+    name = pw.CharField(unique=True, max_length=200)
+    address = pw.CharField(unique=True, max_length=200)
 
     class Meta:
         database = database

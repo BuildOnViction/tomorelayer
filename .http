@@ -1,15 +1,9 @@
 :url = http://localhost:8888/api
-:res = test
-
-# Test async get
-:query = 1
-GET :url/:res?id=:query
-
-# Test async get
-GET :url/t
+:res = register
 
 # Test async post
 POST :url/:res
 Content-Type: application/json
-Authorization: some-bearer
-{body}
+{
+  "name": "aaa",
+}
