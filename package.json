@@ -4,11 +4,12 @@
   "description": "relayer-management-system - frontend",
   "main": "index.js",
   "scripts": {
-    "fe": "node fuse fe",
-    "be": "node fuse be",
-    "dock": "node fuse dock",
-    "ebc": "node fuse embark:compile",
-    "dbc": "node fuse db:create"
+    "fe": "node tasks fe",
+    "be": "node tasks be",
+    "dock": "node tasks dock",
+    "ebc": "node tasks embark:compile",
+    "dbc": "node tasks db:create",
+    "dbm": "node tasks db:migrate"
   },
   "author": "",
   "license": "ISC",
@@ -18,8 +19,8 @@
     "chalk": "^2.4.2",
     "fuse-box": "^3.6.0",
     "node-sass": "^4.11.0",
-    "pretty-error": "^2.1.1",
     "shelljs": "^0.8.3",
+    "signale": "^1.3.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.12.0",
     "tslint-react": "^3.6.0",
