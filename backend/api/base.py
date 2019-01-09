@@ -13,6 +13,13 @@ class BaseHandler(RequestHandler):
         else:
             self.request_body = None
 
+    def json_response(self, response={}, meta={}):
+        standard_resp = {
+            'payload': response,
+            'meta': meta,
+        }
+        self.write(standard_resp)
+
     def write_error(self, status_code, **kwargs):
         self.set_header('Content-Type', 'application/json')
         _, http_exception, stack_trace = kwargs['exc_info']
