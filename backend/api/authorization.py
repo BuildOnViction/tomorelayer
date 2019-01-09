@@ -5,6 +5,7 @@ from .base import BaseHandler
 
 
 class RegisterHandler(BaseHandler):
+
     async def post(self):
         name = self.request_body['name']
         address = self.request_body['address']

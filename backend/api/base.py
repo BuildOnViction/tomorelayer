@@ -29,7 +29,12 @@ class BaseHandler(RequestHandler):
             logger.exception(http_exception)
             traceback.print_tb(stack_trace)
 
-        error = {'code': status_code, 'message': self._reason}
+        error = {
+            'code': status_code,
+            'message': self._reason,
+            'detail': str(http_exception)
+        }
+
         self.finish(json.dumps({'error': error}))
 
 
