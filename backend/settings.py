@@ -29,5 +29,4 @@ settings = {
     'port': getenv('APP_PORT'),
     'static_path': base_path + '/static',
     'stg': getenv('STG'),
-    'xsrf_cookies': True,
 }

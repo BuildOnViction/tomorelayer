@@ -6,6 +6,13 @@ import traceback
 
 
 class BaseHandler(RequestHandler):
+
+    def prepare(self):
+        if self.request.headers.get("Content-Type", "").startswith("application/json"):
+            self.request_body = json.loads(self.request.body)
+        else:
+            self.request_body = None
+
     def write_error(self, status_code, **kwargs):
         self.set_header('Content-Type', 'application/json')
         _, http_exception, stack_trace = kwargs['exc_info']

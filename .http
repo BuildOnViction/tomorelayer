@@ -6,4 +6,5 @@ POST :url/:res
 Content-Type: application/json
 {
   "name": "aaa",
+  "address": "0x00000000000000"
 }
