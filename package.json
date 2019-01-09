@@ -8,7 +8,6 @@
     "be": "node tasks be",
     "dock": "node tasks dock",
     "ebc": "node tasks embark:compile",
-    "dbc": "node tasks db:create",
     "dbm": "node tasks db:migrate"
   },
   "author": "",

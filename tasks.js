@@ -37,15 +37,6 @@ task('embark:compile', () => sh.exec('embark run --nobrowser --noserver'))
  * we need to write migration script ourselves, instead of Django Magic...
  * and, we need to run migrate command afterwards
  */
-task('db:create', () => {
-  const mig_name_fmt = clk.green.bold('Migration_Name')
-  const migrationName = args[3]
-  const ArgsError = () => sig.fatal(`- Missing ${mig_name_fmt}. Passing an argument as ${mig_name_fmt}`)
-  const cmd = `pipenv run pw_migrate create --auto --database=${database} --verbose ${migrationName}`
-  return migrationName ? sh.exec(cmd) : ArgsError()
-})
-
 task('db:migrate', () => {
-  const cmd = `pipenv run pw_migrate migrate --database=${database} --verbose`
-  return sh.exec(cmd)
+  // Reserved for future migration commmands
 })
