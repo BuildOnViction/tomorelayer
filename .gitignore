@@ -1,9 +1,11 @@
-node_modules/
 .db/
 .DS_Store
 .fusebox
-frontend/dist/
-error.log
 .embark
+
+node_modules/
+frontend/dist/
 build
+
+error.log
 chains.json

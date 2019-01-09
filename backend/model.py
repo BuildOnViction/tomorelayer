@@ -1,9 +1,10 @@
-import peewee
+import peewee as pw
 from settings import database
 
 
-class TestNameModel(peewee.Model):
-    name = peewee.CharField()
+class Relayer(pw.Model):
+    name = pw.CharField(unique=True, max_length=200)
+    address = pw.CharField(unique=True, max_length=200)
 
     class Meta:
         database = database
@@ -12,8 +13,5 @@ class TestNameModel(peewee.Model):
         return self.name
 
 
-TestNameModel.create_table(True)
-TestNameModel.get_or_create(id=1, defaults={'name': "TestNameModel id=1"})
-TestNameModel.get_or_create(id=2, defaults={'name': "TestNameModel id=2"})
-TestNameModel.get_or_create(id=3, defaults={'name': "TestNameModel id=3"})
-database.close()
+database.connect()
+database.create_tables([Relayer])
