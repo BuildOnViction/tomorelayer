@@ -1,8 +1,8 @@
 import { withRouter } from 'react-router-dom'
 import { Button, Code } from '@blueprintjs/core'
 
-
-class DashboardComponent extends React.PureComponent {
+@withRouter
+export class Dashboard extends React.PureComponent {
   constructor() {
     super()
     this.goHome = this.goHome.bind(this)
@@ -30,5 +30,3 @@ class DashboardComponent extends React.PureComponent {
     )
   }
 }
-
-export const Dashboard = withRouter(DashboardComponent)

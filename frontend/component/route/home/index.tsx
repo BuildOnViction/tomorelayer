@@ -2,8 +2,8 @@ import { withRouter } from 'react-router-dom'
 import { Button } from '@blueprintjs/core'
 import { SITE_MAP } from '@constant'
 
-
-class HomeComponent extends React.Component {
+@withRouter
+export class Home extends React.Component {
   go = () => this.props.history.push(SITE_MAP.dashboard)
 
   render() {
@@ -16,5 +16,3 @@ class HomeComponent extends React.Component {
     )
   }
 }
-
-export const Home = withRouter(HomeComponent)

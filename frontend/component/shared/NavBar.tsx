@@ -6,7 +6,8 @@ import {
 } from '@blueprintjs/core'
 
 
-class NavBar extends React.Component {
+@withRouter
+export class NavBar extends React.Component {
   render() {
     return (
       <Navbar className="bp3-dark" fixedToTop>
@@ -23,5 +24,3 @@ class NavBar extends React.Component {
     )
   }
 }
-
-export default withRouter(NavBar)
