@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "fe": "node tasks fe",
-    "be": "node tasks be",
+    "be": "pipenv run python ./backend/app.py",
     "dock": "node tasks dock",
     "ebc": "node tasks embark:compile",
     "dbm": "node tasks db:migrate",
