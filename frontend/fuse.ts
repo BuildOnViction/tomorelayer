@@ -32,6 +32,7 @@ const config = {
   alias: {
     '@route': '~/component/route',
     '@shared': '~/component/shared',
+    '@utility': '~/component/utility',
     '@constant': '~/service/constant',
   },
   plugins: [
@@ -61,7 +62,7 @@ task('default', ['clean_all'], () => {
   if (!isProduction) {
     fuse.dev({ port: 3000 })
     bundle
-      .watch('(component|service|style)/**/*.(ts|tsx|scss)')
+      .watch('*.(ts|tsx|scss)')
       .hmr()
   }
   bundle.instructions('> index.tsx')
