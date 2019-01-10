@@ -3,13 +3,13 @@ import { Button } from '@blueprintjs/core'
 import { SITE_MAP } from '@constant'
 
 
-class Home extends React.Component {
+class HomeComponent extends React.Component {
   go = () => this.props.history.push(SITE_MAP.dashboard)
 
   render() {
     return (
       <div>
-        Home
+        HomeComponent
         <hr />
         <Button large intent="warning" text="Click to go!" onClick={this.go} />
       </div>
@@ -17,4 +17,4 @@ class Home extends React.Component {
   }
 }
 
-export default withRouter(Home)
+export const Home = withRouter(HomeComponent)

@@ -1,9 +1,5 @@
-import Divider from './Divider'
-import Private from './Private'
-import SampleForm from './SampleForm'
+import NavBar from './NavBar'
 
 export {
-  Divider,
-  Private,
-  SampleForm,
+  NavBar,
 }
