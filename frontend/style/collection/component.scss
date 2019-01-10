@@ -1,3 +1,23 @@
-.nav--heading {
+.nav--container {
+  background-image: url('../../static/tomobg.jpg');
+  background-position: 0px 0px;
+}
+
+.nav--heading--title {
   font-size: 1.2em !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #FFFFFF !important;
+  text-shadow: 0 0 10px #FFFFFF;
+  line-height: 40px;
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+.nav--heading--logo {
+  background-image: url('../../static/t.png');
+  background-size: contain;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
 }
