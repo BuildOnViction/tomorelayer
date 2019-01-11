@@ -4,7 +4,7 @@ import { AppContainer } from 'react-hot-loader'
 import { Provider } from 'redux-zero/react'
 
 import store from './service/store'
-import App from './App'
+import App from './component/App'
 
 const load = () => ReactDOM.render((
   <AppContainer>
@@ -15,7 +15,7 @@ const load = () => ReactDOM.render((
 ), document.getElementById('root'))
 
 if (module.hot) {
-  module.hot.accept('./App', load)
+  module.hot.accept('./component/App', load)
 }
 
 load()

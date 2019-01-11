@@ -4,7 +4,7 @@ import { Dashboard, Home } from '@route'
 import { NavBar } from '@shared'
 import { Container } from '@utility'
 import '@static/favicon.ico'
-import './style/app.scss'
+import '../style/app.scss'
 
 const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 
@@ -12,7 +12,7 @@ const App = () => (
   <Router>
     <div>
       <NavBar />
-      <Container className="mt-5">
+      <Container full className="mt-5 pt-1">
         <Switch>
           <Route exact path={SITE_MAP.root} component={Home} />
           <Route path={SITE_MAP.dashboard} component={Dashboard} />
