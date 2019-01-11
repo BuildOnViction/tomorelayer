@@ -7,10 +7,11 @@
     "quotemark": [true, "single", "jsx-double"],
     "arrow-parens": [true, "ban-single-arg-parens"],
     "prefer-const": true,
-    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+    "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "member-access": false,
-    "curly": [true, "ignore-same-line"]
+    "curly": [true, "ignore-same-line"],
+    "jsx-boolean-value": ["false"]
   }
 }

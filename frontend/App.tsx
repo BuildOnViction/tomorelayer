@@ -1,7 +1,8 @@
 import { Route, BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { SITE_MAP } from '@constant'
-import Home from '@route/home'
-import Dashboard from '@route/dashboard'
+import { Dashboard, Home } from '@route'
+import { NavBar } from '@shared'
+import { Container } from '@utility'
 
 import './style/app.scss'
 import './static/favicon.ico'
@@ -10,10 +11,15 @@ const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 
 const App = () => (
   <Router>
-    <Switch>
-      <Route exact path={SITE_MAP.root} component={Home} />
-      <Route path={SITE_MAP.dashboard} component={Dashboard} />
-    </Switch>
+    <div>
+      <NavBar />
+      <Container className="mt-5">
+        <Switch>
+          <Route exact path={SITE_MAP.root} component={Home} />
+          <Route path={SITE_MAP.dashboard} component={Dashboard} />
+        </Switch>
+      </Container>
+    </div>
   </Router>
 )
 

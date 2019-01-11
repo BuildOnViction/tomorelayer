@@ -4,6 +4,7 @@ import {
   JSONPlugin,
   SassPlugin,
   CSSPlugin,
+  CSSResourcePlugin,
   WebIndexPlugin,
   QuantumPlugin,
 } from 'fuse-box'
@@ -14,6 +15,7 @@ import {
 } from 'fuse-box/sparky'
 
 const isProduction = process.env.STG === 'production'
+const assetExts = ['ico', 'jpg', 'png'].map(ex => `static/*.${ex}`)
 
 const config = {
   homeDir: '.',
@@ -32,17 +34,19 @@ const config = {
   alias: {
     '@route': '~/component/route',
     '@shared': '~/component/shared',
+    '@utility': '~/component/utility',
     '@constant': '~/service/constant',
   },
   plugins: [
     WebIndexPlugin({ template: 'index.html' }),
-    CopyPlugin({ files: ['static/*.ico'] }),
+    CopyPlugin({ files: assetExts }),
     [
       SassPlugin({ importer: true }),
+      CSSResourcePlugin({ inline: true }),
       CSSPlugin({
         inject: file => `${file}`,
         outFile: file => `dist/${file}`,
-      })
+      }),
     ],
     JSONPlugin(),
     isProduction && QuantumPlugin({
@@ -61,7 +65,7 @@ task('default', ['clean_all'], () => {
   if (!isProduction) {
     fuse.dev({ port: 3000 })
     bundle
-      .watch('(component|service|style)/**/*.(ts|tsx|scss)')
+      .watch('(component|service|static|style)/**.(ts|tsx|scss|jpg|png)')
       .hmr()
   }
   bundle.instructions('> index.tsx')

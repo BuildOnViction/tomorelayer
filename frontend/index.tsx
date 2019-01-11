@@ -1,11 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
+import { Provider } from 'redux-zero/react'
+
+import store from './service/store'
 import App from './App'
 
 const load = () => ReactDOM.render((
   <AppContainer>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </AppContainer>
 ), document.getElementById('root'))
 

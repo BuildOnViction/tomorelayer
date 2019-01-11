@@ -1,0 +1,28 @@
+$brand-color-light: #fbb068;
+$brand-color-dark: #202741;
+
+$space-mod-map: (
+  ml: margin-left,
+  mr: margin-right,
+  mt: margin-top,
+  mb: margin-bottom,
+  m: margin,
+
+  pl: padding-left,
+  pr: padding-right,
+  pt: padding-top,
+  pb: padding-bottom,
+  p: padding
+);
+
+@for $i from 1 through 5 {
+  @each $mod, $val in $space-mod-map {
+    .#{$mod}-#{$i} {
+      #{$val}: #{$i}em;
+    }
+  }
+}
+
+.color-brand-light {
+  color: $brand-color-light !important;
+}

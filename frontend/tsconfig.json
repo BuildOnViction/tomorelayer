@@ -9,8 +9,9 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@route/*": ["component/route/*"],
+      "@route": ["component/route"],
       "@shared": ["component/shared"],
+      "@utility": ["component/utility"],
       "@constant": ["service/constant"]
     }
   }

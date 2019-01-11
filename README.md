@@ -8,27 +8,30 @@
         1.  [Frontend Development](#org7f062cc)
         2.  [Backend Development](#orga954538)
     -  [Development Roadmap](#roadmap)
+3.  [Troubleshooting](#trouble)
 
 
-
+<hr>
 <a id="org836984f"></a>
 
-# Introduction
+## Introduction
 
-A Relayer Manager
+A Relayer Manager Application
 
 
 <a id="org957d994"></a>
 
-# Development
+## Development
 
 
 <a id="org168090e"></a>
 
-### Pre-requisite
+#### Pre-requisite
 The following must be included in the development toolbelt:
 
+-   pyenv
 -   Python 3.7 (recommended installing with pyenv)
+-   Python 2.7 (recommended installing with pyenv, if not in the system yet)
 -   pipenv
 -   nvm
 -   yarn
@@ -54,10 +57,12 @@ The following must be included in the development toolbelt:
     $ yarn fe
     $ yarn be
 
+For any installation problem, checkout [Troubleshooting](#trouble) guide
+<hr>
 
 <a id="org30ae7c1"></a>
 
-### Start hacking
+#### Start hacking
 
 backend has the entry point called "app", frontend "index.tsx"
 Those are where you get started.
@@ -65,7 +70,7 @@ Those are where you get started.
 
 <a id="org7f062cc"></a>
 
-#### Frontend Development
+##### Frontend Development
 
 
 -   Libraries for frontend development includes mainly React & BlueprintJS.
@@ -82,8 +87,9 @@ Those are where you get started.
 
 -   Checkout Python Tornado docs&#x2026;
 
-
+<hr>
 <a id="roadmap"></a>
+
 ### Development Roadmap
 
 1. Relayer Registration
@@ -98,3 +104,28 @@ Those are where you get started.
    - [ ] Counting filled orders
    - [ ] Network volume details
 5. Make Portable/Reusable API Kit
+
+<hr>
+
+<a id="trouble"></a>
+
+## Troubleshooting
+
+### Frontend
+
+**1. I can't install `web3`, something went wrong with the `node-gyp` build process.**
+
+Our project is using python 3.7.x, which is not yet supported by **node-gyp**. In order to install web3 correctly,
+install **python2.7** (if not installed yet), and config your npm's python path to it
+```sh
+$ pyenv install 2.7
+```
+Inquire **python2.7** path, and copy it
+```sh
+$ which python2.7
+```
+Config npm's python path
+```sh
+$ npm config set python <your-python2.7-path>
+```
+Then you can re-install things by running `npm i` or `yarn`
