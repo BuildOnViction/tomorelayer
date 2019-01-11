@@ -14,6 +14,7 @@
       "@shared": ["component/shared"],
       "@utility": ["component/utility"],
       "@static/*": ["static/*"],
+      "@action": ["service/action"],
       "@constant": ["service/constant"]
     }
   }

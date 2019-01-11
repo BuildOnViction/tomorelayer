@@ -14,6 +14,8 @@ class BaseHandler(RequestHandler):
             self.request_body = None
 
     def json_response(self, response={}, meta={}):
+        self.set_header('Content-Type', 'application/json')
+        self.set_header('Access-Control-Allow-Origin', '*')
         standard_resp = {
             'payload': response,
             'meta': meta,

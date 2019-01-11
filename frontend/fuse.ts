@@ -1,6 +1,7 @@
 import {
   FuseBox,
   CopyPlugin,
+  EnvPlugin,
   JSONPlugin,
   SassPlugin,
   CSSPlugin,
@@ -36,9 +37,11 @@ const config = {
     '@shared': '~/component/shared',
     '@utility': '~/component/utility',
     '@static': '~/static',
+    '@action': '~/service/action',
     '@constant': '~/service/constant',
   },
   plugins: [
+    EnvPlugin(process.env),
     WebIndexPlugin({ template: 'index.html' }),
     CopyPlugin({ files: assetExts }),
     [
