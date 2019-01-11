@@ -35,6 +35,7 @@ const config = {
     '@route': '~/component/route',
     '@shared': '~/component/shared',
     '@utility': '~/component/utility',
+    '@static': '~/static',
     '@constant': '~/service/constant',
   },
   plugins: [
