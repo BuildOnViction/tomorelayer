@@ -12,3 +12,6 @@ Content-Type: application/json
 # Get all relayers
 :res = relayers
 GET :url/:res
+
+# Get Main Api
+GET :url
