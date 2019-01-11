@@ -65,7 +65,7 @@ task('default', ['clean_all'], () => {
   if (!isProduction) {
     fuse.dev({ port: 3000 })
     bundle
-      .watch('*.(ts|tsx|scss|jpg|png)')
+      .watch('(component|service|static|style)/**.(ts|tsx|scss|jpg|png)')
       .hmr()
   }
   bundle.instructions('> index.tsx')

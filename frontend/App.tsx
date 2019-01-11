@@ -4,7 +4,7 @@ import { Dashboard, Home } from '@route'
 import { NavBar } from '@shared'
 import { Container } from '@utility'
 
-import './style/collection/app.scss'
+import './style/app.scss'
 import './static/favicon.ico'
 
 const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
