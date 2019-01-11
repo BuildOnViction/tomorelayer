@@ -1,16 +1,12 @@
 @import './grid.scss';
-@import './variables.scss';
+@import './variable.scss';
 @import './mixin.scss';
-@import './classes.scss';
-@import './component.scss';
-
-body {
-  background: #fff;
-  box-sizing: border-box;
-  margin: 0;
-}
 
 // import blueprintjs style in the end of the style so custom variables can take effects
 @import '~@blueprintjs/icons/src/blueprint-icons.scss';
 @import '~@blueprintjs/core/src/blueprint.scss';
 @import '~@blueprintjs/core/lib/scss/variables.scss';
+
+// Compose all the remaining styles
+@import './class.scss';
+@import './component.scss';

@@ -1,3 +1,9 @@
+body {
+  background-color: $light-gray5;
+  box-sizing: border-box;
+  margin: 0;
+}
+
 .nav--container {
   background-image: url('../static/nav-bg.jpg');
   background-position: 0px 0px;
