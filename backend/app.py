@@ -3,7 +3,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application
 from route import route
 from settings import settings
-from api.notfound import NotFoundHandler
+from api.main import NotFoundHandler
 
 
 if __name__ == "__main__":

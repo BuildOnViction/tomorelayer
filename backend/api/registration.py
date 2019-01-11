@@ -1,5 +1,3 @@
-import web3
-from tornado.web import HTTPError
 from model import Relayer
 from .base import BaseHandler
 

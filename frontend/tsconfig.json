@@ -7,11 +7,13 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
       "@route": ["component/route"],
       "@shared": ["component/shared"],
       "@utility": ["component/utility"],
+      "@static/*": ["static/*"],
       "@constant": ["service/constant"]
     }
   }

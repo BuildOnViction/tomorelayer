@@ -1,6 +1,5 @@
-$brand-color-light: #fbb068;
-$brand-color-dark: #202741;
-
+// REUSABLE CLASSES
+/* spacing */
 $space-mod-map: (
   ml: margin-left,
   mr: margin-right,
@@ -21,8 +20,4 @@ $space-mod-map: (
       #{$val}: #{$i}em;
     }
   }
-}
-
-.color-brand-light {
-  color: $brand-color-light !important;
 }
