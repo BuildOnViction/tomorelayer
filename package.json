@@ -4,7 +4,7 @@
   "description": "relayer-management-system - frontend",
   "main": "index.js",
   "scripts": {
-    "fe": "node tasks fe",
+    "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
     "be": "pipenv run python ./backend/app.py",
     "dock": "node tasks dock",
     "ebc": "node tasks embark:compile",
