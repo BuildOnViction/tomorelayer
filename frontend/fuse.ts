@@ -46,7 +46,7 @@ const config = {
       CSSPlugin({
         inject: file => `${file}`,
         outFile: file => `dist/${file}`,
-      })
+      }),
     ],
     JSONPlugin(),
     isProduction && QuantumPlugin({
