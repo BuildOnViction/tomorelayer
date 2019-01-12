@@ -5,6 +5,11 @@ import createStore from 'redux-zero'
 const initialState = {
   relayerAuthorized: false,
   relayers: [],
+  currentUserAddress: '',
+  error: {
+    type: null,
+    message: null,
+  },
 }
 
 const store = createStore(initialState)
