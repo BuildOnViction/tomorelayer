@@ -3,12 +3,14 @@ import { API } from '@constant'
 
 wretch().defaults({
   headers: {
-    "Accept": "application/json; charset=UTF-8"
+    'Accept': 'application/json; charset=UTF-8',
   }
 })
 
 export const AppInitializer = store => ({
   fetchRegisteredRelayers: () => {
-    wretch(API.relayers).get().json(resp => store.setState({ relayers: resp.payload }))
+    wretch(API.relayers).get()
+      .badRequest(console.error)
+      .json(resp => store.setState({ relayers: resp.payload }))
   }
 })

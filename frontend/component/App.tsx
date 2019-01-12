@@ -12,6 +12,7 @@ const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 
 const mapProps = store => ({
   registeredRelayers: store.relayers,
+  error: store.error,
 })
 
 const RelayerList = ({ relayer }) => (
@@ -47,6 +48,7 @@ class App extends React.Component {
               </div>
             )}
             <hr />
+            <pre>{this.props.error.message}</pre>
             <Switch>
               <Route exact path={SITE_MAP.root} component={Home} />
               <Route path={SITE_MAP.dashboard} component={Dashboard} />
