@@ -23,7 +23,7 @@ const RelayerList = ({ relayer }) => (
 
 class App extends React.Component {
   componentDidMount() {
-    /* NOTE : some action on app intilization..
+    /* NOTE: some action on app intilization..
      * 1/ Fetch relayer list from Backend
      * 2/ Fetch current user's address
      * 3/ Compare is this current user is a relayer, show some notification/welcome message

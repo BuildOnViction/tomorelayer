@@ -1,4 +1,4 @@
-// FIXME : when prepare production, fix baseUrl to some environment variable
+// FIXME: when prepare production, fix baseUrl to some environment variable
 const { APP_HOST, APP_PORT } = process.env
 const baseUrl = `${APP_HOST}:${APP_PORT}`
 const apiPrefix = 'api'
