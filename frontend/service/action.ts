@@ -1,11 +1,11 @@
 import wretch from 'wretch'
 import { web3 } from '@blockchain'
-import { API } from '@constant'
+import { API, ERROR, ALERT } from '@constant'
 
 wretch().defaults({
   headers: {
     'Accept': 'application/json; charset=UTF-8',
-  }
+  },
 })
 
 export const AppInitializer = store => ({
@@ -16,8 +16,17 @@ export const AppInitializer = store => ({
   },
   detectWeb3User: () => {
     web3.eth.getAccounts((err, acc) => {
-      console.log(err)
-      console.log(acc)
+      if (err) {
+        return store.setState({ error: ERROR.web3.getAccounts })
+      }
+
+      if (acc.length === 0) {
+        return store.setState({ alert: ALERT.web3.not_logged_in })
+      }
+
+      if (acc.length > 0) {
+        return store.setState({ currentUserAddress: acc[0] })
+      }
     })
-  }
+  },
 })

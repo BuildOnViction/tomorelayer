@@ -5,10 +5,8 @@ const initialState = {
   relayerAuthorized: false,
   relayers: [],
   currentUserAddress: '',
-  error: {
-    type: null,
-    message: null,
-  },
+  error: '',
+  alert: '',
 }
 
 const store = createStore(initialState)

@@ -1,4 +1,3 @@
-// FIXME: when prepare production, fix baseUrl to some environment variable
 const { APP_HOST, APP_PORT } = process.env
 const baseUrl = `${APP_HOST}:${APP_PORT}`
 const apiPrefix = 'api'
@@ -16,10 +15,20 @@ export const SITE_MAP = {
   auth: '/auth',
 }
 
-export const ALERT_TYPE = {
-  NO_WEB3: 'Cannot find MetaMask!'
+export const ALERT = {
+  web3: {
+    not_logged_in: 'No active account found on MetaMask',
+  }
 }
 
-export const ERROR_TYPE = {
-  FETCH_RELAYERS_FAIL: 'Cannot get relayers from server!'
+export const ERROR = {
+  general: {
+    some_error: 'shit happened!'
+  },
+  api: {
+    relayers: 'Cannot get relayers from server!'
+  },
+  web3: {
+    getAccounts: 'Cannot detect current user public key!'
+  },
 }
