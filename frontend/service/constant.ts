@@ -15,3 +15,11 @@ export const SITE_MAP = {
   dashboard: '/dashboard',
   auth: '/auth',
 }
+
+export const ALERT_TYPE = {
+  NO_WEB3: 'Cannot find MetaMask!'
+}
+
+export const ERROR_TYPE = {
+  FETCH_RELAYERS_FAIL: 'Cannot get relayers from server!'
+}
