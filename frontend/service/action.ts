@@ -1,5 +1,5 @@
 import wretch from 'wretch'
-import { web3 } from '@web3'
+import { web3 } from '@blockchain'
 import { API } from '@constant'
 
 wretch().defaults({

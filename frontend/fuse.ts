@@ -39,7 +39,7 @@ const config = {
     '@static': '~/static',
     '@action': '~/service/action',
     '@constant': '~/service/constant',
-    '@web3': '~/service/web3',
+    '@blockchain': '~/service/blockchain',
   },
   plugins: [
     EnvPlugin(process.env),
