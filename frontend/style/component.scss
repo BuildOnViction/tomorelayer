@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 .nav--container {
   box-shadow: none !important;
 }
@@ -28,4 +32,23 @@ body {
 .container .center,
 .container-full .center {
   text-align: center;
+}
+
+.route-switch--route {
+  font-size: 1rem;
+  color: $gray4;
+  padding: 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.4s, color 0.4s;
+  &:hover {
+    color: $gray1;
+    background: $light-gray1;
+  }
+}
+
+.route-switch--route.active {
+  color: $brand-color-light2;
+  background: $white;
+  transition: background 0.4s, color 0.4s;
 }

@@ -1,25 +1,25 @@
-import { Link } from 'react-router-dom'
-import { Card, Elevation } from '@blueprintjs/core'
+import cx from 'classnames'
+import { Link, withRouter } from 'react-router-dom'
 import { Grid } from '@utility'
 import { SITE_MAP } from '@constant'
 
+const cls = active => cx('col-auto route-switch--route m-1', { active })
 
-export const RouteSwitch = () => (
-  <Grid className="justify-space-between">
-    {Object.keys(SITE_MAP).map(route => (
-      <div className="col-2" key={route}>
-        <Card
-          interactive
-          elevation={Elevation.ONE}
+export const RouteSwitch = withRouter(({ history }) => {
+  const activeRoute = history.location.pathname
+  return (
+    <Grid className="route-switch mt-1 mb-2">
+      {Object.keys(SITE_MAP).filter(r => r !== 'Auth').map(route => (
+        <Link
+          to={SITE_MAP[route]}
+          className={cls(activeRoute === SITE_MAP[route])}
+          key={route}
         >
-          <h5>
-            <Link to={SITE_MAP[route]}>
-              {route}
-            </Link>
-          </h5>
-          <div>Card content</div>
-        </Card>
-      </div>
-    ))}
-  </Grid>
-)
+          <div className="text-center">
+            {route}
+          </div>
+        </Link>
+      ))}
+    </Grid>
+  )
+})

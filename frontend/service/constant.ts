@@ -10,11 +10,11 @@ export const API = {
 }
 
 export const SITE_MAP = {
-  Home: '/',
-  Dashboard: '/dashboard',
   Auth: '/auth',
+  Home: '/',
   Orders: '/orders',
   Relayers: '/relayers',
+  Dashboard: '/dashboard',
 }
 
 export const ALERT = {
