@@ -1,7 +1,7 @@
 const { APP_HOST, APP_PORT } = process.env
 const baseUrl = `${APP_HOST}:${APP_PORT}`
 const apiPrefix = 'api'
-const apiBuild = (resource: string) => `${baseUrl}/${apiPrefix}/${resource}`
+const apiBuild = resource => `${baseUrl}/${apiPrefix}/${resource}`
 
 
 export const API = {
@@ -13,6 +13,8 @@ export const SITE_MAP = {
   root: '/',
   dashboard: '/dashboard',
   auth: '/auth',
+  orders: '/orders',
+  relayers: '/relayers',
 }
 
 export const ALERT = {
