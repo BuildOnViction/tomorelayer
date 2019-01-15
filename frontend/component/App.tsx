@@ -12,23 +12,20 @@ const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 
 const mapProps = store => ({
   registeredRelayers: store.relayers,
+  error: store.error,
+  alert: store.alert,
 })
-
-const RelayerList = ({ relayer }) => (
-  <li>
-    {relayer.name} | {relayer.address}
-  </li>
-)
 
 class App extends React.Component {
   componentDidMount() {
-    /* NOTE : some action on app intilization..
+    /* NOTE: some action on app intilization..
      * 1/ Fetch relayer list from Backend
      * 2/ Fetch current user's address
      * 3/ Compare is this current user is a relayer, show some notification/welcome message
      * 4/ Get relayer's contract for comparing too...
      */
     this.props.fetchRegisteredRelayers()
+    this.props.detectWeb3User()
   }
 
   render() {
@@ -37,16 +34,7 @@ class App extends React.Component {
         <div>
           <NavBar />
           <Container full className="mt-5 pt-1">
-            {this.props.registeredRelayers.length > 0 && (
-              <div>
-                <ul>
-                  {this.props.registeredRelayers.map(r => (
-                    <RelayerList key={r.name} relayer={r} />
-                  ))}
-                </ul>
-              </div>
-            )}
-            <hr />
+            <pre>{this.props.alert}</pre>
             <Switch>
               <Route exact path={SITE_MAP.root} component={Home} />
               <Route path={SITE_MAP.dashboard} component={Dashboard} />

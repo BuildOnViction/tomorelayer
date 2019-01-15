@@ -15,7 +15,8 @@
       "@utility": ["component/utility"],
       "@static/*": ["static/*"],
       "@action": ["service/action"],
-      "@constant": ["service/constant"]
+      "@constant": ["service/constant"],
+      "@blockchain": ["service/blockchain"]
     }
   }
 }

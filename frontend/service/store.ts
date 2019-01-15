@@ -1,10 +1,12 @@
-// Creating INITIAL-STORE
 import createStore from 'redux-zero'
 
-// You can split initialState to multiple sub-stores when necessary
+// NOTE: You can split initialState to multiple sub-stores when necessary
 const initialState = {
   relayerAuthorized: false,
   relayers: [],
+  currentUserAddress: '',
+  error: '',
+  alert: '',
 }
 
 const store = createStore(initialState)

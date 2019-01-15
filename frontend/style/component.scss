@@ -1,5 +1,5 @@
 body {
-  background-color: $light-gray5;
+  background-color: $white;
   box-sizing: border-box;
   margin: 0;
 }
@@ -7,6 +7,8 @@ body {
 .nav--container {
   background-image: url('../static/nav-bg.jpg');
   background-position: 0px 0px;
+  box-shadow: none !important;
+
 }
 
 .nav--heading--title {
