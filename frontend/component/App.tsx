@@ -29,10 +29,12 @@ class App extends React.Component {
           <NavBar />
           <Container className="mt-5 pt-1">
             <RouteSwitch />
-            <Switch>
-              <Route exact path={SITE_MAP.Home} component={Home} />
-              <Route path={SITE_MAP.Dashboard} component={Dashboard} />
-            </Switch>
+            <Container className="p-2 drop-shadow switch-container">
+              <Switch>
+                <Route exact path={SITE_MAP.Home} component={Home} />
+                <Route path={SITE_MAP.Dashboard} component={Dashboard} />
+              </Switch>
+            </Container>
           </Container>
         </div>
       </Router>

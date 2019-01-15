@@ -9,7 +9,6 @@ a {
 }
 
 .nav--container {
-  box-shadow: none !important;
 }
 
 .nav--heading--title {
@@ -51,4 +50,9 @@ a {
   color: $brand-color-light2;
   background: $white;
   transition: background 0.4s, color 0.4s;
+}
+
+.switch-container {
+  background: $white;
+  border-radius: 3px;
 }

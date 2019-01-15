@@ -3,12 +3,12 @@ import { Link, withRouter } from 'react-router-dom'
 import { Grid } from '@utility'
 import { SITE_MAP } from '@constant'
 
-const cls = active => cx('col-auto route-switch--route m-1', { active })
+const cls = active => cx('col-auto route-switch--route m-1', { active, 'drop-shadow': active })
 
 export const RouteSwitch = withRouter(({ history }) => {
   const activeRoute = history.location.pathname
   return (
-    <Grid className="route-switch mt-1 mb-2">
+    <Grid className="route-switch mt-1 mb-1">
       {Object.keys(SITE_MAP).filter(r => r !== 'Auth').map(route => (
         <Link
           to={SITE_MAP[route]}
