@@ -13,6 +13,7 @@ const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 const mapProps = store => ({
   registeredRelayers: store.relayers,
   error: store.error,
+  alert: store.alert,
 })
 
 class App extends React.Component {
@@ -33,6 +34,7 @@ class App extends React.Component {
         <div>
           <NavBar />
           <Container full className="mt-5 pt-1">
+            <pre>{this.props.alert}</pre>
             <Switch>
               <Route exact path={SITE_MAP.root} component={Home} />
               <Route path={SITE_MAP.dashboard} component={Dashboard} />

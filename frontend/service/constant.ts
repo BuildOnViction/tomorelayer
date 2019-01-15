@@ -18,6 +18,7 @@ export const SITE_MAP = {
 export const ALERT = {
   web3: {
     not_logged_in: 'No active account found on MetaMask',
+    meta_mask_unavailable: 'MetaMask not found!'
   }
 }
 
