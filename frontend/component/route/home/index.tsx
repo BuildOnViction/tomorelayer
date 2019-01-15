@@ -4,7 +4,7 @@ import { SITE_MAP } from '@constant'
 
 @withRouter
 export class Home extends React.Component {
-  go = () => this.props.history.push(SITE_MAP.dashboard)
+  go = () => this.props.history.push(SITE_MAP.Dashboard)
 
   render() {
     return (
