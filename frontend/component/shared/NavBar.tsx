@@ -9,7 +9,7 @@ const { Group, Heading } = Navbar
 export class NavBar extends React.Component {
   render() {
     return (
-      <Navbar className="bp3-dark nav--container" fixedToTop>
+      <Navbar className="bp3-light nav--container" fixedToTop>
         <Group align={Alignment.LEFT}>
           <Heading className="nav--heading">
             <img

@@ -5,16 +5,15 @@ body {
 }
 
 .nav--container {
-  background-image: url('../static/nav-bg.jpg');
-  background-position: 0px 0px;
+  box-shadow: none !important;
 }
 
 .nav--heading--title {
   font-size: 1.2em !important;
   font-weight: bold;
   text-transform: uppercase;
-  color: #FFFFFF !important;
-  text-shadow: 0 0 10px #FFFFFF;
+  color: $brand-color-dark2 !important;
+  text-shadow: 0 0 10px $brand-color-dark4;
   line-height: 40px;
   display: inline-block;
   vertical-align: text-bottom;
