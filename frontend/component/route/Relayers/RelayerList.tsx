@@ -1,31 +1,5 @@
+import { connect } from 'redux-zero/react'
 import { Grid } from '@utility'
-
-const mock = [
-  {
-    id: 1,
-    name: 'ABC',
-    address: '0x123123123123',
-    logo: 'https://placeimg.com/30/30/tech'
-  },
-  {
-    id: 2,
-    name: 'CDE',
-    address: '0x123123123123',
-    logo: 'https://placeimg.com/30/30/tech'
-  },
-  {
-    id: 3,
-    name: 'FGH',
-    address: '0x123123123123',
-    logo: 'https://placeimg.com/30/30/tech'
-  },
-  {
-    id: 4,
-    name: 'IJK',
-    address: '0x123123123123',
-    logo: 'https://placeimg.com/30/30/tech'
-  },
-]
 
 const TableRow = ({ item }) => (
   <div className="relayer-table--row col-12 mr-1 ml-1">
@@ -35,22 +9,22 @@ const TableRow = ({ item }) => (
       </div>
       <div className="col-5">
         <Grid className="align-center">
-          <div className="col-2 p-0">
-            <img alt={item.name} src={item.logo} className="relayer-logo" />
+          <div className="col-2 p-0 pl-1">
+            <img alt={item.name} src={item.logo} className="relayer-logo" width="50" height="50" />
           </div>
           <div className="col-auto">
             {item.name}
           </div>
         </Grid>
       </div>
-      <div className="col-5">
-        Address
+      <div className="col-5 text-blue text-bold">
+        {item.address}
       </div>
     </Grid>
   </div>
 )
 
-export default class RelayerList extends React.Component {
+class RelayerList extends React.Component {
   render() {
     return (
       <Grid className="relayer-table">
@@ -67,8 +41,14 @@ export default class RelayerList extends React.Component {
             </div>
           </Grid>
         </div>
-        {mock.map((item, idx) => <TableRow key={item.name} item={item} />)}
+        {this.props.relayers.map((item, idx) => <TableRow key={item.name} item={item} />)}
       </Grid>
     )
   }
 }
+
+const connector = connect(store => ({
+  relayers: store.relayers,
+}))
+
+export default connector(RelayerList)
