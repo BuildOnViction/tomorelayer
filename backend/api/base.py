@@ -1,6 +1,8 @@
 from tornado.web import ErrorHandler
 from tornado.web import RequestHandler
+from peewee import IntegrityError
 from logger import logger
+from exception import *
 import json
 import traceback
 
@@ -36,6 +38,17 @@ class BaseHandler(RequestHandler):
             'message': self._reason,
             'detail': str(http_exception)
         }
+
+        if isinstance(http_exception, CustomException):
+            error['code'] = http_exception.status_code
+            error['message'] = http_exception.message
+            error['detail'] = http_exception.detail
+
+        if isinstance(http_exception, IntegrityError):
+            [message, detail] = str(http_exception).split('\n')
+            error['code'] = 400
+            code['message'] = message
+            error['detail'] = detail
 
         self.finish(json.dumps({'error': error}))
 
