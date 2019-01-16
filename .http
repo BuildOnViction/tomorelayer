@@ -5,8 +5,9 @@
 POST :url/:res
 Content-Type: application/json
 {
-  "name": "aaabc",
-  "address": "0x00000000000000"
+  "name": "ABC",
+  "address": "0x00000000000000",
+  "logo": "https://via.placeholder.com/150"
 }
 
 # Get all relayers
