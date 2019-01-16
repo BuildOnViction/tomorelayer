@@ -28,27 +28,31 @@ class BaseHandler(RequestHandler):
         self.set_header('Content-Type', 'application/json')
         _, http_exception, stack_trace = kwargs['exc_info']
 
-        if status_code == 500:
-            # Something wrong with server's handler
-            logger.exception(http_exception)
-            traceback.print_tb(stack_trace)
+        is_integrity_error = isinstance(http_exception, IntegrityError)
+        is_custom_error = isinstance(http_exception, CustomException)
+        is_uncaught_error = status_code == 500 and not is_integrity_error
 
         error = {
             'code': status_code,
             'message': self._reason,
-            'detail': str(http_exception)
+            'detail': str(http_exception),
         }
 
-        if isinstance(http_exception, CustomException):
+        if is_uncaught_error:
+            # Something wrong with server's handler
+            logger.exception(http_exception)
+            traceback.print_tb(stack_trace)
+
+        if is_custom_error:
             error['code'] = http_exception.status_code
             error['message'] = http_exception.message
             error['detail'] = http_exception.detail
 
-        if isinstance(http_exception, IntegrityError):
-            [message, detail] = str(http_exception).split('\n')
+        if is_integrity_error:
+            message, detail, _ = str(http_exception).split('\n')
             error['code'] = 400
-            code['message'] = message
-            error['detail'] = detail
+            error['message'] = message
+            error['detail'] = detail.replace('DETAIL:  ', '')
 
         self.finish(json.dumps({'error': error}))
 
