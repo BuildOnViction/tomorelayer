@@ -1,7 +1,7 @@
 import { Route, BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { SITE_MAP } from '@constant'
-import { Dashboard, Home } from '@route'
+import { Dashboard, Home, Relayers } from '@route'
 import { NavBar, RouteSwitch } from '@shared'
 import { Container } from '@utility'
 import { AppInitializer } from '@action'
@@ -29,10 +29,11 @@ class App extends React.Component {
           <NavBar />
           <Container className="mt-5 pt-1">
             <RouteSwitch />
-            <Container className="p-2 drop-shadow switch-container">
+            <Container className="p-3 drop-shadow switch-container">
               <Switch>
                 <Route exact path={SITE_MAP.Home} component={Home} />
                 <Route path={SITE_MAP.Dashboard} component={Dashboard} />
+                <Route path={SITE_MAP.Relayers} component={Relayers} />
               </Switch>
             </Container>
           </Container>
