@@ -39,6 +39,13 @@ $text-color-map: (
   }
 }
 
+/* text size */
+@for $i from 0 through 5 {
+  .font-#{$i} {
+    font-size: #{$i * 5}pt;
+  }
+}
+
 /* background-color */
 $bg-color-map: (
   blue: $blue5,

@@ -1,12 +1,11 @@
-import { H3, Navbar, Icon } from '@blueprintjs/core'
-import { Divider, Grid } from '@utility'
+import { H3 } from '@blueprintjs/core'
+import { Grid } from '@utility'
 import RelayerList from './RelayerList'
 /* import RelayerRegistration from './RelayerRegistration' */
 
 // NOTE: we need 2 main components switching places
 // one is Current relayer list (url, name, logo, start-date, status)
 // one for Registration
-const { Group } = Navbar
 
 enum ActiveView {
   List = 'Relayer List',
@@ -24,7 +23,7 @@ export class Relayers extends React.Component {
     const { active } = this.state
     return (
       <React.Fragment>
-        <Grid className="justify-space-between align-start">
+        <Grid className="justify-space-between align-start mb-4">
           <div className="col-5">
             <H3 className="text-dark">
               {active.toString().toUpperCase()}
@@ -37,7 +36,6 @@ export class Relayers extends React.Component {
             Become a Relayer
           </a>
         </Grid>
-        <Divider />
         {active === ActiveView.List && <RelayerList />}
       </React.Fragment>
     )
