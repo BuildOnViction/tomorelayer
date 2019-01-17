@@ -11,6 +11,11 @@ class MissingArgumentException(CustomException):
     message = 'Missing required attribute(s)'
 
 
+class InvalidValueException(CustomException):
+    status_code = 400
+    message = 'Invalid value(s)'
+
+
 class NotUniqueException(CustomException):
     status_code = 400
     message = 'Field value is not unique'

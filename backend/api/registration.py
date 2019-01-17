@@ -19,6 +19,9 @@ class RegisterHandler(BaseHandler):
         logo = self.request_body['logo']
         dex_rate = self.request_body['dex_rate']
 
+        if dex_rate >= 1:
+            raise InvalidValueException('Dex_rate must be less than 1')
+
         async with self.application.objects.atomic():
             rl = await self.application.objects.create(
                 Relayer,

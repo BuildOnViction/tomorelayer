@@ -1,3 +1,4 @@
+from settings import settings
 from tornado.web import ErrorHandler
 from tornado.web import RequestHandler
 from peewee import IntegrityError
@@ -35,7 +36,7 @@ class BaseHandler(RequestHandler):
 
         is_integrity_error = isinstance(http_exception, IntegrityError)
         is_custom_error = isinstance(http_exception, CustomException)
-        is_uncaught_error = status_code == 500 and not is_integrity_error
+        is_uncaught_error = status_code == 500 and not is_integrity_error and not is_custom_error
 
         error = {
             'code': status_code,
@@ -47,6 +48,7 @@ class BaseHandler(RequestHandler):
             # Something wrong with server's handler
             logger.exception(http_exception)
             traceback.print_tb(stack_trace)
+            settings['stg'] == 'development' and breakpoint()
 
         if is_custom_error:
             error['code'] = http_exception.status_code
@@ -54,6 +56,7 @@ class BaseHandler(RequestHandler):
             error['detail'] = http_exception.detail
 
         if is_integrity_error:
+            # FIXME: handle all peewee error in one-separete handler
             message, detail, _ = str(http_exception).split('\n')
             error['code'] = 400
             error['message'] = message
