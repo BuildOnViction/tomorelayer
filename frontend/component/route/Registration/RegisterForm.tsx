@@ -1,16 +1,17 @@
 import { connect } from 'redux-zero/react'
 import { Formik } from 'formik'
+import { Alert, FormGroup, InputGroup, NumericInput, Intent, Button } from '@blueprintjs/core'
 import { Grid } from '@utility'
-import { FormGroup, InputGroup, NumericInput, Intent, Button } from '@blueprintjs/core'
+import { RelayerRegistration } from '@action'
 
-function SignUpForm(props) {
+const SignUpForm = props => {
   const {
     isSubmitting,
     handleChange,
     handleSubmit,
   } = props
   return (
-    <Grid className="direction-column relayer-registration--form">
+    <React.Fragment>
       <FormGroup
         className="col-4"
         helperText="Your Relayer name..."
@@ -69,38 +70,53 @@ function SignUpForm(props) {
           {isSubmitting ? 'Loading' : 'Sign Up'}
         </Button>
       </div>
-    </Grid>
+    </React.Fragment>
   )
 }
 
 class RegisterForm extends React.Component {
 
-  registerNewRelayer = (values, actions) => {
-    console.log(values)
-  }
+  registerNewRelayer = (values, actions) => this.props.registerRelayer(values)
 
   initialValues = {
     address: this.props.address
   }
 
-  validate = values => { }
+  validate = values => {
+    // TODO: validate input values
+  }
 
   render() {
+    const { alert, resetAlert } = this.props
+    console.log(alert)
     return (
-      <Formik
-        initialValues={this.initialValues}
-        validate={this.validate}
-        onSubmit={this.registerNewRelayer}
-        render={SignUpForm}
-      />
+      <Grid className="direction-column relayer-registration--form">
+        <Formik
+          initialValues={this.initialValues}
+          validate={this.validate}
+          onSubmit={this.registerNewRelayer}
+          render={SignUpForm}
+        />
+        <Alert
+          intent={Intent.WARNING}
+          confirmButtonText="I got it!"
+          isOpen={alert && alert.for === 'registration-form'}
+          onClose={resetAlert}
+        >
+          <p>
+            {JSON.stringify(this.props.error)}
+          </p>
+        </Alert>
+      </Grid>
     )
   }
 }
 
 const mapProps = store => ({
   address: store.currentUserAddress,
+  alert: store.alert
 })
 
-const connector = connect(mapProps)
+const connector = connect(mapProps, RelayerRegistration)
 
 export default connector(RegisterForm)
