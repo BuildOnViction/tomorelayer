@@ -76,7 +76,9 @@ const SignUpForm = props => {
 
 class RegisterForm extends React.Component {
 
-  registerNewRelayer = (values, actions) => this.props.registerRelayer(values)
+  registerNewRelayer = (values, actions) => {
+    this.props.registerRelayer(values)
+  }
 
   initialValues = {
     address: this.props.address
@@ -88,7 +90,6 @@ class RegisterForm extends React.Component {
 
   render() {
     const { alert, resetAlert } = this.props
-    console.log(alert)
     return (
       <Grid className="direction-column relayer-registration--form">
         <Formik
@@ -104,7 +105,7 @@ class RegisterForm extends React.Component {
           onClose={resetAlert}
         >
           <p>
-            {JSON.stringify(this.props.error)}
+            {JSON.stringify(alert)}
           </p>
         </Alert>
       </Grid>

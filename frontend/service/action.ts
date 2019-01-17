@@ -7,6 +7,7 @@ wretch().defaults({
   headers: {
     'Accept': 'application/json; charset=UTF-8',
   },
+  mode: 'no-cors'
 })
 
 export const AsynCatch = promise => promise
@@ -27,5 +28,17 @@ export const AppInitializer = ({ setState }) => ({
     acc.length === 0 && setState({ alert: ALERT.web3.not_logged_in })
     acc.length > 0 && setState({ currentUserAddress: acc[0] })
   },
+
+})
+
+export const RelayerRegistration = ({ setState }) => ({
+
+  registerRelayer: (state, values) => {
+    wretch(API.register).post(values)
+      .badRequest(r => console.log(r))
+      .json(r => setState({ relayers: [...state.relayers, r] }))
+  },
+
+  resetAlert: () => setState({ alert: '' }),
 
 })
