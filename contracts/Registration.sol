@@ -3,19 +3,19 @@ pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
 
-contract Registra {
+contract Official_TomoChain_Relayer_Registration {
     struct relayer {
         bool activated;
-        // TODO: add customizable rates
-        // dex_rate
-        // foundation_rate
+        uint16 dex_rate;
+        uint16 foundation_rate;
     }
 
     mapping(address => relayer) RELAYERS;
 
-    function setRelayers(address _addr, relayer memory _meta)
+    function register(address _addr, relayer memory _meta)
         public
         returns (relayer memory _relayer) {
+        require(_meta.dex_rate < 100, "DEX_RATE must not be larger than 100 percent");
         RELAYERS[_addr] = _meta;
         return RELAYERS[_addr];
     }
