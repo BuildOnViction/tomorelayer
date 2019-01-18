@@ -2,8 +2,9 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
-
+/// NOTE: upgradable contract?
 contract Official_TomoChain_Relayer_Registration {
+    /// NOTE: rate in range(0, 100)
     struct relayer {
         bool activated;
         uint16 dex_rate;
