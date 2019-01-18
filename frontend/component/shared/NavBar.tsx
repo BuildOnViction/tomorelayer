@@ -4,7 +4,6 @@ import logo from '@static/logo.png'
 
 const { Group, Heading } = Navbar
 
-
 @withRouter
 export class NavBar extends React.Component {
   render() {

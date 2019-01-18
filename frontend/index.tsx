@@ -14,8 +14,6 @@ const load = () => ReactDOM.render((
   </AppContainer>
 ), document.getElementById('root'))
 
-if (module.hot) {
-  module.hot.accept('./component/App', load)
-}
+if (module.hot) module.hot.accept('./component/App', load)
 
 load()

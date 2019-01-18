@@ -1,7 +1,7 @@
 import { web3 } from '@blockchain'
 import { API, ERROR, ALERT } from '@constant'
 
-
+// ASYNC REQUEST CONFIGS
 export const AsynCatch = promise => promise
   .then(data => [null, data])
   .catch(err => [err])
@@ -12,13 +12,13 @@ export const Client = {
     method: 'POST',
     body: JSON.stringify(value),
     headers: {
-      'Accept': 'application/json; charset=UTF-8',
+      Accept: 'application/json; charset=UTF-8',
     },
-  }).then(r => r.json())
+  }).then(r => r.json()),
 }
 
-
-export const AppInitializer = ({ setState }) => ({
+// REDUX_ZERO ACTIONS
+export const AppInitializer = () => ({
 
   fetchRegisteredRelayers: async () => {
     const resp = await Client.get(API.relayers)
@@ -32,16 +32,16 @@ export const AppInitializer = ({ setState }) => ({
   },
 
   detectWeb3User: async () => {
-    if (!web3) return setState({ alert: ALERT.web3.meta_mask_unavailable })
+    if (!web3) return { alert: ALERT.web3.meta_mask_unavailable }
     const [err, acc] = await AsynCatch(web3.eth.getAccounts())
-    err && !acc && setState({ error: ERROR.web3.getAccounts })
-    acc.length === 0 && setState({ alert: ALERT.web3.not_logged_in })
-    acc.length > 0 && setState({ currentUserAddress: acc[0] })
+    if (err && !acc) return { error: ERROR.web3.getAccounts }
+    if (acc.length === 0) return { alert: ALERT.web3.not_logged_in }
+    if (acc.length) return { currentUserAddress: acc[0] }
   },
 
 })
 
-export const RelayerRegistration = ({ setState }) => ({
+export const RelayerRegistration = () => ({
 
   registerRelayer: async (state, values) => {
     const resp = await Client.post(API.register, values)
@@ -55,6 +55,6 @@ export const RelayerRegistration = ({ setState }) => ({
     }
   },
 
-  resetAlert: () => setState({ alert: '', error: '' }),
+  resetAlert: () => ({ alert: '', error: '' }),
 
 })

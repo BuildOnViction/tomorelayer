@@ -2,7 +2,7 @@
 .DS_Store
 .fusebox
 .embark
-
+.tern-port
 node_modules/
 frontend/dist/
 build

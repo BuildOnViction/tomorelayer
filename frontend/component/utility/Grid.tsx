@@ -2,7 +2,7 @@ import cx from 'classnames'
 
 const Grid = ({
   className = '',
-  children
+  children,
 }) => {
   const cls = cx('grid', className)
   return (

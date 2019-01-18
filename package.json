@@ -9,7 +9,8 @@
     "dock": "node tasks dock",
     "ebc": "node tasks embark:compile",
     "dbm": "node tasks db:migrate",
-    "kp": "kill-port 8888"
+    "kp": "kill-port 8888",
+    "lint": "tslint -c ./frontend/tslint.json './frontend/**/*.ts*'"
   },
   "author": "",
   "license": "ISC",

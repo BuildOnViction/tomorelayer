@@ -79,12 +79,12 @@ const SignUpForm = props => {
 
 class RegisterForm extends React.Component {
 
-  registerNewRelayer = (values, actions) => {
-    this.props.registerRelayer(values)
+  initialValues = {
+    address: this.props.address,
   }
 
-  initialValues = {
-    address: this.props.address
+  registerNewRelayer = (values, actions) => {
+    this.props.registerRelayer(values)
   }
 
   validate = values => {

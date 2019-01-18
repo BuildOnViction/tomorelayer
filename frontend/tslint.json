@@ -11,7 +11,7 @@
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "member-access": false,
-    "curly": [true, "ignore-same-line"],
+    "curly": [true, "as-needed"],
     "jsx-boolean-value": ["false"]
   }
 }
