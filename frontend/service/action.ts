@@ -6,7 +6,7 @@ export const AsynCatch = promise => promise
   .then(data => [null, data])
   .catch(err => [err])
 
-export const client = {
+export const Client = {
   get: api => fetch(api).then(r => r.json()),
   post: (api, value) => fetch(api, {
     method: 'POST',
@@ -21,9 +21,14 @@ export const client = {
 export const AppInitializer = ({ setState }) => ({
 
   fetchRegisteredRelayers: async () => {
-    const resp = await client.get(API.relayers)
-    if (resp.error) return { alert: resp.error.message }
-    return { alert: resp.payload, relayers: resp.payload }
+    const resp = await Client.get(API.relayers)
+    if (resp.error) return {
+      alert: resp.error.message,
+      error: resp.error,
+    }
+    return {
+      relayers: resp.payload,
+    }
   },
 
   detectWeb3User: async () => {
@@ -39,16 +44,17 @@ export const AppInitializer = ({ setState }) => ({
 export const RelayerRegistration = ({ setState }) => ({
 
   registerRelayer: async (state, values) => {
-    const resp = await client.post(API.register, values)
+    const resp = await Client.post(API.register, values)
     if (resp.error) return {
-      alert: resp.error.message + ':' + resp.error.detail
+      alert: resp.error.message + ': ' + resp.error.detail,
+      error: resp.error,
     }
     return {
       alert: resp.payload,
-      relayers: [...state.relayers, resp.payload]
+      relayers: [...state.relayers, resp.payload],
     }
   },
 
-  resetAlert: () => setState({ alert: '' }),
+  resetAlert: () => setState({ alert: '', error: '' }),
 
 })

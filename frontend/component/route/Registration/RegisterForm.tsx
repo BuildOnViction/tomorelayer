@@ -1,8 +1,11 @@
+import _ from 'rambda'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Formik } from 'formik'
 import { Alert, FormGroup, InputGroup, NumericInput, Intent, Button } from '@blueprintjs/core'
 import { Grid } from '@utility'
 import { RelayerRegistration } from '@action'
+import { SITE_MAP } from '@constant'
 
 const SignUpForm = props => {
   const {
@@ -36,18 +39,18 @@ const SignUpForm = props => {
           name="address"
           type="text"
           onChange={handleChange}
-          disabled
         />
       </FormGroup>
 
       <FormGroup
         className="col-4"
         label="Order Rate"
-        labelFor="rate"
+        labelFor="dex_rate"
         labelInfo="(required)"
       >
-        <NumericInput
-          name="rate"
+        <InputGroup
+          name="dex_rate"
+          type="number"
           onChange={handleChange}
         />
       </FormGroup>
@@ -88,8 +91,14 @@ class RegisterForm extends React.Component {
     // TODO: validate input values
   }
 
+  closeAlert = () => {
+    const { resetAlert, error, history } = this.props
+    resetAlert()
+    if (!error) history.push(SITE_MAP.Relayers)
+  }
+
   render() {
-    const { alert, resetAlert } = this.props
+    const { alert, error } = this.props
     return (
       <Grid className="direction-column relayer-registration--form">
         <Formik
@@ -99,14 +108,18 @@ class RegisterForm extends React.Component {
           render={SignUpForm}
         />
         <Alert
+          canEscapeKeyCancel
+          canOutsideClickCancel
           intent={Intent.WARNING}
           confirmButtonText="I got it!"
-          isOpen={alert && alert.for === 'registration-form'}
-          onClose={resetAlert}
+          isOpen={!!alert}
+          onClose={this.closeAlert}
         >
-          <p>
-            {JSON.stringify(alert)}
-          </p>
+          <Grid className="alert-message">
+            <div className="col-12">
+              {JSON.stringify(alert)}
+            </div>
+          </Grid>
         </Alert>
       </Grid>
     )
@@ -115,9 +128,13 @@ class RegisterForm extends React.Component {
 
 const mapProps = store => ({
   address: store.currentUserAddress,
-  alert: store.alert
+  alert: store.alert,
+  error: store.error,
 })
 
-const connector = connect(mapProps, RelayerRegistration)
+const connector = _.compose(
+  withRouter,
+  connect(mapProps, RelayerRegistration),
+)
 
 export default connector(RegisterForm)
