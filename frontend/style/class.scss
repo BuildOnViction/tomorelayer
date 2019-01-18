@@ -14,10 +14,80 @@ $space-mod-map: (
   p: padding
 );
 
-@for $i from 1 through 5 {
+@for $i from 0 through 5 {
   @each $mod, $val in $space-mod-map {
     .#{$mod}-#{$i} {
       #{$val}: #{$i}em;
     }
   }
+}
+
+/* text color */
+$text-color-map: (
+  white: $white,
+  blue: $blue5,
+  green: $green5,
+  forest: $forest4,
+  black: $black,
+  orange: $brand-color-light,
+  dark: $dark-gray5,
+);
+
+@each $color, $val in $text-color-map {
+  .text-#{$color} {
+    color: #{$val} !important;
+  }
+}
+
+/* text size */
+@for $i from 0 through 5 {
+  .font-#{$i} {
+    font-size: #{$i * 5}pt;
+  }
+}
+
+/* background-color */
+$bg-color-map: (
+  blue: $blue5,
+  green: $green5,
+  forest: $forest4,
+  black: $black,
+  orange: $brand-color-light,
+  dark: $dark-gray1,
+);
+
+@each $color, $val in $text-color-map {
+  .bg-#{$color} {
+    background: #{$val} !important;
+  }
+}
+
+
+// UTILITY INDIVIDUAL CLASSES
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-bold {
+  font-weight: 800;
+}
+
+.drop-shadow {
+  box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.05);
+}
+
+.border-round-top {
+  border-radius: 5px 5px 0 0;
+}
+
+.border-round-bottom {
+  border-radius: 0 0 5px 5px ;
+}
+
+.border-round-all {
+  border-radius: 5px;
 }

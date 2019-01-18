@@ -1,0 +1,16 @@
+.relayer-table--row {
+  border: solid 1px $light-gray3;
+  margin-top: 5px;
+}
+
+.relayer-table--head {
+}
+
+.relayer-logo {
+  position: relative;
+  margin: 3px 0;
+  border: solid 1px $light-gray3;
+  padding: 1px;
+  border-radius: 3px;
+  transform: translateY(2px);
+}

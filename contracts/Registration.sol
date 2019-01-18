@@ -6,6 +6,9 @@ pragma experimental ABIEncoderV2;
 contract Registra {
     struct relayer {
         bool activated;
+        // TODO: add customizable rates
+        // dex_rate
+        // foundation_rate
     }
 
     mapping(address => relayer) RELAYERS;

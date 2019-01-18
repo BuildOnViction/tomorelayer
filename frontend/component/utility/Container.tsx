@@ -1,14 +1,18 @@
+import cx from 'classnames'
+
 const Container = ({
   full = false,
-  grid = false,
+  center = false,
   className = '',
   children,
 }) => {
-  const isGrid = grid ? ' grid' : ''
-  const containerType = full ? 'container-full' : 'container'
-  const fullclass = containerType + isGrid + ' ' + className
+  const cls = cx({
+    'container': !full,
+    'container-full': full,
+    'center': center,
+  }, className)
   return (
-    <div className={fullclass} >
+    <div className={cls} >
       {children}
     </div>
   )

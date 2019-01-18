@@ -9,7 +9,7 @@ const { Group, Heading } = Navbar
 export class NavBar extends React.Component {
   render() {
     return (
-      <Navbar className="bp3-dark nav--container" fixedToTop>
+      <Navbar className="bp3-light nav--container drop-shadow" fixedToTop>
         <Group align={Alignment.LEFT}>
           <Heading className="nav--heading">
             <img
@@ -17,14 +17,10 @@ export class NavBar extends React.Component {
               src={logo}
               className="nav--heading--logo ml-1"
             />
-            <Link to="/" className="nav--heading--title ml-1">
+            <Link to="/" className="nav--heading--title text-dark ml-1">
               Tomochain Relayer Network
             </Link>
           </Heading>
-        </Group>
-        <Group align={Alignment.RIGHT}>
-          <Button className="bp3-minimal" icon="home" text="Dashboard" large />
-          <Button className="bp3-minimal" icon="user" large />
         </Group>
       </Navbar>
     )

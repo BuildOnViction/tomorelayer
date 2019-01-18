@@ -1,8 +1,8 @@
 import { Route, BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { SITE_MAP } from '@constant'
-import { Dashboard, Home } from '@route'
-import { NavBar } from '@shared'
+import { Dashboard, Home, Relayers, Registration } from '@route'
+import { NavBar, RouteSwitch } from '@shared'
 import { Container } from '@utility'
 import { AppInitializer } from '@action'
 import '@static/favicon.ico'
@@ -18,12 +18,6 @@ const mapProps = store => ({
 
 class App extends React.Component {
   componentDidMount() {
-    /* NOTE: some action on app intilization..
-     * 1/ Fetch relayer list from Backend
-     * 2/ Fetch current user's address
-     * 3/ Compare is this current user is a relayer, show some notification/welcome message
-     * 4/ Get relayer's contract for comparing too...
-     */
     this.props.fetchRegisteredRelayers()
     this.props.detectWeb3User()
   }
@@ -33,12 +27,16 @@ class App extends React.Component {
       <Router>
         <div>
           <NavBar />
-          <Container full className="mt-5 pt-1">
-            <pre>{this.props.alert}</pre>
-            <Switch>
-              <Route exact path={SITE_MAP.root} component={Home} />
-              <Route path={SITE_MAP.dashboard} component={Dashboard} />
-            </Switch>
+          <Container className="mt-5 pt-1">
+            <RouteSwitch />
+            <Container className="p-3 drop-shadow switch-container mb-5">
+              <Switch>
+                <Route exact path={SITE_MAP.Home} component={Home} />
+                <Route path={SITE_MAP.Dashboard} component={Dashboard} />
+                <Route path={SITE_MAP.Registration} component={Registration} />
+                <Route path={SITE_MAP.Relayers} component={Relayers} />
+              </Switch>
+            </Container>
           </Container>
         </div>
       </Router>
