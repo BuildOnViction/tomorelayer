@@ -41,20 +41,15 @@ export const AppInitializer = () => ({
 
 })
 
-export const RelayerRegistration = () => ({
+export const RelayerRegistration = ({ setState }) => ({
 
-  registerRelayer: async (state, values) => {
+  registerRelayer: async (state, values, callback) => {
     const resp = await Client.post(API.register, values)
-    if (resp.error) return {
-      alert: resp.error.message + ': ' + resp.error.detail,
-      error: resp.error,
+    if (!resp.error) {
+      const relayers = [...state.relayers, resp.payload]
+      setState({ relayers })
     }
-    return {
-      alert: resp.payload,
-      relayers: [...state.relayers, resp.payload],
-    }
+    return callback(resp)
   },
-
-  resetAlert: () => ({ alert: '', error: '' }),
 
 })

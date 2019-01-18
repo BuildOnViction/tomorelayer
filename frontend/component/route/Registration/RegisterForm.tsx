@@ -79,33 +79,44 @@ const SignUpForm = props => {
 
 class RegisterForm extends React.Component {
 
-  initialValues = {
-    address: this.props.address,
+  state = {
+    alert: null,
+    initialValues: {
+      address: this.props.address,
+    },
   }
 
-  registerNewRelayer = (values, actions) => {
-    this.props.registerRelayer(values)
-  }
+  registerNewRelayer = values => this.props.registerRelayer(
+    values,
+    ({ error, payload }) => {
+      const errorAlert = err => `Error: ${err.message} (${err.detail})`
+      const successAlert = obj => `Success: ${JSON.stringify(obj)}`
+      const alert = error ? errorAlert(error) : successAlert(payload)
+      return this.setState({ alert })
+    },
+  )
 
   validate = values => {
     // TODO: validate input values
   }
 
   closeAlert = () => {
-    const { resetAlert, error, history } = this.props
-    resetAlert()
-    if (!error) history.push(SITE_MAP.Relayers)
+    const history = this.props.history
+    this.form.setSubmitting(false)
+    if (this.state.alert.includes('Error')) this.setState({ alert: null })
+    if (this.state.alert.includes('Success')) history.push(SITE_MAP.Relayers)
   }
 
   render() {
-    const { alert, error } = this.props
+    const { alert, initialValues } = this.state
     return (
       <Grid className="direction-column relayer-registration--form">
         <Formik
-          initialValues={this.initialValues}
+          initialValues={initialValues}
           validate={this.validate}
           onSubmit={this.registerNewRelayer}
           render={SignUpForm}
+          ref={el => {this.form = el}}
         />
         <Alert
           canEscapeKeyCancel
@@ -128,8 +139,6 @@ class RegisterForm extends React.Component {
 
 const mapProps = store => ({
   address: store.currentUserAddress,
-  alert: store.alert,
-  error: store.error,
 })
 
 const connector = _.compose(
