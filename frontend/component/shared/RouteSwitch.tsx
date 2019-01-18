@@ -7,10 +7,10 @@ import { SITE_MAP } from '@constant'
 
 const cls = active => cx('col-auto route-switch--route m-1', { active, 'drop-shadow': active })
 
-const WrappedRouteSwitch = ({ history, registeredRelayers, currentUser }) => {
+const WrappedRouteSwitch = ({ history, relayers, currentUser }) => {
   const activeRoute = history.location.pathname
-  const addresses = _.pluck('address', registeredRelayers)
-  const isRegistered = currentUser !== '' && registeredRelayers.length > 0 && currentUser in addresses
+  const addresses = _.pluck('address', relayers)
+  const isRegistered = currentUser !== '' && relayers.length > 0 && addresses.indexOf(currentUser) > -1
   const availableRoutes = Object.keys(SITE_MAP).filter(r => isRegistered ? r !== 'Registration' : r !== 'Dashboard')
   return (
     <Grid className="route-switch mt-1 mb-1">
@@ -19,7 +19,7 @@ const WrappedRouteSwitch = ({ history, registeredRelayers, currentUser }) => {
           to={SITE_MAP[route]}
           className={cls(activeRoute === SITE_MAP[route])}
           key={route}
-        >
+          >
           <div className="text-center">
             {route}
           </div>
@@ -30,7 +30,7 @@ const WrappedRouteSwitch = ({ history, registeredRelayers, currentUser }) => {
 }
 
 const mapProps = store => ({
-  registeredRelayers: store.relayers,
+  relayers: store.relayers,
   currentUser: store.currentUserAddress,
 })
 

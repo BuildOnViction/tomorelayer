@@ -4,7 +4,7 @@ import { SITE_MAP } from '@constant'
 import { Dashboard, Home, Relayers, Registration } from '@route'
 import { NavBar, RouteSwitch } from '@shared'
 import { Container } from '@utility'
-import { AppInitializer } from '@action'
+import { APP_INITIALIZER } from '@action'
 import '@static/favicon.ico'
 import '../style/app.scss'
 
@@ -44,4 +44,4 @@ class App extends React.Component {
   }
 }
 
-export default connect(mapProps, AppInitializer)(App)
+export default connect(mapProps, APP_INITIALIZER)(App)

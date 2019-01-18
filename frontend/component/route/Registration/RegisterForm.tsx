@@ -4,7 +4,7 @@ import { connect } from 'redux-zero/react'
 import { Formik } from 'formik'
 import { Alert, FormGroup, InputGroup, NumericInput, Intent, Button } from '@blueprintjs/core'
 import { Grid } from '@utility'
-import { RelayerRegistration } from '@action'
+import { RELAYER_REGISTRATION } from '@action'
 import { SITE_MAP } from '@constant'
 
 const SignUpForm = props => {
@@ -12,6 +12,7 @@ const SignUpForm = props => {
     isSubmitting,
     handleChange,
     handleSubmit,
+    values,
   } = props
   return (
     <React.Fragment>
@@ -38,6 +39,8 @@ const SignUpForm = props => {
         <InputGroup
           name="address"
           type="text"
+          value={values.address}
+          disabled={!!values.address}
           onChange={handleChange}
         />
       </FormGroup>
@@ -81,9 +84,6 @@ class RegisterForm extends React.Component {
 
   state = {
     alert: null,
-    initialValues: {
-      address: this.props.address,
-    },
   }
 
   registerNewRelayer = values => this.props.registerRelayer(
@@ -108,11 +108,12 @@ class RegisterForm extends React.Component {
   }
 
   render() {
-    const { alert, initialValues } = this.state
+    const { alert } = this.state
+    const { address } = this.props
     return (
       <Grid className="direction-column relayer-registration--form">
         <Formik
-          initialValues={initialValues}
+          initialValues={{ address }}
           validate={this.validate}
           onSubmit={this.registerNewRelayer}
           render={SignUpForm}
@@ -143,7 +144,7 @@ const mapProps = store => ({
 
 const connector = _.compose(
   withRouter,
-  connect(mapProps, RelayerRegistration),
+  connect(mapProps, RELAYER_REGISTRATION),
 )
 
 export default connector(RegisterForm)

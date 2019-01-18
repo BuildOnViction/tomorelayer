@@ -18,7 +18,7 @@ export const Client = {
 }
 
 // REDUX_ZERO ACTIONS
-export const AppInitializer = () => ({
+export const APP_INITIALIZER = ({ setState }) => ({
 
   fetchRegisteredRelayers: async () => {
     const resp = await Client.get(API.relayers)
@@ -32,16 +32,17 @@ export const AppInitializer = () => ({
   },
 
   detectWeb3User: async () => {
-    if (!web3) return { alert: ALERT.web3.meta_mask_unavailable }
-    const [err, acc] = await AsynCatch(web3.eth.getAccounts())
-    if (err && !acc) return { error: ERROR.web3.getAccounts }
-    if (acc.length === 0) return { alert: ALERT.web3.not_logged_in }
-    if (acc.length) return { currentUserAddress: acc[0] }
+    if (!web3 || !web3.eth) return { alert: ALERT.web3.meta_mask_unavailable }
+    return web3.eth.getAccounts((err, acc) => {
+      if (err && !acc) setState({ error: ERROR.web3.getAccounts })
+      if (acc.length === 0) setState({ alert: ALERT.web3.not_logged_in })
+      if (acc.length) setState({ currentUserAddress: acc[0] })
+    })
   },
 
 })
 
-export const RelayerRegistration = ({ setState }) => ({
+export const RELAYER_REGISTRATION = ({ setState }) => ({
 
   registerRelayer: async (state, values, callback) => {
     const resp = await Client.post(API.register, values)
