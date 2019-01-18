@@ -7,6 +7,7 @@ class Relayer(pw.Model):
     address = pw.CharField(unique=True, max_length=200)
     dex_rate = pw.DecimalField(max_digits=5, decimal_places=4)
     logo = pw.CharField(max_length=200)
+    activated = pw.BooleanField(default=True)
 
     class Meta:
         database = database
@@ -17,3 +18,4 @@ class Relayer(pw.Model):
 
 database.connect()
 database.create_tables([Relayer])
+# TODO: fetch all relayers from SmartContract if necessary

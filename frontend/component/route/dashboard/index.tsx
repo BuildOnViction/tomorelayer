@@ -13,19 +13,17 @@ export class Dashboard extends React.PureComponent {
   }
 
   public render() {
+    // TODO: dex account customization/configuration
     return (
       <div>
-        <div>
-          <p>
-            <Code>Button</Code>
-          </p>
-          <Button
-            large
-            icon="refresh"
-            text="Go bacl"
-            onClick={this.goHome}
-          />
-        </div>
+        <h3>dex account customization/configuration</h3>
+        <ul>
+          <li>Customize Name</li>
+          <li>Change Address</li>
+          <li>Change DEX Rate</li>
+          <li>Change Logo</li>
+          <li>Deactivate!</li>
+        </ul>
       </div>
     )
   }

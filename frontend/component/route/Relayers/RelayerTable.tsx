@@ -4,7 +4,7 @@ import { Grid } from '@utility'
 const TableRow = ({ item }) => (
   <div className="relayer-table--row col-12 mr-1 ml-1">
     <Grid className="text-dark align-center">
-      <div className="col-2">
+      <div className="col-1">
         {item.id}
       </div>
       <div className="col-5">

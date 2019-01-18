@@ -22,6 +22,7 @@ class RegisterHandler(BaseHandler):
         if dex_rate >= 1:
             raise InvalidValueException('Dex_rate must be less than 1')
 
+        # TODO: register with SmartContract
         async with self.application.objects.atomic():
             rl = await self.application.objects.create(
                 Relayer,
