@@ -34,9 +34,12 @@ module.exports = {
     gas: "auto",
     contracts: {
       // example:
-      //SimpleStorage: {
-      //  args: [ 100 ]
-      //}
+      Official_TomoChain_Relayer_Registration: {
+        file: './contracts/Registration.sol'
+      },
+      afterDeploy: [
+        // TODO: Save address to .env
+      ]
     }
   },
 
