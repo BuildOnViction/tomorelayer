@@ -10,8 +10,7 @@
     -  [Development Roadmap](#roadmap)
 3.  [Troubleshooting](#trouble)
 
-
-<hr>
+// TODO: update doc
 <a id="org836984f"></a>
 
 ## Introduction
@@ -58,7 +57,6 @@ The following must be included in the development toolbelt:
     $ yarn be
 
 For any installation problem, checkout [Troubleshooting](#trouble) guide
-<hr>
 
 <a id="org30ae7c1"></a>
 
@@ -87,15 +85,13 @@ Those are where you get started.
 
 -   Checkout Python Tornado docs&#x2026;
 
-<hr>
 <a id="roadmap"></a>
 
 ### Development Roadmap
 
-1. Relayer Registration
-   - [ ] Signing Relayer Contract
-   - [ ] Storing Relayer Info off-chain (needed?)
-   - [ ] Registering/Adding New Tokens
+1. Relayer Registration & Update
+   - [x] Backend Database
+   - [ ] SmartContract
 2. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
@@ -105,7 +101,6 @@ Those are where you get started.
    - [ ] Network volume details
 5. Make Portable/Reusable API Kit
 
-<hr>
 
 <a id="trouble"></a>
 

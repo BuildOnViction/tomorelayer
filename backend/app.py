@@ -11,4 +11,5 @@ if __name__ == "__main__":
     app = Application(route, default_handler_class=NotFoundHandler, **settings)
     app.listen(settings['port'])
     app.objects = settings['objects']
+    app.contracts = settings['contracts']
     IOLoop.current().start()
