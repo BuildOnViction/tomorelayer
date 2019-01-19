@@ -13,6 +13,7 @@
     "solc": "0.5.1"
   },
   "plugins": {
+    "embark-tomo": {}
   },
   "options": {
     "solc": {

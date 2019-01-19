@@ -7,7 +7,9 @@
     "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
     "be": "pipenv run python ./backend/app.py",
     "dock": "node tasks dock",
-    "ebc": "embark run --nobrowser --noserver",
+    "embark:run": "embark run --nobrowser --noserver",
+    "embark:plugins": "rsync -a plugins/*.* node_modules/embark-tomo/",
+    "ebc": "run-s embark:plugins embark:run",
     "dbm": "node tasks db:migrate",
     "kp": "kill-port 8888",
     "lint": "tslint -c ./frontend/tslint.json './frontend/**/*.ts*'"
@@ -22,6 +24,7 @@
     "fuse-box": "^3.6.0",
     "kill-port": "^1.3.2",
     "node-sass": "^4.11.0",
+    "npm-run-all": "^4.1.5",
     "shelljs": "^0.8.3",
     "signale": "^1.3.0",
     "ts-node": "^7.0.1",
