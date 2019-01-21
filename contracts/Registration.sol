@@ -4,6 +4,8 @@ pragma experimental ABIEncoderV2;
 
 /// NOTE: upgradable contract?
 contract Official_TomoChain_Relayer_Registration {
+    address public owner;
+
     /// NOTE: rate in range(0, 100)
     struct relayer {
         bool activated;
@@ -14,8 +16,16 @@ contract Official_TomoChain_Relayer_Registration {
 
     mapping(address => relayer) RELAYERS;
 
+    constructor() public {
+        owner = msg.sender;
+    }
 
     /// MODIFIERS
+    modifier onlyOwner {
+        require(msg.sender == owner, "Only contract owner is allowed!");
+        _;
+    }
+
     modifier rateIsValid(relayer memory _relayer) {
         require(_relayer.dex_rate < 100, "DEX_RATE must not be larger than 100 percent");
         require(_relayer.dex_rate >= 0, "DEX_RATE must not be less than 0");
@@ -28,6 +38,7 @@ contract Official_TomoChain_Relayer_Registration {
     /// LOGIC
     function register(address _addr, relayer memory _relayer)
         public
+        onlyOwner
         rateIsValid(_relayer)
         returns (bool success, relayer memory registeredRelayer)
     {
@@ -41,6 +52,7 @@ contract Official_TomoChain_Relayer_Registration {
 
     function updateRelayer(address _addr, relayer memory _relayer)
         public
+        onlyOwner
         rateIsValid(_relayer)
         returns (bool success, relayer memory updatedRelayer)
     {
