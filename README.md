@@ -109,7 +109,7 @@ Those are where you get started.
 
 1. Relayer Registration & Update
    - [x] Backend Database
-   - [ ] SmartContract
+   - [x] SmartContract
 2. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
