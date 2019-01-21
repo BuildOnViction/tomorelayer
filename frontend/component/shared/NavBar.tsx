@@ -6,6 +6,7 @@ const { Group, Heading } = Navbar
 
 @withRouter
 export class NavBar extends React.Component {
+  // TODO: Logout/Login button.
   render() {
     return (
       <Navbar className="bp3-light nav--container drop-shadow" fixedToTop>

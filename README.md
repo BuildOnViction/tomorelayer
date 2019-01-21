@@ -1,22 +1,21 @@
-# Table of Contents
+# TABLE OF CONTENTS
 
 1.  [Introduction](#org836984f)
-2.  [First](#org957d994)
-    -  [Pre-requisite](#org168090e)
-    -  [Setup](#orge4742dd)
+2.  [Development](#org957d994)
+    -  [Setup](#org168090e)
     -  [Start hacking](#org30ae7c1)
         1.  [Frontend Development](#org7f062cc)
         2.  [Backend Development](#orga954538)
-    -  [Development Roadmap](#roadmap)
-3.  [Troubleshooting](#trouble)
+3.  [Development Roadmap](#roadmap)
+4.  [Troubleshooting](#trouble)
 
-
-<hr>
+// TODO: update doc
 <a id="org836984f"></a>
 
 ## Introduction
 
 A Relayer Manager Application
+
 
 
 <a id="org957d994"></a>
@@ -26,7 +25,7 @@ A Relayer Manager Application
 
 <a id="org168090e"></a>
 
-#### Pre-requisite
+### Setup
 The following must be included in the development toolbelt:
 
 -   pyenv
@@ -37,48 +36,63 @@ The following must be included in the development toolbelt:
 -   yarn
 -   Docker
 
-..then we go:
 
--   Install required & frontend dependencies
+Now, install dependencies and get the app started.
 
-        $ yarn
--   Install backend dependencies
+Note that generally, you should be prepared to have 3 terminals running in parallel:
 
-        $ pipenv install
--   Fireup database with Docker
+- Install frontend & node scripts dependencies
+``` sh
+$ npm install
+```
 
-        $ yarn db
--   Start the app
+- Install backend dependencies
+``` sh
+$ pipenv install
+```
 
-        $ yarn up
+- Fire up database with Docker
+``` sh
+$ npm run dock
+```
 
-&#x2026;or you can start frontend and backend in two separate terminal windows
+- Run Embark to compile all smart contracts. We are gonna need the contracts data ready first so Backend can interact
+with. In development mode, Embark watches all the file changes and does the hot-reloading for us, so you should run the
+following command in a separate terminal.
+``` sh
+$ npm run ebc
+```
 
-    $ yarn fe
-    $ yarn be
+- All good, let's get Backend up and running, certainly in a different terminal from the Embark's
+``` sh
+$ npm run be
+```
 
-For any installation problem, checkout [Troubleshooting](#trouble) guide
-<hr>
+- Finally, the frontend, in another terminal also
+``` sh
+$ npm run fe
+```
+
+For any installation/running problem, check out [Troubleshooting](#trouble) guide
+
+
 
 <a id="org30ae7c1"></a>
 
-#### Start hacking
+### Start hacking
 
 backend has the entry point called "app", frontend "index.tsx"
 Those are where you get started.
 
-
 <a id="org7f062cc"></a>
 
-##### Frontend Development
-
+#### Frontend Development
 
 -   Libraries for frontend development includes mainly React & BlueprintJS.
--   State Management & Code Splitting are handled using native React API instead of external libraries such as Redux and React-Loadable. This keeps the app minimal as it could be.
--   Stylesheet lang is SASS's SCSS
--   Generally, we are using **Typescript Compiler** for compiling ease & speed, also this helps eliminate the redundancy of babel
-    plugins.
--   **Wretch** is used instead of Axios/Fetch. It provides smaller and more intuitive async code
+-   State Management & Code Splitting are handled with `Redux-Zero` and native React v16-API
+-   Stylesheet developed with SASS's SCSS, with Bootstrap's Grid-System and BlueprintJSS's configurable theming variables
+-   Javascript development with **Typescript Compiler** for compiling ease & speed, also this helps eliminate the redundancy of babel
+    plugins. Typing is totally optional.
 
 
 <a id="orga954538"></a>
@@ -87,15 +101,15 @@ Those are where you get started.
 
 -   Checkout Python Tornado docs&#x2026;
 
-<hr>
 <a id="roadmap"></a>
 
-### Development Roadmap
 
-1. Relayer Registration
-   - [ ] Signing Relayer Contract
-   - [ ] Storing Relayer Info off-chain (needed?)
-   - [ ] Registering/Adding New Tokens
+
+## Development Roadmap
+
+1. Relayer Registration & Update
+   - [x] Backend Database
+   - [x] SmartContract
 2. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
@@ -105,13 +119,11 @@ Those are where you get started.
    - [ ] Network volume details
 5. Make Portable/Reusable API Kit
 
-<hr>
+
 
 <a id="trouble"></a>
 
 ## Troubleshooting
-
-### Frontend
 
 **1. I can't install `web3`, something went wrong with the `node-gyp` build process.**
 
@@ -128,4 +140,9 @@ Config npm's python path
 ```sh
 $ npm config set python <your-python2.7-path>
 ```
-Then you can re-install things by running `npm i` or `yarn`
+Then you can re-install things by running `npm i`
+
+**2. I can't get the Backend running, something is wrong with the 'Port already in use' warning.**
+
+Probably your Backend's last working session encountered some error and the event-loop is still occupying the
+development port (eg 8888). Just kill the port and restart the app as normal, using `npm run kp`

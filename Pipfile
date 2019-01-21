@@ -17,6 +17,7 @@ peewee-async = "*"
 aiopg = "*"
 web3 = "*"
 py-solc = "*"
+logzero = "*"
 
 [requires]
 python_version = "3.7"

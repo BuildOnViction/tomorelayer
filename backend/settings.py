@@ -8,6 +8,7 @@ from peewee_async import PooledPostgresqlDatabase
 # IMPORT ENVIRONMENT VARIABLES
 env_path = Path('..') / '.env'
 load_dotenv(dotenv_path=env_path)
+is_production = getenv('STG') == 'production'
 
 # SETUP ASYNC ORM
 envars = ['user', 'password', 'host', 'port']
@@ -21,9 +22,9 @@ objects = Manager(database)
 # APPLICATION BACKEND SETTINGS
 base_path = path.dirname(__file__)
 settings = {
-    'autoreload': True,
+    'autoreload': not is_production,
     'db': {'name': db_name, **db_config},
-    'debug': getenv('STG') != 'production',
+    'debug': not is_production,
     'login_url': '/login',
     'objects': objects,
     'port': getenv('APP_PORT'),

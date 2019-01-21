@@ -3,9 +3,11 @@
 .fusebox
 .embark
 .tern-port
+.vscode/
 node_modules/
 frontend/dist/
 build
 
 error.log
 chains.json
+contracts.json

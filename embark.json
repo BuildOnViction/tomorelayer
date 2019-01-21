@@ -3,16 +3,17 @@
   "app": {},
   "buildDir": "build/",
   "config": {
-    "contracts": "contracts.js",
-    "blockchain": false,
+    "contracts": "embark/contracts.js",
+    "blockchain": "embark/blockchain.js",
     "storage": false,
-    "communication": false,
+    "communication": "embark/communication.js",
     "webserver": false
   },
   "versions": {
-    "solc": "0.5.1"
+    "solc": "0.5.0"
   },
   "plugins": {
+    "embark-tomo": {}
   },
   "options": {
     "solc": {
