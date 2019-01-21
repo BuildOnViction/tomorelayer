@@ -1,6 +1,6 @@
 /// @dev fixed pragma
 pragma solidity ^0.5.0;
-pragma experimental ABIEncoderV2;
+
 
 /// NOTE: upgradable contract?
 contract Official_TomoChain_Relayer_Registration {
@@ -20,48 +20,69 @@ contract Official_TomoChain_Relayer_Registration {
         owner = msg.sender;
     }
 
+
+    /// EVENTS
+    event NewRelayer (address _relayer, uint16 _dex_rate, uint16 _foundation_rate);
+    event UpdateRelayer (address _relayer, bool _activated, uint16 _dex_rate, uint16 _foundation_rate);
+
+
     /// MODIFIERS
     modifier onlyOwner {
         require(msg.sender == owner, "Only contract owner is allowed!");
         _;
     }
 
-    modifier rateIsValid(relayer memory _relayer) {
-        require(_relayer.dex_rate < 100, "DEX_RATE must not be larger than 100 percent");
-        require(_relayer.dex_rate >= 0, "DEX_RATE must not be less than 0");
-        require(_relayer.foundation_rate < 100, "FOUNDATION_RATE must not be larger than 100 percent");
-        require(_relayer.foundation_rate >= 0, "FOUNDATION_RATE must not be less than 0");
+    modifier rateIsValid(uint16 dex_rate, uint16 foundation_rate) {
+        require(dex_rate < 100, "DEX_RATE must not be larger than 100 percent");
+        require(dex_rate >= 0, "DEX_RATE must not be less than 0");
+        require(foundation_rate < 100, "FOUNDATION_RATE must not be larger than 100 percent");
+        require(foundation_rate >= 0, "FOUNDATION_RATE must not be less than 0");
         _;
     }
 
 
     /// LOGIC
-    function register(address _addr, relayer memory _relayer)
+    function register(address _addr, uint16 _dex_rate, uint16 _foundation_rate)
         public
         onlyOwner
-        rateIsValid(_relayer)
-        returns (bool success, relayer memory registeredRelayer)
+        rateIsValid(_dex_rate, _foundation_rate)
     {
         require(!RELAYERS[_addr].registered, "Address is already registered!");
 
-        RELAYERS[_addr] = _relayer;
+        RELAYERS[_addr].dex_rate = _dex_rate;
+        RELAYERS[_addr].foundation_rate = _foundation_rate;
+        RELAYERS[_addr].activated = true;
         RELAYERS[_addr].registered = true;
 
-        return (true, RELAYERS[_addr]);
+        emit NewRelayer(_addr, RELAYERS[_addr].dex_rate, RELAYERS[_addr].foundation_rate);
     }
 
-    function updateRelayer(address _addr, relayer memory _relayer)
+    function updateRelayer(address _addr, bool _activated, uint16 _dex_rate, uint16 _foundation_rate)
         public
         onlyOwner
-        rateIsValid(_relayer)
-        returns (bool success, relayer memory updatedRelayer)
+        rateIsValid(_dex_rate, _foundation_rate)
     {
         require(RELAYERS[_addr].registered, "Address is not registered!");
-        require(_relayer.registered, "Registration status is not mutable!");
 
-        RELAYERS[_addr] = _relayer;
+        RELAYERS[_addr].dex_rate = _dex_rate;
+        RELAYERS[_addr].foundation_rate = _foundation_rate;
+        RELAYERS[_addr].activated = _activated;
 
-        return (true, RELAYERS[_addr]);
+        emit UpdateRelayer(_addr, RELAYERS[_addr].activated, RELAYERS[_addr].dex_rate, RELAYERS[_addr].foundation_rate);
+    }
+
+    function getSingleRelayer(address _addr)
+        public
+        view
+        returns (bool _activated, uint16 _dex_rate, uint16 _foundation_rate)
+    {
+        require(RELAYERS[_addr].registered, "Address is not registered!");
+
+        bool activated =  RELAYERS[_addr].activated;
+        uint16 dex_rate = RELAYERS[_addr].dex_rate;
+        uint16 foundation_rate = RELAYERS[_addr].foundation_rate;
+
+        return (activated, dex_rate, foundation_rate);
     }
 
 }
