@@ -2,8 +2,7 @@ import json
 import tornado.autoreload
 from os import getenv
 from web3 import Web3
-# from web3 import WebsocketProvider
-from web3 import HTTPProvider
+from web3 import WebsocketProvider
 from web3.middleware import geth_poa_middleware
 from logzero import logger
 
@@ -18,10 +17,9 @@ class Blockchain:
     def __init__(self):
         """ Interact with Blockchain through SmartContract & WebSocket
         """
-        socketProvider = getenv('TMC_EPC')
+        provider = getenv('TMC_WS')
         self.read_local_contracts()
-        # TODO: find a way to change to WebSocketProvider later
-        self.web3 = Web3(HTTPProvider(socketProvider))
+        self.web3 = Web3(WebsocketProvider(provider))
 
         if not is_production:
             self.web3.middleware_stack.inject(geth_poa_middleware, layer=0)
