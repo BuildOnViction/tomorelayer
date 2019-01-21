@@ -74,15 +74,14 @@ contract Official_TomoChain_Relayer_Registration {
     function getSingleRelayer(address _addr)
         public
         view
-        returns (bool _activated, uint16 _dex_rate, uint16 _foundation_rate)
+        returns (bool _registered, bool _activated, uint16 _dex_rate, uint16 _foundation_rate)
     {
-        require(RELAYERS[_addr].registered, "Address is not registered!");
-
+        bool registered =  RELAYERS[_addr].registered;
         bool activated =  RELAYERS[_addr].activated;
         uint16 dex_rate = RELAYERS[_addr].dex_rate;
         uint16 foundation_rate = RELAYERS[_addr].foundation_rate;
 
-        return (activated, dex_rate, foundation_rate);
+        return (registered, activated, dex_rate, foundation_rate);
     }
 
 }
