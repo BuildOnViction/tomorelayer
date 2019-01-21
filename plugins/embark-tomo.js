@@ -18,9 +18,7 @@ module.exports = function(embark) {
   })
 
   embark.events.on('deploy:contract:deployed', contract => {
-    const name = contract.className
-    const address = contract.deployedAddress
-    contracts.push({ name, address })
+    contracts.push(contract)
   })
 
   embark.events.on('contractsDeployed', () => {
