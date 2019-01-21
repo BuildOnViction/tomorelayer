@@ -1,6 +1,8 @@
+from web3 import Web3
 from model import Relayer
 from .base import BaseHandler
-from exception import *
+from exception import MissingArgumentException
+from exception import InvalidValueException
 
 
 class RegisterHandler(BaseHandler):

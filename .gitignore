@@ -3,6 +3,7 @@
 .fusebox
 .embark
 .tern-port
+.vscode/
 node_modules/
 frontend/dist/
 build

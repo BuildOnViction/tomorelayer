@@ -8,7 +8,7 @@ Content-Type: application/json
   "name": "ABC",
   "address": "0x00000000000000",
   "logo": "https://via.placeholder.com/150",
-  "dex_rate": 2
+  "dex_rate": 0.3
 }
 
 # Get all relayers
