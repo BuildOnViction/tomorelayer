@@ -9,7 +9,6 @@
 3.  [Development Roadmap](#roadmap)
 4.  [Troubleshooting](#trouble)
 
-// TODO: update doc
 <a id="org836984f"></a>
 
 ## Introduction

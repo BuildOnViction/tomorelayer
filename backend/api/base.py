@@ -71,3 +71,12 @@ class ErrorHandler(ErrorHandler, BaseHandler):
     Default handler to be used in case of 404 error
     """
     pass
+
+
+class NotFoundHandler(BaseHandler):
+
+    def prepare(self):
+        raise HTTPError(
+            status_code=404,
+            reason="Invalid api endpoint.",
+        )

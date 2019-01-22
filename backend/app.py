@@ -3,8 +3,8 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application
 from route import route
 from settings import settings
-from api.main import NotFoundHandler
 from blockchain import Blockchain
+from api.base import NotFoundHandler
 
 
 if __name__ == "__main__":
