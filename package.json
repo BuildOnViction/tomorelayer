@@ -6,10 +6,10 @@
   "scripts": {
     "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
     "be": "pipenv run python ./backend/app.py",
-    "dock": "node tasks dock",
+    "docker": "node tasks docker",
     "embark:run": "embark run --nobrowser --noserver --nodashboard",
     "embark:plugins": "rsync -a embark/plugins/*.* node_modules/embark-tomo/",
-    "ebc": "run-s embark:plugins embark:run",
+    "embark:dev": "run-s embark:plugins embark:run",
     "dbm": "node tasks db:migrate",
     "kp": "kill-port 8888",
     "lint": "tslint -c ./frontend/tslint.json './frontend/**/*.ts*'"
