@@ -76,8 +76,8 @@ contract Official_TomoChain_Relayer_Registration {
         view
         returns (bool _registered, bool _activated, uint16 _dex_rate, uint16 _foundation_rate)
     {
-        bool registered =  RELAYERS[_addr].registered;
-        bool activated =  RELAYERS[_addr].activated;
+        bool registered = RELAYERS[_addr].registered;
+        bool activated = RELAYERS[_addr].activated;
         uint16 dex_rate = RELAYERS[_addr].dex_rate;
         uint16 foundation_rate = RELAYERS[_addr].foundation_rate;
 
