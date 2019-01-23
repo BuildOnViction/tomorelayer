@@ -27,7 +27,7 @@ class Blockchain:
         logger.warn('Connection status: {}'.format(self.web3.isConnected()))
 
     def read_local_contracts(self):
-        """ READ a friendly contracts.json
+        """ READ JSON FILES OF COMPILED CONTRACTS
         """
         try:
             contract_files = os.listdir('build/contracts')
