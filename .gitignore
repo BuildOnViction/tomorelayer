@@ -11,4 +11,4 @@ build
 error.log
 chains.json
 contracts.json
-.prod.env
+secrets.json
