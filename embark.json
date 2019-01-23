@@ -6,7 +6,7 @@
     "contracts": "embark/contracts.js",
     "blockchain": "embark/blockchain.js",
     "storage": false,
-    "communication": "embark/communication.js",
+    "communication": false,
     "webserver": false
   },
   "versions": {
