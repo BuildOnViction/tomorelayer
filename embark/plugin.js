@@ -6,13 +6,12 @@ module.exports = function(embark) {
   // so Tornando can load them on start
 
   const isProduction = process.env.STG === 'production'
-  let contracts = []
-  let file = 'contracts.json'
-
-  const info = embark.logger.info
+  const contracts = []
+  const file = 'contracts.json'
+  const { info, warn, error } = embark.logger
 
   embark.events.on('deploy:beforeAll', () => {
-    info(`========= is this production? ${isProduction}`)
+    warn(`====================== is this production? ${isProduction}`)
     info(`>> Clear the existing ${file}`)
     fs.writeFile(file, '', 'utf8', err => {
       if (err) throw err
@@ -35,7 +34,7 @@ module.exports = function(embark) {
         process.exit(0)
       }
     } catch (err) {
-      info(`[x] Cannot save to ${file}`)
+      error(`[x] Cannot save to ${file}`)
     }
   })
 

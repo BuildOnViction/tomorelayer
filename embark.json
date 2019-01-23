@@ -4,7 +4,7 @@
   "buildDir": "build/",
   "config": {
     "contracts": "embark/contracts.js",
-    "blockchain": "embark/blockchain.js",
+    "blockchain": false,
     "storage": false,
     "communication": false,
     "webserver": false
