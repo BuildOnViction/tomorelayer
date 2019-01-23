@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 
 
 /// NOTE: upgradable contract?
-contract Official_TomoChain_Relayer_Registration {
+contract Registration {
     address public owner;
 
     /// NOTE: rate in range(0, 100)

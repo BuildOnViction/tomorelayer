@@ -10,5 +10,4 @@ build
 
 error.log
 chains.json
-contracts.json
 secrets.json
