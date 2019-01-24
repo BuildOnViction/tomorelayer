@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import * as Web3 from 'web3'
 
 let web3Instance = null
 
@@ -9,7 +9,8 @@ export const web3 = (() => {
   // const rpc = process.env.RPC
   // const tomoProvider = new Web3.providers.HttpProvider(rpc)
   // web3Instance = new Web3(metaWeb3 ? metaWeb3.currentProvider : tomoProvider)
-
-  web3Instance = metaWeb3 ? new Web3(metaWeb3.currentProvider) : null
+  if (metaWeb3) {
+    web3Instance = new Web3(metaWeb3.currentProvider)
+  }
   return web3Instance
 })()

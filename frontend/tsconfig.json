@@ -5,7 +5,6 @@
     "jsx": "react",
     "importHelpers": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "rootDir": ".",
     "baseUrl": ".",

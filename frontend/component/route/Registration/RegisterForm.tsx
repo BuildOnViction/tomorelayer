@@ -1,4 +1,4 @@
-import _ from 'rambda'
+import * as _ from 'rambda'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Formik } from 'formik'

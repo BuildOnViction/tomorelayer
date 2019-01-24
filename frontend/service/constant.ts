@@ -1,4 +1,6 @@
-const { APP_HOST, APP_PORT } = process.env
+const  APP_HOST = process.env.APP_HOST
+const  APP_PORT = process.env.APP_PORT
+
 const baseUrl = `${APP_HOST}:${APP_PORT}`
 const apiPrefix = 'api'
 const apiBuild = resource => `${baseUrl}/${apiPrefix}/${resource}`
