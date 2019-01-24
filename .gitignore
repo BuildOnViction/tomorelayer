@@ -11,3 +11,4 @@ build
 error.log
 chains.json
 secrets.json
+.prod.env
