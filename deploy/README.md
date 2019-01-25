@@ -6,19 +6,13 @@ $ su - tor
 ```
 
 ## After login as the new user, install neccessary official packages
-Note:
-- `supervisor` is only available to work with **python 2.7**, and since Ubuntu doesnt come with **pip 2.7** installed,
-we need to explicitly install it by default
 ```shell
+$ sudo apt-get update
 $ sudo apt-get install git nginx python-pip
 ```
 
 #### Some special dependencies require special cares
-Node v10
-```shell
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-$ sudo apt install nodejs
-```
+[Node-version-manager](https://github.com/creationix/nvm )
 
 PostgreSQL v10:
 - create user, with proper privileges
@@ -67,6 +61,7 @@ $ sudo mkdir /srv/www
 $ cd /srv/www
 $ git clone <repo:relayerms>
 $ cd relayerms
+$ npm install -g embark
 $ npm install
 ```
 
