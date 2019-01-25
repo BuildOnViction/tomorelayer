@@ -1,0 +1,34 @@
+-i https://pypi.org/simple
+aiopg==0.15.0
+attrdict==2.0.0
+certifi==2018.11.29
+chardet==3.0.4
+cytoolz==0.9.0.1 ; implementation_name == 'cpython'
+eth-abi==2.0.0b4
+eth-account==0.3.0
+eth-hash[pycryptodome]==0.2.0
+eth-keyfile==0.5.1
+eth-keys==0.2.1
+eth-rlp==0.1.2
+eth-typing==2.0.0
+eth-utils==1.4.1
+hexbytes==0.1.0
+idna==2.8
+logzero==1.5.0
+lru-dict==1.1.6
+parsimonious==0.8.1
+peewee-async==0.6.0a0
+peewee==3.8.2
+psycopg2==2.7.6.1
+py-solc==3.2.0
+pycryptodome==3.7.2
+python-dotenv==0.10.1
+requests==2.21.0
+rlp==1.1.0
+semantic-version==2.6.0
+six==1.12.0
+toolz==0.9.0
+tornado==6.0a1
+urllib3==1.24.1
+web3==5.0.0a3
+websockets==7.0
