@@ -3,14 +3,6 @@
   "version": "0.1.0",
   "description": "relayer-management-system - frontend",
   "main": "index.js",
-  "scripts": {
-    "fe": "node -r dotenv/config -r ts-node/register --inspect frontend/fuse.ts",
-    "be": "pipenv run python ./backend/app.py",
-    "docker": "node tasks docker",
-    "embark": "node tasks embark",
-    "kill-port": "task kill-port",
-    "lint": "tslint -c ./frontend/tslint.json './frontend/**/*.ts*'"
-  },
   "author": "",
   "license": "ISC",
   "devDependencies": {

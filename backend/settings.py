@@ -6,7 +6,7 @@ from peewee_async import Manager
 from peewee_async import PooledPostgresqlDatabase
 
 # IMPORT ENVIRONMENT VARIABLES
-env_path = Path('..') / '.env'
+env_path = Path('.') / getenv('ENV_FILE')
 load_dotenv(dotenv_path=env_path)
 is_production = getenv('STG') == 'production'
 
