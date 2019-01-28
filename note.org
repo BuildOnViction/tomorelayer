@@ -1,0 +1,11 @@
+* TASKS [0/4]
+** TODO Implement smoother environment-switch strategy
+*** TODO Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
+*** TODO Custom exec build commands with extra argument to specify what /env/stg/ to use
+** TODO Fix flow-control for manual contract build & deploy
+*** TODO Account setup: create one if needed, or load /(privatekey + address)/ if provided
+*** TODO Contract work: compiled if needed, or load if provided
+** TODO Automation
+*** TODO Copy source to server
+*** TODO Distributing module configs (nginx, supervisor) at server side
+*** TODO Update-hook when contract-code changes
