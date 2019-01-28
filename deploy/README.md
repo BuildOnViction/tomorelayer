@@ -1,4 +1,5 @@
 ## Create an user & grant sudo privileges, eg: "tor"
+*Note*: **pipenv** practically doesn't work with root privileges, so a **sudo** user is required
 ```shell
 $ adduser tor
 $ usermod -aG sudo tor
@@ -46,6 +47,12 @@ Linuxbrew, Pipenv and Python
   - Refer to [Common-build-problem](https://github.com/pyenv/pyenv/wiki/Common-build-problems ) if stuck with installing python3
 
 - Install [Pipenv](https://pipenv.readthedocs.io/en/latest/install/#installing-pipenv )
+  - Add pipenv **USER_BASE** to your **PATH**:
+  ```shell
+  $ python3 -m site
+  # USER_BASE: '/home/your-tor-user/.local'
+  $ export PATH="$PATH:/home/your-tor-user/.local"
+  ```
 
 
 ## Code setup
@@ -71,7 +78,7 @@ $ npm run fe
 ```
 
 ## Make server go online
-#### Nginx
+#### Nginx & Frontend
 ```shell
 $ sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
 $ cp /srv/www/deploy/nginx.conf /etc/nginx/
@@ -79,4 +86,9 @@ $ cp /srv/www/deploy/relayerms.nginx.conf /etc/nginx/site-available/relayerms
 $ sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
 $ sudo rm -r /etc/ngingx/sites-enabled/default
 $ /etc/init.d/nginx start
+```
+
+#### Compiling contract
+``` shell
+$ npm run embark <network-name>
 ```
