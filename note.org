@@ -4,6 +4,8 @@ CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
 *** DONE Custom exec build commands with extra argument to specify what /env/stg/ to use
 ** TODO Fix flow-control for manual contract build & deploy
+*** [X] Fix logic for deposit, deploying, transactions
+CLOSED: [2019-01-28 Mon 17:29]
 *** TODO Account setup: create one if needed, or load /(privatekey + address)/ if provided
 *** TODO Contract work: compiled if needed, or load if provided
 ** TODO Automation
