@@ -12,6 +12,14 @@ class PwModel(pw.Model):
         return self.name
 
 
+class Admin(PwModel):
+    """
+    True Owner of contract and database
+    """
+    name = pw.CharField(unique=True, max_length=200)
+    address = pw.CharField(unique=True, max_length=200)
+
+
 class DelegateAccount(PwModel):
     """
     Accounts that Backend has complete control over
@@ -33,6 +41,7 @@ class Contract(PwModel):
     address = pw.CharField(unique=True, max_length=200)
     abi = BinaryJSONField()
     bytecode = BinaryJSONField()
+    obsolete = pw.BooleanField(default=False)
 
 
 class Relayer(PwModel):
