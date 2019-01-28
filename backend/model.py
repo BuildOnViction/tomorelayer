@@ -1,5 +1,4 @@
 import peewee as pw
-from playhouse.postgres_ext import BinaryJSONField
 from settings import database
 
 
@@ -20,30 +19,6 @@ class Admin(PwModel):
     address = pw.CharField(unique=True, max_length=200)
 
 
-class DelegateAccount(PwModel):
-    """
-    Accounts that Backend has complete control over
-    They are created on server initialization or by requested
-    Real owner of the contract may need deposit some fund to the DelegateAccount
-    so it can make transactions
-    """
-    name = pw.CharField(unique=True, max_length=200)
-    address = pw.CharField(unique=True, max_length=200)
-    network = pw.CharField(unique=True, max_length=200)
-
-
-class Contract(PwModel):
-    """
-    Stored contract abi and bytecode
-    they can be swapped over in case of contract change/upgrade
-    """
-    name = pw.CharField(unique=True, max_length=200)
-    address = pw.CharField(unique=True, max_length=200)
-    abi = BinaryJSONField()
-    bytecode = BinaryJSONField()
-    obsolete = pw.BooleanField(default=False)
-
-
 class Relayer(PwModel):
     name = pw.CharField(unique=True, max_length=200)
     address = pw.CharField(unique=True, max_length=200)
@@ -54,8 +29,7 @@ class Relayer(PwModel):
 
 database.connect()
 database.create_tables([
-    DelegateAccount,
-    Contract,
+    Admin,
     Relayer,
 ])
 # TODO: fetch all relayers from SmartContract if necessary
