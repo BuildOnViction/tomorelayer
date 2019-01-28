@@ -1,4 +1,4 @@
-* TASKS [1/3]
+* TASKS [1/5]
 ** DONE Implement smoother environment-switch strategy
 CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
@@ -7,6 +7,9 @@ CLOSED: [2019-01-28 Mon 16:01]
 *** TODO Account setup: create one if needed, or load /(privatekey + address)/ if provided
 *** TODO Contract work: compiled if needed, or load if provided
 ** TODO Automation
-*** TODO Copy source to server
-*** TODO Distributing module configs (nginx, supervisor) at server side
-*** TODO Update-hook when contract-code changes
+*** TODO Copy source to server & Taskfile
+*** TODO Auto distributing module configs (nginx, supervisor) at server side
+*** TODO Code-swapping automation & restarting backend processes
+** TODO Deployment
+*** TODO Deploy all to a live server
+*** TODO Finalise document on Deployment
