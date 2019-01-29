@@ -1,4 +1,5 @@
 import peewee as pw
+from playhouse.postgres_ext import BinaryJSONField
 from settings import database
 
 
@@ -25,6 +26,13 @@ class Relayer(PwModel):
     dex_rate = pw.DecimalField(max_digits=5, decimal_places=4)
     logo = pw.CharField(max_length=200)
     activated = pw.BooleanField(default=True)
+
+
+class Contract(PwModel):
+    name = pw.CharField(unique=True, max_length=200)
+    address = pw.CharField(unique=True, max_length=200)
+    abi = BinaryJSONField()
+    obsolete = pw.BooleanField(default=False)
 
 
 database.connect()
