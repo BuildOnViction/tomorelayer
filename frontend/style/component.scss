@@ -75,3 +75,13 @@ a {
   width: 100%;
   font-size: 1.3em;
 }
+
+.code__json {
+  padding: 10px;
+  font-size: 10pt;
+  background: $light-gray3;
+  border-radius: 5px;
+  font-family: 'Roboto Mono', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
