@@ -1,15 +1,18 @@
-* TASKS [1/5]
+* TASKS [2/5]
 ** DONE Implement smoother environment-switch strategy
 CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
 *** DONE Custom exec build commands with extra argument to specify what /env/stg/ to use
-** TODO Fix flow-control for manual contract build & deploy
-*** [X] New Contract model: save contract's abi & address to DB
-CLOSED: [2019-01-29 Tue 11:28]
-*** TODO Fix Registration Contract
-*** TODO Client register as New Relayer
-*** [X] Backend app api to save registered relayer to Database
-CLOSED: [2019-01-29 Tue 10:18]
+** DONE Fix flow-control for manual contract build & deploy
+CLOSED: [2019-01-29 Tue 21:02]
+*** DONE New Contract model: save contract's abi & address to DB
+CLOSED: [2019-01-29 Tue 21:00]
+*** DONE Fix Registration Contract
+CLOSED: [2019-01-29 Tue 21:00]
+*** DONE Client register as New Relayer
+CLOSED: [2019-01-29 Tue 21:00]
+*** DONE Backend app api to save registered relayer to Database
+CLOSED: [2019-01-29 Tue 21:00]
 ** TODO Automation
 *** TODO Copy source to server & Taskfile
 *** TODO Auto distributing module configs (nginx, supervisor) at server side
@@ -17,3 +20,6 @@ CLOSED: [2019-01-29 Tue 10:18]
 ** TODO Deployment
 *** TODO Deploy all to a live server
 *** TODO Finalise document on Deployment
+** TODO Refactor Frontend
+*** TODO Fix some ui crap
+*** TODO Rethink about Redux_Zero, since it is starting to appear ugly

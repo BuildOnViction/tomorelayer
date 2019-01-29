@@ -9,7 +9,6 @@ import { SITE_MAP } from '@constant'
 import SignupForm from './SignupForm'
 
 
-
 class RegisterForm extends React.Component {
 
   state = {
