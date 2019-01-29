@@ -4,10 +4,11 @@ CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
 *** DONE Custom exec build commands with extra argument to specify what /env/stg/ to use
 ** TODO Fix flow-control for manual contract build & deploy
-*** ACTIVE Fix logic for deposit, deploying, transactions
-***** TODO Fix Registration Contract
-***** TODO Client register as New Relayer
-***** [X] Backend app api to save registered relayer to Database
+*** [X] New Contract model: save contract's abi & address to DB
+CLOSED: [2019-01-29 Tue 11:28]
+*** TODO Fix Registration Contract
+*** TODO Client register as New Relayer
+*** [X] Backend app api to save registered relayer to Database
 CLOSED: [2019-01-29 Tue 10:18]
 ** TODO Automation
 *** TODO Copy source to server & Taskfile

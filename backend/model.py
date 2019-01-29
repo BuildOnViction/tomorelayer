@@ -20,6 +20,13 @@ class Admin(PwModel):
     address = pw.CharField(unique=True, max_length=200)
 
 
+class Contract(PwModel):
+    name = pw.CharField(max_length=200)
+    address = pw.CharField(unique=True, max_length=200)
+    abi = BinaryJSONField()
+    obsolete = pw.BooleanField(default=False)
+
+
 class Relayer(PwModel):
     name = pw.CharField(unique=True, max_length=200)
     address = pw.CharField(unique=True, max_length=200)
@@ -28,16 +35,10 @@ class Relayer(PwModel):
     activated = pw.BooleanField(default=True)
 
 
-class Contract(PwModel):
-    name = pw.CharField(unique=True, max_length=200)
-    address = pw.CharField(unique=True, max_length=200)
-    abi = BinaryJSONField()
-    obsolete = pw.BooleanField(default=False)
-
-
 database.connect()
 database.create_tables([
     Admin,
+    Contract,
     Relayer,
 ])
 # TODO: fetch all relayers from SmartContract if necessary
