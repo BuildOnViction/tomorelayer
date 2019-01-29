@@ -53,8 +53,8 @@ function emb {
     fi
     rsync -a embark/plugin.js node_modules/embark-tomo/
     echo 'Plugin copied!'
-    echo "EXEC: embark run --nobrowser --noserver --nodashboard $network"
-    embark run --nobrowser --noserver --nodashboard $network
+    echo "EXEC: embark run --nobrowser --noserver $network"
+    embark run --nobrowser --noserver $network
 }
 
 function lint {
