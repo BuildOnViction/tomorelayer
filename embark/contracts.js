@@ -6,6 +6,12 @@ module.exports = {
       host: "localhost",
       port: 8545,
       type: "rpc",
+      accounts: [
+        {
+          privateKey: secrets.METAMASK_PRIVATE_KEY,
+          balance: "500 ether"
+        },
+      ]
     },
     gas: "auto",
     contracts: {}
