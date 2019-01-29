@@ -20,20 +20,8 @@ export const SITE_MAP = {
 }
 
 export const ALERT = {
-  web3: {
-    not_logged_in: 'No active account found on MetaMask',
-    meta_mask_unavailable: 'MetaMask not found!',
-  },
-}
-
-export const ERROR = {
-  general: {
-    some_error: 'shit happened!',
-  },
-  api: {
-    relayers: 'Cannot get relayers from server!',
-  },
-  web3: {
-    getAccounts: 'Cannot detect current user public key!',
-  },
+  success: 'success',
+  error: 'error',
+  warning: 'warning',
+  info: 'info',
 }
