@@ -17,15 +17,18 @@ export const Client = {
   }).then(r => r.json()),
 }
 
+const alerting = error => ({
+  alert: error.message,
+  error: error,
+})
+
+
 // REDUX_ZERO ACTIONS
 export const APP_INITIALIZER = ({ setState }) => ({
 
   fetchRegisteredRelayers: async () => {
     const resp = await Client.get(API.relayers)
-    if (resp.error) return {
-      alert: resp.error.message,
-      error: resp.error,
-    }
+    if (resp.error) return alerting(resp.error)
     return {
       relayers: resp.payload,
     }
@@ -39,6 +42,21 @@ export const APP_INITIALIZER = ({ setState }) => ({
       if (acc.length) setState({ currentUserAddress: acc[0] })
     })
   },
+
+  fetchContracts: async () => {
+    const resp = await Client.get(API.contracts)
+    if (resp.error) return alerting(resp.error)
+    const contracts = {}
+    resp.payload.forEach(contract => {
+      contracts[contract.name] = {
+        address: contract.address,
+        abi: contract.abi,
+      }
+    })
+    return {
+      contracts: contracts
+    }
+  }
 
 })
 

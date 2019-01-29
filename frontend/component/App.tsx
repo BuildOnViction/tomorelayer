@@ -19,6 +19,7 @@ const mapProps = store => ({
 class App extends React.Component {
   componentDidMount() {
     this.props.fetchRegisteredRelayers()
+    this.props.fetchContracts()
     this.props.detectWeb3User()
   }
 

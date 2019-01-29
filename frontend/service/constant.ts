@@ -6,6 +6,7 @@ const apiPrefix = 'api'
 const apiBuild = resource => `${baseUrl}/${apiPrefix}/${resource}`
 
 export const API = {
+  contracts: apiBuild('contracts'),
   register: apiBuild('register'),
   relayers: apiBuild('relayers'),
 }

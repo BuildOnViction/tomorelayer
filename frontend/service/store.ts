@@ -7,6 +7,7 @@ const initialState = {
   currentUserAddress: '',
   error: '',
   alert: '',
+  contracts: {},
 }
 
 const store = createStore(initialState)
