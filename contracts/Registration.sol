@@ -42,13 +42,12 @@ contract Registration {
 
 
     /// LOGIC
-    function register(address _addr, uint16 _dex_rate, uint16 _foundation_rate)
+    function register(uint16 _dex_rate, uint16 _foundation_rate)
         public
-        onlyOwner
         rateIsValid(_dex_rate, _foundation_rate)
     {
+        address _addr = msg.sender;
         require(!RELAYERS[_addr].registered, "Address is already registered!");
-
         RELAYERS[_addr].dex_rate = _dex_rate;
         RELAYERS[_addr].foundation_rate = _foundation_rate;
         RELAYERS[_addr].activated = true;
