@@ -1,9 +1,5 @@
-from web3 import Web3
 from model import Relayer
 from .base import BaseHandler
-from exception import MissingArgumentException
-from exception import InvalidValueException
-from logzero import logger
 
 
 class RegisterHandler(BaseHandler):
@@ -13,6 +9,7 @@ class RegisterHandler(BaseHandler):
         address = self.request_body['address']
         logo = self.request_body['logo']
         dex_rate = self.request_body['dex_rate']
+        foundation_rate = self.request_body['foundation_rate']
 
         # TODO: check relayer must be already resgistered in blockchain
 
@@ -23,6 +20,7 @@ class RegisterHandler(BaseHandler):
                 address=address,
                 logo=logo,
                 dex_rate=dex_rate,
+                foundation_rate=foundation_rate,
             )
 
             self.json_response({
@@ -30,5 +28,6 @@ class RegisterHandler(BaseHandler):
                 'name': rl.name,
                 'address': rl.address,
                 'dex_rate': rl.dex_rate,
+                'foundation_rate': rl.foundation_rate,
                 'logo': rl.logo,
             })
