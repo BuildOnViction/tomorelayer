@@ -61,6 +61,52 @@ function lint {
     tslint -c ./frontend/tslint.json './frontend/**/*.ts*'
 }
 
+# DEPLOY SCRIPTS
+function dep {
+    case "$1" in
+        user) echo ">> CREATE TOR APP with USER: $2 at SERVER: $3"
+              user=$2
+              host=$3
+              sshkey=$(cat ~/.ssh/id_rsa.pub)
+              echo -e "$user\tALL=(ALL) NOPASSWD:ALL" | pbcopy
+              ssh -t root@$3 adduser $user
+              ssh -t root@$3 usermod -aG sudo $user
+              ssh -t root@$3 "echo \"$user\tALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
+              ssh -t root@$3 mkdir /home/$user/.ssh
+              ssh root@$3 "touch /home/$user/.ssh/authorized_keys"
+              ssh root@$3 "echo \"$sshkey\" > /home/$user/.ssh/authorized_keys"
+              echo "Finished: you can now login on the server passwordless with ssh. Don't forget the update the local '~/.ssh/config'"
+              ;;
+
+        setup)  echo ">> SETUP SERVER & BASIC DEPENDENCIES"
+                frontend prod
+                ssh tor sudo rm -rf relayerms
+                ssh tor mkdir relayerms
+                export GLOBIGNORE='node_modules:.embark:.fusebox:.git:.vscode:test:.DS_Store:build'
+                scp -r * tor:~/relayerms/
+                ssh -t tor cd relayerms && ./deploy/dep.sh install
+                ;;
+
+        install)  echo ">> INSTALL PYTHON DEPS & START NGINX"
+                  ssh tor cd relayerms && pipenv install && npm install
+                  ssh -t tor /etc/init.d/nginx start
+                  ;;
+
+        frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
+                   frontend prod
+                   scp -r frontend/dist tor:~/relayerms/frontend/dist
+                   ;;
+
+        backend)  echo ">> UPDATE BACKEND CODE"
+                  # placeholder
+                  ;;
+
+        *) echo "Task not recognized"
+           ;;
+    esac
+
+}
+
 
 # Which function? >>
 "$@"

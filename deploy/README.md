@@ -1,3 +1,35 @@
+# TL;DR
+
+1. Prepare
+We are going to use **Taskfile** to run deploy tasks, so it is generally advised to make an aliased for it:
+``` shell
+$ export task="./Taskfile.sh"
+```
+
+2. Server requirements
+- Ubuntu 18
+- Setup a non-root user, sudo privileges with ssh & authorized_keys, NO-PASSWORD sudo for command executions:
+``` shell
+$ task dep user <user_name> <host_ip>
+```
+
+3. Installing
+``` powershell
+$ task dep setup
+$ task dep install
+```
+
+4. Updating/Patching the Application
+``` shell
+$ task dep frontend
+$ task dep backend
+```
+
+Thats it!
+---
+
+# DIVING DEEP...
+
 ## Create an user & grant sudo privileges, eg: "tor"
 *Note*: **pipenv** practically doesn't work with root privileges, so a **sudo** user is required
 ```shell
