@@ -23,17 +23,18 @@ libffi-dev liblzma-dev python-openssl nodejs"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
     test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
     test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-    test -r ~/.bashrc && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bashrc
-    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bashrc
+    test -r ~/.bashrc && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >> ~/.bashrc
+    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >> ~/.bashrc
     eval $($(brew --prefix)/bin/brew shellenv)
     brew install pipenv
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
-    sudo cp deploy/nginx.conf /etc/nginx/nginx.conf
-    sudo cp deploy/relayerms.nginx.conf /etc/nginx/sites-available/relayerms
+    sudo cp ~/relayerms/deploy/nginx.conf /etc/nginx/nginx.conf
+    sudo cp ~/relayerms/deploy/relayerms.nginx.conf /etc/nginx/sites-available/relayerms
     sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
     sudo rm -r /etc/nginx/sites-enabled/default
+    echo "DONE! RESTARTING SERVER MACHINE!..."
     sudo reboot
 }
 
