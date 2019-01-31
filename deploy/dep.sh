@@ -20,26 +20,21 @@ libffi-dev liblzma-dev python-openssl nodejs"
 
     # brew
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >>~/.bashrc
+    echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.bashrc
 
     # set path
-    echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH:"' >> ~/.bashrc
-    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH:"'
+    echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
+    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH"'
 
     # Install what needed
     brew install gcc pipenv
-    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH:"'
+    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin/pipenv:$PATH"'
 
     # Pull the code
-    git clone https://github.com/tomochain/relayerms.git
-    findpip=$(echo "which pipenv")
-    if [ $findpip != "" ]
-    then
-        echo "PIPENV found: $findpip"
-        cd relayerms
-        pipenv install
-        npm install
-    fi
+    git clone -b deployment https://github.com/tomochain/relayerms.git
+    cd relayerms
+    pipenv install
+    npm install
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx

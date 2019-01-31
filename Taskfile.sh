@@ -79,7 +79,7 @@ function dep {
               ;;
         setup)  echo ">> SETUP SERVER & BASIC DEPENDENCIES"
                 scp ./deploy/dep.sh tor:~/
-                ssh -t tor "sudo ~/dep.sh install"
+                ssh -t tor "~/dep.sh install"
                 ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
                    frontend prod
