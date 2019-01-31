@@ -78,16 +78,9 @@ function dep {
               echo "Finished: you can now login on the server passwordless with ssh. Don't forget the update the local '~/.ssh/config'"
               ;;
         setup)  echo ">> SETUP SERVER & BASIC DEPENDENCIES"
-                frontend prod
-                ssh tor "sudo rm -rf relayerms"
-                ssh tor "mkdir relayerms"
-                export GLOBIGNORE='node_modules:.embark:.fusebox:.git:.vscode:test:.DS_Store:build'
-                scp -r * tor:~/relayerms/
-                ssh -t tor "sudo ~/relayerms/deploy/dep.sh install"
+                scp ./deploy/dep.sh tor:~/
+                ssh -t tor "sudo ~/dep.sh install"
                 ;;
-        install)  echo ">> INSTALL PYTHON DEPS & START NGINX"
-                  ssh tor "cd relayerms && pipenv install && npm install"
-                  ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
                    frontend prod
                    scp -r frontend/dist tor:~/relayerms/frontend/dist

@@ -6,7 +6,7 @@ function install  {
     # NOTE: pwd == 'relayerms'
     # Basic setup
     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    required="-y git nginx python-pip postgresql postgresql-contrib \
+    required="-y git nginx python-pip postgresql postgresql-contrib linuxbrew-wrapper \
 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
 libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
 libffi-dev liblzma-dev python-openssl nodejs"
@@ -14,19 +14,32 @@ libffi-dev liblzma-dev python-openssl nodejs"
     sudo apt-get install $required
 
     # pyenv
-    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+    curl https://pyenv.run | bash
+    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+    echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
     # brew
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-    test -r ~/.bashrc && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >> ~/.bashrc
-    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >> ~/.bashrc
-    eval $($(brew --prefix)/bin/brew shellenv)
-    brew install pipenv
+    echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >>~/.bashrc
+
+    # set path
+    echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH:"' >> ~/.bashrc
+    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH:"'
+
+    # Install what needed
+    brew install gcc pipenv
+    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH:"'
+
+    # Pull the code
+    git clone https://github.com/tomochain/relayerms.git
+    findpip=$(echo "which pipenv")
+    if [ $findpip != "" ]
+    then
+        echo "PIPENV found: $findpip"
+        cd relayerms
+        pipenv install
+        npm install
+    fi
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
