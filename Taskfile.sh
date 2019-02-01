@@ -85,9 +85,34 @@ function dep {
                    frontend prod
                    scp -r frontend/dist tor:~/relayerms/frontend/dist
                    ;;
-        backend)  echo ">> UPDATE BACKEND CODE"
-                  # placeholder
+        backend)  echo ">> Backend Task..."
+                  if [ "$2" == "log" ]
+                  then
+                      echo ">> VIEW SERVER LOG"
+                      echo "====================================================== SUPERVISOR log:"
+                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/supervisord.log"
+                      echo "====================================================== TOR1 log:"
+                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor1_log.log"
+                      echo "error >>>>>>>>"
+                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor1_err.log"
+                      echo "====================================================== TOR2 log:"
+                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor2_log.log"
+                      echo "error >>>>>>>>"
+                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor2_err.log"
+                  else
+                      echo ">> UPDATE BACKEND CODE"
+                      scp ./supervisord.conf tor:~/relayerms/
+                      scp ./.prod.env tor:~/relayerms/
+                      ssh tor "supervisorctl reread"
+                      ssh tor "supervisorctl update"
+                  fi
                   ;;
+        nginx) echo ">> UPDATE NGINX"
+               ssh tor "sudo service nginx stop"
+               scp ./deploy/nginx.conf tor:/etc/nginx/
+               scp ./deploy/relayerms.nginx.conf tor:/etc/nginx/sites-available/relayerms
+               ssh tor "sudo service nginx start"
+               ;;
         *) echo "Task not recognized"
            ;;
     esac
