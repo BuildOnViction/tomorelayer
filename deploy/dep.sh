@@ -9,7 +9,7 @@ function install  {
     required="-y git nginx python-pip postgresql postgresql-contrib linuxbrew-wrapper \
 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
 libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
-libffi-dev liblzma-dev python-openssl nodejs"
+libffi-dev liblzma-dev python-openssl nodejs supervisor"
     sudo apt-get update
     sudo apt-get install $required
 
@@ -42,6 +42,11 @@ libffi-dev liblzma-dev python-openssl nodejs"
     sudo cp ~/relayerms/deploy/relayerms.nginx.conf /etc/nginx/sites-available/relayerms
     sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
     sudo rm -r /etc/nginx/sites-enabled/default
+
+    # Make Task alias
+    echo 'alias task="./Taskfile.sh"' >> ~/.bashrc
+
+    # DONE!
     echo "DONE! RESTARTING SERVER MACHINE!..."
     sudo reboot
 }

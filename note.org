@@ -14,8 +14,10 @@ CLOSED: [2019-01-29 Tue 21:00]
 *** DONE Backend app api to save registered relayer to Database
 CLOSED: [2019-01-29 Tue 21:00]
 ** TODO Automation
-*** TODO Copy source to server & Taskfile
-*** TODO Auto distributing module configs (nginx, supervisor) at server side
+*** DONE Copy source to server & Taskfile
+CLOSED: [2019-02-03 Sun 23:12]
+*** DONE Auto distributing module configs (nginx, supervisor) at server side
+CLOSED: [2019-02-03 Sun 23:12]
 *** TODO Code-swapping automation & restarting backend processes
 ** TODO Deployment
 *** TODO Deploy all to a live server

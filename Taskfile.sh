@@ -1,6 +1,6 @@
 #!/bin/bash
 PATH=./node_modules/.bin:$PATH
-
+# TODO: add 'help'
 
 # DEFAULT VARIABLES
 ENV_NAME="dev"
@@ -82,8 +82,18 @@ function dep {
                 ssh -t tor "~/dep.sh install"
                 ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
-                   frontend prod
-                   scp -r frontend/dist tor:~/relayerms/frontend/dist
+                   scp ./.prod.env tor:~/relayerms/
+                   if [ "$2" == "swap" ]
+                   then
+                       # Hot-swapping frontend bundle from local to server
+                       frontend prod
+                       scp -r frontend/dist tor:~/relayerms/frontend/dist
+                   else
+                       echo "Bundle at server side"
+                       ssh -t tor "cd ~/relayerms && ./Taskfile.sh frontend prod"
+                       ssh -t tor "service nginx start"
+                   fi
+
                    ;;
         backend)  echo ">> Backend Task..."
                   if [ "$2" == "log" ]
@@ -99,12 +109,16 @@ function dep {
                       ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor2_log.log"
                       echo "error >>>>>>>>"
                       ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor2_err.log"
-                  else
-                      echo ">> UPDATE BACKEND CODE"
+                  elif [ "$2" == "update" ]
+                  then
+                      echo ">> SWAPPING BACKEND CODE"
                       scp ./supervisord.conf tor:~/relayerms/
                       scp ./.prod.env tor:~/relayerms/
+                      scp -r ./backend tor:~/relayerms/backend
                       ssh tor "supervisorctl reread"
                       ssh tor "supervisorctl update"
+                  else
+                      ssh -t tor "supervisord -c ~/relayerms/deploy/supervisord.conf"
                   fi
                   ;;
         nginx) echo ">> UPDATE NGINX"
