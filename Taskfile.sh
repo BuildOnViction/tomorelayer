@@ -100,19 +100,19 @@ function dep {
                   then
                       echo ">> VIEW SERVER LOG"
                       echo "====================================================== SUPERVISOR log:"
-                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/supervisord.log"
+                      ssh tor "cat /tmp/supervisord.log"
                       echo "====================================================== TOR1 log:"
-                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor1_log.log"
+                      ssh tor "cat /tmp/tor1_log.log"
                       echo "error >>>>>>>>"
-                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor1_err.log"
+                      ssh tor "cat /tmp/tor1_err.log"
                       echo "====================================================== TOR2 log:"
-                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor2_log.log"
+                      ssh tor "cat /tmp/tor2_log.log"
                       echo "error >>>>>>>>"
-                      ssh tor "cat /home/linuxbrew/.linuxbrew/var/log/tor2_err.log"
+                      ssh tor "cat /tmp/tor2_err.log"
                   elif [ "$2" == "update" ]
                   then
                       echo ">> SWAPPING BACKEND CODE"
-                      scp ./supervisord.conf tor:~/relayerms/
+                      scp ./deploy/supervisord.conf tor:~/relayerms/deploy/
                       scp ./.prod.env tor:~/relayerms/
                       scp -r ./backend tor:~/relayerms/backend
                       ssh tor "supervisorctl reread"
