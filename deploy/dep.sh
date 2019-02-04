@@ -35,6 +35,7 @@ libffi-dev liblzma-dev python-openssl nodejs supervisor"
     cd relayerms
     pipenv install
     npm install
+    CFLAGS="-I$(brew --prefix openssl)/include" LDFLAGS="-L$(brew --prefix openssl)/lib" pyenv install -v 3.7.1
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
