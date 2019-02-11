@@ -5,37 +5,34 @@
 function install  {
     # NOTE: pwd == 'relayerms'
     # Basic setup
+    sudo apt-get update
     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    required="-y git nginx python-pip postgresql postgresql-contrib linuxbrew-wrapper \
+    required="-y git nginx postgresql postgresql-contrib linuxbrew-wrapper \
 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
 libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
 libffi-dev liblzma-dev python-openssl nodejs supervisor"
-    sudo apt-get update
     sudo apt-get install $required
 
     # pyenv
-    curl https://pyenv.run | bash
-    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-    echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+    source ~/.bashrc
 
-    # brew
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.bashrc
-
-    # set path
-    echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
-    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.pyenv/bin:$PATH"'
-
-    # Install what needed
-    brew install gcc pipenv
-    eval 'export PATH="/home/linuxbrew/.linuxbrew/bin/pipenv:$PATH"'
+    sudo chown -R $USER:sudo /usr/
+    CFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib64 pyenv install -v 3.7.2
+    pyenv global 3.7.2
 
     # Pull the code
     git clone -b deployment https://github.com/tomochain/relayerms.git
     cd relayerms
-    pipenv install
     npm install
-    CFLAGS="-I$(brew --prefix openssl)/include" LDFLAGS="-L$(brew --prefix openssl)/lib" pyenv install -v 3.7.1
+    python -m venv env
+    pip install --upgrade pip
+    source env/bin/activate
+    pip install -r requirements.txt
+    deactivate
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
