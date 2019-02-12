@@ -75,11 +75,14 @@ function dep {
               ssh -t root@$3 "mkdir /home/$user/.ssh"
               ssh root@$3 "touch /home/$user/.ssh/authorized_keys"
               ssh root@$3 "echo \"$sshkey\" > /home/$user/.ssh/authorized_keys"
-              echo "Finished: you can now login on the server passwordless with ssh. Don't forget the update the local '~/.ssh/config'"
+              ssh root@$3 "apt-get install python -y"
+              ssh root@$3 "curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python"
+              echo "Finished: you can now login to server passwordless with ssh. Don't forget the update the local '~/.ssh/config'"
               ;;
         setup)  echo ">> SETUP SERVER & BASIC DEPENDENCIES"
                 scp ./deploy/dep.sh tor:~/
                 ssh -t tor "~/dep.sh install"
+                echo ">> DONE. DONT FORGET TO SET POSTGRES PASSWORD"
                 ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
                    scp ./.prod.env tor:~/relayerms/
