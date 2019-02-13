@@ -4,13 +4,14 @@
 
 function install  {
     # Basic setup
-    sudo apt-get update
+    apt-get update
     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    required="-y git python-pip nginx postgresql postgresql-contrib linuxbrew-wrapper \
+    required="-y git python python-pip nginx postgresql postgresql-contrib \
 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
 libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
 libffi-dev liblzma-dev python-openssl nodejs supervisor"
-    sudo apt-get install $required
+    apt-get install $required
+    curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
 
     # pyenv
     curl https://pyenv.run | bash
@@ -23,6 +24,8 @@ libffi-dev liblzma-dev python-openssl nodejs supervisor"
     pyenv install -v 3.7.2
 
     # # # Pull the code
+    mkdir /srv/www
+    cd /srv/www
     git clone -b master https://github.com/tomochain/relayerms.git
     cd relayerms
     npm install
@@ -30,8 +33,8 @@ libffi-dev liblzma-dev python-openssl nodejs supervisor"
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
-    sudo cp ~/relayerms/deploy/nginx.conf /etc/nginx/nginx.conf
-    sudo cp ~/relayerms/deploy/relayerms.nginx.conf /etc/nginx/sites-available/relayerms
+    sudo cp /srv/www/relayerms/deploy/nginx.conf /etc/nginx/nginx.conf
+    sudo cp /srv/www/relayerms/deploy/relayerms.nginx.conf /etc/nginx/sites-available/relayerms
     sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
     sudo rm -r /etc/nginx/sites-enabled/default
 
