@@ -96,7 +96,6 @@ function dep {
                        ssh -t tor "cd ~/relayerms && ./Taskfile.sh frontend prod"
                        ssh -t tor "service nginx start"
                    fi
-
                    ;;
         backend)  echo ">> Backend Task..."
                   if [ "$2" == "log" ]

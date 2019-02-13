@@ -1,25 +1,30 @@
 # TL;DR
 
 1. Prepare
-We are going to use **Taskfile** to run deploy tasks, so it is generally advised to make an aliased for it:
+- First, have a local **.prod.env** file.
+- We are going to use **Taskfile** to run deploy tasks, so it is generally advised to make an alias for it:
 ``` shell
 $ export task="./Taskfile.sh"
 ```
 
 2. Server requirements
-- Ubuntu 18
+- Ubuntu 18.10
 - Setup a non-root user, sudo privileges with ssh & authorized_keys, NO-PASSWORD sudo for command executions:
 ``` shell
 $ task dep user <user_name> <host_ip>
 ```
 
-3. Installing
+3. Setup everything, including **pyenv**, **python**, **nginx**, **supervisor** and stuffs...
 ``` powershell
 $ task dep setup
-$ task dep install
 ```
 
-4. Updating/Patching the Application
+Note:
+- During the setup, you may need to manually input user password.
+- If get stuck installing *python3*, hit **Ctrl+C**
+- After setup, you may also need to manually change Postgres password depending on your **.prod.env** file.
+
+4. Running the Application
 ``` shell
 $ task dep frontend
 $ task dep backend
@@ -29,23 +34,38 @@ Thats it!
 ---
 
 # DIVING DEEP...
+## As root, bootstrapping the whole system with pipenv
+``` powershell
+$ apt-get install python
+$ curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
+```
+
 
 ## Create an user & grant sudo privileges, eg: "tor"
-*Note*: **pipenv** practically doesn't work with root privileges, so a **sudo** user is required
+*Note*: **pyenv** practically doesn't work with root privileges, so a **sudo** user (eg: *tor*) is required
 ```shell
 $ adduser tor
 $ usermod -aG sudo tor
 $ su - tor
 ```
 
+
 ## After login as the new user, install neccessary official packages
 ```shell
 $ sudo apt-get update
-$ sudo apt-get install git nginx python-pip
+$ sudo apt-get install -y git python-pip nginx postgresql postgresql-contrib linuxbrew-wrapper \
+make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
+libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
+libffi-dev liblzma-dev python-openssl supervisor
 ```
 
+
 #### Some special dependencies require special cares
-[Node-version-manager](https://github.com/creationix/nvm )
+Node 10:
+``` powershell
+$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+$ sudo apt-get install nodejs
+```
 
 PostgreSQL v10:
 - create user, with proper privileges
@@ -71,42 +91,32 @@ $ sudo service postgresql start
 $ sudo systemctl restart postgresql.service
 ```
 
-Linuxbrew, Pipenv and Python
-- Install [Linuxbrew](https://linuxbrew.sh/ )
-
 - Install [Pyenv](https://github.com/pyenv/pyenv#installation )
-  - Install **Python 3.7.1** with `pyenv`
+  - Install **Python 3.7.2** with `pyenv`
   - Refer to [Common-build-problem](https://github.com/pyenv/pyenv/wiki/Common-build-problems ) if stuck with installing python3
-
-- Install [Pipenv](https://pipenv.readthedocs.io/en/latest/install/#installing-pipenv )
-  - Add pipenv **USER_BASE** to your **PATH**:
-  ```shell
-  $ python3 -m site
-  # USER_BASE: '/home/your-tor-user/.local'
-  $ export PATH="$PATH:/home/your-tor-user/.local"
-  ```
 
 
 ## Code setup
-Where?
-- Take the ownership and make a `www` dir at `root/srv`
-```shell
-$ sudo chown -R $USER /srv
-$ sudo mkdir /srv/www
-```
-
 - Pull the code there, install application dependencies
-```shell
-$ cd /srv/www
+```powershell
+$ cd ~
 $ git clone <repo:relayerms>
 $ cd relayerms
-$ npm install -g embark
 $ npm install
+$ pipenv install
 ```
 
-Copy your `.prod.env` file to the source code folder and rename it to `.env`. Build the distributed packages
-```shell
-$ npm run fe
+Copy your `.prod.env` file to the source code folder. Build the distributed packages
+```powershell
+$ scp <path:to:prod.env> tor:~/relayerms/
+$ ssh tor
+$ cd relayerms
+$ task frontend prod
+```
+
+Run **Backend** wth supervisor.
+```powershell
+$ supervisord -c ~/relayerms/deploy/supervisord.conf
 ```
 
 ## Make server go online
@@ -118,9 +128,4 @@ $ cp /srv/www/deploy/relayerms.nginx.conf /etc/nginx/site-available/relayerms
 $ sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
 $ sudo rm -r /etc/ngingx/sites-enabled/default
 $ /etc/init.d/nginx start
-```
-
-#### Compiling contract
-``` shell
-$ npm run embark <network-name>
 ```
