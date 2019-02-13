@@ -15,7 +15,7 @@ $ task dep user <user_name> <host_ip>
 ```
 
 3. Setup everything, including **pyenv**, **python**, **nginx**, **supervisor** and stuffs...
-``` powershell
+``` shell
 $ task dep setup
 ```
 
@@ -35,7 +35,7 @@ Thats it!
 
 # DIVING DEEP...
 ## As root, bootstrapping the whole system with pipenv
-``` powershell
+``` shell
 $ apt-get install python
 $ curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
 ```
@@ -62,7 +62,7 @@ libffi-dev liblzma-dev python-openssl supervisor
 
 #### Some special dependencies require special cares
 Node 10:
-``` powershell
+``` shell
 $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 $ sudo apt-get install nodejs
 ```
@@ -98,7 +98,7 @@ $ sudo systemctl restart postgresql.service
 
 ## Code setup
 - Pull the code there, install application dependencies
-```powershell
+```shell
 $ cd ~
 $ git clone <repo:relayerms>
 $ cd relayerms
@@ -107,20 +107,21 @@ $ pipenv install
 ```
 
 Copy your `.prod.env` file to the source code folder. Build the distributed packages
-```powershell
+```shell
 $ scp <path:to:prod.env> tor:~/relayerms/
 $ ssh tor
 $ cd relayerms
 $ task frontend prod
 ```
 
-Run **Backend** wth supervisor.
-```powershell
+
+## Make server go online
+#### Tornado & Supervisor
+```shell
 $ supervisord -c ~/relayerms/deploy/supervisord.conf
 ```
 
-## Make server go online
-#### Nginx & Frontend
+#### Nginx & bundled frontend assets
 ```shell
 $ sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
 $ cp /srv/www/deploy/nginx.conf /etc/nginx/

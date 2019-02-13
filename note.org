@@ -18,7 +18,8 @@ CLOSED: [2019-01-29 Tue 21:00]
 CLOSED: [2019-02-03 Sun 23:12]
 *** DONE Auto distributing module configs (nginx, supervisor) at server side
 CLOSED: [2019-02-03 Sun 23:12]
-*** TODO Code-swapping automation & restarting backend processes
+*** DONE Code-swapping automation & restarting backend processes
+CLOSED: [2019-02-13 Wed 13:50]
 ** TODO Deployment
 *** TODO Deploy all to a live server
 *** TODO Finalise document on Deployment
