@@ -64,36 +64,22 @@ function lint {
 # DEPLOY SCRIPTS
 function dep {
     case "$1" in
-        user) echo ">> CREATE TOR APP with USER: $2 at SERVER: $3"
-              user=$2
-              host=$3
-              sshkey=$(cat ~/.ssh/id_rsa.pub)
-              echo -e "$user\tALL=(ALL) NOPASSWD:ALL" | pbcopy
-              ssh -t root@$3 "adduser $user"
-              ssh -t root@$3 "usermod -aG sudo $user"
-              ssh -t root@$3 "echo -e \"$user\tALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
-              ssh -t root@$3 "mkdir /home/$user/.ssh"
-              ssh root@$3 "touch /home/$user/.ssh/authorized_keys"
-              ssh root@$3 "echo \"$sshkey\" > /home/$user/.ssh/authorized_keys"
-              ssh root@$3 "apt-get install python -y"
-              ssh root@$3 "curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python"
-              echo "Finished: you can now login to server passwordless with ssh. Don't forget the update the local '~/.ssh/config'"
-              ;;
-        setup)  echo ">> SETUP SERVER & BASIC DEPENDENCIES"
-                scp ./deploy/dep.sh tor:~/
-                ssh -t tor "~/dep.sh install"
-                echo ">> DONE. DONT FORGET TO SET POSTGRES PASSWORD"
-                ;;
+        setup) echo ">> CREATE TOR APP at SERVER: $2"
+               host=$2
+               scp ./deploy/dep.sh root@$host:~/
+               ssh -t root@$host "~/dep.sh install"
+               echo "Finished. Don't forget the update the local '~/.ssh/config' and change POSTGRES password"
+               ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
-                   scp ./.prod.env tor:~/relayerms/
+                   scp ./.prod.env tor:/srv/www/relayerms/
                    if [ "$2" == "swap" ]
                    then
                        # Hot-swapping frontend bundle from local to server
                        frontend prod
-                       scp -r frontend/dist tor:~/relayerms/frontend/dist
+                       scp -r frontend/dist tor:/srv/www/relayerms/frontend/
                    else
                        echo "Bundle at server side"
-                       ssh -t tor "cd ~/relayerms && ./Taskfile.sh frontend prod"
+                       ssh -t tor "cd /srv/www/relayerms && ./Taskfile.sh frontend prod"
                        ssh -t tor "service nginx start"
                    fi
                    ;;
@@ -114,15 +100,15 @@ function dep {
                   elif [ "$2" == "update" ]
                   then
                       echo ">> SWAPPING BACKEND CODE"
-                      scp ./deploy/supervisord.conf tor:~/relayerms/deploy/
-                      scp ./.prod.env tor:~/relayerms/
-                      scp -r ./backend tor:~/relayerms/
+                      scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
+                      scp ./.prod.env tor:/srv/www/relayerms/
+                      scp -r ./backend tor:/srv/www/relayerms/
                       ssh -t tor "service supervisor stop"
                       ssh -t tor "service supervisor start"
                   else
-                      scp ./deploy/supervisord.conf tor:~/relayerms/deploy/
-                      scp ./.prod.env tor:~/relayerms/
-                      ssh -t tor "supervisord -c ~/relayerms/deploy/supervisord.conf"
+                      scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
+                      scp ./.prod.env tor:/srv/www/relayerms/
+                      ssh -t tor "supervisord -c /srv/www/relayerms/deploy/supervisord.conf"
                   fi
                   ;;
         nginx) echo ">> UPDATE NGINX"
