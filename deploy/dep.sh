@@ -23,7 +23,7 @@ libffi-dev liblzma-dev python-openssl nodejs supervisor"
     pyenv install -v 3.7.2
 
     # # # Pull the code
-    git clone -b deployment https://github.com/tomochain/relayerms.git
+    git clone -b master https://github.com/tomochain/relayerms.git
     cd relayerms
     npm install
     pipenv install --python $HOME/.pyenv/shims/python
