@@ -4,7 +4,7 @@
 - First, have a local **.prod.env** file.
 - We are going to use **Taskfile** to run deploy tasks, so it is generally advised to make an alias for it:
 ``` shell
-$ export task="./Taskfile.sh"
+$ eval 'alias task="./Taskfile.sh"'
 ```
 
 2. Server requirements

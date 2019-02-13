@@ -28,11 +28,10 @@ A Relayer Manager Application
 The following must be included in the development toolbelt:
 
 -   pyenv
--   Python 3.7 (recommended installing with pyenv)
+-   Python 3.7.2 (recommended installing with pyenv)
 -   Python 2.7 (recommended installing with pyenv, if not in the system yet)
 -   pipenv
 -   nvm
--   yarn
 -   Docker
 
 
@@ -50,26 +49,36 @@ $ npm install
 $ pipenv install
 ```
 
+- Export **Taskfile** alias
+``` sh
+$ echo 'alias task="./Taskfile.sh"' >> ~/.bashrc
+$ eval 'alias task="./Taskfile.sh"'
+```
+
 - Fire up database with Docker
 ``` sh
-$ npm run dock
+$ task docker
 ```
 
 - Run Embark to compile all smart contracts. We are gonna need the contracts data ready first so Backend can interact
 with. In development mode, Embark watches all the file changes and does the hot-reloading for us, so you should run the
 following command in a separate terminal.
 ``` sh
-$ npm run ebc
+$ task emb
 ```
 
 - All good, let's get Backend up and running, certainly in a different terminal from the Embark's
 ``` sh
-$ npm run be
+$ task backend
+# ...or if you want to run in production
+$ task backend prod <port>
 ```
 
 - Finally, the frontend, in another terminal also
 ``` sh
-$ npm run fe
+$ task frontend
+# ...or if you want to run in production for optimized build
+$ task frontend prod
 ```
 
 For any installation/running problem, check out [Troubleshooting](#trouble) guide
@@ -102,6 +111,9 @@ Those are where you get started.
 
 <a id="roadmap"></a>
 
+
+## Deployment
+Please refer to this short [Deployment Guideline](https://github.com/tomochain/relayerms/tree/master/deploy)
 
 
 ## Development Roadmap
@@ -144,4 +156,4 @@ Then you can re-install things by running `npm i`
 **2. I can't get the Backend running, something is wrong with the 'Port already in use' warning.**
 
 Probably your Backend's last working session encountered some error and the event-loop is still occupying the
-development port (eg 8888). Just kill the port and restart the app as normal, using `npm run kp`
+development port (eg 8888). Just kill the port and restart the app as normal, using `task kill-port 8888`
