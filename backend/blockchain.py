@@ -17,7 +17,7 @@ class Blockchain:
         """
         self.web3 = Web3()
 
-        if not is_production:
-            self.web3.middleware_stack.inject(geth_poa_middleware, layer=0)
+        # if not is_production:
+        #     self.web3.middleware_stack.inject(geth_poa_middleware, layer=0)
 
         logger.warn('Connection status: {}'.format(self.web3.isConnected()))
