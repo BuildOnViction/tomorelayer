@@ -116,7 +116,7 @@ function dep {
                       echo ">> SWAPPING BACKEND CODE"
                       scp ./deploy/supervisord.conf tor:~/relayerms/deploy/
                       scp ./.prod.env tor:~/relayerms/
-                      scp -r ./backend tor:~/relayerms/backend
+                      scp -r ./backend tor:~/relayerms/
                       ssh -t tor "service supervisor stop"
                       ssh -t tor "service supervisor start"
                   else

@@ -1,6 +1,7 @@
 import peewee as pw
 from playhouse.postgres_ext import BinaryJSONField
 from settings import database
+from logzero import logger
 
 
 class PwModel(pw.Model):
@@ -37,9 +38,12 @@ class Relayer(PwModel):
 
 
 database.connect()
-database.create_tables([
-    Admin,
-    Contract,
-    Relayer,
-])
+try:
+    database.create_tables([
+        Admin,
+        Contract,
+        Relayer,
+    ])
+except Exception:
+    logger.info('No need creating tables')
 # TODO: fetch all relayers from SmartContract if necessary
