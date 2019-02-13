@@ -1,4 +1,4 @@
-import createStore from 'redux-zero'
+import * as createStore from 'redux-zero'
 
 // NOTE: You can split initialState to multiple sub-stores when necessary
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
   currentUserAddress: '',
   error: '',
   alert: '',
+  contracts: {},
 }
 
 const store = createStore(initialState)

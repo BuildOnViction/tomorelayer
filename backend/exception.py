@@ -19,3 +19,8 @@ class InvalidValueException(CustomException):
 class NotUniqueException(CustomException):
     status_code = 400
     message = 'Field value is not unique'
+
+
+class AuthorizationException(CustomException):
+    status_code = 401
+    message = 'Only web admin can make this request'

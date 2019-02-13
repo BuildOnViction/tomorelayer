@@ -1,15 +1,18 @@
-import Web3 from 'web3'
+import { ethers } from 'ethers'
 
 let web3Instance = null
 
-export const web3 = (() => {
+export const web3Provider = (() => {
   if (web3Instance) return web3Instance
-  const metaWeb3 = window.web3
   // FIXME: cannot use a hardcoded RPC
   // const rpc = process.env.RPC
   // const tomoProvider = new Web3.providers.HttpProvider(rpc)
   // web3Instance = new Web3(metaWeb3 ? metaWeb3.currentProvider : tomoProvider)
-
-  web3Instance = metaWeb3 ? new Web3(metaWeb3.currentProvider) : null
+  const metamask = window.web3 ? window.web3.currentProvider : null
+  if (metamask) {
+    web3Instance = new ethers.providers.Web3Provider(metamask)
+  }
   return web3Instance
 })()
+
+export const eth = ethers

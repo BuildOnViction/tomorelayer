@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 
 
 /// NOTE: upgradable contract?
-contract Official_TomoChain_Relayer_Registration {
+contract Registration {
     address public owner;
 
     /// NOTE: rate in range(0, 100)
@@ -22,8 +22,8 @@ contract Official_TomoChain_Relayer_Registration {
 
 
     /// EVENTS
-    event NewRelayer (address _relayer, uint16 _dex_rate, uint16 _foundation_rate);
-    event UpdateRelayer (address _relayer, bool _activated, uint16 _dex_rate, uint16 _foundation_rate);
+    event NewRelayer (address relayer, uint16 dex_rate, uint16 foundation_rate);
+    event UpdateRelayer (address relayer, bool activated, uint16 dex_rate, uint16 foundation_rate);
 
 
     /// MODIFIERS
@@ -42,19 +42,18 @@ contract Official_TomoChain_Relayer_Registration {
 
 
     /// LOGIC
-    function register(address _addr, uint16 _dex_rate, uint16 _foundation_rate)
+    function register(uint16 _dex_rate, uint16 _foundation_rate)
         public
-        onlyOwner
         rateIsValid(_dex_rate, _foundation_rate)
     {
-        require(!RELAYERS[_addr].registered, "Address is already registered!");
+        require(!RELAYERS[msg.sender].registered, "Address is already registered!");
+        address sender = msg.sender;
+        RELAYERS[sender].dex_rate = _dex_rate;
+        RELAYERS[sender].foundation_rate = _foundation_rate;
+        RELAYERS[sender].activated = true;
+        RELAYERS[sender].registered = true;
 
-        RELAYERS[_addr].dex_rate = _dex_rate;
-        RELAYERS[_addr].foundation_rate = _foundation_rate;
-        RELAYERS[_addr].activated = true;
-        RELAYERS[_addr].registered = true;
-
-        emit NewRelayer(_addr, RELAYERS[_addr].dex_rate, RELAYERS[_addr].foundation_rate);
+        emit NewRelayer(sender, RELAYERS[sender].dex_rate, RELAYERS[sender].foundation_rate);
     }
 
     function updateRelayer(address _addr, bool _activated, uint16 _dex_rate, uint16 _foundation_rate)

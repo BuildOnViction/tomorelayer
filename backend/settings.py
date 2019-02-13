@@ -3,10 +3,10 @@ from os import path
 from pathlib import Path
 from dotenv import load_dotenv
 from peewee_async import Manager
-from peewee_async import PooledPostgresqlDatabase
+from peewee_asyncext import PooledPostgresqlExtDatabase
 
 # IMPORT ENVIRONMENT VARIABLES
-env_path = Path('..') / '.env'
+env_path = Path('.') / getenv('ENV_FILE')
 load_dotenv(dotenv_path=env_path)
 is_production = getenv('STG') == 'production'
 
@@ -16,7 +16,7 @@ db_name = getenv('DB_NAME')
 db_config = {k: getenv('DB_' + k.upper()) for k in envars}
 db_config['port'] = int(db_config['port'])
 
-database = PooledPostgresqlDatabase(db_name, **db_config)
+database = PooledPostgresqlExtDatabase(db_name, **db_config)
 objects = Manager(database)
 
 # APPLICATION BACKEND SETTINGS

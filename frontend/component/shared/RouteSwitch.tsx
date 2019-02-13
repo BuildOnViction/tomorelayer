@@ -1,4 +1,4 @@
-import _ from 'rambda'
+import * as _ from 'rambda'
 import cx from 'classnames'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'

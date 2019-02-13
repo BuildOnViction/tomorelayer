@@ -6,15 +6,13 @@
     "contracts": "embark/contracts.js",
     "blockchain": "embark/blockchain.js",
     "storage": false,
-    "communication": "embark/communication.js",
+    "communication": false,
     "webserver": false
   },
   "versions": {
     "solc": "0.5.0"
   },
-  "plugins": {
-    "embark-tomo": {}
-  },
+  "plugins": {},
   "options": {
     "solc": {
       "optimize": true,

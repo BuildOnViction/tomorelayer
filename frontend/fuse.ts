@@ -22,7 +22,6 @@ const config = {
   homeDir: '.',
   output: 'dist/$name.js',
   target: 'browser@esnext',
-  allowSyntheticDefaultImports: true,
   hash: isProduction,
   cache: !isProduction,
   log: {
@@ -55,9 +54,10 @@ const config = {
     ],
     JSONPlugin(),
     isProduction && QuantumPlugin({
+      replaceProcessEnv: true,
       treeshake: true,
       uglify: true,
-      bakeApiIntoBundle: 'app',
+      bakeApiIntoBundle: true,
     }),
   ],
   sourceMaps: !isProduction,
