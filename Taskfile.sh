@@ -78,8 +78,8 @@ function dep {
                        scp -r frontend/dist tor:/srv/www/relayerms/frontend/
                    else
                        echo "Bundle at server side"
-                       ssh -t tor "cd /srv/www/relayerms && ./Taskfile.sh frontend prod"
-                       ssh -t tor "service nginx start"
+                       ssh tor "cd /srv/www/relayerms && ./Taskfile.sh frontend prod"
+                       ssh tor "service nginx start"
                    fi
                    ;;
         backend)  echo ">> Backend Task..."
@@ -96,25 +96,25 @@ function dep {
                       ssh tor "cat /tmp/tor2_log.log"
                       echo "error >>>>>>>>"
                       ssh tor "cat /tmp/tor2_err.log"
-                  elif [ "$2" == "update" ]
+                  elif [ "$2" == "swap" ]
                   then
                       echo ">> SWAPPING BACKEND CODE"
+                      # TODO: unconfirmed!
                       scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
                       scp ./.prod.env tor:/srv/www/relayerms/
                       scp -r ./backend tor:/srv/www/relayerms/
-                      ssh -t tor "service supervisor stop"
-                      ssh -t tor "service supervisor start"
+                      ssh tor "service supervisor restart"
                   else
                       scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
                       scp ./.prod.env tor:/srv/www/relayerms/
-                      ssh -t tor "supervisord -c /srv/www/relayerms/deploy/supervisord.conf"
+                      ssh tor "supervisord -c /srv/www/relayerms/deploy/supervisord.conf"
                   fi
                   ;;
         nginx) echo ">> UPDATE NGINX"
-               ssh tor "sudo service nginx stop"
+               ssh tor "service nginx stop"
                scp ./deploy/nginx.conf tor:/etc/nginx/
                scp ./deploy/relayerms.nginx.conf tor:/etc/nginx/sites-available/relayerms
-               ssh tor "sudo service nginx start"
+               ssh tor "service nginx start"
                ;;
         *) echo "Task not recognized"
            ;;
