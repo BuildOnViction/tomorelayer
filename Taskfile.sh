@@ -103,7 +103,8 @@ function dep {
                       scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
                       scp ./.prod.env tor:/srv/www/relayerms/
                       scp -r ./backend tor:/srv/www/relayerms/
-                      ssh tor "service supervisor restart"
+                      ssh tor "supervisorctl reread"
+                      ssh tor "supervisorctl update"
                   else
                       scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
                       scp ./.prod.env tor:/srv/www/relayerms/
