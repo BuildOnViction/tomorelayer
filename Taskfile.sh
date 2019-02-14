@@ -64,10 +64,9 @@ function lint {
 # DEPLOY SCRIPTS
 function dep {
     case "$1" in
-        setup) echo ">> CREATE TOR APP at SERVER: $2"
-               host=$2
-               scp ./deploy/dep.sh root@$host:~/
-               ssh -t root@$host "~/dep.sh install"
+        setup) echo ">> CREATE TOR APP at SERVER"
+               scp ./deploy/dep.sh tor:~/
+               ssh -t tor "~/dep.sh install"
                echo "Finished. Don't forget the update the local '~/.ssh/config' and change POSTGRES password"
                ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"

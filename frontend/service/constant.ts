@@ -1,5 +1,5 @@
-const  APP_HOST = process.env.APP_HOST
-const  APP_PORT = process.env.APP_PORT
+const  APP_HOST = process.env.STG === 'development' ? process.env.APP_HOST : window.location.origin
+const  APP_PORT = process.env.STG === 'development' ? process.env.APP_PORT : 80
 
 const baseUrl = `${APP_HOST}:${APP_PORT}`
 const apiPrefix = 'api'
