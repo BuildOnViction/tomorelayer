@@ -6,17 +6,25 @@
 ``` shell
 $ eval 'alias task="./Taskfile.sh"'
 ```
+- Have a ssh config file (eg: `~/.ssh/config`)that contains something like this...
+```
+Host tor
+ HostName <host_ip>
+ User root
+ AddKeysToAgent yes
+ UseKeychain yes
+ IdentitiesOnly yes
+ IdentityFile ~/.ssh/id_rsa
+```
 
 2. Server requirements
 - Ubuntu 18.10
 - Run the following command
 ``` shell
-$ task dep setup <host_ip>
+$ task dep setup
 ```
 
 Note:
-- During the setup, you may need to manually input user password.
-- If get stuck installing *python3*, hit **Ctrl+C**
 - After setup, you may also need to manually change Postgres password depending on your **.prod.env** file.
 
 3. Running the Application
