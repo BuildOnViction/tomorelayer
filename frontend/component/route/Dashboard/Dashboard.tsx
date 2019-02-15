@@ -1,5 +1,4 @@
 import { withRouter } from 'react-router-dom'
-import { Button, Code } from '@blueprintjs/core'
 
 @withRouter
 export class Dashboard extends React.PureComponent {

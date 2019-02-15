@@ -1,93 +1,48 @@
+@import './variable';
+
 body {
-  background-color: $light-gray4;
   box-sizing: border-box;
   margin: 0;
+  color: $text-base-color;
 }
 
 a {
   text-decoration: none !important;
 }
 
-.nav--container {
+.stretched {
+  height: 100vh;
 }
 
-.nav--heading--title {
-  font-size: 1.2em !important;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-shadow: 0 0 10px $brand-color-dark4;
-  line-height: 40px;
-  display: inline-block;
-  vertical-align: text-bottom;
+.main {
+  background: #f8f8fd;
 }
 
-.nav--heading--logo {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
+.elevated {
+  box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.03);
 }
 
-.container .center,
-.container-full .center {
-  text-align: center;
-}
-
-.route-switch--route {
-  font-size: 1rem;
-  color: $gray4;
-  padding: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.4s, color 0.4s;
-  &:hover {
-    color: $gray1;
-    background: $light-gray1;
-  }
-}
-
-.route-switch--route.active {
-  color: $brand-color-light2;
-  background: $white;
-  transition: background 0.4s, color 0.4s;
-}
-
-.switch-container {
-  background: $white;
-  border-radius: 5px;
-  min-height: 80vh;
-}
-
-.relayer-register-button {
-  border: solid 2px $green5;
-  color: $green5;
-  width: auto;
-  border-radius: 30px;
-  transition: color .3s, background .3s;
-  &:hover {
-    background: $green5;
-    color: $white;
-    transition: color .3s, background .3s;
-  }
-}
-
-.alert-message {
-  height: 200px;
-  width: 100%;
-  font-size: 1.3em;
-}
-
-.code__json {
-  padding: 10px;
-  font-size: 10pt;
-  background: $light-gray3;
-  border-radius: 5px;
-  font-family: 'Roboto Mono', monospace;
+.card {
+  background: #fff;
+  min-height: 500px;
+  min-width: 100px;
+  margin: 1em;
+  border-radius: 8px;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-button {
-  &.round {
-    border-radius: 50%;
+.btn {
+  border-radius: 2px;
+  border: solid 1px transparent;
+  background: transparent;
+  color: $text-base-alert;
+  font-size: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background .3s;
+
+  &:hover {
+    background: $brand-color-dark;
+    border-color: $brand-color-dark;
   }
 }

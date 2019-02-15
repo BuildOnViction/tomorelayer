@@ -121,14 +121,18 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/r
 1. Relayer Registration & Update
    - [x] Backend Database
    - [x] SmartContract
-2. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
+   - [x] Depovs Document & Deployment
+2. Refactoring frontend structure, finalise bundling setup
+   - [ ] Refactor UI/UX
+   - [ ] Login
+3. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
-3. Showing & Updating all supported token available for trading
-4. Listing signed & verified Relayers
+4. Showing & Updating all supported token available for trading
+5. Listing signed & verified Relayers
    - [ ] Counting filled orders
    - [ ] Network volume details
-5. Make Portable/Reusable API Kit
+6. Make Portable/Reusable API Kit
 
 
 
