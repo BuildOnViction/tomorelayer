@@ -85,3 +85,9 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+button {
+  &.round {
+    border-radius: 50%;
+  }
+}

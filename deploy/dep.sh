@@ -26,7 +26,7 @@ libffi-dev liblzma-dev python-openssl nodejs supervisor"
     # # # Pull the code
     mkdir /srv/www
     cd /srv/www
-    git clone -b master https://github.com/tomochain/relayerms.git
+    git clone -b inet_supervisor https://github.com/tomochain/relayerms.git
     cd relayerms
     npm install
     pipenv install --python $HOME/.pyenv/shims/python

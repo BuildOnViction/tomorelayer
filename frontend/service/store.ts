@@ -8,6 +8,7 @@ const initialState = {
   error: '',
   alert: '',
   contracts: {},
+  loginModal: false,
 }
 
 const store = createStore(initialState)
