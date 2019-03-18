@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import * as _ from 'lodash/fp'
 import cx from 'classnames'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
