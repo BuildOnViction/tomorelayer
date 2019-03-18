@@ -57,6 +57,7 @@ contract Registration {
     }
 
     function updateRelayer(address _addr, bool _activated, uint16 _dex_rate, uint16 _foundation_rate)
+        /// RelayerResignation
         public
         onlyOwner
         rateIsValid(_dex_rate, _foundation_rate)

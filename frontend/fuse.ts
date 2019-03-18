@@ -46,7 +46,12 @@ const config = {
     CopyPlugin({ files: assetExts }),
     [
       SassPlugin({ importer: true }),
-      CSSResourcePlugin({ inline: true }),
+      CSSResourcePlugin({
+        macros: {
+          static: `${__dirname}/static/`
+        },
+        dist: 'dist/css-resources',
+      }),
       CSSPlugin({
         inject: file => `${file}`,
         outFile: file => `dist/${file}`,
@@ -70,8 +75,8 @@ task('default', ['clean_all'], () => {
   if (!isProduction) {
     fuse.dev({ port: 3000 })
     bundle
-      .watch('(component|service|static|style)/**.(ts|tsx|scss|jpg|png)')
-      .hmr()
+        .watch('(component|service|static|style)/**.(ts|tsx|scss|jpg|png)')
+        .hmr()
   }
   bundle.instructions('> index.tsx')
   return fuse.run()

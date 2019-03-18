@@ -25,5 +25,5 @@ CLOSED: [2019-02-13 Wed 13:50]
 *** DONE Finalise document on Deployment
 CLOSED: [2019-02-13 Wed 15:25]
 ** TODO Refactor Frontend
-*** TODO Fix some ui crap
+*** ACTIVE Fix some ui crap
 *** TODO Rethink about Redux_Zero, since it is starting to appear ugly

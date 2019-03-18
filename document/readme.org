@@ -1,0 +1,21 @@
+#+OPTIONS: ^:nil
+#+TITLE: RelayerManager WorkFlow
+#+DATE: <2018-07-31 Tue>
+#+AUTHOR: Vu Tran
+#+EMAIL: me@vutr.io`
+
+* Content                                                               :TOC:
+- [[#introduction][Introduction]]
+- [[#steps][Steps]]
+
+* Introduction
+Notes about workflow
+
+* Steps
+1. Unlock Wallet (signin)
+2. Registration
+   - Form (deposit: 25k TOMO, Rate, Pick Token-Matches)
+   - DEX Build Guide
+   - Issue token
+3. DEX Personnel Administration
+   - ...

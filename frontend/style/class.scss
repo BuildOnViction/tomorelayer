@@ -17,20 +17,20 @@ $space-mod-map: (
 @for $i from 0 through 5 {
   @each $mod, $val in $space-mod-map {
     .#{$mod}-#{$i} {
-      #{$val}: #{$i}em;
+      #{$val}: #{$i}em !important;
     }
   }
 }
 
 /* text color */
 $text-color-map: (
-  white: $white,
-  blue: $blue5,
-  green: $green5,
-  forest: $forest4,
+  white: $light,
+  blue: $blue,
+  green: $green,
+  forest: $forest,
   black: $black,
   orange: $brand-color-light,
-  dark: $dark-gray5,
+  dark: $dark-gray,
 );
 
 @each $color, $val in $text-color-map {
@@ -48,15 +48,16 @@ $text-color-map: (
 
 /* background-color */
 $bg-color-map: (
-  blue: $blue5,
-  green: $green5,
-  forest: $forest4,
+  blue: $blue,
+  green: $green,
+  forest: $forest,
   black: $black,
   orange: $brand-color-light,
-  dark: $dark-gray1,
+  dark: $dark-gray,
+  gray: $light-gray,
 );
 
-@each $color, $val in $text-color-map {
+@each $color, $val in $bg-color-map {
   .bg-#{$color} {
     background: #{$val} !important;
   }
@@ -99,3 +100,22 @@ $bg-color-map: (
 .float-right {
   float: right;
 }
+
+// Size
+.w_100 { width: 100%; }
+.h_100 { height: 100%; }
+.w_auto { width: auto; }
+.h_auto { height: auto; }
+
+.s_100 {
+  width: 100%;
+  height: 100%;
+}
+
+
+// Display & Position
+.inline { display: inline-block; }
+.block { display: block; }
+.flex { display: flex; }
+.absolute { position: absolute; }
+.relative { position: relative; }
