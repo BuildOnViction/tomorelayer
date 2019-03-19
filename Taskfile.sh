@@ -57,8 +57,13 @@ function emb {
     embark run --nobrowser --noserver --nodashboard $network
 }
 
-function lint {
+function lint-fe {
     tslint -c ./frontend/tslint.json './frontend/**/*.ts*'
+}
+
+function lint-be {
+    pipenv run flake8 **/*.py
+    pipenv run pylint **/*.py
 }
 
 # DEPLOY SCRIPTS
