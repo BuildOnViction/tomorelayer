@@ -1,7 +1,10 @@
 from tornado.web import HTTPError
+from tornado.web import authenticated
 from .base import BaseHandler
 
 
 class MainHandler(BaseHandler):
+
+    @authenticated
     def get(self):
-        self.json_response('Congratulation! API established properly!')
+        self.render('index.html', user='vu')

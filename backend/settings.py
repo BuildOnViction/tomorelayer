@@ -33,4 +33,5 @@ settings = {
     'port': getenv('APP_PORT'),
     'static_path': base_path + '/static',
     'stg': getenv('STG'),
+    'template_path': base_path + '/template',
 }

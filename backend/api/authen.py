@@ -11,11 +11,12 @@ class AuthHandler(BaseHandler):
         from uuid import uuid4
         message = '[Relayer {}] Login'.format(datetime.now().strftime('%x %H-%M-%S'))
         id = str(uuid4())
-        self.json_response({
+        embedded_qr_code = {
             'message': message,
             'id': id,
             'url': base_url + '/api/auth?verifyId={}'.format(id),
-        })
+        }
+        self.render('login.html', qr=embedded_qr_code)
 
     def post(self):
         """verify id
