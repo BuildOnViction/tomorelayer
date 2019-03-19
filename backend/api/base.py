@@ -1,4 +1,5 @@
 from settings import settings
+from tornado.web import HTTPError
 from tornado.web import ErrorHandler
 from tornado.web import RequestHandler
 from peewee import IntegrityError
@@ -9,6 +10,9 @@ import traceback
 
 
 class BaseHandler(RequestHandler):
+
+    def get_current_user(self):
+        return self.get_secure_cookie('user_id')
 
     def set_default_headers(self):
         self.set_header('Content-Type', 'application/json')

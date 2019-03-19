@@ -1,4 +1,4 @@
-* TASKS [2/5]
+* TASKS [4/5]
 ** DONE Implement smoother environment-switch strategy
 CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
@@ -13,17 +13,23 @@ CLOSED: [2019-01-29 Tue 21:00]
 CLOSED: [2019-01-29 Tue 21:00]
 *** DONE Backend app api to save registered relayer to Database
 CLOSED: [2019-01-29 Tue 21:00]
-** TODO Automation
+** DONE Automation
+CLOSED: [2019-03-18 Mon 16:20]
 *** DONE Copy source to server & Taskfile
 CLOSED: [2019-02-03 Sun 23:12]
 *** DONE Auto distributing module configs (nginx, supervisor) at server side
 CLOSED: [2019-02-03 Sun 23:12]
 *** DONE Code-swapping automation & restarting backend processes
 CLOSED: [2019-02-13 Wed 13:50]
-** TODO Deployment
-*** TODO Deploy all to a live server
+** DONE Deployment
+CLOSED: [2019-03-18 Mon 16:20]
+*** DONE Deploy all to a live server
+CLOSED: [2019-03-18 Mon 16:20]
 *** DONE Finalise document on Deployment
 CLOSED: [2019-02-13 Wed 15:25]
 ** TODO Refactor Frontend
-*** ACTIVE Fix some ui crap
-*** TODO Rethink about Redux_Zero, since it is starting to appear ugly
+*** CANCELLED Fix some ui crap
+CLOSED: [2019-03-18 Mon 16:20]
+*** WAITING Rethink about Redux_Zero, since it is starting to appear ugly
+** TODO Authentication
+*** 4 methods of authentication

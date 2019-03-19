@@ -6,9 +6,11 @@ from peewee_async import Manager
 from peewee_asyncext import PooledPostgresqlExtDatabase
 
 # IMPORT ENVIRONMENT VARIABLES
+# TODO: remove python-dotenv since pipenv auto detect dotenv file
 env_path = Path('.') / getenv('ENV_FILE')
 load_dotenv(dotenv_path=env_path)
 is_production = getenv('STG') == 'production'
+base_url = '{}:{}'.format(getenv('APP_HOST'), getenv('APP_PORT')) if not is_production else getenv('APP_HOST')
 
 # SETUP ASYNC ORM
 envars = ['user', 'password', 'host', 'port']
@@ -23,6 +25,7 @@ objects = Manager(database)
 base_path = path.dirname(__file__)
 settings = {
     'autoreload': not is_production,
+    'cookie_secret': getenv('SECRET_COOKIE'),
     'db': {'name': db_name, **db_config},
     'debug': not is_production,
     'login_url': '/login',
