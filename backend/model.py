@@ -1,7 +1,7 @@
+from logzero import logger
 import peewee as pw
 from playhouse.postgres_ext import BinaryJSONField
 from settings import database
-from logzero import logger
 
 
 class PwModel(pw.Model):

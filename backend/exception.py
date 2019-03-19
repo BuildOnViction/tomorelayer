@@ -3,6 +3,7 @@ class CustomException(Exception):
     message = ''
 
     def __init__(self, detail=''):
+        super().__init__()
         self.detail = detail
 
 

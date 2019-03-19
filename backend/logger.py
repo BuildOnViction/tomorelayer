@@ -1,5 +1,5 @@
-from settings import settings
 import logging
+from settings import settings
 
 
 logger = logging.getLogger()
