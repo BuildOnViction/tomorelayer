@@ -1,4 +1,5 @@
 from api.main import MainHandler
+from api.auth import AuthHandler
 from api.contract import ContractHandler
 from api.registration import RegisterHandler
 from api.relayer import RelayerHandler
@@ -6,6 +7,7 @@ from api.example import TomoHandler
 
 route = [
     (r"/api", MainHandler),
+    (r"/api/auth", AuthHandler),
     (r"/api/contracts", ContractHandler),
     (r"/api/register", RegisterHandler),
     (r"/api/relayers", RelayerHandler),

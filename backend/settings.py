@@ -9,6 +9,7 @@ from peewee_asyncext import PooledPostgresqlExtDatabase
 env_path = Path('.') / getenv('ENV_FILE')
 load_dotenv(dotenv_path=env_path)
 is_production = getenv('STG') == 'production'
+base_url = '{}:{}'.format(getenv('APP_HOST'), getenv('APP_PORT')) if not is_production else getenv('APP_HOST')
 
 # SETUP ASYNC ORM
 envars = ['user', 'password', 'host', 'port']
