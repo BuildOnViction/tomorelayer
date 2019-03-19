@@ -62,7 +62,9 @@ function lint-fe {
 }
 
 function lint-be {
+    echo "Linting with Flake8............."
     pipenv run flake8 **/*.py
+    echo "Linting with Pylint............."
     pipenv run pylint **/*.py
 }
 

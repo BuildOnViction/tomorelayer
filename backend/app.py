@@ -14,8 +14,8 @@ define("port", default=settings['port'], help="app port", type=int)
 if __name__ == "__main__":
     parse_command_line()
     AsyncIOMainLoop().install()
-    app = Application(route, default_handler_class=NotFoundHandler, **settings)
-    app.listen(options.port)
-    app.objects = settings['objects']
-    app.blockchain = Blockchain()
+    APP = Application(route, default_handler_class=NotFoundHandler, **settings)
+    APP.listen(options.port)
+    APP.objects = settings['objects']
+    APP.blockchain = Blockchain()
     IOLoop.current().start()
