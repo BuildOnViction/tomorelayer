@@ -8,6 +8,11 @@ const isFunction = t => typeof t === 'function'
  */
 const h = (f, v) => isFunction(f) ? f(v) : f
 
+/*
+ * Noop!
+ */
+const noop = () => undefined
+
 const baseOr = (...args) => bol => {
   if (args.length === 0) { return bol }
   if (args.length === 1) { return bol && h(args[0], bol) }
@@ -35,7 +40,13 @@ export const flush = options => obj => {
 }
 
 // Resolve 2nd/3rd arguments when first argument is truthy
-export const when = arg1 => arg2 => arg1 ? arg2 : null
+export const when = arg1 => ({
+  then: arg2 => {
+    if (!arg1 && isFunction(arg2)) return noop
+    if (!arg1 && !isFunction(arg2)) return undefined
+    if (arg1) return arg2
+  }
+})
 
 export const assign = (src, dest) => Object.assign(src, dest)
 
@@ -44,6 +55,12 @@ interface IMatcherConfig {
   default?: string
 }
 
-export const matcher = pattern => (arg, config: IMatcherConfig = {}) => arg in pattern
-                                                                      ? pattern[arg](config.returnedValue)
-                                                                      : pattern[config.default || 'default'](config.returnedValue)
+export const match = pattern => (arg, config: IMatcherConfig = {}) => {
+  const fallback = pattern[config.default || 'default' || '_']
+  const returnedValue = config.returnedValue
+  return or(h(pattern[arg], returnedValue), h(fallback, returnedValue))(arg in pattern)
+}
+
+export const notEqual = (value1, value2) => value1 !== value2
+
+export const intersect = (array1, array2) => array1.some(item => item in array2)

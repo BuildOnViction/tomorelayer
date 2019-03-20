@@ -6,7 +6,7 @@ const apiPrefix = 'api'
 const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
 
 export const API = {
-  fetchQRCode: apiBuild('auth?qr_code=1'),
+  fetchQRCode: apiBuild('auth?qr_code='),
   contracts: apiBuild('contracts'),
   register: apiBuild('register'),
   relayers: apiBuild('relayers'),

@@ -1,12 +1,9 @@
 import { connect } from 'redux-zero/react'
 import Select from 'react-select'
-import { QRCode } from 'react-qr-svg'
 import { API, UNLOCK_WALLET_METHODS } from '@constant'
-import { Grid } from '@utility'
 import { Client } from '@action'
-import { matcher } from '@helper'
+import { match, when, notEqual } from '@helper'
 import { MethodBody } from './MethodBody'
-
 
 const mapProps = store => ({
   method: store.authStore.method,
@@ -20,41 +17,44 @@ const actions = () => ({
 
 @connect(mapProps, actions)
 export class Authentication extends React.Component {
-  state = {
-    qrcode: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      qrcode: '',
+      hdPath: '',
+      metamask: '',
+    }
+    this.authComponent = React.createRef()
   }
 
   componentDidMount() {
-    // TODO: detect agent device
-    Client.get(API.fetchQRCode).then(({ qrcode }) => this.setState({ qrcode }))
+    const isAndroid = navigator.userAgent.match(/Android/i)
+    const isIOS = navigator.userAgent.match(/iPhone|iPad|iPod/i)
+    const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
+    Client.get(API.fetchQRCode + agentQuery).then(data => this.setState({
+      qrcode: data.payload.qrcode
+    }))
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevMethod = prevProps.method
+    const currentMethod = this.props.method
+    const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
+    const HDWalletMethods = [ LedgerWallet, TrezorWallet ]
+    const setHDPath = hdPath => this.setState({ hdPath })
+
+    const methodListen = match({
+      [TomoWallet]: () => console.log('shit happen'),
+      [LedgerWallet]: () => setHDPath("m/44'/889'/0'/0"),
+      [TrezorWallet]: () => setHDPath("m/44'/60'/0'/0"),
+      [BrowserWallet]: () => console.log(this.state.metamask),
+    })
+
+    const shouldUpdateHDPath = notEqual(prevMethod, currentMethod) && HDWalletMethods.includes(currentMethod)
+    return when(shouldUpdateHDPath).then(methodListen)(currentMethod)
   }
 
   handleChange = selected => this.props.changeMethod(selected.value)
-
-  methodMatch = matcher({
-    [UNLOCK_WALLET_METHODS.TomoWallet]: () => QRCode({
-      bgColor: '#FFFFFF',
-      fgColor: '#000000',
-      level: 'Q',
-      style: { width: 200, paddingTop: 20 },
-      value: this.state.qrcode,
-    }),
-    [UNLOCK_WALLET_METHODS.LedgerWallet]: () => (
-      <div>
-        <h2>ledger</h2>
-      </div>
-    ),
-    [UNLOCK_WALLET_METHODS.TrezorWallet]: () => (
-      <div>
-        <h2>Trezor</h2>
-      </div>
-    ),
-    [UNLOCK_WALLET_METHODS.BrowserWallet]: () => (
-      <div>
-        <h2>MetaMask</h2>
-      </div>
-    ),
-  })
 
   render () {
     const methodSelectOptions = Object.keys(UNLOCK_WALLET_METHODS).map(method => ({
@@ -65,8 +65,15 @@ export class Authentication extends React.Component {
     const selectedOption = methodSelectOptions.find(op => op.value === this.props.method)
 
     const { method } = this.props
+    const { qrcode, hdPath } = this.state
+
+    const methodBodyAttributes = {
+      qrcode,
+      hdPath,
+    }
+
     return (
-      <div className="col-md-12">
+      <div className="col-md-12" >
         <h3>Unlock Your Wallet</h3>
         <div className="col-md-6">
           <Select
@@ -76,7 +83,10 @@ export class Authentication extends React.Component {
           />
         </div>
         <div className="col-md-6">
-          {this.methodMatch(method)}
+          <MethodBody
+            method={selectedOption.value}
+            attributes={methodBodyAttributes}
+          />
         </div>
       </div>
     )
