@@ -1,15 +1,12 @@
 import * as createStore from 'redux-zero'
+import { UNLOCK_WALLET_METHODS } from '@constant'
 
 // NOTE: You can split initialState to multiple sub-stores when necessary
 const initialState = {
-  auth: false,
-  relayerAuthorized: false,
-  relayers: [],
-  currentUserAddress: '',
-  error: '',
-  alert: '',
-  contracts: {},
-  loginModal: false,
+  authStore: {
+    auth: false,
+    method: UNLOCK_WALLET_METHODS.TomoWallet,
+  }
 }
 
 const store = createStore(initialState)

@@ -6,6 +6,7 @@ const apiPrefix = 'api'
 const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
 
 export const API = {
+  fetchQRCode: apiBuild('auth?qr_code=1'),
   contracts: apiBuild('contracts'),
   register: apiBuild('register'),
   relayers: apiBuild('relayers'),
@@ -25,4 +26,11 @@ export const ALERT = {
   error: 'error',
   warning: 'warning',
   info: 'info',
+}
+
+export const UNLOCK_WALLET_METHODS = {
+  TomoWallet: 'TomoWallet',
+  LedgerWallet: 'LedgerWallet',
+  TrezorWallet: 'TrezorWallet',
+  BrowserWallet: 'MetaMask/TrustWallet/MidasWallet',
 }

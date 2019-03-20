@@ -19,6 +19,6 @@ class AuthHandler(BaseHandler):
         qr_code = {
             'message': message,
             'id': identity,
-            'url': base_url + '/api/auth?verifyId={}'.format(id),
+            'qrcode': base_url + '/api/auth?verifyId={}'.format(identity),
         }
         return qr_code
