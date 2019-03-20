@@ -39,6 +39,7 @@ const config = {
     '@action': '~/service/action',
     '@constant': '~/service/constant',
     '@blockchain': '~/service/blockchain',
+    '@helper': '~/service/helper',
   },
   plugins: [
     EnvPlugin(process.env),

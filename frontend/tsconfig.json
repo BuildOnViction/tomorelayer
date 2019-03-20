@@ -15,7 +15,8 @@
       "@static/*": ["static/*"],
       "@action": ["service/action"],
       "@constant": ["service/constant"],
-      "@blockchain": ["service/blockchain"]
+      "@blockchain": ["service/blockchain"],
+      "@helper": ["service/helper"]
     }
   }
 }
