@@ -64,3 +64,8 @@ export const match = pattern => (arg, config: IMatcherConfig = {}) => {
 export const notEqual = (value1, value2) => value1 !== value2
 
 export const intersect = (array1, array2) => array1.some(item => item in array2)
+
+// Compose from left-most to right-most
+export const compose = (...functions) => lastArg => functions
+  .filter(isFunction)
+  .reduce((returned, currentFunc) => currentFunc(returned), lastArg)

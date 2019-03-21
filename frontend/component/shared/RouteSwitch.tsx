@@ -1,9 +1,9 @@
-import * as _ from 'lodash/fp'
 import cx from 'classnames'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
-import { Grid } from '@utility'
 import { SITE_MAP } from '@constant'
+import { compose } from '@helper'
+import { Grid } from '@utility'
 
 const cls = active => cx('col-auto route-switch--route m-1', { active, 'drop-shadow': active })
 
@@ -34,9 +34,9 @@ const mapProps = store => ({
   currentUser: store.currentUserAddress,
 })
 
-const connector = _.compose(
-  withRouter,
+const connector = compose(
   connect(mapProps),
+  withRouter,
 )
 
 export const RouteSwitch = connector(WrappedRouteSwitch)
