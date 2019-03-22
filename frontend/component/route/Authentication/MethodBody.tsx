@@ -18,17 +18,17 @@ export const MethodBody = ({
   ),
   [UNLOCK_WALLET_METHODS.LedgerWallet]: (
     <div>
-      <h2>{attributes.hdPath}</h2>
+      <h2>m/44'/889'/0'/0</h2>
     </div>
   ),
   [UNLOCK_WALLET_METHODS.TrezorWallet]: (
     <div>
-      <h2>{attributes.hdPath}</h2>
+      <h2>m/44'/60'/0'/0</h2>
     </div>
   ),
   [UNLOCK_WALLET_METHODS.BrowserWallet]: (
     <div>
-      <h2>MetaMask</h2>
+      <h2>Please install & login Metamask Extension then connect it to Tomochain Mainnet or Testnet.</h2>
     </div>
   ),
 })(method)

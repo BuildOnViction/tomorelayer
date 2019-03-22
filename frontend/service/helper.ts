@@ -41,7 +41,7 @@ export const flush = options => obj => {
 
 // Resolve 2nd/3rd arguments when first argument is truthy
 export const when = arg1 => ({
-  then: arg2 => {
+  do: arg2 => {
     if (!arg1 && isFunction(arg2)) return noop
     if (!arg1 && !isFunction(arg2)) return undefined
     if (arg1) return arg2
@@ -69,3 +69,22 @@ export const intersect = (array1, array2) => array1.some(item => item in array2)
 export const compose = (...functions) => lastArg => functions
   .filter(isFunction)
   .reduce((returned, currentFunc) => currentFunc(returned), lastArg)
+
+export const extract = (...keys) => ({
+  from: obj => {
+    const result = {}
+    keys.forEach(k => result[k] = obj[k])
+    return result
+  }
+})
+
+export const safety_net = promise => promise
+  .then(data => [null, data])
+  .catch(err => [err])
+
+export const isEmpty = something => {
+  if (something === '') return true
+  if (typeof something === 'object' && something.length === 0) return true
+  if (typeof something === 'object' && Object.keys(something).length === 0) return true
+  return false
+}

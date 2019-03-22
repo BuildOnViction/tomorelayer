@@ -6,6 +6,7 @@ const initialState = {
   authStore: {
     auth: false,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
+    userAddress: '',
   }
 }
 
