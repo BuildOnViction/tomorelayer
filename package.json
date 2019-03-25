@@ -21,8 +21,11 @@
     "uglify-js": "^3.5.2"
   },
   "dependencies": {
+    "@colony/purser-core": "^2.1.0",
     "@colony/purser-ledger": "^1.2.2",
+    "@colony/purser-metamask": "^2.2.0",
     "@colony/purser-software": "^1.2.4",
+    "@colony/purser-trezor": "^1.2.2",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-router-dom": "^4.3.1",

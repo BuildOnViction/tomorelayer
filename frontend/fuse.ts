@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+
 import {
   FuseBox,
   CopyPlugin,
@@ -74,7 +76,13 @@ task('default', ['clean_all'], () => {
   const fuse = FuseBox.init(config)
   const bundle = fuse.bundle('app')
   if (!isProduction) {
-    fuse.dev({ port: 3000 })
+    fuse.dev({
+      port: 3000,
+      https: {
+        key: fs.readFileSync("./cert/app.key", "utf8"),
+        cert: fs.readFileSync("./cert/app.crt", "utf8"),
+      }
+    })
     bundle
         .watch('(component|service|static|style)/**.(ts|tsx|scss|jpg|png)')
         .hmr()
