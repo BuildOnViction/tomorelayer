@@ -1,22 +1,31 @@
-import { open } from '@colony/purser-ledger'
+import ledger from '@vutr/purser-ledger'
+import metamask from '@colony/purser-metamask'
 import { connect } from 'redux-zero/react'
 import Select from 'react-select'
 import { API, UNLOCK_WALLET_METHODS } from '@constant'
 import { Client } from '@action'
-import * as _ from '@helper'
+import _ from '@helper'
 import { MethodBody } from './MethodBody'
 
 const mapProps = store => ({
   method: store.authStore.method,
   userAddress: store.authStore.userAddress,
+  auth: store.authStore.auth,
 })
 
 const actions = () => ({
-  changeMethod: (state, event ) => ({
-    authStore: { method: event.value }
+  changeMethod: (state, event) => ({
+    authStore: {
+      ...state.authStore,
+      method: event.value,
+    }
   }),
   setUserAddress: (state, userAddress) => ({
-    authStore: { userAddress }
+    authStore: {
+      ...state.authStore,
+      userAddress: userAddress,
+      auth: true,
+    }
   })
 })
 
@@ -45,25 +54,23 @@ export class Authentication extends React.Component {
     const currentMethod = this.props.method
     const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 
-    const metamaskUnlock = () => match({
-      false: () => console.warn('No MetaMask found!'),
-      true: async () => {
-        const provider = window.web3.currentProvider
-        const web3 = new ethers.providers.Web3Provider(provider)
-        const [error, addresses] = await safety_net(web3.listAccounts())
-        when(error).do(console.warn)('Something\'s wrong with the Network')
-        when(isEmpty(addresses)).do(console.warn)('You are not logged in yet')
-      }
-    })(!!window.web3)
-
     const unlockByMethod = match({
       [TomoWallet]: void 0,
       [LedgerWallet]: async () => {
-        const wallet = await open({ addressCount: 100 })
+        console.warn('Unlock Ledger Wallet')
+        const wallet = await ledger.open({ customDerivationPath: "m/44'/889'/0'/0" })
         console.log(wallet)
       },
       [TrezorWallet]: void 0,
-      [BrowserWallet]: metamaskUnlock,
+      [BrowserWallet]: async () => {
+        const available = await metamask.detect()
+        when(!available).do(console.warn)('MetaMask not found!')
+        when(available).do(async () => {
+          const wallet = await metamask.open()
+          console.warn('Your address: ' + wallet.address)
+          this.props.setUserAddress(wallet.address)
+        })()
+      },
     })
 
     return unlockByMethod(currentMethod)

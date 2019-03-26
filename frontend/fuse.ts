@@ -26,6 +26,7 @@ const config = {
   target: 'browser@esnext',
   hash: isProduction,
   cache: !isProduction,
+  allowSyntheticDefaultImports: true,
   log: {
     showBundledFiles: true,
     clearTerminalOnBundle: true,
