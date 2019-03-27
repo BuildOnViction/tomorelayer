@@ -6,7 +6,7 @@ import { match } from 'service/helper'
 
 const MethodBody = ({
   method = UNLOCK_WALLET_METHODS.TomoWallet,
-  attributes = {},
+  qrcode,
 }) => match({
   [UNLOCK_WALLET_METHODS.TomoWallet]: (
     <QRCode
@@ -14,7 +14,7 @@ const MethodBody = ({
       fgColor="#000000"
       level="Q"
       style={{ width: 200, paddingTop: 20 }}
-      value={attributes.qrcode}
+      value={qrcode}
     />
   ),
   [UNLOCK_WALLET_METHODS.LedgerWallet]: (

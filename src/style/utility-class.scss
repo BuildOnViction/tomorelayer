@@ -24,13 +24,7 @@ $space-mod-map: (
 
 /* text color */
 $text-color-map: (
-  white: $light,
-  blue: $blue,
-  green: $green,
-  forest: $forest,
-  black: $black,
-  orange: $brand-color-light,
-  dark: $dark-gray,
+  initial: $text-base-color,
 );
 
 @each $color, $val in $text-color-map {
@@ -46,32 +40,11 @@ $text-color-map: (
   }
 }
 
-/* background-color */
-$bg-color-map: (
-  blue: $blue,
-  green: $green,
-  forest: $forest,
-  black: $black,
-  orange: $brand-color-light,
-  dark: $dark-gray,
-  gray: $light-gray,
-);
-
-@each $color, $val in $bg-color-map {
-  .bg-#{$color} {
-    background: #{$val} !important;
-  }
-}
-
 
 // UTILITY INDIVIDUAL CLASSES
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
 
 .text-bold {
   font-weight: 800;
@@ -119,3 +92,5 @@ $bg-color-map: (
 .flex { display: flex; }
 .absolute { position: absolute; }
 .relative { position: relative; }
+
+.pointer { cursor: pointer; }

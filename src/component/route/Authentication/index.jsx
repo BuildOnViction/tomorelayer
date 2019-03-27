@@ -2,13 +2,13 @@ import React from 'react'
 import ledger from '@vutr/purser-ledger'
 import metamask from '@colony/purser-metamask'
 import { connect } from 'redux-zero/react'
-import Select from 'react-select'
 import { API, UNLOCK_WALLET_METHODS } from 'service/constant'
 import { Client } from 'service/action'
 import * as _ from 'service/helper'
 import { Container } from 'component/utility'
-import MethodBody from './MethodBody'
 import TopBar from './TopBar'
+import MethodBody from './MethodBody'
+import MethodSelect from './MethodSelect'
 import logo from 'asset/relayer-logo.png'
 
 const mapProps = store => ({
@@ -18,10 +18,10 @@ const mapProps = store => ({
 })
 
 const actions = () => ({
-  changeMethod: (state, event) => ({
+  changeMethod: (state, method) => ({
     authStore: {
       ...state.authStore,
-      method: event.value,
+      method,
     }
   }),
   setUserAddress: (state, userAddress) => ({
@@ -80,14 +80,8 @@ class Authentication extends React.Component {
   }
 
   render () {
-    const methodSelectOptions = Object.keys(UNLOCK_WALLET_METHODS).map(method => ({
-      value: UNLOCK_WALLET_METHODS[method],
-      label: method,
-    }))
-
-    const selectedOption = methodSelectOptions.find(op => op.value === this.props.method)
-    const methodBodyAttributes = _.extract('qrcode', 'hdPath').from(this.state)
-
+    const { method, changeMethod } = this.props
+    const { qrcode } = this.state
     return (
       <React.Fragment>
         <TopBar />
@@ -98,18 +92,17 @@ class Authentication extends React.Component {
             className="relayer-logo block mb-3"
             height="80"
           />
-          <div className="col-md-6">
-            <Select
-              value={selectedOption}
-              options={methodSelectOptions}
-              onChange={this.props.changeMethod}
+          <div className="col-md-12">
+            <div className="mb-2 mt-2 font-3 text-left">
+              Start by choosing the wallet you would like to unlock
+            </div>
+            <MethodSelect
+              method={method}
+              changeMethod={changeMethod}
             />
           </div>
-          <div className="col-md-6">
-            <MethodBody
-              method={selectedOption.value}
-              attributes={methodBodyAttributes}
-            />
+          <div className="col-md-12 method-body">
+            <MethodBody method={method} qrcode={qrcode} />
           </div>
           <button onClick={this.unlockWallet} className="btn">
             Unlock my Wallet!

@@ -4,28 +4,10 @@ $pt-font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
 $pt-navbar-height: 70px;
 
 /* Tomochain branding colo */
-$brand-color-light: #fbb068;
-$brand-color-light2: darken(#fbb068, 20%);
+$green: #10D0B2;
+$dark-green: #08847C;
 
-$brand-color-dark: #202741;
-$brand-color-dark2: lighten(#202741, 25%);
-$brand-color-dark3: lighten(#202741, 50%);
-$brand-color-dark4: lighten(#202741, 75%);
-
-$text-base-color: #a8abc9;
-$text-subtle-color: #c3c7d8;
-$text-base-highlight: #30366e;
-$text-base-alert: orange;
-
-
-/* Bg color */
-$light: white;
-$blue: blue;
-$green: green;
-$forest: darkgreen;
-$black: black;
-$dark-gray: #1a1f36;
-$light-gray: lightgray;
+$text-base-color: #707070;
 
 /* Spacing */
 $space: 10px;

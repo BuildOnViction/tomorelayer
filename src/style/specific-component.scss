@@ -2,6 +2,7 @@ body {
   box-sizing: border-box;
   margin: 0;
   color: $text-base-color;
+  letter-spacing: 1px;
 }
 
 a {
@@ -56,4 +57,30 @@ a {
 
 .relayer-logo {
   margin: 0 auto;
+}
+
+.method-select {
+  border: solid 1px $green;
+  border-radius: 5px;
+}
+
+.method-select__option {
+  width: 25%;
+  height: 100px;
+  border: solid 2px transparent;
+  padding: $space;
+
+  &.method-select__option--active {
+    background: $green;
+    color: white;
+    border-bottom: solid 4px $dark-green;
+  }
+}
+
+.method-option__title * {
+  font-weight: 200;
+}
+
+.method-body {
+  min-height: 300px;
 }
