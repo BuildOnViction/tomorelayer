@@ -4,7 +4,7 @@ import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { match } from 'service/helper'
 
 
-export const MethodBody = ({
+const MethodBody = ({
   method = UNLOCK_WALLET_METHODS.TomoWallet,
   attributes = {},
 }) => match({
@@ -33,3 +33,5 @@ export const MethodBody = ({
     </div>
   ),
 })(method)
+
+export default MethodBody

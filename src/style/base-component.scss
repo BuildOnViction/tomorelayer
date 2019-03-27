@@ -1,0 +1,37 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding: $space;
+  text-align: left;
+
+  &.container--full {
+    max-width: 100vw;
+  }
+
+  &.container--center {
+    text-align: center;
+  }
+
+  &.container--right {
+    text-align: right;
+  }
+}
+
+
+.btn {
+  cursor: pointer;
+  border: solid 1px #ddd;
+  padding: $space;
+  font-size: 14px;
+
+  &:hover {
+    background: lighten(#ddd, 10);
+  }
+
+  &.btn--minimal {
+    border: none !important;
+    background: transparent;
+    width: auto;
+    padding: 0;
+  }
+}

@@ -6,7 +6,10 @@ import Select from 'react-select'
 import { API, UNLOCK_WALLET_METHODS } from 'service/constant'
 import { Client } from 'service/action'
 import * as _ from 'service/helper'
-import { MethodBody } from './MethodBody'
+import { Container } from 'component/utility'
+import MethodBody from './MethodBody'
+import TopBar from './TopBar'
+import logo from 'asset/relayer-logo.png'
 
 const mapProps = store => ({
   method: store.authStore.method,
@@ -50,7 +53,7 @@ class Authentication extends React.Component {
 
   unlockWallet = e => {
     e.preventDefault()
-    const { when, match } = _
+    const { when, match, safety_net } = _
     const currentMethod = this.props.method
     const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 
@@ -58,8 +61,8 @@ class Authentication extends React.Component {
       [TomoWallet]: void 0,
       [LedgerWallet]: async () => {
         console.warn('Unlock Ledger Wallet')
-        const wallet = await ledger.open({ customDerivationPath: "m/44'/889'/0'/0" })
-        console.log(wallet)
+        const [error, wallet] = safety_net(await ledger.open({ customDerivationPath: "m/44'/889'/0'/0" }))
+        when(error).do(console.warn)('Somethign wrong wrong')
       },
       [TrezorWallet]: void 0,
       [BrowserWallet]: async () => {
@@ -86,25 +89,33 @@ class Authentication extends React.Component {
     const methodBodyAttributes = _.extract('qrcode', 'hdPath').from(this.state)
 
     return (
-      <div className="col-md-12" >
-        <h3>Unlock Your Wallet</h3>
-        <div className="col-md-6">
-          <Select
-            value={selectedOption}
-            options={methodSelectOptions}
-            onChange={this.props.changeMethod}
+      <React.Fragment>
+        <TopBar />
+        <Container center>
+          <img
+            alt="logo"
+            src={logo}
+            className="relayer-logo block mb-3"
+            height="80"
           />
-        </div>
-        <div className="col-md-6">
-          <MethodBody
-            method={selectedOption.value}
-            attributes={methodBodyAttributes}
-          />
-        </div>
-        <button onClick={this.unlockWallet} className="btn">
-          Unlock my Wallet!
-        </button>
-      </div>
+          <div className="col-md-6">
+            <Select
+              value={selectedOption}
+              options={methodSelectOptions}
+              onChange={this.props.changeMethod}
+            />
+          </div>
+          <div className="col-md-6">
+            <MethodBody
+              method={selectedOption.value}
+              attributes={methodBodyAttributes}
+            />
+          </div>
+          <button onClick={this.unlockWallet} className="btn">
+            Unlock my Wallet!
+          </button>
+        </Container>
+      </React.Fragment>
     )
   }
 }

@@ -1,5 +1,3 @@
-@import './variable';
-
 body {
   box-sizing: border-box;
   margin: 0;
@@ -8,6 +6,7 @@ body {
 
 a {
   text-decoration: none !important;
+  color: initial;
 }
 
 .stretched {
@@ -31,18 +30,30 @@ a {
   overflow: hidden;
 }
 
-.btn {
-  border-radius: 2px;
-  border: solid 1px transparent;
+.lang-select {
+  width: 30px;
+  border: none;
   background: transparent;
-  color: $text-base-alert;
-  font-size: 14px;
-  padding: 8px 12px;
+  font-size: 16px;
+  text-align: left;
+  appearance: none;
   cursor: pointer;
-  transition: background .3s;
+}
 
+.lang-flag {
+  width: 25px;
+  border: solid 1px #ddd;
+  height: 20px;
+}
+
+.help-badge {
+  color: $text-base-color;
+  font-size: 15px;
   &:hover {
-    background: $brand-color-dark;
-    border-color: $brand-color-dark;
+    color: darken($text-base-color, 20);
   }
+}
+
+.relayer-logo {
+  margin: 0 auto;
 }

@@ -7,6 +7,9 @@ const initialState = {
     auth: false,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
     userAddress: '',
+  },
+  global: {
+    lang: 'en'
   }
 }
 
