@@ -2,22 +2,6 @@
 PATH=./node_modules/.bin:$PATH
 # TODO: add 'help'
 
-# DEFAULT VARIABLES
-ENV_NAME="dev"
-ENV_FILE=".dev.env"
-ENV_PATH="./.dev.env"
-
-# HELPER FUNCTIONS
-function load_env {
-    if [ "$1" != "" ]
-    then
-        echo "STG >> .$1.env"
-        ENV_NAME="$1"
-        ENV_FILE=".$1.env"
-        ENV_PATH="./.$1.env"
-    fi
-}
-
 function kill_port {
     kill-port $1
 }
@@ -25,20 +9,13 @@ function kill_port {
 
 # TASKS
 function frontend {
-    load_env $1
-    echo "node -r dotenv/config -r ts-node/register frontend/fuse.ts default dotenv_config_path=$ENV_FILE"
-    node -r dotenv/config -r ts-node/register frontend/fuse.ts default dotenv_config_path=$ENV_PATH
+    echo "node -r dotenv/config -r ts-node/register frontend/fuse.ts default"
+    node -r dotenv/config -r ts-node/register frontend/fuse.ts default
 }
 
 function backend {
-    load_env $2
-    BE_PORT=""
-    if [ "$1" != "" ]
-    then
-        BE_PORT=" --port=$1"
-    fi
-    echo "ENV_FILE=$ENV_FILE pipenv run python ./backend/app.py" $BE_PORT
-    ENV_FILE=$ENV_FILE pipenv run python ./backend/app.py $BE_PORT
+    echo "pipenv run python ./backend/app.py"
+    pipenv run python ./backend/app.py
 }
 
 function docker {

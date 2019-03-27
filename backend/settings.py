@@ -6,10 +6,9 @@ from peewee_async import Manager
 from peewee_asyncext import PooledPostgresqlExtDatabase
 
 # IMPORT ENVIRONMENT VARIABLES
-env_path = Path('.') / getenv('ENV_FILE')
-load_dotenv(dotenv_path=env_path)
+load_dotenv()
 is_production = getenv('STG') == 'production'
-base_url = '{}:{}'.format(getenv('APP_HOST'), getenv('APP_PORT')) if not is_production else getenv('APP_HOST')
+base_url = '{}:{}'.format(getenv('REACT_APP_HOST'), getenv('REACT_APP_PORT')) if not is_production else getenv('REACT_APP_HOST')
 
 # SETUP ASYNC ORM
 envars = ['user', 'password', 'host', 'port']
@@ -28,7 +27,7 @@ settings = {
     'debug': not is_production,
     'login_url': '/login',
     'objects': objects,
-    'port': getenv('APP_PORT'),
+    'port': getenv('REACT_APP_PORT'),
     'static_path': base_path + '/static',
     'stg': getenv('STG'),
 }
