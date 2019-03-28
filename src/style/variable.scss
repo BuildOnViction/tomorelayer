@@ -1,12 +1,13 @@
-$pt-font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+$pt-font-family: "Helvetica Neue", sans-serif;
 
 /* Custom NavBar style */
 $pt-navbar-height: 70px;
 
-/* Tomochain branding colo */
+/* App branding colors */
 $green: #00A99D;
 $light-green: #10D0B2;
 $dark-green: darken($green, 10);
+$light-blue: #bbccdc;
 
 $text-base-color: #707070;
 $text-base-light: lighten($text-base-color, 5);

@@ -8,8 +8,10 @@ import * as _ from 'service/helper'
 import { Container } from 'component/utility'
 import TopBar from './TopBar'
 import Header from './Header'
-import MethodBody from './MethodBody'
 import MethodSelect from './MethodSelect'
+import MethodBody from './MethodBody'
+import ModalWalletAddressList from './ModalWalletAddressList'
+
 
 const mapProps = store => store.authStore
 
@@ -20,19 +22,23 @@ const actions = () => ({
       method,
     }
   }),
-  setUserAddress: (state, userAddress) => ({
-    authStore: {
-      ...state.authStore,
-      userAddress: userAddress,
-      auth: true,
+  setUserAddress: (state, userAddress) => {
+    return {
+      authStore: {
+        ...state.authStore,
+        userAddress: userAddress,
+        auth: true,
+      }
     }
-  })
+  }
 })
 
 class Authentication extends React.Component {
   state = {
     qrcode: '',
     hdPath: '',
+    walletAddresses: [],
+    toggleModal: false,
   }
 
   async componentDidMount() {
@@ -52,7 +58,12 @@ class Authentication extends React.Component {
     const unlockByMethod = match({
       [TomoWallet]: void 0,
       [LedgerWallet]: async () => {
+        // TODO: handle error (time out, cant open, wrong HD path)
         const wallet = await ledger.open({ customDerivationPath: ledgerHdPath })
+        this.setState({
+          walletAddresses: wallet.otherAddresses,
+          toggleModal: true,
+        })
       },
       [TrezorWallet]: void 0,
       [BrowserWallet]: async () => {
@@ -69,9 +80,19 @@ class Authentication extends React.Component {
     return unlockByMethod(currentMethod)
   }
 
+  closeModal = address => () => this.setState(
+    {
+      toggleModal: false,
+    },
+    () => {
+      console.warn('Selected Address = ' + address)
+      setTimeout(() => this.props.setUserAddress(this.state.temporaryUserAddress), 2000)
+    }
+  )
+
   render () {
     const { method, changeMethod } = this.props
-    const { qrcode } = this.state
+    const { qrcode, walletAddresses, toggleModal  } = this.state
     return (
       <React.Fragment>
         <TopBar />
@@ -82,6 +103,11 @@ class Authentication extends React.Component {
             <MethodBody method={method} qrcode={qrcode} unlock={this.unlockWallet} />
           </div>
         </Container>
+        <ModalWalletAddressList
+          addresses={walletAddresses}
+          closeModal={this.closeModal}
+          isOpen={toggleModal}
+        />
       </React.Fragment>
     )
   }

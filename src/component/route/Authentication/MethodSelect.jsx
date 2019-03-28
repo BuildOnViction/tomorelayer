@@ -33,7 +33,7 @@ const renderMethodContent = (
 
 const MethodSelect = ({ method, changeMethod }) => (
   <div className="col-md-12 mb-1">
-    <div className="mb-1 mt-2 font-3 text-left">
+    <div className="mb-2 mt-2 font-3 text-left">
       Start by choosing the wallet you would like to unlock
     </div>
     <Grid className="method-select no-wrap m-0 mb-1">

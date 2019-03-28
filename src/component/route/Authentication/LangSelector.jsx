@@ -16,7 +16,7 @@ class LangSelector extends React.Component {
   render() {
     const { lang, changeLang } = this.props
     return (
-      <Grid class="align-center">
+      <Grid className="align-center">
         <img
           alt={lang}
           src={flags[lang]}

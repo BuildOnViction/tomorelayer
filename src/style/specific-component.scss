@@ -19,8 +19,16 @@
   overflow: hidden;
 }
 
-.auth-container {
+.container.auth-container {
   max-width: 800px;
+}
+
+.container.address-list {
+  max-width: 700px;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  border: solid 1px #ddd;
 }
 
 .lang-select {
@@ -31,18 +39,22 @@
   text-align: left;
   appearance: none;
   cursor: pointer;
-  color: $text-base-color;
+  color: $light-blue;
+  &:hover {
+    color: $text-base-dark;
+  }
 }
 
 .lang-flag {
   width: 25px;
   border: solid 1px #ddd;
   height: 20px;
+  margin-right: 8px;
 }
 
 .help-badge {
-  color: $text-base-light;
-  font-size: 15px;
+  font-size: 16px;
+  color: $light-blue;
   &:hover {
     color: $text-base-dark;
   }
@@ -113,6 +125,50 @@
   input.form-input--disabled {
     border-color: #bbb;
     background: #ccc;
-    color: #fff;
+    color: white;
   }
+}
+
+.address-info {
+  padding: 10px 0;
+  font-size: 16px;
+  &:hover {
+    background: #eee;
+  }
+}
+
+.address-info__address {
+  width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.address-info__balance {
+  width: 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.address-info__currency {
+  width: auto;
+}
+
+.address-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.address-container__header {
+  height: auto;
+  background: $dark-green;
+  box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.55);
+  color: white;
+
+}
+
+.address-container__body {
+  height: 90vh;
+  overflow: scroll;
+  flex-wrap: nowrap;
 }

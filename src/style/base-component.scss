@@ -1,13 +1,12 @@
 body {
   margin: 0;
-  color: $text-base-color;
-  letter-spacing: 1px;
-  font-family: 'Assistant', san-serif;
   font-size: 14px;
+  color: $text-base-color;
 }
 
 body * {
   box-sizing: border-box;
+  font-family: $pt-font-family;
 }
 
 a {
@@ -60,4 +59,37 @@ a {
     color: white;
     background: #ddd;
   }
+}
+
+.modal {
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  position: fixed !important;
+  text-align: center;
+}
+
+.modal__backround {
+  height: 100%;
+  width: 100%;
+  background: rgba(black, .7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.modal__container {
+  max-width: 75vw;
+  max-height: 75vh;
+  background-color: black;
+  margin: auto;
+  margin-top: 10vh;
+  overflow: scroll;
+}
+
+.modal__contained-img {
+  max-width: 100%;
+  max-height: 100%;
 }
