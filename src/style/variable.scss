@@ -4,10 +4,13 @@ $pt-font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
 $pt-navbar-height: 70px;
 
 /* Tomochain branding colo */
-$green: #10D0B2;
-$dark-green: #08847C;
+$green: #00A99D;
+$light-green: #10D0B2;
+$dark-green: darken($green, 10);
 
 $text-base-color: #707070;
+$text-base-light: lighten($text-base-color, 5);
+$text-base-dark: darken($text-base-color, 5);
 
 /* Spacing */
 $space: 10px;

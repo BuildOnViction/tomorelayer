@@ -1,6 +1,23 @@
+body {
+  margin: 0;
+  color: $text-base-color;
+  letter-spacing: 1px;
+  font-family: 'Assistant', san-serif;
+  font-size: 14px;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: initial;
+}
+
 .container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   padding: $space;
   text-align: left;
 
@@ -17,21 +34,30 @@
   }
 }
 
-
 .btn {
   cursor: pointer;
-  border: solid 1px #ddd;
+  border: solid 1px $text-base-light;
   padding: $space;
   font-size: 14px;
-
-  &:hover {
-    background: lighten(#ddd, 10);
-  }
+  border-radius: 5px;
 
   &.btn--minimal {
     border: none !important;
     background: transparent;
     width: auto;
     padding: 0;
+  }
+}
+
+.form-input {
+  padding: 10px;
+  border-radius: 5px;
+  border: solid 1px $text-base-light;
+  font-size: 14px;
+  color: $text-base-color;
+
+  &.form-input--disabled {
+    color: white;
+    background: #ddd;
   }
 }

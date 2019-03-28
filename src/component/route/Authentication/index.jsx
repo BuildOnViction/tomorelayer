@@ -7,15 +7,11 @@ import { Client } from 'service/action'
 import * as _ from 'service/helper'
 import { Container } from 'component/utility'
 import TopBar from './TopBar'
+import Header from './Header'
 import MethodBody from './MethodBody'
 import MethodSelect from './MethodSelect'
-import logo from 'asset/relayer-logo.png'
 
-const mapProps = store => ({
-  method: store.authStore.method,
-  userAddress: store.authStore.userAddress,
-  auth: store.authStore.auth,
-})
+const mapProps = store => store.authStore
 
 const actions = () => ({
   changeMethod: (state, method) => ({
@@ -47,22 +43,16 @@ class Authentication extends React.Component {
     this.setState({ qrcode: data.payload.qrcode })
   }
 
-  componentDidUpdate(prevProps) {
-    // Change Hd path on user input
-  }
-
   unlockWallet = e => {
     e.preventDefault()
-    const { when, match, safety_net } = _
-    const currentMethod = this.props.method
+    const { when, match } = _
+    const { method: currentMethod, ledgerHdPath } = this.props
     const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 
     const unlockByMethod = match({
       [TomoWallet]: void 0,
       [LedgerWallet]: async () => {
-        console.warn('Unlock Ledger Wallet')
-        const [error, wallet] = safety_net(await ledger.open({ customDerivationPath: "m/44'/889'/0'/0" }))
-        when(error).do(console.warn)('Somethign wrong wrong')
+        const wallet = await ledger.open({ customDerivationPath: ledgerHdPath })
       },
       [TrezorWallet]: void 0,
       [BrowserWallet]: async () => {
@@ -85,28 +75,12 @@ class Authentication extends React.Component {
     return (
       <React.Fragment>
         <TopBar />
-        <Container center>
-          <img
-            alt="logo"
-            src={logo}
-            className="relayer-logo block mb-3"
-            height="80"
-          />
-          <div className="col-md-12">
-            <div className="mb-2 mt-2 font-3 text-left">
-              Start by choosing the wallet you would like to unlock
-            </div>
-            <MethodSelect
-              method={method}
-              changeMethod={changeMethod}
-            />
-          </div>
+        <Container center className="auth-container">
+          <Header />
+          <MethodSelect method={method} changeMethod={changeMethod} />
           <div className="col-md-12 method-body">
-            <MethodBody method={method} qrcode={qrcode} />
+            <MethodBody method={method} qrcode={qrcode} unlock={this.unlockWallet} />
           </div>
-          <button onClick={this.unlockWallet} className="btn">
-            Unlock my Wallet!
-          </button>
         </Container>
       </React.Fragment>
     )

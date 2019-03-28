@@ -25,6 +25,9 @@ $space-mod-map: (
 /* text color */
 $text-color-map: (
   initial: $text-base-color,
+  subtle-light: $text-base-light,
+  subtle-dark: $text-base-dark,
+  alert: #ff3167,
 );
 
 @each $color, $val in $text-color-map {
@@ -45,10 +48,9 @@ $text-color-map: (
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-left { text-align: left; }
-
-.text-bold {
-  font-weight: 800;
-}
+.text-bold { font-weight: 800; }
+.text-underlined { text-decoration: underline; }
+.text-italic { font-style: italic; }
 
 .drop-shadow {
   box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.05);

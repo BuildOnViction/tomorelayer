@@ -6,6 +6,7 @@ const initialState = {
   authStore: {
     auth: false,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
+    ledgerHdPath: "m/44'/889'/0'/0",
     userAddress: '',
   },
   global: {
