@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import green from '@material-ui/core/colors/green'
 import { Provider } from 'redux-zero/react'
 import store from './service/store'
 import App from './component/App'

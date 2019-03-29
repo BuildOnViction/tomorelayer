@@ -1,6 +1,7 @@
 import React from 'react'
-import { Dialog, Radio, Button, Slide } from '@material-ui/core';
+import { Dialog, Radio, Button, IconButton, Icon, Slide } from '@material-ui/core'
 import { Container, Grid } from 'component/utility'
+
 import tomo from 'asset/tomo-logo.png'
 
 const getBalance = add => {
@@ -35,8 +36,17 @@ export default class ModalWalletAddressList extends React.Component {
       <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
         <Container full className="p-0 address-container">
           <Grid className="m-0 align-center justify-space-between p-1 address-container__header">
-            <div className="text-bold font-4">Select Address</div>
-            <Button variant="contained" color="primary" onClick={closeModal(tempAddress)} disabled={tempAddress ===  ''}>
+            <div className="text-bold font-4">
+              <span>
+                <IconButton onClick={closeModal()}>
+                  <Icon className="text-white">clear</Icon>
+                </IconButton>
+              </span>
+              <span className="ml-1 vertical-middle">
+                Select Address
+              </span>
+            </div>
+            <Button variant="contained" color="secondary" onClick={closeModal(tempAddress)} disabled={tempAddress ===  ''}>
               Confirm
             </Button>
           </Grid>

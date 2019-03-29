@@ -11,7 +11,7 @@ import Header from './Header'
 import MethodSelect from './MethodSelect'
 import MethodBody from './MethodBody'
 import ModalWalletAddressList from './ModalWalletAddressList'
-
+import spinner from 'asset/spinner.svg'
 
 const mapProps = store => store.authStore
 
@@ -39,6 +39,7 @@ class Authentication extends React.Component {
     hdPath: '',
     walletAddresses: [],
     toggleModal: false,
+    showSpinner: false,
   }
 
   async componentDidMount() {
@@ -80,19 +81,21 @@ class Authentication extends React.Component {
     return unlockByMethod(currentMethod)
   }
 
-  closeModal = address => () => this.setState(
+  closeModal = (address = '') => () => this.setState(
     {
       toggleModal: false,
+      showSpinner: address !== '',
     },
     () => {
-      console.warn('Selected Address = ' + address)
-      setTimeout(() => this.props.setUserAddress(this.state.temporaryUserAddress), 2000)
+      if (!_.isEmpty(address)) {
+        return setTimeout(() => this.props.setUserAddress(this.state.temporaryUserAddress), 2000)
+      }
     }
   )
 
   render () {
     const { method, changeMethod } = this.props
-    const { qrcode, walletAddresses, toggleModal  } = this.state
+    const { qrcode, walletAddresses, toggleModal, showSpinner  } = this.state
     return (
       <React.Fragment>
         <TopBar />
@@ -101,6 +104,14 @@ class Authentication extends React.Component {
           <MethodSelect method={method} changeMethod={changeMethod} />
           <div className="col-md-12 method-body">
             <MethodBody method={method} qrcode={qrcode} unlock={this.unlockWallet} />
+            {showSpinner && (
+               <img
+                 alt="loading"
+                 src={spinner}
+                 width="80"
+                 className="m-4"
+               />
+            )}
           </div>
         </Container>
         <ModalWalletAddressList

@@ -29,6 +29,7 @@ $text-color-map: (
   subtle-dark: $text-base-dark,
   subtle-blue: $light-blue,
   alert: #ff3167,
+  white: #fff,
 );
 
 @each $color, $val in $text-color-map {
@@ -95,5 +96,5 @@ $text-color-map: (
 .flex { display: flex; }
 .absolute { position: absolute; }
 .relative { position: relative; }
-
+.vertical-middle { vertical-align: middle; }
 .pointer { cursor: pointer; }
