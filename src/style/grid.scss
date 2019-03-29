@@ -1511,36 +1511,36 @@
 
 @media (max-width: 575px) {
   .hidden-xxs {
-    display: none;
+    display: none !important;
   }
 }
 
 @media (min-width: 576px) and (max-width: 767px) {
   .hidden-xs {
-    display: none;
+    display: none !important;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .hidden-sm {
-    display: none;
+    display: none !important;
   }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .hidden-md {
-    display: none;
+    display: none !important;
   }
 }
 
 @media (min-width: 1200px) and (max-width: 1599px) {
   .hidden-lg {
-    display: none;
+    display: none !important;
   }
 }
 
 @media (min-width: 1600px) {
   .hidden-xlg {
-    display: none;
+    display: none !important;
   }
 }

@@ -13,30 +13,20 @@ import MethodBody from './MethodBody'
 import ModalWalletAddressList from './ModalWalletAddressList'
 import spinner from 'asset/spinner.svg'
 
-const mapProps = store => store.authStore
+const mapProps = store => ({
+  authState: store.authStore,
+})
 
 const actions = () => ({
-  changeMethod: (state, method) => ({
-    authStore: {
-      ...state.authStore,
-      method,
-    }
-  }),
-  setUserAddress: (state, userAddress) => {
-    return {
-      authStore: {
-        ...state.authStore,
-        userAddress: userAddress,
-        auth: true,
-      }
-    }
-  }
+  updateAuthState: (state, authStore) => ({
+    ...state,
+    authStore,
+  })
 })
 
 class Authentication extends React.Component {
   state = {
     qrcode: '',
-    hdPath: '',
     walletAddresses: [],
     toggleModal: false,
     showSpinner: false,
@@ -53,14 +43,15 @@ class Authentication extends React.Component {
   unlockWallet = e => {
     e.preventDefault()
     const { when, match } = _
-    const { method: currentMethod, ledgerHdPath } = this.props
+    const { authState, updateAuthState } = this.props
     const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 
     const unlockByMethod = match({
       [TomoWallet]: void 0,
       [LedgerWallet]: async () => {
         // TODO: handle error (time out, cant open, wrong HD path)
-        const wallet = await ledger.open({ customDerivationPath: ledgerHdPath })
+        const wallet = await ledger.open({ customDerivationPath: authState.ledgerHdPath })
+        updateAuthState({ ...authState, wallet })
         this.setState({
           walletAddresses: wallet.otherAddresses,
           toggleModal: true,
@@ -73,12 +64,12 @@ class Authentication extends React.Component {
         when(available).do(async () => {
           const wallet = await metamask.open()
           console.warn('Your address: ' + wallet.address)
-          this.props.setUserAddress(wallet.address)
+          updateAuthState({ ...authState, wallet })
         })()
       },
     })
 
-    return unlockByMethod(currentMethod)
+    return unlockByMethod(authState.method)
   }
 
   closeModal = (address = '') => () => this.setState(
@@ -86,24 +77,35 @@ class Authentication extends React.Component {
       toggleModal: false,
       showSpinner: address !== '',
     },
-    () => {
-      if (!_.isEmpty(address)) {
-        return setTimeout(() => this.props.setUserAddress(this.state.temporaryUserAddress), 2000)
+    () => !_.isEmpty(address) && setTimeout(async () => {
+      const { authState, updateAuthState } = this.props
+
+      if (authState.wallet) {
+        // NOTE: case of Hardware Wallet
+        const currentAddressIndex = authState.wallet.otherAddresses.indexOf(address)
+        await authState.wallet.setDefaultAddress(currentAddressIndex)
+        updateAuthState({ ...authState, userAddress: address, auth: true })
       }
-    }
+    }, 2000)
   )
 
   render () {
-    const { method, changeMethod } = this.props
-    const { qrcode, walletAddresses, toggleModal, showSpinner  } = this.state
+    const { authState, updateAuthState } = this.props
+    const {
+      qrcode,
+      walletAddresses,
+      toggleModal,
+      showSpinner,
+    } = this.state
+    const changeMethod = method => updateAuthState({ ...authState, method })
     return (
       <React.Fragment>
         <TopBar />
         <Container center className="auth-container">
           <Header />
-          <MethodSelect method={method} changeMethod={changeMethod} />
+          <MethodSelect method={authState.method} changeMethod={changeMethod} />
           <div className="col-md-12 method-body">
-            <MethodBody method={method} qrcode={qrcode} unlock={this.unlockWallet} />
+            <MethodBody method={authState.method} qrcode={qrcode} unlock={this.unlockWallet} />
             {showSpinner && (
                <img
                  alt="loading"

@@ -1,13 +1,9 @@
 import React from 'react'
+import { ethers } from 'ethers'
 import { Dialog, Radio, Button, IconButton, Icon, Slide } from '@material-ui/core'
 import { Container, Grid } from 'component/utility'
-
 import tomo from 'asset/tomo-logo.png'
 
-const getBalance = add => {
-  // TODO: get real balance from each addresses
-  return 10
-}
 
 const Transition = props => <Slide direction="up" {...props} />
 
@@ -15,8 +11,28 @@ export default class ModalWalletAddressList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      tempAddress: ''
+      tempAddress: '',
+      balance: {}
     }
+  }
+
+  tempBalance = {}
+
+  componentDidUpdate() {
+    const { addresses } = this.props
+
+    if (addresses.length === 0) return
+    if (addresses.length === Object.keys(this.tempBalance).length) return
+
+    const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
+    this.props.addresses.forEach(async addr => {
+      const weiBalance = await provider.getBalance(addr)
+      const ethBalance = ethers.utils.formatEther(weiBalance, {commify: true, pad: true})
+      this.tempBalance[addr] = ethBalance
+      if (Object.keys(this.tempBalance).length === addresses.length) {
+        this.setState({ balance: this.tempBalance })
+      }
+    })
   }
 
   changeTempAddress = tempAddress => () => this.setState({ tempAddress })
@@ -30,6 +46,7 @@ export default class ModalWalletAddressList extends React.Component {
 
     const {
       tempAddress,
+      balance,
     } = this.state
 
     return (
@@ -50,25 +67,37 @@ export default class ModalWalletAddressList extends React.Component {
               Confirm
             </Button>
           </Grid>
-          <Grid className="direction-column address-container__body m-0 p-1">
-            {addresses.map(addr => (
-              <Grid className="align-center m-0 pointer address-info" key={addr} onClick={this.changeTempAddress(addr)}>
-                <Radio
-                  checked={addr === tempAddress}
-                  name={`address-${addr}`}
-                  aria-label={addr}
-                />
-                <div className="address-info__address text-bold">
-                  {addr}
-                </div>
-                <div className="address-info__balance text-alert">
-                  {getBalance(addr)}
-                </div>
-                <div className="address-info__currency">
-                  <img alt="TOMO" src={tomo} width="30" />
-                </div>
-              </Grid>
-            ))}
+          <Grid className="direction-column address-container__body p-1">
+            <Container>
+              {addresses.map(addr => (
+                <Grid className="align-center m-0 pointer address-info justify-space-between" key={addr} onClick={this.changeTempAddress(addr)}>
+                  <div className="address-info__address">
+                    <Radio
+                      checked={addr === tempAddress}
+                      name={`address-${addr}`}
+                      aria-label={addr}
+                    />
+                    <div className="inline hidden-xs hidden-xxs text-alert mr-1">
+                      Address:
+                    </div>
+                    <div className="inline">
+                      {addr}
+                    </div>
+                  </div>
+                  <div className="address-info__balance">
+                    <div className="inline hidden-xs hidden-xxs text-alert mr-1">
+                      Balance:{' '}
+                    </div>
+                    <div className="inline">
+                      {balance[addr]}
+                    </div>
+                  </div>
+                  <div className="address-info__currency mr-1 hidden-xxs">
+                    <img alt="TOMO" src={tomo} width="30" />
+                  </div>
+                </Grid>
+              ))}
+            </Container>
           </Grid>
         </Container>
       </Dialog>

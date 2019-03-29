@@ -130,24 +130,24 @@
 }
 
 .address-info {
-  padding: 10px 0;
+  padding: 10px;
   font-size: 16px;
+  border-radius: 50px;
   &:hover {
     background: #eee;
   }
 }
 
 .address-info__address {
-  width: 40%;
+  width: 60%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .address-info__balance {
-  width: 30%;
+  width: 20%;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: center;
 }
 
 .address-info__currency {
