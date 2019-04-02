@@ -31,6 +31,11 @@ a {
   &.container--right {
     text-align: right;
   }
+
+  &.container--padded {
+    max-width: 80%;
+    padding: 2em;
+  }
 }
 
 .btn {

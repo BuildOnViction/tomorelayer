@@ -1,3 +1,13 @@
+import { ethers } from 'ethers'
+
+export const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
+
+export const getBalance = async address => {
+  const weiBalance = await provider.getBalance(address)
+  const ethBalance = ethers.utils.formatEther(weiBalance, {commify: true, pad: true})
+  return ethBalance
+}
+
 /* import { ethers } from 'ethers'
  *
  * let web3Instance = null

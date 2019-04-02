@@ -1,28 +1,34 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
 import { QRCode } from 'react-qr-svg'
-import { Grid } from 'component/utility'
+import { Grid, Container } from 'component/utility'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { match } from 'service/helper'
+import actions from './actions'
 
-const UnlockButton = ({ onClick }) => (
+const Button = ({ onClick, text }) => (
   <button className="btn btn-unlock" onClick={onClick}>
-    Unlock My Wallet!
+    {text}
   </button>
 )
 
+const UnlockButton = ({ onClick }) => <Button onClick={onClick} text="Unlock Your Wallet" />
+
 const MethodBody = ({
   method = UNLOCK_WALLET_METHODS.TomoWallet,
-  qrcode,
-  unlock,
-  ledgerHdPath,
-  changeLedgerHdPath,
+  address,
+  balance,
+  TomoWalletQRcode,
+  LedgerPath,
+  $changeLedgerHdPath,
+  $getUnlocked,
+  $confirmAddress,
 }) => match({
   [UNLOCK_WALLET_METHODS.TomoWallet]: (
     <Grid className="tomowallet-method align-center justify-center">
       <div className="tomowallet-method-content pr-2">
         <h2 className="text-left">
-          Scan QR code using TomoWallet to unlock
+          Scan QR code using TomoWallet to $getUnlocked
         </h2>
         <div className="block text-underlined">
           Haven’t installed TomoWallet yet?
@@ -37,7 +43,7 @@ const MethodBody = ({
           fgColor="#000000"
           level="Q"
           style={{ width: 180, paddingTop: 20 }}
-          value={qrcode}
+          value={TomoWalletQRcode}
         />
       </div>
     </Grid>
@@ -50,12 +56,12 @@ const MethodBody = ({
         </label>
         <input
           name="ledger-path"
-          value={ledgerHdPath}
-          onChange={changeLedgerHdPath}
+          value={LedgerPath}
+          onChange={e => $changeLedgerHdPath(e.target.value)}
           className="form-input"
         />
       </div>
-      <UnlockButton onClick={unlock} />
+      <UnlockButton onClick={$getUnlocked} />
     </Grid>
   ),
   [UNLOCK_WALLET_METHODS.TrezorWallet]: (
@@ -71,29 +77,56 @@ const MethodBody = ({
           disabled
         />
       </div>
-      <UnlockButton onClick={unlock} />
+      <UnlockButton onClick={$getUnlocked} />
     </Grid>
   ),
   [UNLOCK_WALLET_METHODS.BrowserWallet]: (
     <div>
-      <h3>Please install & login Metamask Extension then connect it to Tomochain Mainnet or Testnet.</h3>
-      <UnlockButton onClick={unlock} />
+      {address === '' ? (
+         <div>
+           <h3>Please install & login Metamask Extension then connect it to Tomochain Mainnet or Testnet.</h3>
+           <Button onClick={$getUnlocked} text="Unlock Your Wallet!" />
+         </div>
+    ) : (
+      <Container padded>
+        <Grid className="justify-space-between">
+          <Grid className="justify-start direction-column m-0 mr-1">
+            <div>
+              <span className="text-bold mr-1">
+                Address:
+              </span>
+              <span>
+                {address}
+              </span>
+            </div>
+            <div>
+              <span>
+                <span className="text-bold mr-1">
+                  Balance:
+                </span>
+                <span className="text-alert mr-1">
+                  {balance}
+                </span>
+              </span>
+              <span className="text-bold">
+                TOMO
+              </span>
+            </div>
+          </Grid>
+          <Button onClick={$confirmAddress} text="Use this Wallet!" />
+        </Grid>
+      </Container>
+    )}
     </div>
   ),
 })(method)
 
-const mapProps = store => ({
-  ledgerHdPath: store.authStore.ledgerHdPath
-})
-
-const actions = () => ({
-  changeLedgerHdPath: (state, event) => ({
-    ...state,
-    authStore: {
-      ...state.authStore,
-      ledgerHdPath: event.target.value
-    }
-  })
+const mapProps = state => ({
+  method: state.authStore.method,
+  address: state.authStore.user_meta.address,
+  balance: state.authStore.user_meta.balance,
+  LedgerPath: state.authStore.user_meta.LedgerPath,
+  TomoWalletQRcode: state.authStore.user_meta.TomoWalletQRcode,
 })
 
 export default connect(mapProps, actions)(MethodBody)

@@ -5,6 +5,7 @@ const Container = ({
   full = false,
   center = false,
   right = false,
+  padded = false,
   className = '',
   children,
 }) => {
@@ -14,6 +15,7 @@ const Container = ({
       'container--full': full,
       'container--center': center,
       'container--right': right,
+      'container--padded': padded,
     },
     className,
   )
