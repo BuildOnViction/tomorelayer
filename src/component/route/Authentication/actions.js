@@ -8,64 +8,85 @@ import { API, UNLOCK_WALLET_METHODS } from 'service/constant'
 const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match } = _
 
-const actions = () => ({
+export const $changeMethod = (state, method) => {
+  return {
+    ...state,
+    authStore: {
+      ...state.authStore,
+      method,
+    },
+  }
+}
 
-  $changeMethod: (state, method) => {
-    return {
-      ...state,
-      authStore: {
-        ...state.authStore,
-        method,
-      },
+export const $changeLedgerHdPath = (state, LedgerPath) => ({
+  ...state,
+  authStore: {
+    ...state.authStore,
+    user_meta: {
+      ...state.authStore.user_meta,
+      LedgerPath,
     }
-  },
+  }
+})
 
-  $changeLedgerHdPath: (state, LedgerPath) => ({
+export const $getQRCode = async (state) => {
+  const isAndroid = window.navigator.userAgent.match(/Android/i)
+  const isIOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/i)
+  const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
+  const data = await Client.get(API.fetchQRCode + agentQuery)
+  const TomoWalletQRcode = data.payload.qrcode
+  return {
     ...state,
     authStore: {
       ...state.authStore,
       user_meta: {
         ...state.authStore.user_meta,
-        LedgerPath,
+        TomoWalletQRcode,
       }
     }
-  }),
+  }
+}
 
-  $getQRCode: async (state) => {
-    const isAndroid = window.navigator.userAgent.match(/Android/i)
-    const isIOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/i)
-    const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
-    const data = await Client.get(API.fetchQRCode + agentQuery)
-    const TomoWalletQRcode = data.payload.qrcode
-    return {
+export const $getUnlocked = state => match({
+  [TomoWallet]: void 0,
+
+  [LedgerWallet]: async () => {
+    const { authStore } = state
+    const customDerivationPath = authStore.user_meta.LedgerPath
+    const wallet = await ledger.open({ customDerivationPath })
+    const address = wallet.address
+    const balance = await blk.getBalance(address)
+    const currentAddressIndex = wallet.otherAddresses.indexOf(address)
+    await wallet.setDefaultAddress(currentAddressIndex)
+    const NewState = {
       ...state,
       authStore: {
-        ...state.authStore,
+        ...authStore,
         user_meta: {
-          ...state.authStore.user_meta,
-          TomoWalletQRcode,
+          ...authStore.user_meta,
+          wallet,
+          address,
+          balance,
         }
       }
     }
+    return NewState
   },
 
-  $getUnlocked: state => match({
-    [TomoWallet]: void 0,
+  [TrezorWallet]: void 0,
 
-    [LedgerWallet]: async () => {
-      const { authStore } = state
-      const customDerivationPath = authStore.user_meta.LedgerPath
-      const wallet = await ledger.open({ customDerivationPath })
+  [BrowserWallet]: async () => {
+    const available = await metamask.detect()
+    if (available) {
+      const wallet = await metamask.open()
       const address = wallet.address
       const balance = await blk.getBalance(address)
-      const currentAddressIndex = wallet.otherAddresses.indexOf(address)
-      await wallet.setDefaultAddress(currentAddressIndex)
       const NewState = {
         ...state,
         authStore: {
-          ...authStore,
+          ...state.authStore,
           user_meta: {
-            ...authStore.user_meta,
+            ...state.authStore.user_meta,
             wallet,
             address,
             balance,
@@ -73,57 +94,18 @@ const actions = () => ({
         }
       }
       return NewState
-    },
-
-    [TrezorWallet]: void 0,
-
-    [BrowserWallet]: async () => {
-      const available = await metamask.detect()
-      if (available) {
-        const wallet = await metamask.open()
-        const address = wallet.address
-        const balance = await blk.getBalance(address)
-        const NewState = {
-          ...state,
-          authStore: {
-            ...state.authStore,
-            user_meta: {
-              ...state.authStore.user_meta,
-              wallet,
-              address,
-              balance,
-            }
-          }
-        }
-        return NewState
-      } else {
-        alert('No Metamask Found!')
-        return state
-      }
-    },
-  })(state.authStore.method),
-
-  $metamaskAddressChangeHook: async (state, metamaskWallet) => {
-    const currentAddress = state.authStore.user_meta.address
-    const address = metamaskWallet.selectedAddress
-    if (currentAddress !== '' && currentAddress !== address) {
-      const balance = await blk.getBalance(address)
-      return {
-        ...state,
-        authStore: {
-          ...state.authStore,
-          user_meta: {
-            ...state.authStore.user_meta,
-            address,
-            balance,
-          },
-        },
-      }
+    } else {
+      alert('No Metamask Found!')
+      return state
     }
-    return state
   },
+})(state.authStore.method)
 
-  $changeHDWalletAddress: (state, { address, balance }) => {
+export const $metamaskAddressChangeHook = async (state, metamaskWallet) => {
+  const currentAddress = state.authStore.user_meta.address
+  const address = metamaskWallet.selectedAddress
+  if (currentAddress !== '' && currentAddress !== address) {
+    const balance = await blk.getBalance(address)
     return {
       ...state,
       authStore: {
@@ -135,32 +117,45 @@ const actions = () => ({
         },
       },
     }
-  },
+  }
+  return state
+}
 
-  $confirmAddress: state => {
-    return {
-      ...state,
-      authStore: {
-        ...state.authStore,
-        auth: true,
+export const $changeHDWalletAddress = (state, { address, balance }) => {
+  return {
+    ...state,
+    authStore: {
+      ...state.authStore,
+      user_meta: {
+        ...state.authStore.user_meta,
+        address,
+        balance,
       },
-      toggle: {
-        ...state.toggle,
-        AddressModal: false,
-      },
-    }
-  },
+    },
+  }
+}
 
-  $toggleModal: state => {
+export const $confirmAddress = state => {
+  return {
+    ...state,
+    authStore: {
+      ...state.authStore,
+      auth: true,
+    },
+    toggle: {
+      ...state.toggle,
+      AddressModal: false,
+    },
+  }
+}
 
-    return {
-      ...state,
-      toggle: {
-        ...state.toggle,
-        AddressModal: !state.toggle.AddressModal,
-      },
-    }
-  },
-})
+export const $toggleModal = state => {
 
-export default actions
+  return {
+    ...state,
+    toggle: {
+      ...state.toggle,
+      AddressModal: !state.toggle.AddressModal,
+    },
+  }
+}

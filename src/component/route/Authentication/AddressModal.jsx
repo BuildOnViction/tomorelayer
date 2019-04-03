@@ -4,7 +4,7 @@ import { Dialog, Radio, Button, IconButton, Icon, Slide } from '@material-ui/cor
 import { Container, Grid } from 'component/utility'
 import { getBalance } from 'service/blockchain'
 import tomo from 'asset/tomo-logo.png'
-import actions from './actions'
+import { $confirmAddress, $changeHDWalletAddress, $toggleModal } from './actions'
 
 const Transition = props => <Slide direction="up" {...props} />
 
@@ -110,4 +110,8 @@ const mapProps = ({ toggle, authStore }) => ({
   address: authStore.user_meta.address,
 })
 
-export default connect(mapProps, actions)(AddressModal)
+export default connect(mapProps, {
+  $confirmAddress,
+  $changeHDWalletAddress,
+  $toggleModal,
+})(AddressModal)

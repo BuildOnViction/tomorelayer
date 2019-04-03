@@ -6,8 +6,8 @@ import TopBar from './TopBar'
 import Header from './Header'
 import MethodSelect from './MethodSelect'
 import MethodBody from './MethodBody'
-import ModalWalletAddressList from './ModalWalletAddressList'
-import actions from './actions'
+import AddressModal from './AddressModal'
+import { $getQRCode, $metamaskAddressChangeHook } from './actions'
 
 class Authentication extends React.Component {
   componentDidMount() {
@@ -29,7 +29,7 @@ class Authentication extends React.Component {
             <MethodBody />
           </div>
         </Container>
-        <ModalWalletAddressList />
+        <AddressModal />
       </React.Fragment>
     )
   }
@@ -40,4 +40,7 @@ const mapProps = state => ({
   address: state.authStore.user_meta.address,
 })
 
-export default connect(mapProps, actions)(Authentication)
+export default connect(mapProps, {
+  $getQRCode,
+  $metamaskAddressChangeHook,
+})(Authentication)

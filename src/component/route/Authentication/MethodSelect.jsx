@@ -3,7 +3,7 @@ import { connect } from 'redux-zero/react'
 import { Grid } from 'component/utility'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { match } from 'service/helper'
-import actions from './actions'
+import { $changeMethod } from './actions'
 
 const renderMethodContent = (
   method = UNLOCK_WALLET_METHODS.TomoWallet,
@@ -59,4 +59,6 @@ const mapProps = state => ({
   method: state.authStore.method,
 })
 
-export default connect(mapProps, actions)(MethodSelect)
+export default connect(mapProps, {
+  $changeMethod,
+})(MethodSelect)
