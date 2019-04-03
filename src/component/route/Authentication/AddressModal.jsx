@@ -11,22 +11,22 @@ const Transition = props => <Slide direction="up" {...props} />
 class AddressModal extends React.Component {
   constructor(props) {
     super(props)
-    const addresses = props.wallet ? props.wallet.otherAddresses : []
-    const balance = {}
-    this.state = { balance, addresses }
+    this.state = {
+      balance: {}
+    }
   }
 
   tempBalance = {}
 
-  async componentDidUpdate() {
-    const { addresses } = this.state
+  componentDidUpdate() {
+    const { wallet } = this.props
 
-    if (addresses.length === 0) return
-    if (addresses.length === Object.keys(this.tempBalance).length) return
+    if (!wallet || !wallet.otherAddresses) return
+    if (Object.keys(this.state.balance).length === wallet.otherAddresses.length) return
 
-    addresses.forEach(async addr => {
-      this.tempBalance[addr] = getBalance(addr)
-      if (Object.keys(this.tempBalance).length === addresses.length) {
+    wallet.otherAddresses.forEach(async addr => {
+      this.tempBalance[addr] = await getBalance(addr)
+      if (Object.keys(this.tempBalance).length === wallet.otherAddresses.length) {
         this.setState({ balance: this.tempBalance })
       }
     })
@@ -36,17 +36,18 @@ class AddressModal extends React.Component {
     const {
       isOpen,
       address,
+      wallet,
       $confirmAddress,
       $changeHDWalletAddress,
       $toggleModal,
     } = this.props
 
     const {
-      addresses,
       balance,
     } = this.state
 
-    const selectAddress = () => address => $changeHDWalletAddress({ address, balance: balance[address] })
+    const selectAddress = address => () => $changeHDWalletAddress({ address, balance: balance[address] })
+    const addresses = (wallet && wallet.otherAddresses) || []
 
     return (
       <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
@@ -69,7 +70,7 @@ class AddressModal extends React.Component {
           <Grid className="direction-column address-container__body p-1">
             <Container>
               {addresses.map(addr => (
-                <Grid className="align-center m-0 pointer address-info justify-space-between" key={addr} onClick={selectAddress}>
+                <Grid className="align-center m-0 pointer address-info justify-space-between" key={addr} onClick={selectAddress(addr)}>
                   <div className="address-info__address">
                     <Radio
                       checked={addr === address}
@@ -105,6 +106,7 @@ class AddressModal extends React.Component {
 }
 
 const mapProps = ({ toggle, authStore }) => ({
+  method: authStore.method,
   isOpen: toggle.AddressModal,
   wallet: authStore.user_meta.wallet,
   address: authStore.user_meta.address,

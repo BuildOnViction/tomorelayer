@@ -52,7 +52,7 @@ const MethodBody = ({
           bgColor="#FFFFFF"
           fgColor="#000000"
           level="Q"
-          style={{ width: 180, paddingTop: 20 }}
+          style={{ width: 220, paddingTop: 20 }}
           value={TomoWalletQRcode}
         />
       </div>
@@ -139,8 +139,8 @@ const mapProps = state => ({
   TomoWalletQRcode: state.authStore.user_meta.TomoWalletQRcode,
 })
 
-export default connect(mapProps, {
+export default connect(mapProps, store => ({
   $changeLedgerHdPath,
   $confirmAddress,
-  $getUnlocked,
-})(MethodBody)
+  $getUnlocked: state => $getUnlocked(state, store),
+}))(MethodBody)

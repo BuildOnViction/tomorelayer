@@ -47,7 +47,7 @@ export const $getQRCode = async (state) => {
   }
 }
 
-export const $getUnlocked = state => match({
+export const $getUnlocked = (state, store) => match({
   [TomoWallet]: void 0,
 
   [LedgerWallet]: async () => {
@@ -56,8 +56,6 @@ export const $getUnlocked = state => match({
     const wallet = await ledger.open({ customDerivationPath })
     const address = wallet.address
     const balance = await blk.getBalance(address)
-    const currentAddressIndex = wallet.otherAddresses.indexOf(address)
-    await wallet.setDefaultAddress(currentAddressIndex)
     const NewState = {
       ...state,
       authStore: {
@@ -68,7 +66,11 @@ export const $getUnlocked = state => match({
           address,
           balance,
         }
-      }
+      },
+      toggle: {
+        ...state.toggle,
+        AddressModal: true,
+      },
     }
     return NewState
   },
@@ -79,8 +81,9 @@ export const $getUnlocked = state => match({
     const available = await metamask.detect()
     if (available) {
       const wallet = await metamask.open()
-      const address = wallet.address
-      const balance = await blk.getBalance(address)
+      let address = wallet.address
+      let balance = await blk.getBalance(address)
+
       const NewState = {
         ...state,
         authStore: {
@@ -93,7 +96,20 @@ export const $getUnlocked = state => match({
           }
         }
       }
-      return NewState
+
+      store.setState(NewState)
+
+      const walletChangedCallback = async ({ selectedAddress }) => {
+        if (address !== selectedAddress) {
+          address = selectedAddress;
+          balance = await blk.getBalance(address)
+          NewState.authStore.user_meta.address = address
+          NewState.authStore.user_meta.balance = balance
+          store.setState(NewState)
+        }
+      }
+
+      await metamask.accountChangeHook(walletChangedCallback)
     } else {
       alert('No Metamask Found!')
       return state
@@ -135,7 +151,15 @@ export const $changeHDWalletAddress = (state, { address, balance }) => {
   }
 }
 
-export const $confirmAddress = state => {
+export const $confirmAddress = async state => {
+  const method = state.authStore.method
+  const { address, wallet } = state.authStore.user_meta
+
+  if (method === UNLOCK_WALLET_METHODS.LedgerWallet || method === UNLOCK_WALLET_METHODS.TrezorWallet) {
+    const index = wallet.otherAddresses.indexOf(address)
+    await wallet.setDefaultAddress(index)
+  }
+
   return {
     ...state,
     authStore: {

@@ -1,5 +1,4 @@
 import React from 'react'
-import { accountChangeHook } from '@colony/purser-metamask';
 import { connect } from 'redux-zero/react'
 import { Container } from 'component/utility'
 import TopBar from './TopBar'
@@ -7,15 +6,11 @@ import Header from './Header'
 import MethodSelect from './MethodSelect'
 import MethodBody from './MethodBody'
 import AddressModal from './AddressModal'
-import { $getQRCode, $metamaskAddressChangeHook } from './actions'
+import { $getQRCode } from './actions'
 
 class Authentication extends React.Component {
   componentDidMount() {
     this.props.$getQRCode()
-  }
-
-  async componentDidUpdate() {
-    await accountChangeHook(this.props.$metamaskAddressChangeHook)
   }
 
   render () {
@@ -35,12 +30,6 @@ class Authentication extends React.Component {
   }
 }
 
-const mapProps = state => ({
-  method: state.authStore.method,
-  address: state.authStore.user_meta.address,
-})
-
-export default connect(mapProps, {
+export default connect(null, {
   $getQRCode,
-  $metamaskAddressChangeHook,
 })(Authentication)
