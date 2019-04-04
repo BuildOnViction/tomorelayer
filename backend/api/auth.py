@@ -22,7 +22,7 @@ class AuthHandler(BaseHandler):
         from uuid import uuid4
         message = '[Relayer {}] Login'.format(datetime.now().strftime('%x %H-%M-%S'))
         identity = str(uuid4())
-        qrcode = '{base_url}/api/auth?verifyId={identity}'.format(
+        url = '{base_url}/api/auth?verifyId={identity}'.format(
             base_url=base_url,
             identity=identity,
         )
@@ -30,5 +30,5 @@ class AuthHandler(BaseHandler):
         return {
             'message': message,
             'id': identity,
-            'qrcode': qrcode,
+            'url': url,
         }

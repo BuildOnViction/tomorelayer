@@ -34,7 +34,7 @@ export const $getQRCode = async (state) => {
   const isIOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/i)
   const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
   const data = await Client.get(API.fetchQRCode + agentQuery)
-  const TomoWalletQRcode = data.payload.qrcode
+  const TomoWalletQRcode = `tomochain:sign?message=${encodeURI(data.payload.message)}&submitURL=${data.payload.url}`
   return {
     ...state,
     authStore: {
