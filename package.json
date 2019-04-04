@@ -33,6 +33,7 @@
   ],
   "devDependencies": {
     "kill-port": "^1.3.2",
+    "localtunnel": "^1.9.1",
     "node-sass": "^4.11.0"
   }
 }

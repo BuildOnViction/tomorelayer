@@ -26,6 +26,6 @@ if __name__ == "__main__":
     app = Application(route, default_handler_class=NotFoundHandler, ssl_options=ssl_options, **settings)
     app.objects = settings['objects']
     app.blockchain = Blockchain()
-    http_server = httpserver.HTTPServer(app, ssl_options=ssl_options)
-    http_server.listen(options.port)
+    # http_server = httpserver.HTTPServer(app, ssl_options=ssl_options)
+    app.listen(options.port)
     IOLoop.current().start()
