@@ -33,24 +33,29 @@ export const $getQRCode = store => state => {
   const isIOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/i)
   const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
   const socket = state.socket
+
   socket.onopen = () => socket.send(JSON.stringify({
     request: SOCKET_REQ.getQRCode,
     meta: { agentQuery },
   }))
+
   socket.onmessage = stringData => {
     const data = JSON.parse(stringData.data)
-    console.log(data)
-    const TomoWalletQRcode = `tomochain:sign?message=${encodeURI(data.message)}&submitURL=${data.url}`
-    store.setState({
-      ...state,
-      authStore: {
-        ...state.authStore,
-        user_meta: {
-          ...state.authStore.user_meta,
-          TomoWalletQRcode,
-        },
-      }
-    })
+
+    if (data.type === 'QR_CODE_REQUEST') {
+      const meta = data.meta
+      const TomoWalletQRcode = `tomochain:sign?message=${encodeURI(meta.message)}&submitURL=${meta.url}`
+      state.authStore.user_meta.TomoWalletQRcode = TomoWalletQRcode
+      store.setState(state)
+    }
+
+    if (data.type === 'QR_CODE_LOGIN') {
+      const meta = data.meta
+      const address = meta.address
+      state.authStore.user_meta.address = address
+    }
+
+    store.setState(state)
   }
 }
 

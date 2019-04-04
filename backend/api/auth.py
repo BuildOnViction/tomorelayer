@@ -13,8 +13,11 @@ class AuthHandler(BaseHandler):
         signature = self.request_body['signature'].lower()
         conn = SocketClient.retrieve(conn_id)
         payload = json.dumps({
-            'conn_id': conn_id,
-            'address': signer_address,
+            'type': 'QR_CODE_LOGIN',
+            'meta': {
+                'conn_id': conn_id,
+                'address': signer_address,
+            }
         })
         conn.write_message(payload)
 
@@ -31,7 +34,10 @@ class AuthSocketHandler():
         )
 
         return json.dumps({
-            'message': message,
-            'id': identity,
-            'url': url,
+            'type': 'QR_CODE_REQUEST',
+            'meta': {
+                'message': message,
+                'id': identity,
+                'url': url,
+            }
         })

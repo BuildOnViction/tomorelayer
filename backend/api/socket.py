@@ -16,5 +16,5 @@ class SocketClient:
 
     @classmethod
     def remove(cls, conn):
-        clients.remove(conn)
-        del client_dict[conn.id]
+        cls.clients.remove(conn)
+        del cls.client_dict[conn.id]
