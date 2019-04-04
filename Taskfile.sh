@@ -9,13 +9,14 @@ function kill_port {
 
 # TASKS
 function frontend {
-    echo "node -r dotenv/config -r ts-node/register frontend/fuse.ts default"
-    node -r dotenv/config -r ts-node/register frontend/fuse.ts default
+    echo "npm start"
+    npm start
 }
 
 function backend {
-    echo "pipenv run python ./backend/app.py"
-    pipenv run python ./backend/app.py
+    echo "npm run backend-tunnel"
+    kill-port 8888
+    npm run backend-tunnel
 }
 
 function docker {

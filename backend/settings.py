@@ -8,7 +8,10 @@ from peewee_asyncext import PooledPostgresqlExtDatabase
 # IMPORT ENVIRONMENT VARIABLES
 load_dotenv()
 is_production = getenv('STG') == 'production'
+tunnel_url = getenv('TUNNEL_URL')
 base_url = '{}:{}'.format(getenv('REACT_APP_HOST'), getenv('REACT_APP_PORT')) if not is_production else getenv('REACT_APP_HOST')
+# Favor tunneled url over existing url
+base_url = tunnel_url or base_url
 
 # SETUP ASYNC ORM
 envars = ['user', 'password', 'host', 'port']
