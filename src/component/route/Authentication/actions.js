@@ -1,9 +1,8 @@
 import ledger from '@vutr/purser-ledger'
 import metamask from '@colony/purser-metamask'
-import { Client } from 'service/action'
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { API, UNLOCK_WALLET_METHODS } from 'service/constant'
+import { SOCKET_REQ, UNLOCK_WALLET_METHODS } from 'service/constant'
 
 const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match } = _
@@ -29,21 +28,29 @@ export const $changeLedgerHdPath = (state, LedgerPath) => ({
   }
 })
 
-export const $getQRCode = async (state) => {
+export const $getQRCode = store => state => {
   const isAndroid = window.navigator.userAgent.match(/Android/i)
   const isIOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/i)
   const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
-  const data = await Client.get(API.fetchQRCode + agentQuery)
-  const TomoWalletQRcode = `tomochain:sign?message=${encodeURI(data.payload.message)}&submitURL=${data.payload.url}`
-  return {
-    ...state,
-    authStore: {
-      ...state.authStore,
-      user_meta: {
-        ...state.authStore.user_meta,
-        TomoWalletQRcode,
+  const socket = state.socket
+  socket.onopen = () => socket.send(JSON.stringify({
+    request: SOCKET_REQ.getQRCode,
+    meta: { agentQuery },
+  }))
+  socket.onmessage = stringData => {
+    const data = JSON.parse(stringData.data)
+    console.log(data)
+    const TomoWalletQRcode = `tomochain:sign?message=${encodeURI(data.message)}&submitURL=${data.url}`
+    store.setState({
+      ...state,
+      authStore: {
+        ...state.authStore,
+        user_meta: {
+          ...state.authStore.user_meta,
+          TomoWalletQRcode,
+        },
       }
-    }
+    })
   }
 }
 

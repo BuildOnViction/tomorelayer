@@ -1,34 +1,37 @@
+import json
 from settings import base_url
 from .base import BaseHandler
+from .socket import SocketClient
 
 
 class AuthHandler(BaseHandler):
 
-    def get(self):
-        """Provide QR code when requested
-        """
-        if self.get_argument('qr_code', None):
-            agent_query = self.get_argument('qr_code')
-            qr = self.generate_qr_code()
-            return self.json_response(qr)
-
     def post(self):
         """Receiving request from TomoWallet"""
-        print(self.request_body)
-        breakpoint()
+        conn_id = self.get_argument('verifyId', '')
+        signer_address = self.request_body['signer'].lower()
+        signature = self.request_body['signature'].lower()
+        conn = SocketClient.retrieve(conn_id)
+        payload = json.dumps({
+            'conn_id': conn_id,
+            'address': signer_address,
+        })
+        conn.write_message(payload)
 
-    def generate_qr_code(self):
+
+class AuthSocketHandler():
+
+    @staticmethod
+    def get_qr_code(request, meta, identity):
         from datetime import datetime
-        from uuid import uuid4
         message = '[Relayer {}] Login'.format(datetime.now().strftime('%x %H-%M-%S'))
-        identity = str(uuid4())
         url = '{base_url}/api/auth?verifyId={identity}'.format(
             base_url=base_url,
             identity=identity,
         )
 
-        return {
+        return json.dumps({
             'message': message,
             'id': identity,
             'url': url,
-        }
+        })

@@ -1,7 +1,9 @@
-const  APP_HOST = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_HOST : window.location.origin
-const  APP_PORT = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_PORT : 80
+const APP_HOST = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_HOST : window.location.origin
+const APP_PORT = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_PORT : 80
+const APP_SOCKET = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_SOCKET : window.location.origin.replace('http', 'ws')
 
-const baseUrl = `${APP_HOST}:${APP_PORT}`
+export const baseUrl = `${APP_HOST}:${APP_PORT}`
+export const socketUrl = `${APP_SOCKET}:${APP_PORT}/socket`
 const apiPrefix = 'api'
 const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
 
@@ -10,6 +12,10 @@ export const API = {
   contracts: apiBuild('contracts'),
   register: apiBuild('register'),
   relayers: apiBuild('relayers'),
+}
+
+export const SOCKET_REQ = {
+  getQRCode: 'QR_CODE_LOGIN',
 }
 
 export const SITE_MAP = {

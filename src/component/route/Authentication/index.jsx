@@ -30,6 +30,6 @@ class Authentication extends React.Component {
   }
 }
 
-export default connect(null, {
-  $getQRCode,
-})(Authentication)
+export default connect(null, store => ({
+  $getQRCode: $getQRCode(store)
+}))(Authentication)
