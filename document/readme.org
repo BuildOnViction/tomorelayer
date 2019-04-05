@@ -13,6 +13,15 @@ Notes about workflow
 
 * Steps
 1. Unlock Wallet (signin)
+   - detect web3 on load: redirect to /home if user-address detected else login-page
+   - show login method
+     1. TomoWallet QR Code
+        - fetch code from Backend
+        - render QR code
+     2. MetaMask
+        - Show login button
+     3. Cold-Wallet (trezor, ledger)
+        - Switch HD Path
 2. Registration
    - Form (deposit: 25k TOMO, Rate, Pick Token-Matches)
    - DEX Build Guide

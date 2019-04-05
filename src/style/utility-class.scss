@@ -1,0 +1,101 @@
+// REUSABLE CLASSES
+/* spacing */
+$space-mod-map: (
+  ml: margin-left,
+  mr: margin-right,
+  mt: margin-top,
+  mb: margin-bottom,
+  m: margin,
+
+  pl: padding-left,
+  pr: padding-right,
+  pt: padding-top,
+  pb: padding-bottom,
+  p: padding
+);
+
+@for $i from 0 through 5 {
+  @each $mod, $val in $space-mod-map {
+    .#{$mod}-#{$i} {
+      #{$val}: #{$i}em !important;
+    }
+  }
+}
+
+/* text color */
+$text-color-map: (
+  initial: $text-base-color,
+  subtle-light: $text-base-light,
+  subtle-dark: $text-base-dark,
+  subtle-blue: $light-blue,
+  alert: #ff3167,
+  white: #fff,
+);
+
+@each $color, $val in $text-color-map {
+  .text-#{$color} {
+    color: #{$val} !important;
+  }
+}
+
+/* text size */
+@for $i from 0 through 5 {
+  .font-#{$i} {
+    font-size: #{$i * 5}pt;
+  }
+}
+
+
+// UTILITY INDIVIDUAL CLASSES
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.text-bold { font-weight: 800; }
+.text-underlined { text-decoration: underline; }
+.text-italic { font-style: italic; }
+
+.drop-shadow {
+  box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.05);
+}
+
+.border-round-top {
+  border-radius: 5px 5px 0 0;
+}
+
+.border-round-bottom {
+  border-radius: 0 0 5px 5px ;
+}
+
+.border-round-all {
+  border-radius: 5px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+// Size
+.w_100 { width: 100%; }
+.h_100 { height: 100%; }
+.w_auto { width: auto; }
+.h_auto { height: auto; }
+
+.s_100 {
+  width: 100%;
+  height: 100%;
+}
+
+
+// Display & Position
+.inline { display: inline-block; }
+.block { display: block; }
+.flex { display: flex; }
+.absolute { position: absolute; }
+.relative { position: relative; }
+.vertical-middle { vertical-align: middle; }
+.pointer { cursor: pointer; }
+.margin-center { margin-left: auto; margin-right: auto; }

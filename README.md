@@ -13,7 +13,7 @@
 
 ## Introduction
 
-A Relayer Manager Application
+A Relayer Manager Application, built with Python, Tornado, and React's Create-React-App
 
 
 
@@ -28,7 +28,7 @@ A Relayer Manager Application
 The following must be included in the development toolbelt:
 
 -   pyenv
--   Python 3.7.2 (recommended installing with pyenv)
+-   Python 3.7.* (recommended installing with pyenv)
 -   Python 2.7 (recommended installing with pyenv, if not in the system yet)
 -   pipenv
 -   nvm
@@ -60,25 +60,14 @@ $ eval 'alias task="./Taskfile.sh"'
 $ task docker
 ```
 
-- Run Embark to compile all smart contracts. We are gonna need the contracts data ready first so Backend can interact
-with. In development mode, Embark watches all the file changes and does the hot-reloading for us, so you should run the
-following command in a separate terminal.
-``` sh
-$ task emb
-```
-
 - All good, let's get Backend up and running, certainly in a different terminal from the Embark's
 ``` sh
 $ task backend
-# ...or if you want to run in production
-$ task backend prod <port>
 ```
 
 - Finally, the frontend, in another terminal also
 ``` sh
 $ task frontend
-# ...or if you want to run in production for optimized build
-$ task frontend prod
 ```
 
 For any installation/running problem, check out [Troubleshooting](#trouble) guide
@@ -87,20 +76,18 @@ For any installation/running problem, check out [Troubleshooting](#trouble) guid
 
 <a id="org30ae7c1"></a>
 
-### Start hacking
+### Development
 
-backend has the entry point called "app", frontend "index.tsx"
+backend has the entry point called "app", frontend "index.jsx"
 Those are where you get started.
 
 <a id="org7f062cc"></a>
 
 #### Frontend Development
 
--   Libraries for frontend development includes mainly React & BlueprintJS.
--   State Management & Code Splitting are handled with `Redux-Zero` and native React v16-API
--   Stylesheet developed with SASS's SCSS, with Bootstrap's Grid-System and BlueprintJSS's configurable theming variables
--   Javascript development with **Typescript Compiler** for compiling ease & speed, also this helps eliminate the redundancy of babel
-    plugins. Typing is totally optional.
+-   Made with *Create-React-App*
+-   State Management with *Redux-Zero* for complete isolation of LOGIC from UI
+-   Stylesheet developed with SASS's SCSS, with support from *Bootstrap's Grid-System*
 
 
 <a id="orga954538"></a>
@@ -108,6 +95,7 @@ Those are where you get started.
 #### Backend Development
 
 -   Checkout Python Tornado docs&#x2026;
+-   Communicate with Frontend through 2 channels: one is Socket and one for Restful API, checkout `backend/route` for details
 
 <a id="roadmap"></a>
 
@@ -123,8 +111,8 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/r
    - [x] SmartContract
    - [x] Depovs Document & Deployment
 2. Refactoring frontend structure, finalise bundling setup
-   - [ ] Refactor UI/UX
-   - [ ] Login
+   - [x] Refactor UI/UX
+   - [x] Login
 3. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details

@@ -8,6 +8,7 @@ jedi = "*"
 flake8 = "*"
 pylint = "*"
 autopep8 = "*"
+bpython = "*"
 
 [packages]
 tornado = "*"

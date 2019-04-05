@@ -1,3 +1,4 @@
+from tornado.web import HTTPError
 from settings import settings
 from tornado.web import HTTPError
 from tornado.web import ErrorHandler

@@ -1,4 +1,6 @@
+import os
 from tornado.platform.asyncio import AsyncIOMainLoop
+from tornado import httpserver
 from tornado.ioloop import IOLoop
 from tornado.web import Application
 from tornado.options import options
@@ -14,8 +16,8 @@ define("port", default=settings['port'], help="app port", type=int)
 if __name__ == "__main__":
     parse_command_line()
     AsyncIOMainLoop().install()
-    APP = Application(route, default_handler_class=NotFoundHandler, **settings)
-    APP.listen(options.port)
-    APP.objects = settings['objects']
-    APP.blockchain = Blockchain()
+    app = Application(route, default_handler_class=NotFoundHandler, **settings)
+    app.objects = settings['objects']
+    app.blockchain = Blockchain()
+    app.listen(options.port)
     IOLoop.current().start()

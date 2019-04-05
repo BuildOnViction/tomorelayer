@@ -1,0 +1,18 @@
+$pt-font-family: "Helvetica Neue", sans-serif;
+
+/* Custom NavBar style */
+$pt-navbar-height: 70px;
+
+/* App branding colors */
+$green: #00A99D;
+$light-green: #10D0B2;
+$dark-green: darken($green, 10);
+$light-blue: #bbccdc;
+
+$text-base-color: #707070;
+$text-base-light: lighten($text-base-color, 5);
+$text-base-dark: darken($text-base-color, 5);
+
+/* Spacing */
+$space: 10px;
+$space-2: 30px;
