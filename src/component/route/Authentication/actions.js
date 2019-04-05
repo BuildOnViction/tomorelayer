@@ -1,4 +1,5 @@
 import ledger from '@vutr/purser-ledger'
+import trezor from '@colony/purser-trezor'
 import metamask from '@colony/purser-metamask'
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
@@ -57,7 +58,19 @@ export const $getUnlocked = (state, store) => match({
     return state
   },
 
-  [TrezorWallet]: void 0,
+  [TrezorWallet]: async () => {
+    const wallet = await trezor.open()
+
+    assign(state.authStore.user_meta, {
+      address: wallet.address,
+      balance: await blk.getBalance(wallet.address),
+      unlockingMethod: TrezorWallet,
+      wallet: wallet,
+    })
+
+    state.toggle.AddressModal = true
+    return state
+  },
 
   [BrowserWallet]: async () => {
     const available = await metamask.detect()
