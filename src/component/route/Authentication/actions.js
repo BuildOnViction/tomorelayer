@@ -4,7 +4,7 @@ import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
 import { SOCKET_REQ, UNLOCK_WALLET_METHODS } from 'service/constant'
 
-const { LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
+const { TomoWallet,LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match } = _
 
 export const $changeMethod = (state, method) => {
@@ -28,7 +28,7 @@ export const $getQRCode = store => state => {
     meta: { agentQuery },
   }))
 
-  socket.onmessage = stringData => {
+  socket.onmessage = async stringData => {
     const data = JSON.parse(stringData.data)
 
     if (data.type === 'QR_CODE_REQUEST') {
@@ -41,7 +41,10 @@ export const $getQRCode = store => state => {
     if (data.type === 'QR_CODE_LOGIN') {
       const meta = data.meta
       const address = meta.address
+      const balance = await blk.getBalance(address)
       state.authStore.user_meta.address = address
+      state.authStore.user_meta.balance = balance
+      state.authStore.user_meta.unlockingMethod = TomoWallet
     }
 
     store.setState(state)
@@ -57,6 +60,7 @@ export const $getUnlocked = (state, store) => match({
     const balance = await blk.getBalance(address)
     state.authStore.user_meta = {
       ...authStore.user_meta,
+      unlockingMethod: LedgerWallet,
       wallet,
       address,
       balance,
@@ -80,6 +84,7 @@ export const $getUnlocked = (state, store) => match({
     let balance = await blk.getBalance(address)
     state.authStore.user_meta = {
       ...state.authStore.user_meta,
+      unlockingMethod: BrowserWallet,
       wallet,
       address,
       balance,

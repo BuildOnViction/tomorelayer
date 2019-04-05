@@ -4,9 +4,13 @@ import { QRCode } from 'react-qr-svg'
 import { Grid, Container } from 'component/utility'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { match } from 'service/helper'
+import * as blk from 'service/blockchain'
 import { $changeLedgerHdPath, $getUnlocked, $confirmAddress } from './actions'
 import appstore from 'asset/appstore-logo.png'
 import googleplay from 'asset/google-play-logo.png'
+import success_icon from 'asset/success.png'
+
+const { TomoWallet, TrezorWallet, LedgerWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 
 const Button = ({ onClick, text }) => (
   <button className="btn btn-unlock" onClick={onClick}>
@@ -16,17 +20,41 @@ const Button = ({ onClick, text }) => (
 
 const UnlockButton = ({ onClick }) => <Button onClick={onClick} text="Unlock Your Wallet" />
 
+const TomoWalletSuccessLogin = ({ address, balance, confirm }) => (
+<Grid className="mt-2 justify-start align-center">
+  <img alt="success" src={success_icon} width="60" height="60" className="block p-1" />
+  <div className="p-1 font-2 mr-2">
+    <div>
+      <b>Address: </b>
+      <span>{address}</span>
+    </div>
+    <div>
+      <b>Balance: </b>
+      <span>{balance} TOMO</span>
+    </div>
+  </div>
+  <Button onClick={confirm} text="Use this account!" />
+</Grid>
+)
+
 const MethodBody = ({
-  method = UNLOCK_WALLET_METHODS.TomoWallet,
+  method = TomoWallet,
   address,
   balance,
+  unlockingMethod,
   TomoWalletQRcode,
   LedgerPath,
   $changeLedgerHdPath,
   $getUnlocked,
   $confirmAddress,
 }) => match({
-  [UNLOCK_WALLET_METHODS.TomoWallet]: (
+  [TomoWallet]: (blk.validateAddress(address, balance) && unlockingMethod === TomoWallet) ? (
+    <TomoWalletSuccessLogin
+      address={address}
+      balance={balance}
+      confirm={$confirmAddress}
+    />
+  ) : (
     <Grid className="tomowallet-method align-center justify-center">
       <div className="tomowallet-method-content pr-2">
         <h2 className="text-left">
@@ -44,7 +72,6 @@ const MethodBody = ({
           </a>
         </div>
         <div>
-
         </div>
       </div>
       <div className="tomowallet-method-qrcode">
@@ -52,13 +79,13 @@ const MethodBody = ({
           bgColor="#FFFFFF"
           fgColor="#000000"
           level="Q"
-          style={{ width: 220, paddingTop: 20 }}
+          style={{ width: 200 }}
           value={TomoWalletQRcode}
         />
       </div>
     </Grid>
   ),
-  [UNLOCK_WALLET_METHODS.LedgerWallet]: (
+  [LedgerWallet]: (
     <Grid className="hardware-wallet-method align-end justify-center mt-3">
       <div className="hardware-wallet-method__path mr-2 text-left">
         <label htmlFor="ledger-path" className="block font-2 text-subtle-light mb-1">
@@ -74,7 +101,7 @@ const MethodBody = ({
       <UnlockButton onClick={$getUnlocked} />
     </Grid>
   ),
-  [UNLOCK_WALLET_METHODS.TrezorWallet]: (
+  [TrezorWallet]: (
     <Grid className="hardware-wallet-method align-end justify-center mt-3">
       <div className="hardware-wallet-method__path mr-2 text-left">
         <label htmlFor="trezor-path" className="block font-2 text-subtle-light mb-1">
@@ -90,14 +117,9 @@ const MethodBody = ({
       <UnlockButton onClick={$getUnlocked} />
     </Grid>
   ),
-  [UNLOCK_WALLET_METHODS.BrowserWallet]: (
+  [BrowserWallet]: (
     <div>
-      {address === '' ? (
-         <div>
-           <h3>Please install & login Metamask Extension then connect it to Tomochain Mainnet or Testnet.</h3>
-           <Button onClick={$getUnlocked} text="Unlock Your Wallet!" />
-         </div>
-      ) : (
+      {blk.validateAddress(address, balance) && unlockingMethod === BrowserWallet ? (
          <Container padded>
            <Grid className="justify-space-between">
              <Grid className="justify-start direction-column m-0 mr-1">
@@ -126,9 +148,14 @@ const MethodBody = ({
              <Button onClick={$confirmAddress} text="Use this Wallet!" />
            </Grid>
          </Container>
+      ) : (
+        <div>
+          <h3>Please install & login Metamask Extension then connect it to Tomochain Mainnet or Testnet.</h3>
+          <Button onClick={$getUnlocked} text="Unlock Your Wallet!" />
+        </div>
       )}
-    </div>
-  ),
+  </div>
+  )
 })(method)
 
 const mapProps = state => ({
@@ -136,6 +163,7 @@ const mapProps = state => ({
   address: state.authStore.user_meta.address,
   balance: state.authStore.user_meta.balance,
   LedgerPath: state.authStore.user_meta.LedgerPath,
+  unlockingMethod: state.authStore.user_meta.unlockingMethod,
   TomoWalletQRcode: state.authStore.user_meta.TomoWalletQRcode,
 })
 
