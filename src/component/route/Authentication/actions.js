@@ -4,29 +4,18 @@ import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
 import { SOCKET_REQ, UNLOCK_WALLET_METHODS } from 'service/constant'
 
-const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
+const { LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match } = _
 
 export const $changeMethod = (state, method) => {
-  return {
-    ...state,
-    authStore: {
-      ...state.authStore,
-      method,
-    },
-  }
+  state.authStore.method = method
+  return state
 }
 
-export const $changeLedgerHdPath = (state, LedgerPath) => ({
-  ...state,
-  authStore: {
-    ...state.authStore,
-    user_meta: {
-      ...state.authStore.user_meta,
-      LedgerPath,
-    }
-  }
-})
+export const $changeLedgerHdPath = (state, LedgerPath) => {
+  state.authStore.user_meta.LedgerPath = LedgerPath
+  return state
+}
 
 export const $getQRCode = store => state => {
   const isAndroid = window.navigator.userAgent.match(/Android/i)
@@ -60,138 +49,94 @@ export const $getQRCode = store => state => {
 }
 
 export const $getUnlocked = (state, store) => match({
-  [TomoWallet]: void 0,
-
   [LedgerWallet]: async () => {
     const { authStore } = state
     const customDerivationPath = authStore.user_meta.LedgerPath
     const wallet = await ledger.open({ customDerivationPath })
     const address = wallet.address
     const balance = await blk.getBalance(address)
-    const NewState = {
-      ...state,
-      authStore: {
-        ...authStore,
-        user_meta: {
-          ...authStore.user_meta,
-          wallet,
-          address,
-          balance,
-        }
-      },
-      toggle: {
-        ...state.toggle,
-        AddressModal: true,
-      },
+    state.authStore.user_meta = {
+      ...authStore.user_meta,
+      wallet,
+      address,
+      balance,
     }
-    return NewState
+    state.toggle.AddressModal = true
+    return state
   },
 
   [TrezorWallet]: void 0,
 
   [BrowserWallet]: async () => {
     const available = await metamask.detect()
-    if (available) {
-      const wallet = await metamask.open()
-      let address = wallet.address
-      let balance = await blk.getBalance(address)
 
-      const NewState = {
-        ...state,
-        authStore: {
-          ...state.authStore,
-          user_meta: {
-            ...state.authStore.user_meta,
-            wallet,
-            address,
-            balance,
-          }
-        }
-      }
-
-      store.setState(NewState)
-
-      const walletChangedCallback = async ({ selectedAddress }) => {
-        if (address !== selectedAddress) {
-          address = selectedAddress;
-          balance = await blk.getBalance(address)
-          NewState.authStore.user_meta.address = address
-          NewState.authStore.user_meta.balance = balance
-          store.setState(NewState)
-        }
-      }
-
-      await metamask.accountChangeHook(walletChangedCallback)
-    } else {
-      alert('No Metamask Found!')
+    if (!available) {
+      alert('No MetaMask Found!')
       return state
     }
+
+    const wallet = await metamask.open()
+    let address = wallet.address
+    let balance = await blk.getBalance(address)
+    state.authStore.user_meta = {
+      ...state.authStore.user_meta,
+      wallet,
+      address,
+      balance,
+    }
+
+    store.setState(state)
+
+    const walletChangedCallback = async ({ selectedAddress }) => {
+      if (address !== selectedAddress) {
+        address = selectedAddress;
+        balance = await blk.getBalance(address)
+        state.authStore.user_meta.address = address
+        state.authStore.user_meta.balance = balance
+        store.setState(state)
+      }
+    }
+
+    await metamask.accountChangeHook(walletChangedCallback)
   },
 })(state.authStore.method)
 
 export const $metamaskAddressChangeHook = async (state, metamaskWallet) => {
   const currentAddress = state.authStore.user_meta.address
   const address = metamaskWallet.selectedAddress
+
   if (currentAddress !== '' && currentAddress !== address) {
     const balance = await blk.getBalance(address)
-    return {
-      ...state,
-      authStore: {
-        ...state.authStore,
-        user_meta: {
-          ...state.authStore.user_meta,
-          address,
-          balance,
-        },
-      },
-    }
+    state.authStore.user_meta.address = address
+    state.authStore.user_meta.balance = balance
   }
+
   return state
 }
 
 export const $changeHDWalletAddress = (state, { address, balance }) => {
-  return {
-    ...state,
-    authStore: {
-      ...state.authStore,
-      user_meta: {
-        ...state.authStore.user_meta,
-        address,
-        balance,
-      },
-    },
-  }
+  state.authStore.user_meta.address = address
+  state.authStore.user_meta.balance = balance
+  return state
 }
 
 export const $confirmAddress = async state => {
   const method = state.authStore.method
   const { address, wallet } = state.authStore.user_meta
+  const { LedgerWallet, TrezorWallet } = UNLOCK_WALLET_METHODS
+  const usingHardwareWallet = method === LedgerWallet || method === TrezorWallet
 
-  if (method === UNLOCK_WALLET_METHODS.LedgerWallet || method === UNLOCK_WALLET_METHODS.TrezorWallet) {
+  if (usingHardwareWallet) {
     const index = wallet.otherAddresses.indexOf(address)
     await wallet.setDefaultAddress(index)
   }
 
-  return {
-    ...state,
-    authStore: {
-      ...state.authStore,
-      auth: true,
-    },
-    toggle: {
-      ...state.toggle,
-      AddressModal: false,
-    },
-  }
+  state.toggle.AddressModal = false
+  state.authStore.auth = true
+  return state
 }
 
 export const $toggleModal = state => {
-
-  return {
-    ...state,
-    toggle: {
-      ...state.toggle,
-      AddressModal: !state.toggle.AddressModal,
-    },
-  }
+  state.toggle.AddressModal = !state.toggle.AddressModal
+  return state
 }

@@ -17,6 +17,7 @@ class AuthHandler(BaseHandler):
             'meta': {
                 'conn_id': conn_id,
                 'address': signer_address,
+                'signature': signature,
             }
         })
         conn.write_message(payload)
