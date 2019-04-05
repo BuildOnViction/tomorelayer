@@ -8,6 +8,12 @@ export const getBalance = async address => {
   return ethBalance
 }
 
+export const validateAddress = (address, balance) => {
+  const validAddressLength = typeof address === 'string' && address.length > 0
+  const validBalance = typeof balance === 'string' && balance.length > 0
+  return validAddressLength && validBalance
+}
+
 /* import { ethers } from 'ethers'
  *
  * let web3Instance = null

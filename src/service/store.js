@@ -13,8 +13,9 @@ const initialState = {
       TrezorPath: "m/44'/60'/0'/0",
       LedgerPath: "m/44'/889'/0'/0",
       address: '',
-      balance: 0,
+      balance: '',
       wallet: null,
+      unlockingMethod: UNLOCK_WALLET_METHODS.TomoWallet,
     },
   },
   global: {
