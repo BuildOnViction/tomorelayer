@@ -5,17 +5,11 @@ import * as blk from 'service/blockchain'
 import { SOCKET_REQ, UNLOCK_WALLET_METHODS } from 'service/constant'
 
 const { TomoWallet,LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
-const { match } = _
+const { match, assign } = _
 
-export const $changeMethod = (state, method) => {
-  state.authStore.method = method
-  return state
-}
+export const $changeMethod = (state, method) => assign(state.authStore, { method })
 
-export const $changeLedgerHdPath = (state, LedgerPath) => {
-  state.authStore.user_meta.LedgerPath = LedgerPath
-  return state
-}
+export const $changeLedgerHdPath = (state, LedgerPath) => assign(state.authStore.user_meta, { LedgerPath })
 
 export const $getQRCode = store => state => {
   const isAndroid = window.navigator.userAgent.match(/Android/i)
@@ -30,22 +24,17 @@ export const $getQRCode = store => state => {
 
   socket.onmessage = async stringData => {
     const data = JSON.parse(stringData.data)
+    const QRCodeLink = meta => `tomochain:sign?message=${encodeURI(meta.message)}&submitURL=${meta.url}`
 
-    if (data.type === 'QR_CODE_REQUEST') {
-      const meta = data.meta
-      const TomoWalletQRcode = `tomochain:sign?message=${encodeURI(meta.message)}&submitURL=${meta.url}`
-      state.authStore.user_meta.TomoWalletQRcode = TomoWalletQRcode
-      store.setState(state)
-    }
+    if (data.type === 'QR_CODE_REQUEST') assign(state.authStore.user_meta, {
+      TomoWalletQRcode: QRCodeLink(data.meta)
+    })
 
-    if (data.type === 'QR_CODE_LOGIN') {
-      const meta = data.meta
-      const address = meta.address
-      const balance = await blk.getBalance(address)
-      state.authStore.user_meta.address = address
-      state.authStore.user_meta.balance = balance
-      state.authStore.user_meta.unlockingMethod = TomoWallet
-    }
+    if (data.type === 'QR_CODE_LOGIN') assign(state.authStore.user_meta, {
+      address: data.meta.address,
+      balance: await blk.getBalance(data.meta.address),
+      unlockingMethod: TomoWallet,
+    })
 
     store.setState(state)
   }
@@ -56,15 +45,14 @@ export const $getUnlocked = (state, store) => match({
     const { authStore } = state
     const customDerivationPath = authStore.user_meta.LedgerPath
     const wallet = await ledger.open({ customDerivationPath })
-    const address = wallet.address
-    const balance = await blk.getBalance(address)
-    state.authStore.user_meta = {
-      ...authStore.user_meta,
+
+    assign(state.authStore.user_meta, {
+      address: wallet.address,
+      balance: await blk.getBalance(wallet.address),
       unlockingMethod: LedgerWallet,
-      wallet,
-      address,
-      balance,
-    }
+      wallet: wallet,
+    })
+
     state.toggle.AddressModal = true
     return state
   },
@@ -82,13 +70,14 @@ export const $getUnlocked = (state, store) => match({
     const wallet = await metamask.open()
     let address = wallet.address
     let balance = await blk.getBalance(address)
-    state.authStore.user_meta = {
-      ...state.authStore.user_meta,
-      unlockingMethod: BrowserWallet,
-      wallet,
+    const unlockingMethod = BrowserWallet
+
+    assign(state.authStore.user_meta, {
       address,
       balance,
-    }
+      unlockingMethod,
+      wallet,
+    })
 
     store.setState(state)
 
@@ -96,8 +85,7 @@ export const $getUnlocked = (state, store) => match({
       if (address !== selectedAddress) {
         address = selectedAddress;
         balance = await blk.getBalance(address)
-        state.authStore.user_meta.address = address
-        state.authStore.user_meta.balance = balance
+        assign(state.authStore.user_meta, { address, balance })
         store.setState(state)
       }
     }
@@ -112,23 +100,17 @@ export const $metamaskAddressChangeHook = async (state, metamaskWallet) => {
 
   if (currentAddress !== '' && currentAddress !== address) {
     const balance = await blk.getBalance(address)
-    state.authStore.user_meta.address = address
-    state.authStore.user_meta.balance = balance
+    assign(state.authStore.user_meta, { address, balance })
   }
 
   return state
 }
 
-export const $changeHDWalletAddress = (state, { address, balance }) => {
-  state.authStore.user_meta.address = address
-  state.authStore.user_meta.balance = balance
-  return state
-}
+export const $changeHDWalletAddress = (state, { address, balance }) => assign(state.authStore.user_meta, { balance, address })
 
 export const $confirmAddress = async state => {
   const method = state.authStore.method
   const { address, wallet } = state.authStore.user_meta
-  const { LedgerWallet, TrezorWallet } = UNLOCK_WALLET_METHODS
   const usingHardwareWallet = method === LedgerWallet || method === TrezorWallet
 
   if (usingHardwareWallet) {
