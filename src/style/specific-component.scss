@@ -176,6 +176,16 @@
   background: $dark-bg;
   margin-bottom: 2em;
   div {
-    padding: 5px 20px;
+    padding: 10px 20px;
   }
+}
+
+.relayer-form-container {
+  min-height: 400px;
+  max-height: 80vh;
+}
+
+.progress-bar--status {
+  font-size: 18px !important;
+  margin-left: 5px;
 }

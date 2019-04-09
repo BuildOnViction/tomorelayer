@@ -26,10 +26,12 @@ $space-mod-map: (
 $text-color-map: (
   initial: $text-base-color,
   subtle-light: $text-base-light,
+  super-light: lighten($text-base-light, 25),
   subtle-dark: $text-base-dark,
   subtle-blue: $light-blue,
   alert: #ff3167,
   white: #fff,
+  green: $green,
 );
 
 @each $color, $val in $text-color-map {

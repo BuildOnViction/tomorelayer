@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container } from 'component/utility'
 import Menu from './Menu'
+import RelayerFormModal from './RelayerFormModal'
 
 const Main = () => (
   <React.Fragment>
@@ -8,6 +9,7 @@ const Main = () => (
     <Container>
       body
     </Container>
+    <RelayerFormModal />
   </React.Fragment>
 )
 

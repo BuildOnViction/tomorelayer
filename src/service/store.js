@@ -18,11 +18,15 @@ const initialState = {
       unlockingMethod: UNLOCK_WALLET_METHODS.TomoWallet,
     },
   },
+  RelayerForm: {
+    step: 0,
+  },
   global: {
     lang: 'en',
   },
   toggle: {
-    AddressModal: false
+    AddressModal: false,
+    RelayerFormModal: false,
   },
   socket: socket,
 }
