@@ -40,10 +40,11 @@ a {
 
 .btn {
   cursor: pointer;
-  border: solid 1px $text-base-light;
+  border: solid 1px #ddd;
   padding: $space;
   font-size: 14px;
-  border-radius: 5px;
+  border-radius: 2px;
+  color: inherit;
 
   &.btn--minimal {
     border: none !important;
@@ -97,4 +98,11 @@ a {
 .modal__contained-img {
   max-width: 100%;
   max-height: 100%;
+}
+
+.form-control {
+  font-size: inherit;
+  border: solid 1px #ddd;
+  padding: $space;
+  border-radius: 2px;
 }

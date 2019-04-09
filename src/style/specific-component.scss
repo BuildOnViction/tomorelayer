@@ -164,11 +164,18 @@
   background: $dark-green;
   box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.55);
   color: white;
-
 }
 
 .address-container__body {
   height: 90vh;
   overflow: scroll;
   flex-wrap: nowrap;
+}
+
+.main-menu {
+  background: $dark-bg;
+  margin-bottom: 2em;
+  div {
+    padding: 5px 20px;
+  }
 }
