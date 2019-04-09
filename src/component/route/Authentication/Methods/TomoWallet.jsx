@@ -69,18 +69,20 @@ const TomoWalletMethod = ({
   unlockingMethod,
   TomoWalletQRcode,
   $confirmAddress,
-}) => (blk.validateAddress(address, balance) && unlockingMethod === TomoWallet) ? (
-  <SuccessLogin
-    address={address}
-    balance={balance}
-    confirm={$confirmAddress}
-  />
-) : (
-  <PendingLogin
-    qrcode={TomoWalletQRcode}
-  />
-)
-
+}) => {
+  const validTomoWalletAddress = blk.validateAddress(address, balance) && unlockingMethod === TomoWallet
+  return validTomoWalletAddress ? (
+    <SuccessLogin
+      address={address}
+      balance={balance}
+      confirm={$confirmAddress}
+    />
+  ) : (
+    <PendingLogin
+      qrcode={TomoWalletQRcode}
+    />
+  )
+}
 
 const mapProps = state => ({
   address: state.authStore.user_meta.address,

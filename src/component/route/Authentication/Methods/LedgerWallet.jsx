@@ -32,7 +32,7 @@ const mapProps = state => ({
 
 const actions = store => ({
   $changeLedgerHdPath,
-  $getUnlocked: $getUnlocked(store),
+  $getUnlocked: state => $getUnlocked(state, store),
 })
 
 export default connect(mapProps, actions)(LedgerWalletMethod)

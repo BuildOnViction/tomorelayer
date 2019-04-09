@@ -1,12 +1,18 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
 import { Container } from 'component/utility'
+import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import TopBar from './TopBar'
 import Header from './Header'
 import MethodSelect from './MethodSelect'
-import MethodBody from './MethodBody'
+import TomoWalletMethod from './Methods/TomoWallet'
+import LedgerWalletMethod from './Methods/LedgerWallet'
+import TrezorWalletMethod from './Methods/TrezorWallet'
+import BrowserWalletMethod from './Methods/BrowserWallet'
 import AddressModal from './AddressModal'
 import { $getQRCode } from './actions'
+
+const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 
 class Authentication extends React.Component {
   componentDidMount() {
@@ -14,6 +20,7 @@ class Authentication extends React.Component {
   }
 
   render () {
+    const method = this.props.method
     return (
       <React.Fragment>
         <TopBar />
@@ -21,7 +28,10 @@ class Authentication extends React.Component {
           <Header />
           <MethodSelect  />
           <div className="col-md-12 method-body">
-            <MethodBody />
+            {method === TomoWallet && <TomoWalletMethod />}
+            {method === LedgerWallet && <LedgerWalletMethod />}
+            {method === TrezorWallet && <TrezorWalletMethod />}
+            {method === BrowserWallet && <BrowserWalletMethod />}
           </div>
         </Container>
         <AddressModal />
@@ -30,8 +40,12 @@ class Authentication extends React.Component {
   }
 }
 
-const actions = store => ({
-  $getQRCode: $getQRCode(store)
+const mapProps = state => ({
+  method: state.authStore.method,
 })
 
-export default connect(null, actions)(Authentication)
+const actions = store => ({
+  $getQRCode: $getQRCode(store),
+})
+
+export default connect(mapProps, actions)(Authentication)
