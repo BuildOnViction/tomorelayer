@@ -101,3 +101,7 @@ $text-color-map: (
 .vertical-middle { vertical-align: middle; }
 .pointer { cursor: pointer; }
 .margin-center { margin-left: auto; margin-right: auto; }
+
+.border-bottom {
+  border-bottom: solid 1px #ddd;
+}

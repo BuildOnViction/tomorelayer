@@ -180,12 +180,41 @@
   }
 }
 
-.relayer-form-container {
-  min-height: 400px;
-  max-height: 80vh;
+.relayer-form-modal {
+  height: auto;
 }
 
 .progress-bar--status {
   font-size: 18px !important;
   margin-left: 5px;
+}
+
+.relayer-form--container {
+  background: #f7f7f7;
+}
+
+.relayer-form--progress {
+  margin: 0 !important;
+  padding: 20px;
+
+  > div {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.relayer-form--step-body {
+  background: white;
+  margin: 0 !important;
+  padding: 20px;
+
+  > form > div {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.relayer-form-step-body--title {
+  font-size: 18px;
+  color: $text-base-light;
 }
