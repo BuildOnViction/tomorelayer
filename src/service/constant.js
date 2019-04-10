@@ -41,6 +41,9 @@ export const UNLOCK_WALLET_METHODS = {
   BrowserWallet: 'MetaMask/TrustWallet/MidasWallet',
 }
 
+export const MISC = {
+  MinimumDeposit: 25000,
+}
 
 export const I18N_LANGS = [
   { value: 'en', label: 'EN' },
