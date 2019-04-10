@@ -6,3 +6,9 @@ export const $toggleRelayerFormModal = state => {
   state.toggle.RelayerFormModal = !state.toggle.RelayerFormModal
   return state
 }
+
+export const $cancelRegistration = state => {
+  state.toggle.RelayerFormModal = false
+  state.RelayerForm.relayer_meta = {}
+  return state
+}

@@ -173,9 +173,8 @@
 }
 
 .main-menu {
-  background: $dark-bg;
   margin-bottom: 2em;
-  div {
+  > div {
     padding: 10px 20px;
   }
 }
