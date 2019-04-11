@@ -4,6 +4,7 @@ import { connect } from 'redux-zero/react'
 import * as ethers from 'ethers'
 import { TextField, Button } from '@material-ui/core'
 import { MISC } from 'service/constant'
+import { Grid } from 'component/utility'
 import { $cancelRegistration, $submitFormPayload } from '../main_actions'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
@@ -49,19 +50,20 @@ const RegistrationFormStepOne = props => {
           disabled
         />
       </div>
-      <div className="col-12 text-right">
+      <Grid className="justify-space-between m-0 mt-1">
         <Button size="small" variant="contained" className="mr-1" onClick={props.$cancelRegistration} type="button">
           Cancel
         </Button>
         <Button size="small" color="primary" variant="contained" type="submit">
           Confirm
         </Button>
-      </div>
+      </Grid>
     </form>
   )
 }
 
 const FormikWrapper = withFormik({
+  validateOnChange: false,
   validate: values => {
     const errors = {}
 

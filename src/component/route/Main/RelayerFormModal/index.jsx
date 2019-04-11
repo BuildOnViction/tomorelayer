@@ -4,7 +4,7 @@ import { Dialog } from '@material-ui/core'
 import { Container, Grid } from 'component/utility'
 import ProgressBar from './ProgressBar'
 import StepOne from './StepOne'
-import { $toggleRelayerFormModal } from '../main_actions'
+import StepTwo from './StepTwo'
 
 
 class RelayerFormModal extends React.Component {
@@ -24,6 +24,7 @@ class RelayerFormModal extends React.Component {
             </Grid>
             <Grid className="direction-column col-auto relayer-form--step-body">
               {step === 0 && <StepOne />}
+              {step === 1 && <StepTwo />}
             </Grid>
           </Grid>
         </Container>

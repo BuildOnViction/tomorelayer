@@ -9,8 +9,11 @@ export const $toggleRelayerFormModal = state => {
 
 export const $cancelRegistration = state => {
   state.toggle.RelayerFormModal = false
+  state.RelayerForm.step = 0
   state.RelayerForm.relayer_meta = {
-    deposit: MISC.MinimumDeposit
+    deposit: MISC.MinimumDeposit,
+    name: '',
+    tradePairs: [],
   }
   return state
 }
@@ -18,6 +21,5 @@ export const $cancelRegistration = state => {
 export const $submitFormPayload = (state, payload) => {
   _.assign(state.RelayerForm.relayer_meta, payload)
   state.RelayerForm.step = state.RelayerForm.step + 1
-  console.warn(state)
   return state
 }

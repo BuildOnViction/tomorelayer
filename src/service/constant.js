@@ -43,6 +43,11 @@ export const UNLOCK_WALLET_METHODS = {
 
 export const MISC = {
   MinimumDeposit: 25000,
+  AvailableTradePairs: [
+    'TOMO/TRIIP',
+    'TOMO/MAS',
+    'TOMO/USD',
+  ],
 }
 
 export const I18N_LANGS = [

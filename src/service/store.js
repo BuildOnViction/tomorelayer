@@ -22,6 +22,8 @@ const initialState = {
     step: 0,
     relayer_meta: {
       deposit: MISC.MinimumDeposit,
+      name: '',
+      tradePairs: [],
     },
   },
   global: {
