@@ -217,3 +217,10 @@
   font-size: 18px;
   color: $text-base-light;
 }
+
+.progress-bar--text {
+  color: inherit;
+  &.prev-step:hover {
+    color: $text-base-dark;
+  }
+}

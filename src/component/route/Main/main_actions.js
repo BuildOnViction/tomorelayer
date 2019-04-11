@@ -23,3 +23,8 @@ export const $submitFormPayload = (state, payload) => {
   state.RelayerForm.step = state.RelayerForm.step + 1
   return state
 }
+
+export const $changeStep = (state, step) => {
+  state.RelayerForm.step = step
+  return state
+}

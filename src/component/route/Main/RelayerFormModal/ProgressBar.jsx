@@ -3,6 +3,7 @@ import cx from 'classnames'
 import { Icon } from '@material-ui/core'
 import { Grid } from 'component/utility'
 import { connect } from 'redux-zero/react'
+import { $changeStep } from '../main_actions'
 
 const StepMetaData = [
   'Submit register information',
@@ -18,24 +19,37 @@ const cls = (step, index) => cx(
   }
 )
 
-const ProgressBar = ({ step }) => (
-  <React.Fragment>
-    {StepMetaData.map((stepText, index) => (
-      <div className={cls(step, index)} key={stepText}>
-        <Grid className="m-0 align-center justify-start">
-          <div className="text-bold">Step {index + 1}:</div>
-          {index < step && (<Icon className="text-green progress-bar--status">check_circle</Icon>)}
-        </Grid>
-        <div>
-          {stepText}
-        </div>
-      </div>
-    ))}
-  </React.Fragment>
+const progressTextCls = (step, index) => cx(
+  'progress-bar--text',
+  {
+    'prev-step': index < step,
+  },
 )
+
+const ProgressBar = props => {
+  const goBackStep = (step, index) => () => {
+    return index < props.step ? props.$changeStep(index) : undefined
+  }
+
+  return (
+    <React.Fragment>
+      {StepMetaData.map((stepText, index) => (
+        <div className={cls(props.step, index)} key={stepText}>
+          <Grid className="m-0 align-center justify-start">
+            <div className="text-bold">Step {index + 1}:</div>
+            {index < props.step && (<Icon className="text-green progress-bar--status">check_circle</Icon>)}
+          </Grid>
+          <a href="#" className={progressTextCls(props.step, index)} onClick={goBackStep(props.step, index)}>
+            {stepText}
+          </a>
+        </div>
+      ))}
+    </React.Fragment>
+  )
+}
 
 const mapProps = state => ({
   step: state.RelayerForm.step
 })
 
-export default connect(mapProps)(ProgressBar)
+export default connect(mapProps, { $changeStep })(ProgressBar)
