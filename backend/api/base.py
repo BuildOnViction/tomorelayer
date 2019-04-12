@@ -1,5 +1,5 @@
 from tornado.web import HTTPError
-from settings import settings
+from settings import settings, is_production
 from tornado.web import HTTPError
 from tornado.web import ErrorHandler
 from tornado.web import RequestHandler
@@ -11,6 +11,10 @@ import traceback
 
 
 class BaseHandler(RequestHandler):
+
+    def set_default_headers(self):
+        if not is_production:
+            self.set_header("Access-Control-Allow-Origin", "*")
 
     def get_current_user(self):
         return self.get_secure_cookie('user_id')

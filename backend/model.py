@@ -37,13 +37,56 @@ class Relayer(PwModel):
     activated = pw.BooleanField(default=True)
 
 
+class Token(PwModel):
+    name = pw.CharField(unique=True, max_length=20)
+    symbol = pw.CharField(unique=True, max_length=20)
+    address = pw.CharField(unique=True, max_length=200)
+    total_supply = pw.CharField()
+
+
+def loaddata():
+    """Prepare some default data for database"""
+    existing_tokens = Token.select()
+
+    if existing_tokens:
+        return
+
+    # NOTE: eventually, it may requires an admin-only dashboard
+    # to update this data over time
+    initial_tokens = [
+        {
+            'name': 'Wrapped TOMO',
+            'address': 'addressxxx',
+            'total_supply': '10000000000000000000000000',
+            'symbol': 'WTOMO',
+        },
+        {
+            'name': 'USD-Tether',
+            'address': 'yyyyyy',
+            'total_supply': '99999999',
+            'symbol': 'USDT',
+        },
+        {
+            'name': 'Triip Coin',
+            'address': 'zzzzzzzz',
+            'total_supply': '1111111111',
+            'symbol': 'TRIIP',
+        },
+    ]
+
+    for token in initial_tokens:
+        Token.create(**token)
+
+
 database.connect()
 try:
     database.create_tables([
         Admin,
         Contract,
         Relayer,
+        Token,
     ])
+    loaddata()
 except Exception:
     logger.info('No need creating tables')
 # TODO: fetch all relayers from SmartContract if necessary

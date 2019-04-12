@@ -7,12 +7,16 @@ import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
 import StepFour from './StepFour'
-
+import { $fetchTokens } from '../main_actions'
 
 class RelayerFormModal extends React.Component {
 
   dialogClasses = {
     paper: 'relayer-form-modal'
+  }
+
+  componentDidMount() {
+    this.props.$fetchTokens()
   }
 
   render() {
@@ -42,4 +46,4 @@ const mapProps = ({ toggle, RelayerForm }) => ({
   isOpen: toggle.RelayerFormModal,
 })
 
-export default connect(mapProps)(RelayerFormModal)
+export default connect(mapProps, { $fetchTokens })(RelayerFormModal)

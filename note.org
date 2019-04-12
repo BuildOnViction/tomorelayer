@@ -1,4 +1,4 @@
-* TASKS [4/5]
+* TASKS [5/6]
 ** DONE Implement smoother environment-switch strategy
 CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
@@ -30,6 +30,10 @@ CLOSED: [2019-02-13 Wed 15:25]
 ** TODO Refactor Frontend
 *** CANCELLED Fix some ui crap
 CLOSED: [2019-03-18 Mon 16:20]
-*** WAITING Rethink about Redux_Zero, since it is starting to appear ugly
-** TODO Authentication
-*** 4 methods of authentication
+*** CANCELLED Rethink about Redux_Zero, since it is starting to appear ugly
+CLOSED: [2019-04-12 Fri 14:10]
+** DONE Authentication
+CLOSED: [2019-04-12 Fri 14:10]
+*** [X] 4 methods of authentication
+CLOSED: [2019-04-12 Fri 14:10]
+** New Registration Contract

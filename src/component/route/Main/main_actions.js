@@ -1,6 +1,7 @@
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { SOCKET_REQ, MISC } from 'service/constant'
+import { Client } from 'service/action'
+import { API, SOCKET_REQ, MISC } from 'service/constant'
 
 export const $toggleRelayerFormModal = state => {
   state.toggle.RelayerFormModal = !state.toggle.RelayerFormModal
@@ -18,6 +19,24 @@ export const $cancelRegistration = state => {
     takerFee: 0.1,
   }
   return state
+}
+
+export const $fetchTokens = async (state) => {
+  const response = await Client.get(API.token)
+  console.log(response)
+  if (response.ok) {
+    state.tradableTokens = response.payload
+  } else {
+    state.notification = {
+      show: true,
+      content: 'Error fetching Tokens from server!',
+    }
+  }
+  return state
+}
+
+export const $addNewToken = async (state, tokens) => {
+  const backendUpdate = await Client.post(API.tokens, tokens)
 }
 
 export const $submitFormPayload = (state, payload) => {

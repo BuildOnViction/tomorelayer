@@ -1,9 +1,13 @@
 import React from 'react'
 import cx from 'classnames'
-import { Chip, Button } from '@material-ui/core'
+import Creatable from 'react-select/lib/Creatable'
+import { Chip, Button, IconButton } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+import AddIcon from '@material-ui/icons/Add'
 import { grey, red } from '@material-ui/core/colors'
-import { MISC } from 'service/constant'
+import { Container, Grid } from 'component/utility'
+import { MISC, STANDARD_ERC20_ABI, TRADABLE_TOKENS, Tokenizer } from 'service/constant'
+import { ERC20TokenInfo } from 'service/blockchain'
 
 const AVAILABLE_TRADE_PAIRS = MISC.AvailableTradePairs
 
@@ -32,6 +36,14 @@ const styles = theme => ({
       padding: 8,
     },
   },
+  TokenSelect: {
+    border: 'solid 1px #ddd',
+    borderRadius: 2,
+    width: '90px',
+    select: {
+      paddingLeft: 10,
+    }
+  }
 })
 
 export const TradePairChoice = withStyles(styles)(({ text, selected, classes, onClick }) => {
@@ -45,6 +57,75 @@ export const TradePairChoice = withStyles(styles)(({ text, selected, classes, on
     </Button>
   )
 })
+
+
+export class TokenSelect extends React.Component {
+  state = {
+    tokens: Array.from(TRADABLE_TOKENS),
+    fromToken: undefined,
+    toToken: undefined,
+    newlyAddedToken: '',
+  }
+
+  handleChange = token => e => {
+    this.setState({ [token]: e.value })
+  }
+
+  addNewToken = type => async selectValue => {
+    if (!selectValue.__isNew__) return this.handleChange(type)(selectValue)
+    const tokenAddress = selectValue.value
+    const tokenData = await ERC20TokenInfo(tokenAddress)
+
+    if (!tokenData) {
+      alert('Wrong token')
+      return
+    }
+    console.log(tokenData)
+
+    const newToken = Tokenizer(tokenData.symbol, tokenAddress)
+    this.setState({ [type]: tokenData.symbol })
+  }
+
+  render() {
+    const SelectOptions = (type) => this.state.tokens.filter(t => t.address !== this.state.tokens[type === 'fromToken' ? 'toToken' : 'fromToken']).map(tk => ({
+      value: tk.address,
+      label: tk.symbol,
+    }))
+
+    const { classes } = this.props
+    return (
+      <Grid className="align-center justify-space-between mt-1">
+        <div className="col-12">
+          <Creatable
+            isClearable
+            value={this.state.fromToken}
+            onChange={this.addNewToken('fromToken')}
+            onInputChange={this.handleChange('fromToken')}
+            options={SelectOptions('fromToken')}
+            placeholder="Select or paste token address"
+            className="mb-1"
+          />
+          <Creatable
+            isClearable
+            value={this.state.toToken}
+            onChange={this.addNewToken('toToken')}
+            onInputChange={this.handleChange('toToken')}
+            options={SelectOptions('toToken')}
+            placeholder="Select or paste token address"
+          />
+        </div>
+        <div>
+          Add Token Pair: {this.state.fromToken} / {this.state.toToken}
+        </div>
+        <div className="col-4">
+          <IconButton aria-label="Add">
+            <AddIcon />
+          </IconButton>
+        </div>
+      </Grid>
+    )
+  }
+}
 
 export class TradePairSelect extends React.Component {
   constructor(props) {
@@ -100,6 +181,7 @@ export class TradePairSelect extends React.Component {
           key={pair}
         />
       ))}
+      <TokenSelect />
       {this.props.error ? (
          <div className="mt-2 text-alert">
            At least one(1) trading pairs must be selected!

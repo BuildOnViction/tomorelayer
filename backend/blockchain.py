@@ -13,8 +13,5 @@ class Blockchain:
         """ Interact with Blockchain through SmartContract & WebSocket
         """
         self.web3 = Web3()
-
-        # if not is_production:
-        #     self.web3.middleware_stack.inject(geth_poa_middleware, layer=0)
-
-        logger.warn('Connection status: {}'.format(self.web3.isConnected()))
+        logger.info('Connection status: {}'.format(self.web3.isConnected()))
+        logger.info('Connection name: {}'.format(self.web3.clientVersion))

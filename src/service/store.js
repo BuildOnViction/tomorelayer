@@ -28,6 +28,7 @@ const initialState = {
       takerFee: 0.1,
     },
   },
+  tradableTokens: [],
   global: {
     lang: 'en',
   },
@@ -36,6 +37,10 @@ const initialState = {
     RelayerFormModal: false,
   },
   socket: socket,
+  notification: {
+    show: false,
+    content: '',
+  }
 }
 
 const store = createStore(initialState)

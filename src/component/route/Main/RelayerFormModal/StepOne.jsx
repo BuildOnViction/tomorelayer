@@ -1,9 +1,9 @@
 import React from 'react'
 import { withFormik } from 'formik'
 import { connect } from 'redux-zero/react'
-import * as ethers from 'ethers'
 import { Button, InputAdornment, TextField, Tooltip } from '@material-ui/core'
 import { MISC } from 'service/constant'
+import { validateCoinbase, bigNumberify } from 'service/blockchain'
 import { Grid } from 'component/utility'
 import { $cancelRegistration, $submitFormPayload } from '../main_actions'
 import { $logout } from 'component/route/Authentication/actions'
@@ -62,6 +62,7 @@ const RegistrationFormStepOne = props => {
           error={errors.address}
           helperText={errors.address && <i className="text-alert">* Invalid coinbase address!</i>}
           fullWidth
+          disabled
           InputProps={{
             endAdornment: <ChangeWalletAdornment onClick={props.$logout} />
           }}
@@ -84,13 +85,11 @@ const FormikWrapper = withFormik({
   validate: values => {
     const errors = {}
 
-    try {
-      ethers.utils.getAddress(values.address)
-    } catch (e) {
-      errors.address = true
-    }
+    validateCoinbase(values.address, isValid => {
+      if (!isValid) errors.address = true
+    })
 
-    const currentDeposit = ethers.utils.bigNumberify(values.deposit)
+    const currentDeposit = bigNumberify(values.deposit)
     const invalidDeposit = currentDeposit.lt(MINIMUM_DEPOSIT)
     if (invalidDeposit) errors.deposit = true
 
