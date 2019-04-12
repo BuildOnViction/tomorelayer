@@ -24,6 +24,8 @@ const initialState = {
       deposit: MISC.MinimumDeposit,
       name: '',
       tradePairs: [],
+      makerFee: 0.1,
+      takerFee: 0.1,
     },
   },
   global: {

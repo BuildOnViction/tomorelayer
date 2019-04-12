@@ -14,6 +14,8 @@ export const $cancelRegistration = state => {
     deposit: MISC.MinimumDeposit,
     name: '',
     tradePairs: [],
+    makerFee: 0.1,
+    takerFee: 0.1,
   }
   return state
 }

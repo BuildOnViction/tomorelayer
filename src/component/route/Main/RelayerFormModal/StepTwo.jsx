@@ -39,6 +39,7 @@ const RegistrationFormStepTwo = props => {
         <TradePairSelect
           value={values.tradePairs}
           onChange={handleChange}
+          error={errors.tradePairs}
           name="tradePairs"
         />
       </div>
@@ -62,13 +63,17 @@ const FormikWrapper = withFormik({
     const invalidName = typeof values.name !== 'string' || values.name.length < 4
     if (invalidName) errors.name = true
 
+    const emptyTradePair = !values.tradePairs.length
+    if (emptyTradePair) errors.tradePairs = true
+
     return errors
   },
 
   handleSubmit: (values, { props }) => {
+    const { name, tradePairs } = values
     props.$submitFormPayload({
-      name: values.name,
-      tradePairs: values.tradePairs.split(','),
+      name: name,
+      tradePairs: typeof tradePairs === 'string' ? tradePairs.split(',') : tradePairs,
     })
   },
 

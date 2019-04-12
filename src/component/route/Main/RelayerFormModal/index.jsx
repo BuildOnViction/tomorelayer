@@ -5,6 +5,7 @@ import { Container, Grid } from 'component/utility'
 import ProgressBar from './ProgressBar'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
+import StepThree from './StepThree'
 
 
 class RelayerFormModal extends React.Component {
@@ -25,6 +26,7 @@ class RelayerFormModal extends React.Component {
             <Grid className="direction-column col-auto relayer-form--step-body">
               {step === 0 && <StepOne />}
               {step === 1 && <StepTwo />}
+              {step === 2 && <StepThree />}
             </Grid>
           </Grid>
         </Container>

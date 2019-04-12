@@ -57,6 +57,7 @@ export class TradePairSelect extends React.Component {
 
   componentDidMount() {
     this.inputRef.current.addEventListener('input', this.handleChange)
+    console.warn(this.props.value)
   }
 
   updatePairs = pair => () => {
@@ -100,9 +101,15 @@ export class TradePairSelect extends React.Component {
           key={pair}
         />
       ))}
-      <div className="mt-2">
-        Your have selected <TotalPairChip label={this.state.pairs.length} /> trade pairs
-      </div>
+      {this.props.error ? (
+         <div className="mt-2 text-alert">
+           At least one(1) trading pairs must be selected!
+         </div>
+      ) : (
+         <div className="mt-2">
+           Your have selected <TotalPairChip label={this.state.pairs.length} /> trade pairs
+         </div>
+      )}
     </div>
   )
 }
