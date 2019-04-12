@@ -30,3 +30,8 @@ export const $changeStep = (state, step) => {
   state.RelayerForm.step = step
   return state
 }
+
+export const $finalizeRegistration = state => {
+  console.info('Finalization', state.RelayerForm.relayer_meta)
+  return state
+}

@@ -27,6 +27,7 @@ $text-color-map: (
   initial: $text-base-color,
   subtle-light: $text-base-light,
   super-light: lighten($text-base-light, 25),
+  super-dark: darken($text-base-dark, 25),
   subtle-dark: $text-base-dark,
   subtle-blue: $light-blue,
   alert: #f44336,

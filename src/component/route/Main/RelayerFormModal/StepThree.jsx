@@ -3,7 +3,6 @@ import { withFormik } from 'formik'
 import { connect } from 'redux-zero/react'
 import { Button, TextField, Typography } from '@material-ui/core'
 import { Grid } from 'component/utility'
-import { TradePairSelect } from './SupportComponents'
 import { $cancelRegistration, $submitFormPayload } from '../main_actions'
 
 const RegistrationFormStepThree = props => {
@@ -58,7 +57,7 @@ const RegistrationFormStepThree = props => {
           <i>These fees can be modified later</i>
         </Typography>
       </div>
-      <Grid className="justify-space-between m-0 mt-1">
+      <Grid className="justify-space-between m-0 pt-5">
         <Button size="small" variant="contained" className="mr-1" onClick={props.$cancelRegistration} type="button">
           Cancel
         </Button>

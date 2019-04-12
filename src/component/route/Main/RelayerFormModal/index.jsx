@@ -6,6 +6,7 @@ import ProgressBar from './ProgressBar'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
+import StepFour from './StepFour'
 
 
 class RelayerFormModal extends React.Component {
@@ -27,6 +28,7 @@ class RelayerFormModal extends React.Component {
               {step === 0 && <StepOne />}
               {step === 1 && <StepTwo />}
               {step === 2 && <StepThree />}
+              {step === 3 && <StepFour />}
             </Grid>
           </Grid>
         </Container>

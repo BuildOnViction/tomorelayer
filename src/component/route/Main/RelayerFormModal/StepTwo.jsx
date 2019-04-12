@@ -43,7 +43,7 @@ const RegistrationFormStepTwo = props => {
           name="tradePairs"
         />
       </div>
-      <Grid className="justify-space-between m-0 mt-1">
+      <Grid className="justify-space-between m-0 pt-5">
         <Button size="small" variant="contained" className="mr-1" onClick={props.$cancelRegistration} type="button">
           Cancel
         </Button>

@@ -8,6 +8,7 @@ import { $changeStep } from '../main_actions'
 const StepMetaData = [
   'Submit register information',
   'Customize your relayer',
+  'Set trading fees',
   'Review',
 ]
 
