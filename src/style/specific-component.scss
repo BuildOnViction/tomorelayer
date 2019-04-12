@@ -224,3 +224,7 @@
     color: $text-base-dark;
   }
 }
+
+.coinbase-logout:hover {
+  color: map-get($text-color-map, primary);
+}

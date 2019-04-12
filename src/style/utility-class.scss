@@ -33,6 +33,7 @@ $text-color-map: (
   alert: #f44336,
   white: #fff,
   green: $green,
+  primary: #2196f3,
 );
 
 @each $color, $val in $text-color-map {
@@ -105,4 +106,9 @@ $text-color-map: (
 
 .border-bottom {
   border-bottom: solid 1px #ddd;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

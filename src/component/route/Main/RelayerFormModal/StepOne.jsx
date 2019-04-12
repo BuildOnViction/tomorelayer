@@ -2,12 +2,25 @@ import React from 'react'
 import { withFormik } from 'formik'
 import { connect } from 'redux-zero/react'
 import * as ethers from 'ethers'
-import { TextField, Button } from '@material-ui/core'
+import { Button, InputAdornment, TextField, Tooltip } from '@material-ui/core'
 import { MISC } from 'service/constant'
 import { Grid } from 'component/utility'
 import { $cancelRegistration, $submitFormPayload } from '../main_actions'
+import { $logout } from 'component/route/Authentication/actions'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
+
+const ChangeWalletAdornment = ({ onClick }) => (
+  <InputAdornment position="end">
+    <Tooltip title="Change Wallet" placement="top">
+      <a href="#" onClick={onClick} className="coinbase-logout">
+        <i className="material-icons">
+          account_balance_wallet
+        </i>
+      </a>
+    </Tooltip>
+  </InputAdornment>
+)
 
 const RegistrationFormStepOne = props => {
   const {
@@ -46,8 +59,12 @@ const RegistrationFormStepOne = props => {
           variant="outlined"
           value={values.address}
           onChange={handleChange}
+          error={errors.address}
+          helperText={errors.address && <i className="text-alert">* Invalid coinbase address!</i>}
           fullWidth
-          disabled
+          InputProps={{
+            endAdornment: <ChangeWalletAdornment onClick={props.$logout} />
+          }}
         />
       </div>
       <Grid className="justify-space-between m-0 pt-5">
@@ -67,8 +84,11 @@ const FormikWrapper = withFormik({
   validate: values => {
     const errors = {}
 
-    const invalidAddress = typeof values.address !== 'string' || values.address.length === 0
-    if (invalidAddress) errors.address = true
+    try {
+      ethers.utils.getAddress(values.address)
+    } catch (e) {
+      errors.address = true
+    }
 
     const currentDeposit = ethers.utils.bigNumberify(values.deposit)
     const invalidDeposit = currentDeposit.lt(MINIMUM_DEPOSIT)
@@ -92,6 +112,7 @@ const storeConnect = connect(
   {
     $cancelRegistration,
     $submitFormPayload,
+    $logout,
   },
 )
 

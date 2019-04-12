@@ -57,7 +57,6 @@ export class TradePairSelect extends React.Component {
 
   componentDidMount() {
     this.inputRef.current.addEventListener('input', this.handleChange)
-    console.warn(this.props.value)
   }
 
   updatePairs = pair => () => {

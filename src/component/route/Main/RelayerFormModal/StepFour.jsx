@@ -40,7 +40,7 @@ const RegistrationFormStepFour = props => {
           <div className="col-6 pb-0 pl-0">
             Coinbase Address:
           </div>
-          <div className="col-6 pb-0 pl-0">
+          <div className="col-6 pb-0 pl-0 text-ellipsis">
             {address}
           </div>
         </div>
