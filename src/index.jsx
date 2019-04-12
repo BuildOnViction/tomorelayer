@@ -1,11 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import { Provider } from 'redux-zero/react'
-import store from './service/store'
 import App from './component/App'
-
-const theme = createMuiTheme()
+import store from './service/store'
+import theme from './theme.config'
 
 ReactDOM.render((
   <MuiThemeProvider theme={theme}>

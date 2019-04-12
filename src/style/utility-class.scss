@@ -26,10 +26,14 @@ $space-mod-map: (
 $text-color-map: (
   initial: $text-base-color,
   subtle-light: $text-base-light,
+  super-light: lighten($text-base-light, 25),
+  super-dark: darken($text-base-dark, 25),
   subtle-dark: $text-base-dark,
   subtle-blue: $light-blue,
-  alert: #ff3167,
+  alert: #f44336,
   white: #fff,
+  green: $green,
+  primary: #2196f3,
 );
 
 @each $color, $val in $text-color-map {
@@ -99,3 +103,12 @@ $text-color-map: (
 .vertical-middle { vertical-align: middle; }
 .pointer { cursor: pointer; }
 .margin-center { margin-left: auto; margin-right: auto; }
+
+.border-bottom {
+  border-bottom: solid 1px #ddd;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

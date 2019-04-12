@@ -1,5 +1,5 @@
 import createStore from 'redux-zero'
-import { UNLOCK_WALLET_METHODS, socketUrl } from './constant'
+import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
 
 // NOTE: You can split initialState to multiple sub-stores when necessary
 const socket = new WebSocket(socketUrl)
@@ -18,11 +18,22 @@ const initialState = {
       unlockingMethod: UNLOCK_WALLET_METHODS.TomoWallet,
     },
   },
+  RelayerForm: {
+    step: 0,
+    relayer_meta: {
+      deposit: MISC.MinimumDeposit,
+      name: '',
+      tradePairs: [],
+      makerFee: 0.1,
+      takerFee: 0.1,
+    },
+  },
   global: {
     lang: 'en',
   },
   toggle: {
-    AddressModal: false
+    AddressModal: false,
+    RelayerFormModal: false,
   },
   socket: socket,
 }
