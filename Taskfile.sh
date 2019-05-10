@@ -23,16 +23,15 @@ function docker {
     docker-compose -f docker-compose.dev.yaml up -d
 }
 
-function emb {
-    network="development"
+function eb {
+    network="dev"
     if [ "$1" != "" ]
     then
         network="$1"
     fi
-    rsync -a embark/plugin.js node_modules/embark-tomo/
-    echo 'Plugin copied!'
-    echo "EXEC: embark run --nobrowser --noserver $network"
-    embark run --nobrowser --noserver --nodashboard $network
+    # rsync -a embark/plugin.js node_modules/embark-tomo/
+    # echo 'Plugin copied!'
+    npx embark run
 }
 
 function lint-fe {

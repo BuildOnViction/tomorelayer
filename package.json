@@ -7,24 +7,33 @@
     "@colony/purser-software": "^1.2.4",
     "@colony/purser-trezor": "^1.2.2",
     "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
     "@vutr/purser-ledger": "^1.2.4",
     "classnames": "^2.2.6",
     "ethers": "^4.0.27",
-    "formik": "^1.5.2",
+    "formik": "^1.5.4",
+    "openzeppelin-solidity": "^2.2.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-qr-svg": "^2.2.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "react-select": "^2.4.2",
-    "redux-zero": "^5.0.1"
+    "react-select": "^2.4.3",
+    "redux-zero": "^5.0.2",
+    "web3": "^1.0.0-beta.54"
   },
   "scripts": {
     "start": "NODE_ENV=development HTTPS=true react-scripts start",
     "backend-tunnel": "node custom-script.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eb": "embark run dev",
+    "eb:tes": "embark test",
+    "eb:del": "embark reset",
+    "eb:trace": "embark run --nodashboard --logfile log.txt --loglevel trace",
+    "lint": "eslint --ext .jsx,.js src/",
+    "pylint": "pipenv run pylint backend/*"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,10 +45,14 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "chai": "^4.2.0",
     "dotenv": "^7.0.0",
+    "embark": "^4.0.2",
+    "embarkjs-connector-web3": "^4.0.0",
     "exec-sh": "^0.3.2",
-    "kill-port": "^1.3.2",
+    "kill-port": "^1.4.0",
     "localtunnel": "^1.9.1",
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.12.0",
+    "pretty-format": "^24.8.0"
   }
 }

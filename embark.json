@@ -1,22 +1,25 @@
 {
   "contracts": ["contracts/**"],
-  "app": {},
-  "buildDir": "build/",
+  "buildDir": "dist/",
   "config": {
-    "contracts": "embark/contracts.js",
-    "blockchain": "embark/blockchain.js",
+    "contracts": "embarkConfig/contracts.js",
+    "blockchain": "embarkConfig/blockchain.js",
     "storage": false,
     "communication": false,
     "webserver": false
   },
   "versions": {
-    "solc": "0.5.0"
+    "web3": "1.0.0-beta",
+    "solc": "0.5.8"
   },
-  "plugins": {},
+  "plugins": {
+    "embarkjs-connector-web3": {}
+  },
   "options": {
     "solc": {
       "optimize": true,
       "optimize-runs": 200
     }
-  }
+  },
+  "generationDir": "embarkArtifacts"
 }

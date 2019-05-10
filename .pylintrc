@@ -1,2 +1,5 @@
 [MESSAGES CONTROL]
 disable=C0111, C0301, C0103
+
+[MASTER]
+ignore=backend/migration

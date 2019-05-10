@@ -1,3 +1,5 @@
+export * from './abi'
+
 const APP_HOST = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_HOST : window.location.origin
 const APP_PORT = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_PORT : 80
 const APP_SOCKET = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_SOCKET : window.location.origin.replace('http', 'ws')
@@ -9,9 +11,7 @@ const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
 
 export const API = {
   fetchQRCode: apiBuild('auth?qr_code='),
-  contracts: apiBuild('contracts'),
-  register: apiBuild('register'),
-  relayers: apiBuild('relayers'),
+  token: apiBuild('token'),
 }
 
 export const SOCKET_REQ = {
@@ -41,13 +41,25 @@ export const UNLOCK_WALLET_METHODS = {
   BrowserWallet: 'MetaMask/TrustWallet/MidasWallet',
 }
 
+export interface ITokenTRC20 {
+  symbol: string;
+  address: string;
+}
+
+export const Tokenizer = (symbol: string, address: string): ITokenTRC20 => ({ symbol, address })
+
+export const TRADABLE_TOKENS: ITokenTRC20[] = [
+  Tokenizer('WTOMO', 'wrappedtomo-address'),
+  Tokenizer('TRIIP', 'triip-address'),
+]
+
 export const MISC = {
   MinimumDeposit: 25000,
   AvailableTradePairs: [
     'TOMO/TRIIP',
     'TOMO/MAS',
     'TOMO/USD',
-  ],
+ ],
 }
 
 export const I18N_LANGS = [
