@@ -4,6 +4,7 @@ import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
 import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
+import { Private } from 'component/utility'
 import { SITE_MAP } from 'service/constant'
 import 'style/app.scss'
 
@@ -13,7 +14,7 @@ const App = () => (
   <Router>
     <Switch>
       <Route path={SITE_MAP.Authentication} component={Authentication} />
-      <Route path={SITE_MAP.Home} render={props => (
+      <Private path={SITE_MAP.Home} render={() => (
         <div>
           <PageHeader />
           <Switch>

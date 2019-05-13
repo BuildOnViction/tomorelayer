@@ -11,15 +11,9 @@ const Private = ({
   ...rest
 }) => {
 
-  if (auth && path === '/login') {
-    return <Redirect to="/" />
-  }
-
   if (!auth && path !== '/login') {
     return <Redirect to="/login" />
   }
-
-  console.log('to', path);
 
   return (
     <Route

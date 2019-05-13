@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'redux-zero/react'
 import { Container } from 'component/utility'
 import ProgressBar from './ProgressBar'
+import FormStepOne from './FormStepOne'
 
 
 class Register extends React.Component {
@@ -11,11 +12,12 @@ class Register extends React.Component {
   }
 
   render() {
+    const { step } = this.props
     return (
       <Container center>
         <ProgressBar />
         <div className="register-form--container">
-          {this.props.step}
+          {step === 1 && <FormStepOne />}
         </div>
       </Container>
     )

@@ -202,22 +202,22 @@
   margin: 0 auto;
   background: white;
   border-radius: 50%;
-  border: solid 1px #1e93e8;
-  color: #1e93e8;
+  border: solid 1px #aaa;
+  color: #aaa;
   line-height: 40px;
-  font-size: 14px;
+  font-size: 16px;
   padding: 0 15px;
 
 }
 
 .register-progress--step__current {
+  border-color: #1e93e8;
   background: #1e93e8;
   color: white;
 }
 
 .register-form--container {
   width: 600px;
-  margin: 50px auto;
+  margin: 10px auto;
   padding: 20px;
-  background: red;
 }

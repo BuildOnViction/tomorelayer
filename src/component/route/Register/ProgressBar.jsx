@@ -18,7 +18,7 @@ const ProgressBar = ({ step }) => {
     <Grid className="justify-center row">
       <div className="register-progress--container">
         {[1,2,3,4].map(_step => (
-          <div className="col-md-3 text-center">
+          <div className="col-md-3 text-center" key={_step}>
             <div className={cls(_step)}>
               {_step}
             </div>
