@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Container } from 'component/utility'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
@@ -17,6 +18,12 @@ const { TomoWallet, LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_
 class Authentication extends React.Component {
   componentDidMount() {
     this.props.$getQRCode()
+  }
+
+  componentDidUpdate() {
+    if (this.props.auth) {
+      this.props.history.push('/')
+    }
   }
 
   render () {
@@ -42,10 +49,11 @@ class Authentication extends React.Component {
 
 const mapProps = state => ({
   method: state.authStore.method,
+  auth: state.authStore.auth,
 })
 
 const actions = store => ({
   $getQRCode: $getQRCode(store),
 })
 
-export default connect(mapProps, actions)(Authentication)
+export default connect(mapProps, actions)(withRouter(Authentication))

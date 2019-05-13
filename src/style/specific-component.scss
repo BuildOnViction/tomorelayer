@@ -228,3 +228,7 @@
 .coinbase-logout:hover {
   color: map-get($text-color-map, primary);
 }
+
+.menu-item--cancel {
+  border-top: solid 1px #eaeaea !important;
+}

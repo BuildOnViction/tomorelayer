@@ -19,6 +19,8 @@ const Private = ({
     return <Redirect to="/login" />
   }
 
+  console.log('to', path);
+
   return (
     <Route
       path={path}

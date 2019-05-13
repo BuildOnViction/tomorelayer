@@ -23,7 +23,7 @@ export const SITE_MAP = {
   Home: '/',
   Orders: '/orders',
   Relayers: '/relayers',
-  Registration: '/register',
+  Register: '/register',
   Dashboard: '/dashboard',
 }
 

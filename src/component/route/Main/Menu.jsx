@@ -1,7 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Grid } from 'component/utility'
-import { TextField, Button } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { $toggleRelayerFormModal } from './main_actions'
 import logo from 'asset/app-logo.png'
 
@@ -22,9 +23,9 @@ const Menu = ({
       />
     </div>
     <div className="col-md-4 text-center">
-      <Button onClick={$toggleRelayerFormModal} variant="contained" color="primary">
+      <Link to="/register">
         Create your relayer
-      </Button>
+      </Link>
 
     </div>
     <div className="col-12 hidden-md hidden-lg hidden-xxl">
