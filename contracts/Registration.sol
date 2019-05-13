@@ -6,6 +6,7 @@ contract RelayerRegistration {
     /// @dev constructor arguments
     address public OWNER;
     uint public MaximumRelayers;
+    uint public MaximumTokenList;
 
 
     /// @dev Data types
@@ -37,31 +38,28 @@ contract RelayerRegistration {
     uint256 public MinimumDeposit  = 25000 ether;
 
     /// @dev Events
-    event MaximumRelayerNumberChange(uint number);
+    event ConfigEvent(uint max_relayer, uint max_token, uint256 min_deposit);
     event RegisterEvent(string relayer_name, address coinbase, string[] names);
     event UpdateEvent(string relayer_name, uint256 deposit);
     event ChangeOwnershipEvent(string relayer_name, address new_owner, address new_coinbase);
     event ResignEvent(uint deposit_release_time, uint256 deposit_amount);
     event RefundEvent(bool success, uint remaining_time, uint256 deposit_amount);
 
-
     constructor (uint maxRelayers) public {
         RelayerCount = 0;
         MaximumRelayers = maxRelayers;
+        MaximumTokenList = 200;
         OWNER = msg.sender;
     }
 
 
-    function changeMaximumRelayer (uint number) public {
-        require(msg.sender == OWNER);
-        require(number > RelayerCount);
-
-        MaximumRelayers = number;
-        emit MaximumRelayerNumberChange(MaximumRelayers);
+    /// @dev Modifier
+    modifier contractOwnerOnly() {
+        require(msg.sender == OWNER, "Contract Owner Only.");
+        _;
     }
 
-    /// @dev Modifier
-    modifier authorizedOnly(string memory relayerName) {
+    modifier relayerOwnerOnly(string memory relayerName) {
         require(RELAYER_OWNERSHIP_LIST[relayerName]._owner == msg.sender, "Unauthorized request.");
         _;
     }
@@ -74,6 +72,18 @@ contract RelayerRegistration {
     modifier nonZeroValue() {
         require(msg.value > 0, "Transfer value must be > 0");
         _;
+    }
+
+
+    /// @dev Contract Config Modifications
+    function reconfigure (uint maxRelayer, uint maxToken, uint256 minDeposit) public contractOwnerOnly {
+        require(maxRelayer > RelayerCount);
+        require(maxToken > 4 && maxToken < 1001);
+        require(minDeposit > 10000);
+        MaximumRelayers = maxRelayer;
+        MaximumTokenList = maxToken;
+        MinimumDeposit = minDeposit;
+        emit ConfigEvent(MaximumRelayers,MaximumTokenList, MinimumDeposit);
     }
 
 
@@ -90,12 +100,13 @@ contract RelayerRegistration {
         public
         payable
     {
+        require(msg.sender != OWNER, "Contract Owner is forbidden to create a Relayer");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
         /// @dev valid relayer configuration
         require(bytes(name).length >= 3 && bytes(name).length <= 32, "Name length invalid (3 ~ 32)");
         require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
         require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
-        require(fromTokens.length <= 50, "Exceeding number of trade pairs (max = 50)");
+        require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
         /// @dev uniqueness assurance to avoid double-spending
         require(bytes(RELAYER_COINBASE_LIST[coinbase]).length == 0, "Coinbase already registered.");
@@ -120,14 +131,14 @@ contract RelayerRegistration {
 
     function update(string memory name, string memory newName, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens)
         public
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
         onlyActiveRelayer(name)
     {
         require(bytes(name).length >= 3 && bytes(name).length <= 32);
         require(bytes(newName).length >= 3 && bytes(newName).length <= 32);
         require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
         require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
-        require(fromTokens.length <= 50, "Exceeding number of trade pairs (max = 50)");
+        require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
         RELAYER_OWNER_LIST[msg.sender][name]._makerFee = makerFee;
@@ -165,7 +176,7 @@ contract RelayerRegistration {
 
     function depositMore(string memory name)
         public
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
         onlyActiveRelayer(name)
         nonZeroValue
         payable
@@ -177,7 +188,7 @@ contract RelayerRegistration {
 
     function withdraw(string memory name, uint256 requestAmount)
         public
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
         onlyActiveRelayer(name)
     {
         require(requestAmount > 0 ether, "Invalid withdrawal amount");
@@ -191,7 +202,7 @@ contract RelayerRegistration {
 
     function changeOwnership (string memory name, address new_owner, address new_coinbase)
         public
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
         onlyActiveRelayer(name)
     {
         require(new_owner != address(0));
@@ -234,7 +245,7 @@ contract RelayerRegistration {
 
     function resign(string memory name)
         public
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
     {
         require(RELAYER_OWNER_LIST[msg.sender][name]._coinbase != address(0), "No relayer associated with this address");
         require(RELAYER_OWNER_LIST[msg.sender][name]._deposit > 0, "No deposit remains");
@@ -247,7 +258,7 @@ contract RelayerRegistration {
 
     function refund(string memory name)
         public
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
     {
         require(RESIGN_REQUESTS[name] > 0, "Request not found");
         uint256 amount = RELAYER_OWNER_LIST[msg.sender][name]._deposit;
@@ -281,7 +292,7 @@ contract RelayerRegistration {
     function relayerMetaView(string memory name)
         public
         view
-        authorizedOnly(name)
+        relayerOwnerOnly(name)
         returns (Relayer memory)
     {
         return (RELAYER_OWNER_LIST[msg.sender][name]);

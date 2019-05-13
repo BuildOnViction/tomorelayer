@@ -495,4 +495,6 @@ contract('RelayerRegistration', async () => {
 
   })
 
+  // TODO: missing test change Contract config!
+
 })
