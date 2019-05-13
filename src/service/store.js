@@ -6,7 +6,7 @@ const socket = new WebSocket(socketUrl)
 
 const initialState = {
   authStore: {
-    auth: false,
+    auth: true,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
     user_meta: {
       TomoWalletQRcode: '',
@@ -19,7 +19,7 @@ const initialState = {
     },
   },
   RelayerForm: {
-    step: 1,
+    step: 3,
     relayer_meta: {
       deposit: MISC.MinimumDeposit,
       name: '',

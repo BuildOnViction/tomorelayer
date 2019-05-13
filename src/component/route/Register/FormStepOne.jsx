@@ -1,8 +1,7 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
 import { withFormik } from 'formik'
 import { connect } from 'redux-zero/react'
-import { Button, InputAdornment, TextField, Tooltip } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
 import { MISC } from 'service/constant'
 import { validateCoinbase, bigNumberify } from 'service/blockchain'
 import { Grid } from 'component/utility'
@@ -10,31 +9,13 @@ import { $cancelRegistration, $logout, $submitFormPayload } from './actions'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
 
-const ChangeWalletAdornment = ({ onClick }) => (
-  <InputAdornment position="end">
-    <Tooltip title="Change Wallet" placement="top">
-      <a href="#" onClick={onClick} className="coinbase-logout">
-        <i className="material-icons">
-          account_balance_wallet
-        </i>
-      </a>
-    </Tooltip>
-  </InputAdornment>
-)
-
 const FormStepOne = props => {
   const {
     values,
     errors,
     handleChange,
     handleSubmit,
-    history,
   } = props
-
-  const changeWallet = () => {
-    props.$logout()
-    history.push('/login')
-  }
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
@@ -66,17 +47,13 @@ const FormStepOne = props => {
           error={errors.address}
           helperText={errors.address && <i className="text-alert">* Invalid coinbase address!</i>}
           fullWidth
-          disabled
-          InputProps={{
-            endAdornment: <ChangeWalletAdornment onClick={changeWallet} />
-          }}
         />
       </div>
       <Grid className="justify-space-between m-0">
-        <Button size="small" variant="contained" className="mr-1" onClick={props.$cancelRegistration} type="button">
+        <Button variant="outlined" className="mr-1" onClick={props.$cancelRegistration} type="button">
           Cancel
         </Button>
-        <Button size="small" color="primary" variant="contained" type="submit">
+        <Button color="primary" variant="contained" type="submit">
           Confirm
         </Button>
       </Grid>
@@ -109,7 +86,6 @@ const FormikWrapper = withFormik({
 
 const storeConnect = connect(
   state => ({
-    address: state.authStore.user_meta.address,
     deposit: state.RelayerForm.relayer_meta.deposit,
   }),
   {
@@ -119,4 +95,4 @@ const storeConnect = connect(
   }
 )
 
-export default storeConnect(withRouter(FormikWrapper))
+export default storeConnect(FormikWrapper)

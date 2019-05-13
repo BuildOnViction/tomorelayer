@@ -3,14 +3,21 @@ import * as blk from 'service/blockchain'
 import { Client } from 'service/action'
 import { API, SOCKET_REQ, MISC } from 'service/constant'
 
+
 export const $logout = state => {
   state.authStore.auth = false
+  return state
+}
+
+export const $backOneStep = state => {
+  state.RelayerForm.step = state.RelayerForm.step - 1
   return state
 }
 
 export const $submitFormPayload = (state, payload) => {
   _.assign(state.RelayerForm.relayer_meta, payload)
   state.RelayerForm.step = state.RelayerForm.step + 1
+  console.log('state', state);
   return state
 }
 

@@ -216,6 +216,17 @@
   color: white;
 }
 
+.register-progress--step__completed {
+  border-color: #1e93e8;
+  background: #1e93e8;
+  opacity: .75;
+  i {
+    transform: translate(-7px, 5px);
+    font-weight: 900;
+    color: white;
+  }
+}
+
 .register-form--container {
   width: 600px;
   margin: 10px auto;

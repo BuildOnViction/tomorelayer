@@ -20,7 +20,7 @@ const ProgressBar = ({ step }) => {
         {[1,2,3,4].map(_step => (
           <div className="col-md-3 text-center" key={_step}>
             <div className={cls(_step)}>
-              {_step}
+              {_step < step ? (<i className="material-icons">check</i>) : _step}
             </div>
           </div>
         ))}
