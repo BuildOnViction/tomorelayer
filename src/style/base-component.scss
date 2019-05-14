@@ -106,3 +106,12 @@ a {
   padding: $space;
   border-radius: 2px;
 }
+
+/* BORDER UTILS */
+.border-all {
+  border: solid 1px #ddd;
+}
+
+.border-rounded {
+  border-radius: 3px;
+}
