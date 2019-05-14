@@ -40,6 +40,7 @@ class Relayer(PwModel):
 class Token(PwModel):
     name = pw.CharField(unique=True, max_length=20)
     symbol = pw.CharField(unique=True, max_length=20)
+    logo =  pw.CharField(max_length=255, null=True)
     address = pw.CharField(unique=True, max_length=200)
     total_supply = pw.CharField()
 
@@ -57,18 +58,21 @@ def loaddata():
         {
             'name': 'Wrapped TOMO',
             'address': 'addressxxx',
+            'logo': '',
             'total_supply': '10000000000000000000000000',
             'symbol': 'WTOMO',
         },
         {
             'name': 'USD-Tether',
             'address': 'yyyyyy',
+            'logo': '',
             'total_supply': '99999999',
             'symbol': 'USDT',
         },
         {
             'name': 'Triip Coin',
             'address': 'zzzzzzzz',
+            'logo': '',
             'total_supply': '1111111111',
             'symbol': 'TRIIP',
         },
