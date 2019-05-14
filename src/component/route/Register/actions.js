@@ -33,3 +33,10 @@ export const $cancelRegistration = state => {
   }
   return state
 }
+
+export const $fetchTokens = async state => {
+  const resp = await Client.get(API.token)
+  console.log(resp.payload);
+  state.tradableTokens = resp.payload
+  return state
+}

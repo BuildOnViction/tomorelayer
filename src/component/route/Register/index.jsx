@@ -7,9 +7,14 @@ import FormStepOne from './FormStepOne'
 import FormStepTwo from './FormStepTwo'
 import FormStepThree from './FormStepThree'
 import FormStepFour from './FormStepFour'
+import { $fetchTokens } from './actions'
 
 
 class Register extends React.Component {
+
+  componentDidMount() {
+    this.props.$fetchTokens()
+  }
 
   render() {
     const { step } = this.props
@@ -33,4 +38,4 @@ const mapProps = store => ({
   step: store.RelayerForm.step
 })
 
-export default connect(mapProps)(Register)
+export default connect(mapProps, { $fetchTokens })(Register)

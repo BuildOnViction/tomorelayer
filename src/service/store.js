@@ -19,7 +19,7 @@ const initialState = {
     },
   },
   RelayerForm: {
-    step: 3,
+    step: 4,
     relayer_meta: {
       deposit: MISC.MinimumDeposit,
       name: '',

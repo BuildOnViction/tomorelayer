@@ -108,6 +108,18 @@ $text-color-map: (
   border-bottom: solid 1px #ddd;
 }
 
+.border-all {
+  border: solid 1px #ddd;
+}
+
+.border-rounded {
+  border-radius: 3px;
+}
+
+.bg-filled {
+  background: white;
+}
+
 .text-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
