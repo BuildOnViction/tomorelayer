@@ -40,12 +40,12 @@ const FormStepOne = props => {
           fullWidth
         />
         <TextField
-          name="address"
+          name="coinbase"
           label="Coinbase Address"
-          value={values.address}
+          value={values.coinbase}
           onChange={handleChange}
-          error={errors.address}
-          helperText={errors.address && <i className="text-alert">* Invalid coinbase address!</i>}
+          error={errors.coinbase}
+          helperText={errors.coinbase && <i className="text-alert">* Invalid coinbase address!</i>}
           fullWidth
         />
       </div>
@@ -66,8 +66,8 @@ const FormikWrapper = withFormik({
   validate: values => {
     const errors = {}
 
-    validateCoinbase(values.address, isValid => {
-      if (!isValid) errors.address = true
+    validateCoinbase(values.coinbase, isValid => {
+      if (!isValid) errors.coinbase = true
     })
 
     const currentDeposit = bigNumberify(values.deposit)
@@ -78,7 +78,10 @@ const FormikWrapper = withFormik({
   },
 
   handleSubmit: (values, { props }) => {
-    props.$submitFormPayload({ deposit: values.deposit })
+    props.$submitFormPayload({
+      deposit: values.deposit,
+      coinbase: values.coinbase,
+    })
   },
 
   displayName: 'FormStepOne',
@@ -87,6 +90,7 @@ const FormikWrapper = withFormik({
 const storeConnect = connect(
   state => ({
     deposit: state.RelayerForm.relayer_meta.deposit,
+    coinbase: state.authStore.user_meta.coinbase,
   }),
   {
     $logout,

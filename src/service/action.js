@@ -6,7 +6,7 @@ export const AsynCatch = promise => promise
 export const Client = {
   get: api => fetch(api).then(r => r.json()),
   post: (api, value) => fetch(api, {
-    method: 'POST',
+    method: 'post',
     body: JSON.stringify(value),
     headers: {
       Accept: 'application/json; charset=UTF-8',

@@ -54,9 +54,15 @@ export const ERC20TokenInfo = async tokenAddress => {
     const tokenContract = new ethers.Contract(tokenAddress, STANDARD_ERC20_ABI, provider)
     const name = await tokenContract.name()
     const symbol = await tokenContract.symbol()
-    const decimals = await tokenContract.decimals()
-    const totalSupply = await tokenContract.totalSupply().then(BNresult => BNresult.toString(10))
-    const tokenInfo = { name, symbol, decimals, totalSupply }
+    // const decimals = await tokenContract.decimals()
+    const total_supply = await tokenContract.totalSupply().then(BNresult => BNresult.toString(10))
+    const tokenInfo = {
+      name,
+      symbol,
+      logo: '',
+      address: tokenAddress,
+      total_supply,
+    }
     return tokenInfo
   } catch (e) {
     return undefined

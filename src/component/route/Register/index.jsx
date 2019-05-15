@@ -7,6 +7,7 @@ import FormStepOne from './FormStepOne'
 import FormStepTwo from './FormStepTwo'
 import FormStepThree from './FormStepThree'
 import FormStepFour from './FormStepFour'
+import Review from './Review'
 import { $fetchTokens } from './actions'
 
 
@@ -21,12 +22,13 @@ class Register extends React.Component {
     const cls = currentStep => cx('register-form--container', { 'register-form--container__expand': currentStep === 4 })
     return (
       <Container center>
-        <ProgressBar />
+        {step < 5 && (<ProgressBar />)}
         <div className={cls(step)}>
           {step === 1 && <FormStepOne />}
           {step === 2 && <FormStepTwo />}
           {step === 3 && <FormStepThree />}
           {step === 4 && <FormStepFour />}
+          {step === 5 && <Review />}
         </div>
       </Container>
     )
