@@ -12,7 +12,7 @@ module.exports = {
         {
           mnemonic: process.env.MNEMONIC,
           addressIndex: 0,
-          numAddresses: 4,
+          numAddresses: 8,
           balance: "900000 ether",
         }
       ]
@@ -25,7 +25,7 @@ module.exports = {
     gas: "auto",
     contracts: {
       RelayerRegistration: {
-        fromIndex: 3,
+        fromIndex: 0,
         args: [50],
       },
       Token: { deploy: false, },
@@ -38,12 +38,12 @@ module.exports = {
       TokenOne: {
         fromIndex: 1,
         instanceOf: 'Token',
-        args: ["TOKEN1", "TOK1", 1000, 0],
+        args: ["TOKEN1", "TOK1", 10000, 0],
       },
       TokenTwo: {
         fromIndex: 2,
         instanceOf: 'Token',
-        args: ["TOKEN2", "TOK2", 2000, 0],
+        args: ["TOKEN2", "TOK2", 20000, 0],
       },
     }
   },

@@ -6,7 +6,6 @@ import { $backOneStep, $registerRelayer } from './actions'
 
 
 const tableData = meta => {
-  console.log(meta);
   return [
     { key: 'Relayer Name', value: meta.name },
     { key: 'Coinbase', value: meta.coinbase },

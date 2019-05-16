@@ -46,6 +46,10 @@ export const $fetchTokens = async state => {
 
 export const $addToken = async (state, address) => {
   const token = await blk.ERC20TokenInfo(address)
+  if (!token) {
+    alert(`No such Token at the address: ${address}`)
+    return state
+  }
   const tokenExist = state.tradableTokens.find(t => t.symbol === token.symbol)
 
   if (token && !tokenExist) {

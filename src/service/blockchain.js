@@ -1,33 +1,3 @@
-/* import Web3 from 'web3'
- *
- * const provider = Web3.givenProvider || process.env.WEB3_PROVIDER_URI
- *
- * export const web3 = new Web3(provider)
- *
- * export const getBalance = async address => {
- *   console.log(web3.currentProvider)
- *   const balance = await web3.eth.getBalance(address)
- *   return web3.utils.fromWei(balance)
- * }
- *
- * export const validateAddress = (address) => {
- *   const isValidAddress = web3.utils.isAddress(address)
- *   return isValidAddress
- * }
- *
- * export const findContract = address => {
- *
- * }
- *
- * export const bigNumberify = num => {
- *   return web3.utils.toWei(num.toString())
- * }
- *
- * export const validateCoinbase = address => {
- *
- * }
- *  */
-
 import { ethers } from 'ethers'
 import { STANDARD_ERC20_ABI } from './abi'
 import { RelayerRegistration } from 'artifacts/contracts'
