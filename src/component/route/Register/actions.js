@@ -3,7 +3,6 @@ import * as blk from 'service/blockchain'
 import { Client } from 'service/action'
 import { API, SOCKET_REQ, MISC } from 'service/constant'
 
-
 export const $logout = state => {
   state.authStore.auth = false
   return state
@@ -53,7 +52,7 @@ export const $addToken = async (state, address) => {
     const resp = await Client.post(API.token, { tokens: [token] })
     state.tradableTokens = resp.payload
     return state
-    }
+  }
 }
 
 export const $registerRelayer = async state => {
@@ -61,10 +60,17 @@ export const $registerRelayer = async state => {
   const payload = {
     coinbase: meta.coinbase,
     name: meta.name,
-    makerFee: meta.makerFee * 1000,
-    takerFee: meta.takerFee * 1000,
+    makerFee: meta.makerFee * 10,
+    takerFee: meta.takerFee * 10,
     fromTokens: meta.fromTokens.map(p => p.address),
     toTokens: meta.toTokens.map(p => p.address),
   }
-  // Get contract from Backend
+
+  // Transact
+  const account = state.authStore.user_meta.address
+  const resp = await blk.register(payload, account, meta.deposit)
+  console.log(resp);
+
+  // Save Relayer to DB...
+
 }
