@@ -56,4 +56,8 @@ export const toWei = number => {
 
 export const register = (payload, account, deposit) => RelayerRegistration.methods.register(...Object.values({
   ...payload,
-})).send({ from: account, value: toWei(deposit) })
+})).send({ from: account, value: toWei(deposit) }).then(resp => {
+  return { status: true, details: resp.events.RegisterEvent.returnValues }
+}).catch(err => {
+  return { status: false, details: err }
+})

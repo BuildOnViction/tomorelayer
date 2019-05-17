@@ -73,8 +73,24 @@ export const $registerRelayer = async state => {
   // Transact
   const account = state.authStore.user_meta.address
   const resp = await blk.register(payload, account, meta.deposit)
-  console.log(resp);
+
+  if (!resp.status) {
+    console.warn(resp)
+    alert('Cant save a relayer to Blockchain')
+    return state
+  }
 
   // Save Relayer to DB...
+  const relayer = {
+    owner: state.authStore.user_meta.address,
+    name: meta.name,
+    coinbase: meta.coinbase,
+    makerFee: meta.makerFee * 10,
+    takerFee: meta.takerFee * 10,
+    fromTokens: meta.fromTokens.map(p => p.address),
+    toTokens: meta.toTokens.map(p => p.address),
+  }
 
+  const result = await Client.post(API.relayer, { relayer })
+  console.info('DONE: ', result);
 }
