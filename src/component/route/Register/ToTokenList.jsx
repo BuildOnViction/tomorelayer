@@ -12,6 +12,12 @@ import SearchIcon from '@material-ui/icons/Search'
 
 
 const ToTokenList = ({ tokens, fromToken, selected, onChange, disabled }) => {
+  const shouldDisable = id => !fromToken || disabled(id)
+  const handleClick = tokenId => event => {
+    const alreadyPicked = disabled(tokenId)
+    if (!alreadyPicked) onChange(tokenId)
+  }
+
   return (
     <List dense className="border-all token-list bg-filled pt-0">
       <ListSubheader className="border-bottom p-1">
@@ -31,10 +37,10 @@ const ToTokenList = ({ tokens, fromToken, selected, onChange, disabled }) => {
         />
       </ListSubheader>
       {tokens.filter(t => t.id !== fromToken).map((token, idx) => (
-        <ListItem key={token.id} button dense onClick={onChange(token.id)} className="p-0">
+        <ListItem key={token.id} button dense onClick={handleClick(token.id)} className="p-0">
           <Checkbox
-            disabled={!fromToken || disabled(token.id)}
-            checked={selected.includes(token.id) || disabled(token.id)}
+            disabled={shouldDisable(token.id)}
+            checked={selected.includes(token.id)}
             color="primary"
             className="pr-0"
           />

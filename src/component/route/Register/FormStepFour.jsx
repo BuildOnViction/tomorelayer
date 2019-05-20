@@ -20,7 +20,7 @@ class FormStepFour extends React.Component {
     this.setState({ selectedFromToken: id, selectedToTokens: [] })
   }
 
-  changeToTokens = id => () => {
+  changeToTokens = id => {
     const set = new Set(this.state.selectedToTokens)
     set.has(id) ? set.delete(id) : set.add(id)
     const selectedToTokens = Array.from(set)
@@ -36,7 +36,10 @@ class FormStepFour extends React.Component {
 
     const { tradableTokens } = this.props
     const newPairs = Array.from(tokenPairs)
-    selectedToTokens.forEach(tk => newPairs.push({
+    selectedToTokens.filter(toTokenAddr => {
+      const find = tokenPairs.find(pair => pair.from.id === selectedFromToken && pair.to.id === toTokenAddr)
+      return !find
+    }).forEach(tk => newPairs.push({
       from: tradableTokens.find(t => t.id === selectedFromToken),
       to: tradableTokens.find(t => t.id === tk)
     }))
