@@ -16,11 +16,6 @@ export const $backOneStep = state => {
 export const $submitFormPayload = (state, payload) => {
   _.assign(state.RelayerForm.relayer_meta, payload)
   state.RelayerForm.step = state.RelayerForm.step + 1
-
-  if (state.RelayerForm.step === 5) {
-    console.log(state.RelayerForm.relayer_meta);
-  }
-
   return state
 }
 
@@ -85,12 +80,19 @@ export const $registerRelayer = async state => {
     owner: state.authStore.user_meta.address,
     name: meta.name,
     coinbase: meta.coinbase,
-    makerFee: meta.makerFee * 10,
-    takerFee: meta.takerFee * 10,
-    fromTokens: meta.fromTokens.map(p => p.address),
-    toTokens: meta.toTokens.map(p => p.address),
+    maker_fee: meta.makerFee * 10,
+    taker_fee: meta.takerFee * 10,
+    from_tokens: meta.fromTokens.map(p => p.address),
+    to_tokens: meta.toTokens.map(p => p.address),
   }
 
-  const result = await Client.post(API.relayer, { relayer })
-  console.info('DONE: ', result);
+  const result = await Client.post(API.relayer, { relayer }).then(() => true).catch(() => false)
+
+  if (!result) {
+    // NOTE: alert
+    return state
+  } else {
+    state.RelayerForm.step = state.RelayerForm.step - 1
+    return state
+  }
 }

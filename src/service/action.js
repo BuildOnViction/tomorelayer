@@ -11,5 +11,8 @@ export const Client = {
     headers: {
       Accept: 'application/json; charset=UTF-8',
     },
-  }).then(r => r.json()),
+  }).then(r => {
+    if (r.ok) return r.json()
+    throw new Error(r.json())
+  }),
 }
