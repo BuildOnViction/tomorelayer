@@ -3,11 +3,8 @@ import {
   Checkbox,
   List,
   ListItemText,
-  ListItemSecondaryAction,
   ListItem,
-  ListItemAvatar,
   ListSubheader,
-  Avatar,
   InputAdornment,
   TextField,
 } from '@material-ui/core'
@@ -34,19 +31,14 @@ const ToTokenList = ({ tokens, fromToken, selected, onChange, disabled }) => {
         />
       </ListSubheader>
       {tokens.filter(t => t.id !== fromToken).map((token, idx) => (
-        <ListItem key={token.id} button>
-          <ListItemAvatar>
-            <Avatar alt={token.name} src={token.logo} />
-          </ListItemAvatar>
+        <ListItem key={token.id} button dense onClick={onChange(token.id)} className="p-0">
+          <Checkbox
+            disabled={!fromToken || disabled(token.id)}
+            checked={selected.includes(token.id) || disabled(token.id)}
+            color="primary"
+            className="pr-0"
+          />
           <ListItemText primary={token.symbol} />
-          <ListItemSecondaryAction>
-            <Checkbox
-              disabled={!fromToken || disabled(token.id)}
-              checked={selected.includes(token.id) || disabled(token.id)}
-              onChange={onChange(token.id)}
-              color="primary"
-            />
-          </ListItemSecondaryAction>
         </ListItem>
       ))}
     </List>

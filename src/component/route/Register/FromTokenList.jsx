@@ -2,11 +2,8 @@ import React from 'react'
 import {
   List,
   ListItemText,
-  ListItemSecondaryAction,
   ListItem,
-  ListItemAvatar,
   ListSubheader,
-  Avatar,
   InputAdornment,
   TextField,
   Radio,
@@ -33,21 +30,9 @@ const FromTokenList = ({ tokens, selected, onChange }) => {
         />
       </ListSubheader>
       {tokens.map((token, idx) => (
-        <ListItem key={token.id} button>
-          <ListItemAvatar>
-            <Avatar
-              alt={token.name}
-              src={token.logo}
-            />
-          </ListItemAvatar>
+        <ListItem key={token.id} button dense onClick={onChange(token.id)} className="p-0">
+          <Radio color="primary" checked={token.id === selected} className="pr-0" />
           <ListItemText primary={token.symbol} />
-          <ListItemSecondaryAction>
-            <Radio
-              color="primary"
-              checked={token.id === selected}
-              onChange={onChange(token.id)}
-            />
-          </ListItemSecondaryAction>
         </ListItem>
       ))}
     </List>

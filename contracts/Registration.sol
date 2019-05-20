@@ -8,7 +8,6 @@ contract RelayerRegistration {
     uint public MaximumRelayers;
     uint public MaximumTokenList;
 
-
     /// @dev Data types
     struct Relayer {
         address _coinbase;
@@ -29,6 +28,7 @@ contract RelayerRegistration {
     mapping(address => string[]) private RELAYER_NAME_LIST;
     /// @dev name -> { owner, coinbase }
     mapping(string => RelayerOwnership) private RELAYER_OWNERSHIP_LIST;
+    string[] private NAME_LIST;
     /// @dev coinbase -> name
     mapping(address => string) private RELAYER_COINBASE_LIST;
     /// @dev name -> time
@@ -122,6 +122,7 @@ contract RelayerRegistration {
         RELAYER_OWNERSHIP_LIST[name] = ownership;
         RELAYER_COINBASE_LIST[coinbase] = name;
         RELAYER_NAME_LIST[msg.sender].push(name);
+        NAME_LIST.push(name);
 
         RelayerCount++;
 
@@ -165,6 +166,12 @@ contract RelayerRegistration {
             for (uint i = 0; i < RELAYER_NAME_LIST[msg.sender].length; i++) {
                 if (compareStrings(RELAYER_NAME_LIST[msg.sender][i], name)) {
                     RELAYER_NAME_LIST[msg.sender][i] = newName;
+                }
+            }
+
+            for (uint i = 0; i < NAME_LIST.length; i++) {
+                if (compareStrings(NAME_LIST[i], name)) {
+                    NAME_LIST[i] = newName;
                 }
             }
 
@@ -278,6 +285,12 @@ contract RelayerRegistration {
                 }
             }
 
+            for (uint i = 0; i < NAME_LIST.length; i++) {
+                if (compareStrings(NAME_LIST[i], name)) {
+                    delete NAME_LIST[i];
+                }
+            }
+
             RelayerCount--;
 
             msg.sender.transfer(amount);
@@ -292,10 +305,10 @@ contract RelayerRegistration {
     function relayerMetaView(string memory name)
         public
         view
-        relayerOwnerOnly(name)
         returns (Relayer memory)
     {
-        return (RELAYER_OWNER_LIST[msg.sender][name]);
+        address owner = RELAYER_OWNERSHIP_LIST[name]._owner;
+        return (RELAYER_OWNER_LIST[owner][name]);
     }
 
 
@@ -305,6 +318,19 @@ contract RelayerRegistration {
         returns (string[] memory)
     {
         return (RELAYER_NAME_LIST[msg.sender]);
+    }
+
+    function getAllRelayerNames()
+        public
+        view
+        returns (string[] memory, RelayerOwnership[] memory)
+    {
+        RelayerOwnership[] memory ownership = new RelayerOwnership[](RelayerCount);
+        for (uint i = 0; i < NAME_LIST.length; i++) {
+            string memory name = NAME_LIST[i];
+            ownership[i] = RELAYER_OWNERSHIP_LIST[name];
+        }
+        return (NAME_LIST, ownership);
     }
 
 
