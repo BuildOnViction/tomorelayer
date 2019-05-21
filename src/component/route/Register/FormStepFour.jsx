@@ -14,6 +14,7 @@ class FormStepFour extends React.Component {
     selectedToTokens: [],
     tokenPairs: [],
     customToken: '',
+    showCustomTokenForm: false,
   }
 
   changeFromToken = id => () => {
@@ -74,6 +75,8 @@ class FormStepFour extends React.Component {
     this.props.$addToken(address)
   }
 
+  toggleNewTokenForm = () => this.setState({ showCustomTokenForm: !this.state.showCustomTokenForm })
+
   render() {
     const { tradableTokens } = this.props
     const {
@@ -81,6 +84,7 @@ class FormStepFour extends React.Component {
       selectedToTokens,
       tokenPairs,
       customToken,
+      showCustomTokenForm,
     } = this.state
 
     return (
@@ -120,17 +124,19 @@ class FormStepFour extends React.Component {
         </div>
         <div className="col-6 border-all">
           <Grid className="align-baseline pl-1">
-            <Button type="button" className="mr-2" onClick={this.addNewToken}>
+            <Button type="button" className="mr-2" onClick={this.toggleNewTokenForm}>
               Add Custom Token
             </Button>
-            <TextField
-              placeholder="Token address..."
-              type="text"
-              variant="outlined"
-              margin="dense"
-              value={customToken}
-              onChange={this.setCustomTokenAddress}
-            />
+            {showCustomTokenForm && (
+              <TextField
+                placeholder="Token address..."
+                type="text"
+                variant="outlined"
+                margin="dense"
+                value={customToken}
+                onChange={this.setCustomTokenAddress}
+              />
+            )}
           </Grid>
         </div>
         <Grid className="justify-space-between m-0 mt-2">
@@ -143,7 +149,7 @@ class FormStepFour extends React.Component {
         </Grid>
       </div>
     )
-  }
+                              }
 }
 
 const storeConnect = connect(

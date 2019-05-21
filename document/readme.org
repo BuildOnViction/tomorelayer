@@ -28,3 +28,6 @@ Notes about workflow
    - Issue token
 3. DEX Personnel Administration
    - ...
+4. Protocol & Smart Contract
+   - Entrance fee: 25.000 = fee(5000) + locked(20,000)
+   - No withdraw, only resign
