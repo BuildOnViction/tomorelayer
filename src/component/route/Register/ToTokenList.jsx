@@ -13,6 +13,12 @@ import SearchIcon from '@material-ui/icons/Search'
 
 const ToTokenList = ({ tokens, fromToken, selected, onChange, disabled }) => {
   const shouldDisable = id => !fromToken || disabled(id)
+
+  const shouldBeChecked = id => {
+    if (!fromToken) return false
+    return selected.includes(id) || shouldDisable(id)
+  }
+
   const handleClick = tokenId => event => {
     const alreadyPicked = disabled(tokenId)
     if (!alreadyPicked) onChange(tokenId)
@@ -40,7 +46,7 @@ const ToTokenList = ({ tokens, fromToken, selected, onChange, disabled }) => {
         <ListItem key={token.id} button dense onClick={handleClick(token.id)} className="p-0">
           <Checkbox
             disabled={shouldDisable(token.id)}
-            checked={selected.includes(token.id)}
+            checked={shouldBeChecked(token.id)}
             color="primary"
             className="pr-0"
           />
