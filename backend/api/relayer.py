@@ -17,13 +17,10 @@ class RelayerHandler(BaseHandler):
         self.json_response(response)
 
     async def get(self):
-        query = await self.application.objects.execute(Relayer.select().dicts())
         relayers = []
-
-        for r in query:
-            relayers.append(r)
-
-        for r in relayers:
-            r['dex_rate'] = float(r['dex_rate'])
+        try:
+            relayers = [model_to_dict(relayer or {}) for relayer in Relayer.select()]
+        except Exception:
+            pass
 
         self.json_response(relayers)

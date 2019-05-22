@@ -30,6 +30,7 @@ const initialState = {
     },
   },
   tradableTokens: [],
+  Relayers: [],
   global: {
     lang: 'en',
   },

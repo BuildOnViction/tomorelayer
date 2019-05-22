@@ -80,6 +80,7 @@ class PageHeader extends React.Component {
 const mapProps = state => ({
   address: state.authStore.user_meta.address,
   auth: state.authStore.auth,
+  ownedRelayers: state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
 })
 
 export default connect(mapProps)(withRouter(PageHeader))
