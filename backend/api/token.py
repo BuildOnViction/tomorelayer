@@ -10,7 +10,7 @@ class TokenHandler(BaseHandler):
         tokens = []
         try:
             tokens = [model_to_dict(token or {}) for token in Token.select()]
-        except Exception as err:
+        except Exception:
             # No Token in DB yet
             pass
 

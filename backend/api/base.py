@@ -1,16 +1,16 @@
+import json
+import traceback
 from tornado.web import HTTPError
-from settings import settings, is_production
-from tornado.web import HTTPError
-from tornado.web import ErrorHandler
+from tornado.web import ErrorHandler as TorErrorHandler
 from tornado.web import RequestHandler
 from peewee import IntegrityError
 from logger import logger
+from settings import settings, is_production
 from exception import *
-import json
-import traceback
 
 
 class BaseHandler(RequestHandler):
+    request_body = None
 
     def set_default_headers(self):
         if not is_production:
@@ -26,8 +26,6 @@ class BaseHandler(RequestHandler):
 
         if valid_content_type:
             self.request_body = json.loads(self.request.body)
-        else:
-            self.request_body = None
 
     def json_response(self, response={}, meta={}):
         standard_resp = {
@@ -53,7 +51,8 @@ class BaseHandler(RequestHandler):
             # Something wrong with server's handler
             logger.exception(http_exception)
             traceback.print_tb(stack_trace)
-            settings['stg'] == 'development' and breakpoint()
+            if settings['stg'] == 'development':
+                breakpoint()
 
         if is_custom_error:
             error['code'] = http_exception.status_code
@@ -71,11 +70,10 @@ class BaseHandler(RequestHandler):
         self.finish(json.dumps({'error': error}))
 
 
-class ErrorHandler(ErrorHandler, BaseHandler):
+class ErrorHandler(TorErrorHandler, BaseHandler):
     """
     Default handler to be used in case of 404 error
     """
-    pass
 
 
 class NotFoundHandler(BaseHandler):

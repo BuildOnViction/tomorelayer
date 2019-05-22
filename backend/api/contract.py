@@ -1,6 +1,6 @@
+from util.decorator import admin_required
 from model import Contract
 from .base import BaseHandler
-from util.decorator import admin_required
 
 
 class ContractHandler(BaseHandler):

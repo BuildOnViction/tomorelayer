@@ -8,13 +8,13 @@ class SocketClient:
     def add(cls, conn):
         if conn not in cls.clients:
             cls.clients.add(conn)
-            cls.client_dict[conn.id] = conn
+            cls.client_dict[conn.socket_id] = conn
 
     @classmethod
-    def retrieve(cls, id):
-        return cls.client_dict[id]
+    def retrieve(cls, socket_id):
+        return cls.client_dict[socket_id]
 
     @classmethod
     def remove(cls, conn):
         cls.clients.remove(conn)
-        del cls.client_dict[conn.id]
+        del cls.client_dict[conn.socket_id]

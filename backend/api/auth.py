@@ -26,7 +26,7 @@ class AuthHandler(BaseHandler):
 class AuthSocketHandler():
 
     @staticmethod
-    def get_qr_code(request, meta, identity):
+    def get_qr_code(identity):
         from datetime import datetime
         message = '[Relayer {}] Login'.format(datetime.now().strftime('%x %H-%M-%S'))
         url = '{base_url}/api/auth?verifyId={identity}'.format(

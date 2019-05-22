@@ -1,3 +1,4 @@
+# pylint: skip-file
 from tornado.web import HTTPError
 from logzero import logger
 from .base import BaseHandler

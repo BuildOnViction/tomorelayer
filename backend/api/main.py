@@ -1,12 +1,13 @@
 import json
 from logzero import logger
 from tornado.websocket import WebSocketHandler
-from .base import BaseHandler
 from .auth import AuthSocketHandler
 from .socket import SocketClient
 
 
 class MainHandler(WebSocketHandler):
+
+    socket_id = None
 
     def open(self, *args, **kwargs):
         """
@@ -14,7 +15,7 @@ class MainHandler(WebSocketHandler):
         """
         logger.debug('SOCKET OPENED')
         from uuid import uuid4
-        self.id = str(uuid4())
+        self.socket_id = str(uuid4())
         SocketClient.add(self)
 
     def on_message(self, message):
@@ -24,10 +25,9 @@ class MainHandler(WebSocketHandler):
         logger.debug('Message incomming: %s', message)
         payload = json.loads(message)
         request = payload['request']
-        meta = payload['meta']
 
         if request == 'QR_CODE_LOGIN':
-            response = AuthSocketHandler.get_qr_code(request, meta, self.id)
+            response = AuthSocketHandler.get_qr_code(self.socket_id)
             self.write_message(response)
 
     def on_close(self):

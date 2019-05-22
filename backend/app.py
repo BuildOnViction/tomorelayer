@@ -1,6 +1,4 @@
-import os
 from tornado.platform.asyncio import AsyncIOMainLoop
-from tornado import httpserver
 from tornado.ioloop import IOLoop
 from tornado.web import Application
 from tornado.options import options

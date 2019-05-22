@@ -1,7 +1,7 @@
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
 import { Client } from 'service/action'
-import { API, SOCKET_REQ, MISC } from 'service/constant'
+import { API, MISC } from 'service/constant'
 
 export const $logout = state => {
   state.authStore.auth = false

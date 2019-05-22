@@ -1,6 +1,5 @@
 from os import getenv
 from os import path
-from pathlib import Path
 from dotenv import load_dotenv
 from peewee_async import Manager
 from peewee_asyncext import PooledPostgresqlExtDatabase

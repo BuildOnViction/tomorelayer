@@ -43,7 +43,7 @@ class Relayer(PwModel):
 class Token(PwModel):
     name = pw.CharField(unique=True, max_length=20)
     symbol = pw.CharField(unique=True, max_length=20)
-    logo =  pw.CharField(max_length=255, null=True)
+    logo = pw.CharField(max_length=255, null=True)
     address = pw.CharField(unique=True, max_length=200)
     total_supply = pw.CharField()
 
@@ -94,6 +94,7 @@ try:
         Token,
     ])
     loaddata()
-except Exception:
+    # TODO: fetch all relayers from SmartContract if necessary
+except Exception as err:
+    logger.debug(err)
     logger.info('No need creating tables')
-# TODO: fetch all relayers from SmartContract if necessary

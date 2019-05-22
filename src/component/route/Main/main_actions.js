@@ -1,7 +1,6 @@
 import * as _ from 'service/helper'
-import * as blk from 'service/blockchain'
 import { Client } from 'service/action'
-import { API, SOCKET_REQ, MISC } from 'service/constant'
+import { API, MISC } from 'service/constant'
 
 export const $toggleRelayerFormModal = state => {
   state.toggle.RelayerFormModal = !state.toggle.RelayerFormModal
@@ -33,10 +32,6 @@ export const $fetchTokens = async (state) => {
     }
   }
   return state
-}
-
-export const $addNewToken = async (state, tokens) => {
-  const backendUpdate = await Client.post(API.tokens, tokens)
 }
 
 export const $submitFormPayload = (state, payload) => {
