@@ -19,11 +19,13 @@ const initialState = {
     },
   },
   RelayerForm: {
-    step: 0,
+    step: 1,
     relayer_meta: {
+      coinbase: '',
       deposit: MISC.MinimumDeposit,
       name: '',
-      tradePairs: [],
+      fromTokens: [],
+      toTokens: [],
       makerFee: 0.1,
       takerFee: 0.1,
     },

@@ -20,15 +20,19 @@ class TokenHandler(BaseHandler):
     async def post(self):
         """Add new token"""
         tokens = self.request_body.get('tokens', [])
+        response = []
 
         async with self.application.objects.atomic():
             for token in tokens:
                 obj = await self.application.objects.create(Token, **token)
                 response.append({
                     'id': obj.id,
+                    'name': obj.name,
                     'symbol': obj.symbol,
+                    'logo': obj.logo,
                     'address': obj.address,
+                    'total_supply': obj.total_supply,
                 })
 
-            all_tokens = Token.select()
-            self.json_response(all_tokens)
+        all_tokens = [model_to_dict(token or {}) for token in Token.select()]
+        self.json_response(all_tokens)

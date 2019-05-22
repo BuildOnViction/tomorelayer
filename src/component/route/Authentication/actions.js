@@ -140,8 +140,3 @@ export const $toggleModal = state => {
   state.toggle.AddressModal = !state.toggle.AddressModal
   return state
 }
-
-export const $logout = state => {
-  state.authStore.auth = false
-  return state
-}

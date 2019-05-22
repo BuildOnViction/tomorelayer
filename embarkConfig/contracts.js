@@ -12,8 +12,8 @@ module.exports = {
         {
           mnemonic: process.env.MNEMONIC,
           addressIndex: 0,
-          numAddresses: 3,
-          balance: "9000 ether",
+          numAddresses: 8,
+          balance: "900000 ether",
         }
       ]
     },
@@ -26,7 +26,7 @@ module.exports = {
     contracts: {
       RelayerRegistration: {
         fromIndex: 0,
-        args: [50],
+        args: [50, 40, 25],
       },
       Token: { deploy: false, },
       ERC20: { deploy: false },
@@ -38,12 +38,12 @@ module.exports = {
       TokenOne: {
         fromIndex: 1,
         instanceOf: 'Token',
-        args: ["TOKEN1", "TOK1", 1000, 0],
+        args: ["TOKEN1", "TOK1", 10000, 0],
       },
       TokenTwo: {
         fromIndex: 2,
         instanceOf: 'Token',
-        args: ["TOKEN2", "TOK2", 2000, 0],
+        args: ["TOKEN2", "TOK2", 20000, 0],
       },
     }
   },
@@ -52,9 +52,9 @@ module.exports = {
   // assumed to be the intended environment by `embark run`
   development: {
     dappConnection: [
+      "$WEB3",  // uses pre existing web3 object if available (e.g in Mist)
       "ws://localhost:8546",
       "http://localhost:8545",
-      "$WEB3"  // uses pre existing web3 object if available (e.g in Mist)
     ]
   },
 

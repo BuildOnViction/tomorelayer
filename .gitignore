@@ -31,4 +31,5 @@ yarn-debug.log*
 yarn-error.log*
 
 embarkArtifacts/
+src/artifacts/
 log.txt

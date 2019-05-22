@@ -12,6 +12,7 @@ const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
 export const API = {
   fetchQRCode: apiBuild('auth?qr_code='),
   token: apiBuild('token'),
+  relayer: apiBuild('relayer'),
 }
 
 export const SOCKET_REQ = {
@@ -23,7 +24,7 @@ export const SITE_MAP = {
   Home: '/',
   Orders: '/orders',
   Relayers: '/relayers',
-  Registration: '/register',
+  Register: '/register',
   Dashboard: '/dashboard',
 }
 

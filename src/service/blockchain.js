@@ -1,35 +1,6 @@
-/* import Web3 from 'web3'
- *
- * const provider = Web3.givenProvider || process.env.WEB3_PROVIDER_URI
- *
- * export const web3 = new Web3(provider)
- *
- * export const getBalance = async address => {
- *   console.log(web3.currentProvider)
- *   const balance = await web3.eth.getBalance(address)
- *   return web3.utils.fromWei(balance)
- * }
- *
- * export const validateAddress = (address) => {
- *   const isValidAddress = web3.utils.isAddress(address)
- *   return isValidAddress
- * }
- *
- * export const findContract = address => {
- *
- * }
- *
- * export const bigNumberify = num => {
- *   return web3.utils.toWei(num.toString())
- * }
- *
- * export const validateCoinbase = address => {
- *
- * }
- *  */
-
 import { ethers } from 'ethers'
 import { STANDARD_ERC20_ABI } from './abi'
+import { RelayerRegistration } from 'artifacts/contracts'
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
 
@@ -54,9 +25,15 @@ export const ERC20TokenInfo = async tokenAddress => {
     const tokenContract = new ethers.Contract(tokenAddress, STANDARD_ERC20_ABI, provider)
     const name = await tokenContract.name()
     const symbol = await tokenContract.symbol()
-    const decimals = await tokenContract.decimals()
-    const totalSupply = await tokenContract.totalSupply().then(BNresult => BNresult.toString(10))
-    const tokenInfo = { name, symbol, decimals, totalSupply }
+    // const decimals = await tokenContract.decimals()
+    const total_supply = await tokenContract.totalSupply().then(BNresult => BNresult.toString(10))
+    const tokenInfo = {
+      name,
+      symbol,
+      logo: '',
+      address: tokenAddress,
+      total_supply,
+    }
     return tokenInfo
   } catch (e) {
     return undefined
@@ -71,3 +48,16 @@ export const validateCoinbase = (address, callback) => {
     return callback(false)
   }
 }
+
+export const toWei = number => {
+  const stringified = number.toString()
+  return ethers.utils.parseEther(stringified)
+}
+
+export const register = (payload, account, deposit) => RelayerRegistration.methods.register(...Object.values({
+  ...payload,
+})).send({ from: account, value: toWei(deposit) }).then(resp => {
+  return { status: true, details: resp.events.RegisterEvent.returnValues }
+}).catch(err => {
+  return { status: false, details: err }
+})

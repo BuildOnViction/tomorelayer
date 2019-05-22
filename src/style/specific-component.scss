@@ -19,6 +19,7 @@
   overflow: hidden;
 }
 
+/* LOGIN PAGE */
 .container.auth-container {
   max-width: 800px;
 }
@@ -179,52 +180,64 @@
   }
 }
 
-.relayer-form-modal {
-  height: auto;
-}
-
-.progress-bar--status {
-  font-size: 18px !important;
-  margin-left: 5px;
-}
-
-.relayer-form--container {
-  background: #f7f7f7;
-}
-
-.relayer-form--progress {
-  margin: 0 !important;
-  padding: 20px;
-
-  > div {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-.relayer-form--step-body {
-  background: white;
-  margin: 0 !important;
-  padding: 20px;
-
-  > form > div {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-.relayer-form-step-body--title {
-  font-size: 18px;
-  color: $text-base-light;
-}
-
-.progress-bar--text {
-  color: inherit;
-  &.prev-step:hover {
-    color: $text-base-dark;
-  }
-}
 
 .coinbase-logout:hover {
   color: map-get($text-color-map, primary);
+}
+
+.menu-item--cancel {
+  border-top: solid 1px #eaeaea !important;
+}
+
+
+/* REGISTER PAGE */
+.register-progress--container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.register-progress--step {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 50%;
+  border: solid 1px #aaa;
+  color: #aaa;
+  line-height: 40px;
+  font-size: 16px;
+  padding: 0 15px;
+
+}
+
+.register-progress--step__current {
+  border-color: #1e93e8;
+  background: #1e93e8;
+  color: white;
+}
+
+.register-progress--step__completed {
+  border-color: #1e93e8;
+  background: #1e93e8;
+  opacity: .75;
+  i {
+    transform: translate(-7px, 5px);
+    font-weight: 900;
+    color: white;
+  }
+}
+
+.register-form--container {
+  width: 600px;
+  margin: 10px auto;
+  padding: 20px;
+}
+
+.register-form--container__expand {
+  width: 1000px;
+}
+
+.token-list {
+  height: 400px;
+  overflow: scroll;
 }
