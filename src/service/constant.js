@@ -1,8 +1,10 @@
 export * from './abi'
 
-const APP_HOST = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_HOST : window.location.origin
-const APP_PORT = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_PORT : 80
-const APP_SOCKET = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_SOCKET : window.location.origin.replace('http', 'ws')
+const isDev = process.env.NODE_ENV === 'development'
+
+const APP_HOST = isDev ? process.env.REACT_APP_HOST : window.location.origin
+const APP_PORT = isDev ? process.env.REACT_APP_PORT : 80
+const APP_SOCKET = isDev ? process.env.REACT_APP_SOCKET : window.location.origin.replace('http', 'ws')
 
 export const baseUrl = `${APP_HOST}:${APP_PORT}`
 export const socketUrl = `${APP_SOCKET}:${APP_PORT}/socket`

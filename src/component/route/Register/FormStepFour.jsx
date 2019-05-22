@@ -17,6 +17,14 @@ class FormStepFour extends React.Component {
     showCustomTokenForm: false,
   }
 
+  componentDidMount() {
+    const tokenPairs = this.props.fromTokens.map((t, idx) => ({
+      from: t,
+      to: this.props.toTokens[idx],
+    }))
+    this.setState({ tokenPairs })
+  }
+
   changeFromToken = id => () => {
     this.setState({ selectedFromToken: id, selectedToTokens: [] })
   }
@@ -149,7 +157,7 @@ class FormStepFour extends React.Component {
         </Grid>
       </div>
     )
-                              }
+  }
 }
 
 const storeConnect = connect(
