@@ -58,7 +58,6 @@ export const $registerRelayer = async state => {
   const meta = state.RelayerForm.relayer_meta
   const payload = {
     coinbase: meta.coinbase,
-    name: meta.name,
     makerFee: meta.makerFee * 10,
     takerFee: meta.takerFee * 10,
     fromTokens: meta.fromTokens.map(p => p.address),
