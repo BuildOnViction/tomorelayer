@@ -1,4 +1,4 @@
-* TASKS [5/6]
+* TASKS [6/7]
 ** DONE Implement smoother environment-switch strategy
 CLOSED: [2019-01-28 Mon 16:01]
 *** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
@@ -36,4 +36,5 @@ CLOSED: [2019-04-12 Fri 14:10]
 CLOSED: [2019-04-12 Fri 14:10]
 *** [X] 4 methods of authentication
 CLOSED: [2019-04-12 Fri 14:10]
-** New Registration Contract
+** DONE New Registration Contract
+CLOSED: [2019-05-22 Wed 11:07]

@@ -113,6 +113,7 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/r
 2. Refactoring frontend structure, finalise bundling setup
    - [x] Refactor UI/UX
    - [x] Login
+   - [x] RelayerRegistration
 3. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
