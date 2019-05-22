@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Grid } from 'component/utility'
-import { Button, TextField, Menu, MenuItem } from '@material-ui/core'
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import { Button, TextField } from '@material-ui/core'
 import logo from 'asset/app-logo.png'
+import UserMenu from './UserMenu'
 
 
 class PageHeader extends React.Component {
@@ -18,6 +18,11 @@ class PageHeader extends React.Component {
 
   openMenu = event => {
     this.setState({ anchorEl: event.currentTarget })
+  }
+
+  createRelayer = () => {
+    const { history, auth } = this.props
+    history.push(auth ? '/register' : '/login')
   }
 
   render() {
@@ -38,26 +43,25 @@ class PageHeader extends React.Component {
         </div>
         <div className="col-md-4 text-center row">
           <div className="col-md-6">
-            <Button>
-              <Link to="/register">
-                Create your relayer
-              </Link>
+            <Button onClick={this.createRelayer}>
+              Create your relayer
             </Button>
           </div>
-          <div className="col-md-6">
-            <Button onClick={this.openMenu}>
-              MyWallet&nbsp;
-              <KeyboardArrowDown />
-            </Button>
-            <Menu id="simple-menu" open={!!this.state.anchorEl} anchorEl={this.state.anchorEl}>
-              <MenuItem onClick={this.menuItemClick('profile')}>Profile</MenuItem>
-              <MenuItem onClick={this.menuItemClick('account')}>My account</MenuItem>
-              <MenuItem onClick={this.menuItemClick('logout')}>Logout</MenuItem>
-              <MenuItem onClick={this.menuItemClick('cancel')} className="menu-item--cancel">
-                Cancel
-              </MenuItem>
-            </Menu>
-          </div>
+          {this.props.auth ? (
+            <UserMenu
+              openMenu={this.openMenu}
+              anchorEl={this.state.anchorEl}
+              menuItemClick={this.menuItemClick}
+            />
+          ) : (
+            <div className="col-md-6">
+              <Button>
+                <Link to="/login">
+                  LOGIN
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
         <div className="col-12 hidden-md hidden-lg hidden-xxl">
           <input
@@ -74,7 +78,8 @@ class PageHeader extends React.Component {
 
 
 const mapProps = state => ({
-  address: state.authStore.user_meta.address
+  address: state.authStore.user_meta.address,
+  auth: state.authStore.auth,
 })
 
-export default connect(mapProps)(PageHeader)
+export default connect(mapProps)(withRouter(PageHeader))

@@ -18,11 +18,6 @@ export const $getQRCode = store => state => {
   const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
   const socket = state.socket
 
-  socket.onopen = () => socket.send(JSON.stringify({
-    request: SOCKET_REQ.getQRCode,
-    meta: { agentQuery },
-  }))
-
   socket.onmessage = async stringData => {
     const data = JSON.parse(stringData.data)
     const QRCodeLink = meta => `tomochain:sign?message=${encodeURI(meta.message)}&submitURL=${meta.url}`
@@ -39,6 +34,18 @@ export const $getQRCode = store => state => {
 
     store.setState(state)
   }
+
+  const getQR = () => socket.send(JSON.stringify({
+    request: SOCKET_REQ.getQRCode,
+    meta: { agentQuery },
+  }))
+
+  if (socket.readyState === socket.OPEN) {
+    getQR()
+  } else {
+    socket.onopen = getQR
+  }
+
 }
 
 export const $getUnlocked = (state, store) => match({
