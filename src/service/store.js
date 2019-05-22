@@ -1,7 +1,6 @@
 import createStore from 'redux-zero'
 import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
 
-// NOTE: You can split initialState to multiple sub-stores when necessary
 const socket = new WebSocket(socketUrl)
 
 const initialState = {

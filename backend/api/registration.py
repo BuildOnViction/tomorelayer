@@ -11,8 +11,6 @@ class RegisterHandler(BaseHandler):
         dex_rate = self.request_body['dex_rate']
         foundation_rate = self.request_body['foundation_rate']
 
-        # TODO: check relayer must be already resgistered in blockchain
-
         async with self.application.objects.atomic():
             rl = await self.application.objects.create(
                 Relayer,

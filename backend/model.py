@@ -94,7 +94,6 @@ try:
         Token,
     ])
     loaddata()
-    # TODO: fetch all relayers from SmartContract if necessary
 except Exception as err:
     logger.debug(err)
     logger.info('No need creating tables')

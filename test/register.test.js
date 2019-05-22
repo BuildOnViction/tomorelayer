@@ -377,6 +377,4 @@ contract('RelayerRegistration', async () => {
     await unlock
   })
 
-  // TODO: missing test change Contract config!
-
 })
