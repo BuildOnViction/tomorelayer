@@ -179,7 +179,7 @@ contract('RelayerRegistration', async () => {
   })
 
   // Test suites
-  it('CONTRACT CONFIGURATIONS: Min_deposit = 25,000 TOMO; Max_relayer = 2 (for testing purpose)', async () => {
+  it('CONTRACT CONFIGURATIONS: Min_deposit = 22,000 TOMO (not 25,000!); Max_relayer = 2 (for testing purpose)', async () => {
     const getMinDeposit = await RelayerRegistration.methods.MinimumDeposit().call()
     assert.equal(toWei(minDeposit), getMinDeposit)
 

@@ -241,3 +241,15 @@
   height: 400px;
   overflow: scroll;
 }
+
+.success-icon {
+  font-size: 40px !important;
+  color: green;
+  transform: translateY(10px);
+  margin-right: 8px;
+}
+
+.register-form--success-info {
+  letter-spacing: 1px;
+  font-size: 15px;
+}

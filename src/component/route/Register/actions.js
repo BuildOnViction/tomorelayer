@@ -91,7 +91,7 @@ export const $registerRelayer = async state => {
     // NOTE: alert
     return state
   } else {
-    state.RelayerForm.step = state.RelayerForm.step - 1
+    state.RelayerForm.step = state.RelayerForm.step + 1
     return state
   }
 }

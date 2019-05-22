@@ -8,6 +8,7 @@ import FormStepTwo from './FormStepTwo'
 import FormStepThree from './FormStepThree'
 import FormStepFour from './FormStepFour'
 import Review from './Review'
+import SuccessRegistration from './SuccessRegistration'
 import { $fetchTokens } from './actions'
 
 
@@ -29,6 +30,7 @@ class Register extends React.Component {
           {step === 3 && <FormStepThree />}
           {step === 4 && <FormStepFour />}
           {step === 5 && <Review />}
+          {step === 6 && <SuccessRegistration />}
         </div>
       </Container>
     )

@@ -15,7 +15,8 @@ const PairList = ({ pairs, removePair }) => {
     <List dense className="border-all token-list bg-filled pt-0">
       <ListSubheader className="border-bottom p-1">
         <Typography component="h4">
-          Selected Pairs
+          <span>Selected Trading Pairs: </span>
+          <span>{pairs.length}</span>
         </Typography>
       </ListSubheader>
       {pairs.map(p =>
