@@ -1,9 +1,21 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'redux-zero/react'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 
 
 const UserMenu = props => {
+  if (!props.auth) {
+    return (
+      <div className="col-md-6">
+        <Button size="small" component={props => <Link to="/login" {...props} />}>
+          LOGIN
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <div className="col-md-6">
       <Button onClick={props.openMenu} size="small">
@@ -22,4 +34,8 @@ const UserMenu = props => {
   )
 }
 
-export default UserMenu
+const mapProps = state => ({
+  auth: state.authStore.auth
+})
+
+export default connect(mapProps)(UserMenu)

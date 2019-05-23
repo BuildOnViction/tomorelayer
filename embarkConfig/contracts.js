@@ -35,15 +35,25 @@ module.exports = {
       ERC20Detailed: { deploy: false, },
       SafeMath: { deploy: false, },
       Roles: { deploy: false, },
-      TokenOne: {
+      TokenA: {
         fromIndex: 1,
         instanceOf: 'Token',
-        args: ["TOKEN1", "TOK1", 10000, 0],
+        args: ["TOKENA", "TOKA", 10000, 0],
       },
-      TokenTwo: {
+      TokenB: {
         fromIndex: 2,
         instanceOf: 'Token',
-        args: ["TOKEN2", "TOK2", 20000, 0],
+        args: ["TOKENB", "TOKB", 20000, 0],
+      },
+      TokenC: {
+        fromIndex: 1,
+        instanceOf: 'Token',
+        args: ["TOKENC", "TOKC", 10000, 0],
+      },
+      TokenD: {
+        fromIndex: 2,
+        instanceOf: 'Token',
+        args: ["TOKEND", "TOKD", 20000, 0],
       },
     }
   },

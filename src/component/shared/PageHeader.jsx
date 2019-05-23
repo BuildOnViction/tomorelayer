@@ -1,49 +1,35 @@
 import React from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import { connect } from 'redux-zero/react'
+import { Link } from 'react-router-dom'
 import { Grid } from 'component/utility'
-import { Button, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import logo from 'asset/app-logo.png'
 import UserMenu from './UserMenu'
 import UserRelayerList from './UserRelayerList'
-import { $changeActiveRelayer } from '../actions'
-
 
 class PageHeader extends React.Component {
   state = {
-    anchorEl: null,
-    relayerListAnchorEl: null,
+    userMenuEl: null,
+    relayerMenuEl: null,
   }
 
   menuItemClick = which => event => {
-    this.setState({ anchorEl: null })
+    this.setState({ userMenuEl: null })
   }
 
   openMenu = event => {
-    this.setState({ anchorEl: event.currentTarget })
+    this.setState({ userMenuEl: event.currentTarget })
   }
 
   openRelayerMenu = event => {
-    this.setState({ relayerListAnchorEl: event.currentTarget })
-  }
-
-  createRelayer = () => {
-    const { history, auth } = this.props
-    history.push(auth ? '/register' : '/login')
+    this.setState({ relayerMenuEl: event.currentTarget })
   }
 
   clickAway = () => this.setState({
-    anchorEl: null,
-    relayerListAnchorEl: null,
+    userMenuEl: null,
+    relayerMenuEl: null,
   })
 
   render() {
-    const {
-      relayers,
-      activeRelayer,
-      auth,
-    } = this.props
-
     return (
       <Grid className="main-menu justify-start align-center border-bottom">
         <div className="col-md-3 col-xs-2 col-xxs-2">
@@ -60,37 +46,16 @@ class PageHeader extends React.Component {
           />
         </div>
         <div className="col-md-4 text-center row">
-          {relayers.length === 0 && (
-            <div className="col-md-6">
-              <Button onClick={this.createRelayer} size="small">
-                Create your relayer
-              </Button>
-            </div>
-          )}
-          {relayers.length > 0 && (
-            <UserRelayerList
-              activeRelayer={activeRelayer}
-              relayers={relayers}
-              changeActiveRelayer={this.props.$changeActiveRelayer}
-              anchorEl={this.state.relayerListAnchorEl}
-              openRelayerMenu={this.openRelayerMenu}
-              createRelayer={this.createRelayer}
-              handleClickAway={this.clickAway}
-            />
-          )}
-          {auth ? (
-            <UserMenu
-              openMenu={this.openMenu}
-              anchorEl={this.state.anchorEl}
-              menuItemClick={this.menuItemClick}
-            />
-          ) : (
-            <div className="col-md-6">
-              <Button size="small" component={props => <Link to="/login" {...props} />}>
-                LOGIN
-              </Button>
-            </div>
-          )}
+          <UserRelayerList
+            anchorEl={this.state.relayerMenuEl}
+            openRelayerMenu={this.openRelayerMenu}
+            handleClickAway={this.clickAway}
+          />
+          <UserMenu
+            openMenu={this.openMenu}
+            anchorEl={this.state.userMenuEl}
+            menuItemClick={this.menuItemClick}
+          />
         </div>
         <div className="col-12 hidden-md hidden-lg hidden-xxl">
           <input
@@ -105,12 +70,4 @@ class PageHeader extends React.Component {
   }
 }
 
-
-const mapProps = state => ({
-  address: state.authStore.user_meta.address,
-  auth: state.authStore.auth,
-  relayers: state.User.relayers,
-  activeRelayer: state.User.activeRelayer,
-})
-
-export default connect(mapProps, { $changeActiveRelayer })(withRouter(PageHeader))
+export default PageHeader
