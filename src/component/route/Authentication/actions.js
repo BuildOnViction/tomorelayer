@@ -140,6 +140,7 @@ export const $confirmAddress = async state => {
 
   state.toggle.AddressModal = false
   state.authStore.auth = true
+  state.User.relayers = state.Relayers.filter(r => r.owner === address)
   return state
 }
 

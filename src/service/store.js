@@ -31,6 +31,10 @@ const initialState = {
   },
   tradableTokens: [],
   Relayers: [],
+  User: {
+    relayers: [],
+    activeRelayer: 0,
+  },
   global: {
     lang: 'en',
   },

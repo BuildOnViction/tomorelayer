@@ -90,8 +90,17 @@ export const $registerRelayer = async state => {
   if (!result) {
     // NOTE: alert
     return state
-  } else {
-    state.RelayerForm.step = state.RelayerForm.step + 1
+  }
+
+  const relayers = await Client.get(API.relayer).then(r => r.payload).catch(() => false)
+
+  if (!relayers) {
+    // NOTE: alert
     return state
   }
+
+  state.Relayers = relayers
+  state.User.relayers = relayers.filter(r => r.owner === state.authStore.user_meta.address)
+  state.RelayerForm.step = state.RelayerForm.step + 1
+  return state
 }

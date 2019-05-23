@@ -6,7 +6,7 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 const UserMenu = props => {
   return (
     <div className="col-md-6">
-      <Button onClick={props.openMenu}>
+      <Button onClick={props.openMenu} size="small">
         MyWallet&nbsp;
         <KeyboardArrowDown />
       </Button>

@@ -3,18 +3,19 @@ import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
 import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
+import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
-import { SITE_MAP, API } from 'service/constant'
-import { Client } from 'service/action'
+import { SITE_MAP } from 'service/constant'
+import { $fetchRelayers } from './actions'
 import 'style/app.scss'
 
 const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 
 class App extends React.Component {
+
   async componentDidMount() {
-    const resp = await Client.get(API.relayer)
-    this.props.$fetchRelayers(resp.payload)
+    this.props.$fetchRelayers()
   }
 
   render() {
@@ -28,6 +29,7 @@ class App extends React.Component {
               <Switch>
                 <Route path={SITE_MAP.Register} component={Register} />
                 <Route path={SITE_MAP.Home} exact component={Main} />
+                <Route path={SITE_MAP.Dashboard} exact component={Dashboard} />
               </Switch>
             </div>
           )} />
@@ -41,8 +43,4 @@ const mapProps = state => ({
   relayers: state.Relayers
 })
 
-const actions = store => ({
-  $fetchRelayers: (store, Relayers) => ({ Relayers })
-})
-
-export default connect(mapProps, actions)(App)
+export default connect(mapProps, { $fetchRelayers })(App)

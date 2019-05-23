@@ -1,5 +1,4 @@
-pragma solidity >=0.4.22 <0.6.0;
-pragma experimental ABIEncoderV2;
+pragma solidity >=0.4.24;
 
 contract RelayerRegistration {
 
@@ -30,10 +29,11 @@ contract RelayerRegistration {
     uint256 public MinimumDeposit;
 
     /// @dev Events
+    /// struct-mapping -> values
     event ConfigEvent(uint max_relayer, uint max_token, uint256 min_deposit);
-    event RegisterEvent(Relayer relayer);
-    event UpdateEvent(Relayer relayer);
-    event ChangeOwnershipEvent(Relayer relayer);
+    event RegisterEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
+    event UpdateEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
+    event ChangeOwnershipEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
     event ResignEvent(uint deposit_release_time, uint256 deposit_amount);
     event RefundEvent(bool success, uint remaining_time, uint256 deposit_amount);
 
@@ -114,7 +114,12 @@ contract RelayerRegistration {
 
         RelayerCount++;
 
-        emit RegisterEvent(RELAYER_LIST[coinbase]);
+        emit RegisterEvent(
+                           RELAYER_LIST[coinbase]._deposit,
+                           RELAYER_LIST[coinbase]._makerFee,
+                           RELAYER_LIST[coinbase]._takerFee,
+                           RELAYER_LIST[coinbase]._fromTokens,
+                           RELAYER_LIST[coinbase]._toTokens);
     }
 
 
@@ -140,7 +145,12 @@ contract RelayerRegistration {
         RELAYER_LIST[coinbase]._fromTokens = fromTokens;
         RELAYER_LIST[coinbase]._toTokens = toTokens;
 
-        emit UpdateEvent(RELAYER_LIST[coinbase]);
+        emit UpdateEvent(
+                         RELAYER_LIST[coinbase]._deposit,
+                         RELAYER_LIST[coinbase]._makerFee,
+                         RELAYER_LIST[coinbase]._takerFee,
+                         RELAYER_LIST[coinbase]._fromTokens,
+                         RELAYER_LIST[coinbase]._toTokens);
     }
 
 
@@ -165,7 +175,12 @@ contract RelayerRegistration {
                 OWNER_LIST[new_coinbase] = new_owner;
                 COINBASE_LIST[new_owner].push(new_coinbase);
 
-                emit ChangeOwnershipEvent(RELAYER_LIST[coinbase]);
+                emit ChangeOwnershipEvent(
+                                          RELAYER_LIST[new_coinbase]._deposit,
+                                          RELAYER_LIST[new_coinbase]._makerFee,
+                                          RELAYER_LIST[new_coinbase]._takerFee,
+                                          RELAYER_LIST[new_coinbase]._fromTokens,
+                                          RELAYER_LIST[new_coinbase]._toTokens);
             }
         }
 
@@ -180,7 +195,12 @@ contract RelayerRegistration {
         nonZeroValue
     {
         RELAYER_LIST[coinbase]._deposit += msg.value;
-        emit UpdateEvent(RELAYER_LIST[coinbase]);
+        emit UpdateEvent(
+                         RELAYER_LIST[coinbase]._deposit,
+                         RELAYER_LIST[coinbase]._makerFee,
+                         RELAYER_LIST[coinbase]._takerFee,
+                         RELAYER_LIST[coinbase]._fromTokens,
+                         RELAYER_LIST[coinbase]._toTokens);
     }
 
 
@@ -228,9 +248,14 @@ contract RelayerRegistration {
     function getRelayerByCoinbase(address coinbase)
         public
         view
-        returns (address, Relayer memory)
+        returns (address, uint256, uint16, uint16, address[] memory, address[] memory)
     {
-        return (OWNER_LIST[coinbase], RELAYER_LIST[coinbase]);
+        return (OWNER_LIST[coinbase],
+                RELAYER_LIST[coinbase]._deposit,
+                RELAYER_LIST[coinbase]._makerFee,
+                RELAYER_LIST[coinbase]._takerFee,
+                RELAYER_LIST[coinbase]._fromTokens,
+                RELAYER_LIST[coinbase]._toTokens);
     }
 
 
