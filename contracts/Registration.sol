@@ -94,6 +94,7 @@ contract RelayerRegistration {
         public
         payable
     {
+        require(msg.sender != coinbase);
         require(msg.sender != CONTRACT_OWNER, "Contract Owner is forbidden to create a Relayer");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
         /// @dev valid relayer configuration

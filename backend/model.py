@@ -37,6 +37,7 @@ class Relayer(PwModel):
     from_tokens = ArrayField(pw.CharField, default=[])
     to_tokens = ArrayField(pw.CharField, default=[])
     logo = pw.CharField(max_length=200, null=True)
+    link = pw.CharField(max_length=255, null=True)
     resigning = pw.BooleanField(default=False)
 
 
