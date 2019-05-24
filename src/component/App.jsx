@@ -8,7 +8,7 @@ import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
 import { Private } from 'component/utility'
 import { SITE_MAP } from 'service/constant'
-import { $fetchRelayers } from './actions'
+import { $autoAuthenticated, $fetchRelayers } from './shared/actions'
 import 'style/app.scss'
 
 const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
@@ -17,6 +17,7 @@ class App extends React.Component {
 
   async componentDidMount() {
     this.props.$fetchRelayers()
+    this.props.$autoAuthenticated()
   }
 
   render() {
@@ -45,4 +46,4 @@ const mapProps = state => ({
   relayers: state.Relayers
 })
 
-export default connect(mapProps, { $fetchRelayers })(App)
+export default connect(mapProps, { $autoAuthenticated, $fetchRelayers })(App)

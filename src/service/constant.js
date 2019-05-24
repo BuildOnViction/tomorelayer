@@ -44,14 +44,9 @@ export const UNLOCK_WALLET_METHODS = {
   BrowserWallet: 'MetaMask/TrustWallet/MidasWallet',
 }
 
-export interface ITokenTRC20 {
-  symbol: string;
-  address: string;
-}
+export const Tokenizer = (symbol, address) => ({ symbol, address })
 
-export const Tokenizer = (symbol: string, address: string): ITokenTRC20 => ({ symbol, address })
-
-export const TRADABLE_TOKENS: ITokenTRC20[] = [
+export const TRADABLE_TOKENS = [
   Tokenizer('WTOMO', 'wrappedtomo-address'),
   Tokenizer('TRIIP', 'triip-address'),
 ]
@@ -70,3 +65,7 @@ export const I18N_LANGS = [
   { value: 'vn', label: 'VN' },
   { value: 'jp', label: 'JP' }
 ]
+
+export const STORAGE_ITEMS = {
+  authen: '__tomorelayer__authstore__'
+}

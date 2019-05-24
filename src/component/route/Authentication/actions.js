@@ -3,7 +3,7 @@ import trezor from '@colony/purser-trezor'
 import metamask from '@colony/purser-metamask'
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { SOCKET_REQ, UNLOCK_WALLET_METHODS } from 'service/constant'
+import { SOCKET_REQ, UNLOCK_WALLET_METHODS, STORAGE_ITEMS } from 'service/constant'
 
 const { TomoWallet,LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match, assign } = _
@@ -141,6 +141,10 @@ export const $confirmAddress = async state => {
   state.toggle.AddressModal = false
   state.authStore.auth = true
   state.User.relayers = state.Relayers.filter(r => r.owner === address)
+
+  const savingAuthentication = JSON.stringify({ ...state.authStore, lastSession: Date.now() })
+  window.localStorage.setItem(STORAGE_ITEMS.authen, savingAuthentication)
+
   return state
 }
 

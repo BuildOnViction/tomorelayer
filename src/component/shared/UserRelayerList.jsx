@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button, ClickAwayListener, Paper, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import { SITE_MAP } from 'service/constant'
-import { $changeActiveRelayer } from '../actions'
+import { $changeActiveRelayer } from './actions'
 
 
 const LinkBtn = props => <Link to="/register" {...props} />
