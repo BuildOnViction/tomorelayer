@@ -175,6 +175,7 @@
 
 .main-menu {
   margin-bottom: 2em;
+  background-color: #ddd;
   > div {
     padding: 10px 20px;
   }
@@ -252,4 +253,9 @@
 .register-form--success-info {
   letter-spacing: 1px;
   font-size: 15px;
+}
+
+.tab-menu--indicator {
+  background-color: #828282 !important;
+  height: 4px !important;
 }

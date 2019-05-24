@@ -15,7 +15,7 @@ const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
 
 class App extends React.Component {
 
-  async componentDidMount() {
+  componentDidMount() {
     this.props.$fetchRelayers()
     this.props.$autoAuthenticated()
   }

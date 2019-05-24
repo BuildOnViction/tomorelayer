@@ -7,7 +7,7 @@ import { $changeTab } from './actions'
 const Dashboard = props => {
   const { relayers, match } = props
   return (
-    <Container full>
+    <Container>
       <TabMenu />
       <Grid className="mt-1 row">
         <div className="col-12">

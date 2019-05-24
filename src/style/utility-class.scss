@@ -42,6 +42,12 @@ $text-color-map: (
   }
 }
 
+@each $color, $val in $text-color-map {
+  .bg-#{$color} {
+    background-color: #{$val} !important;
+  }
+}
+
 /* text size */
 @for $i from 0 through 5 {
   .font-#{$i} {
