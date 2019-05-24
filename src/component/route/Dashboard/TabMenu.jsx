@@ -13,16 +13,11 @@ const useStyles = withStyles(theme => ({
   appMenu: {
     borderBottom: 'solid 1px #ddd',
   },
-  appTab: {
-    '&>span': {
-      textTransform: 'none'
-    },
-  },
+  appTab: {},
 }))
 
 const styles = {
   menu: {
-    root: {},
     indicator: 'tab-menu--indicator'
   }
 }
