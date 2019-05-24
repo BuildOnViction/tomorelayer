@@ -16,7 +16,7 @@ const initialState = {
       wallet: null,
       unlockingMethod: UNLOCK_WALLET_METHODS.TomoWallet,
     },
-    expire: 3 // minutes
+    expire: 15 // minutes
   },
   RelayerForm: {
     step: 1,
@@ -29,6 +29,9 @@ const initialState = {
       makerFee: 0.1,
       takerFee: 0.1,
     },
+  },
+  Dashboard: {
+    activeTab: 0,
   },
   tradableTokens: [],
   Relayers: [],

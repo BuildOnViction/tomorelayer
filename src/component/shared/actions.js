@@ -29,7 +29,6 @@ export const $autoAuthenticated = state => {
   const lastSession = new Date(authStore.lastSession)
   const now = Date.now()
   const difference = differenceInMinutes(now, lastSession)
-  console.log(difference)
 
   if (difference < state.authStore.expire) {
     state.authStore = authStore
