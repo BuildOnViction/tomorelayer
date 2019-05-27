@@ -61,3 +61,8 @@ export const register = (payload, account, deposit) => RelayerRegistration.metho
 }).catch(err => {
   return { status: false, details: err }
 })
+
+export const updateRelayer = async (owner, coinbase, makerFee, takerFee, fromTokens, toTokens) => RelayerRegistration.methods.update(coinbase, makerFee, takerFee, fromTokens, toTokens).send({ from: owner }).then(r => ({
+  status: true,
+  details: r.events.UpdateEvent.returnValues,
+})).catch(r => ({ status: false, details: r }))

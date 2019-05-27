@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import { AppBar, Tabs, Tab, Typography, Toolbar } from '@material-ui/core'
+import { AppBar, Tabs, Tab } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { $changeTab } from './actions'
 

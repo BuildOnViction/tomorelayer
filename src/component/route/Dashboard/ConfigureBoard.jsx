@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
 import { List, ListItem, ListItemText } from '@material-ui/core'
-import { Container, Grid } from 'component/utility'
+import { Grid } from 'component/utility'
 import ConfigureBoardInfo from './subcomponents/ConfigureBoardInfo'
 import { $changeConfigItem } from './actions'
 

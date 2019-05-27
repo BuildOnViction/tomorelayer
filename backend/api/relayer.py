@@ -11,10 +11,18 @@ class RelayerHandler(BaseHandler):
         response = {}
 
         async with self.application.objects.atomic():
-            obj = await self.application.objects.create(Relayer, **relayer)
-            response.update({'relayer': model_to_dict(obj)})
+            obj = None
+            if not relayer.get('id'):
+                obj = await self.application.objects.create(Relayer, **relayer)
+            else:
+                relayer_id = relayer['id']
+                del relayer['id']
+                query = (Relayer.update(**relayer).where(Relayer.id == relayer_id).returning(Relayer))
+                cursor = query.execute()
+                obj = cursor[0]
 
-        self.json_response(response)
+            response.update({'relayer': model_to_dict(obj)})
+            self.json_response(response)
 
     async def get(self):
         relayers = []

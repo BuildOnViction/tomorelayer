@@ -8,6 +8,7 @@ class PwModel(pw.Model):
 
     class Meta:
         database = database
+        only_save_dirty = True
 
     def __str__(self):
         return self.name
