@@ -3,7 +3,7 @@ import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
 
 const socket = new WebSocket(socketUrl)
 
-const initialState = {
+export const initialState = {
   authStore: {
     auth: false,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
@@ -40,7 +40,7 @@ const initialState = {
   Relayers: [],
   User: {
     relayers: [],
-    activeRelayer: 0,
+    activeRelayer: undefined,
   },
   global: {
     lang: 'en',

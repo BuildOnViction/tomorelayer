@@ -39,6 +39,14 @@ const theme = createMuiTheme({
         },
       }
     },
+    MuiAvatar: {
+      root: {
+        width: 200,
+        height: 200,
+        margin: 0,
+        borderRadius: 4,
+      }
+    }
   }
 })
 

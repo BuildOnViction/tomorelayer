@@ -5,6 +5,7 @@ import { withFormik } from 'formik'
 
 export const wrappers = {
   basicInfoForm: withFormik({
+    enableReinitialize: true,
     validateOnChange: false,
     validate: values => {
       const errors = {}

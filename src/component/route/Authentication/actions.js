@@ -142,6 +142,10 @@ export const $confirmAddress = async state => {
   state.authStore.auth = true
   state.User.relayers = state.Relayers.filter(r => r.owner === address)
 
+  if (state.User.relayers.length > 0) {
+    state.User.activeRelayer = state.User.relayers[0]
+  }
+
   const savingAuthentication = JSON.stringify({ ...state.authStore, lastSession: Date.now() })
   window.localStorage.setItem(STORAGE_ITEMS.authen, savingAuthentication)
 

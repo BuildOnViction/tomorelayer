@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'redux-zero/react'
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import { Grid } from 'component/utility'
-import ConfigureBoardInfo from './subcomponents/ConfigureBoardInfo'
+import RelayerInfoConfig from './subcomponents/RelayerInfoConfig'
 import { $changeConfigItem } from './actions'
 
 const ListItems = [
@@ -18,7 +18,7 @@ class ConfigureBoard extends React.Component {
   }
 
   render() {
-    const { relayer, activeConfig } = this.props
+    const { activeConfig } = this.props
     const changeConfigItem = idx => () => this.props.$changeConfigItem(idx)
     const isSelected = idx => idx === activeConfig
 
@@ -34,7 +34,7 @@ class ConfigureBoard extends React.Component {
           </List>
         </div>
         <div className="col-9">
-          {activeConfig === 0 && <ConfigureBoardInfo relayer={relayer} />}
+          {activeConfig === 0 && <RelayerInfoConfig />}
         </div>
       </Grid>
     )

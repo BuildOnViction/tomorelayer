@@ -17,7 +17,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.$fetchRelayers()
-    // this.props.$autoAuthenticated()
+    this.props.$autoAuthenticated()
   }
 
   render() {

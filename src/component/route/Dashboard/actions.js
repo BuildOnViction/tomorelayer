@@ -14,20 +14,13 @@ export const $changeConfigItem = (state, activeConfig) => {
 }
 
 export const $submitConfigFormPayload = async (state, configs = {}) => {
-  const relayer = state.User.relayers[state.User.activeRelayer]
+  const relayer = state.User.activeRelayer
 
   // Update chain
   const {
     id,
     owner,
     coinbase,
-    makerFee,
-    takerFee,
-    fromTokens,
-    toTokens,
-    name,
-    logo,
-    link,
   } = relayer
 
   const shouldUpdateChain = configs.makerFee || configs.takerFee || configs.fromTokens || configs.toTokens
@@ -36,10 +29,10 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     const updateChain = await blk.updateRelayer(
       owner,
       coinbase,
-      configs.makerFee || makerFee,
-      configs.takerFee || takerFee,
-      configs.fromTokens || fromTokens,
-      configs.toTokens || toTokens,
+      configs.makerFee,
+      configs.takerFee,
+      configs.fromTokens,
+      configs.toTokens,
     )
 
     console.warn(updateChain.details)
@@ -49,17 +42,7 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     }
   }
 
-  const relayerPayload = {
-    id,
-    name: configs.name || name,
-    logo: configs.logo || logo,
-    link: configs.link || link,
-    makerFee: configs.makerFee || makerFee,
-    takerFee: configs.takerFee || takerFee,
-    fromTokens: configs.fromTokens || fromTokens,
-    toTokens: configs.toTokens || toTokens,
-  }
-
+  const relayerPayload = { id, ...configs }
   const updateBackend = await Client.post(API.relayer, { relayer: relayerPayload }).then(resp => resp).catch(() => false)
 
   if (!updateBackend) {
@@ -67,12 +50,10 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     return state
   }
 
-  console.warn('Update backend', updateBackend)
-
-  state.User.relayers[state.User.activeRelayer] = {
-    ...relayer,
-    ...updateBackend.payload.relayer,
-  }
+  const relayerIndex = state.Relayers.findIndex(r => r.id === updateBackend.payload.relayer.id)
+  state.Relayers[relayerIndex] = updateBackend.payload.relayer
+  state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
+  state.User.activeRelayer = updateBackend.payload.relayer
 
   return state
 }

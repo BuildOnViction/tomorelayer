@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import { TextField, Button } from '@material-ui/core'
+import { Avatar, TextField, Button } from '@material-ui/core'
 import { Container, Grid } from 'component/utility'
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 
-class ConfigureBoardInfo extends React.Component {
+
+class RelayerInfoConfig extends React.Component {
   render() {
     const {
       values,
@@ -51,6 +52,9 @@ class ConfigureBoardInfo extends React.Component {
                 helperText={errors.logo && <i className="text-alert">Invalid URL!</i>}
               />
             </div>
+            <div className="row mt-1 mb-1">
+              <Avatar alt={values.name} src={values.logo} />
+            </div>
             <Grid className="row justify-end">
               <Button color="primary" variant="contained" type="submit">
                 Save
@@ -58,19 +62,18 @@ class ConfigureBoardInfo extends React.Component {
             </Grid>
           </form>
         </Grid>
-
       </Container>
     )
   }
 }
 
 const mapProps = state => ({
-  name: state.User.relayers[state.User.activeRelayer].name,
-  link: state.User.relayers[state.User.activeRelayer].link,
-  logo: state.User.relayers[state.User.activeRelayer].logo,
+  name: state.User.activeRelayer.name,
+  link: state.User.activeRelayer.link,
+  logo: state.User.activeRelayer.logo,
 })
 
 const storeConnect = connect(mapProps, { $submitConfigFormPayload })
-const formConnect = wrappers.basicInfoForm(ConfigureBoardInfo)
+const formConnect = wrappers.basicInfoForm(RelayerInfoConfig)
 
 export default storeConnect(formConnect)

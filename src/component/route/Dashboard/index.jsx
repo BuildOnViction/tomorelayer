@@ -21,7 +21,7 @@ const Dashboard = props => {
 }
 
 const mapProps = state => ({
-  activeRelayer: state.User.relayers[state.User.activeRelayer],
+  activeRelayer: state.User.activeRelayer,
   activeTab: state.Dashboard.activeTab,
 })
 

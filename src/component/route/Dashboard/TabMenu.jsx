@@ -48,7 +48,7 @@ const TabMenu = useStyles(props => {
 
 const mapProps = state => ({
   activeTab: state.Dashboard.activeTab,
-  relayerName: state.User.relayers[state.User.activeRelayer].name
+  relayerName: state.User.activeRelayer.name
 })
 
 export default connect(mapProps, { $changeTab })(TabMenu)

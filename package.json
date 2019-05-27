@@ -21,8 +21,7 @@
     "react-scripts": "2.1.8",
     "react-select": "^2.4.3",
     "redux-zero": "^5.0.2",
-    "valid-url": "^1.0.9",
-    "web3": "^1.0.0-beta.54"
+    "valid-url": "^1.0.9"
   },
   "scripts": {
     "start": "NODE_ENV=development HTTPS=true react-scripts start",
@@ -30,10 +29,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eb": "embark run dev",
+    "eb": "embark run",
     "eb:tes": "embark test",
     "eb:del": "embark reset",
-    "eb:trace": "embark run --nodashboard --logfile log.txt --loglevel trace",
     "lint": "eslint --ext .jsx,.js src/",
     "pylint": "pipenv run pylint backend/*"
   },
@@ -54,7 +52,6 @@
     "exec-sh": "^0.3.2",
     "kill-port": "^1.4.0",
     "localtunnel": "^1.9.1",
-    "node-sass": "^4.12.0",
-    "pretty-format": "^24.8.0"
+    "node-sass": "^4.12.0"
   }
 }

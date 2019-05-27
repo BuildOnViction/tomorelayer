@@ -18,7 +18,7 @@ const UserRelayerList = props => {
     openRelayerMenu,
   } = props
 
-  if (relayers.length === 0) {
+  if (relayers.length === 0 || !activeRelayer) {
     return (
       <div className="col-md-6">
         <Button component={LinkBtn} size="small">
@@ -31,7 +31,7 @@ const UserRelayerList = props => {
   return (
     <div className="col-md-6">
       <Button size="small" component={DashboardBtn}>
-        {relayers[activeRelayer].name}
+        {activeRelayer.name}
       </Button>
       <Button onClick={openRelayerMenu}>
         <KeyboardArrowDown />
@@ -40,7 +40,7 @@ const UserRelayerList = props => {
         <Paper>
           <Menu open={!!anchorEl} anchorEl={anchorEl}>
             {relayers.map((r, idx) => (
-              <MenuItem key={r.id} onClick={() => props.$changeRelayer(idx)}>
+              <MenuItem key={r.id} onClick={() => props.$changeRelayer(r)}>
                 {r.name}
               </MenuItem>
             ))}
