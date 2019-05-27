@@ -90,7 +90,7 @@ const FormikWrapper = withFormik({
 const storeConnect = connect(
   state => ({
     deposit: state.RelayerForm.relayer_meta.deposit,
-    coinbase: state.authStore.user_meta.coinbase,
+    coinbase: state.RelayerForm.relayer_meta.coinbase,
   }),
   {
     $logout,

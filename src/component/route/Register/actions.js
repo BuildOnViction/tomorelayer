@@ -104,3 +104,21 @@ export const $registerRelayer = async state => {
   state.RelayerForm.step = state.RelayerForm.step + 1
   return state
 }
+
+export const $resetFormState = state => {
+  const RelayerForm = {
+    step: 1,
+    relayer_meta: {
+      coinbase: '',
+      deposit: MISC.MinimumDeposit,
+      name: '',
+      fromTokens: [],
+      toTokens: [],
+      makerFee: 0.1,
+      takerFee: 0.1,
+    },
+  }
+
+  state.RelayerForm = RelayerForm
+  return state
+}

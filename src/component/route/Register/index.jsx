@@ -9,13 +9,17 @@ import FormStepThree from './FormStepThree'
 import FormStepFour from './FormStepFour'
 import Review from './Review'
 import SuccessRegistration from './SuccessRegistration'
-import { $fetchTokens } from './actions'
+import { $fetchTokens, $resetFormState } from './actions'
 
 
 class Register extends React.Component {
 
   componentDidMount() {
     this.props.$fetchTokens()
+  }
+
+  componentWillUnmount() {
+    this.props.$resetFormState()
   }
 
   render() {
@@ -42,4 +46,4 @@ const mapProps = store => ({
   step: store.RelayerForm.step
 })
 
-export default connect(mapProps, { $fetchTokens })(Register)
+export default connect(mapProps, { $fetchTokens, $resetFormState })(Register)
