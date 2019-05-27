@@ -16,7 +16,7 @@ export const $fetchRelayers = async (state) => {
   return state
 }
 
-export const $changeActiveRelayer = (state, activeRelayer) => {
+export const $changeRelayer = (state, activeRelayer) => {
   state.User.activeRelayer = activeRelayer
   return state
 }

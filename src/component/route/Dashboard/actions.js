@@ -3,7 +3,7 @@ export const $changeTab = (state, activeTab) => {
   return state
 }
 
-export const $changeConfigItem = (state, activeConfigure) => {
-  state.Dashboard.ConfigureBoard.activeConfigure = activeConfigure
+export const $changeConfigItem = (state, activeConfig) => {
+  state.Dashboard.ConfigureBoard.activeConfig = activeConfig
   return state
 }

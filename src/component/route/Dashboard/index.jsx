@@ -7,8 +7,7 @@ import ConfigureBoard from './ConfigureBoard'
 import { $changeTab } from './actions'
 
 const Dashboard = props => {
-  const { activeTab, relayers, match } = props
-  const activeRelayer = relayers[match.params.relayerIdx]
+  const { activeTab, activeRelayer } = props
   return (
     <Container>
       <TabMenu />
@@ -22,7 +21,7 @@ const Dashboard = props => {
 }
 
 const mapProps = state => ({
-  relayers: state.User.relayers,
+  activeRelayer: state.User.relayers[state.User.activeRelayer],
   activeTab: state.Dashboard.activeTab,
 })
 

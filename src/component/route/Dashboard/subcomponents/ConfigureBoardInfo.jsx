@@ -12,10 +12,13 @@ class ConfigureBoardInfo extends React.Component {
         <Grid className="row col-12 p-4">
           <form>
             <div className="row mb-1">
-              <TextField label="Relayer Name" value={relayer.name} name="name" className="col-6" />
+              <TextField label="Relayer Name" value={relayer.name || ''} name="name" className="col-6" />
             </div>
             <div className="row mb-1">
-              <TextField label="Link" value={relayer.link} name="link" className="col-6" />
+              <TextField label="Link" value={relayer.link || ''} name="link" className="col-6" />
+            </div>
+            <div className="row mb-1">
+              <TextField label="Logo" value={relayer.logo || ''} name="logo" className="col-6" />
             </div>
           </form>
         </Grid>

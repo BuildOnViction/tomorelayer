@@ -18,23 +18,23 @@ class ConfigureBoard extends React.Component {
   }
 
   render() {
-    const { relayer, activeConfigure } = this.props
+    const { relayer, activeConfig } = this.props
     const changeConfigItem = idx => () => this.props.$changeConfigItem(idx)
-    const isSelected = idx => idx === activeConfigure
+    const isSelected = idx => idx === activeConfig
 
     return (
       <Grid className="row">
         <div className="col-3 pr-2">
           <List component="nav">
             {ListItems.map((item, idx) => (
-              <ListItem key={item} button selected={isSelected(idx)} onClick={changeConfigItem(idx)}>
+              <ListItem key={item} button selected={isSelected(idx)} onClick={changeConfigItem(idx)} disableRipple>
                 <ListItemText primary={item} />
               </ListItem>
             ))}
           </List>
         </div>
         <div className="col-9">
-          {activeConfigure === 0 && <ConfigureBoardInfo relayer={relayer} />}
+          {activeConfig === 0 && <ConfigureBoardInfo relayer={relayer} />}
         </div>
       </Grid>
     )
@@ -42,7 +42,7 @@ class ConfigureBoard extends React.Component {
 }
 
 const mapProps = state => ({
-  activeConfigure: state.Dashboard.ConfigureBoard.activeConfigure
+  activeConfig: state.Dashboard.ConfigureBoard.activeConfig
 })
 
 export default connect(mapProps, { $changeConfigItem })(ConfigureBoard)

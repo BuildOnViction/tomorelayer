@@ -33,7 +33,7 @@ const initialState = {
   Dashboard: {
     activeTab: 0,
     ConfigureBoard: {
-      activeConfigure: 0,
+      activeConfig: 0,
     },
   },
   tradableTokens: [],

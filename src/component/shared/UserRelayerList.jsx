@@ -3,14 +3,15 @@ import { connect } from 'redux-zero/react'
 import { Link } from 'react-router-dom'
 import { Button, ClickAwayListener, Paper, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
-import { SITE_MAP } from 'service/constant'
-import { $changeActiveRelayer } from './actions'
+import { $changeRelayer } from './actions'
 
 
 const LinkBtn = props => <Link to="/register" {...props} />
+const DashboardBtn = props => <Link to="/dashboard" {...props} />
 
 const UserRelayerList = props => {
   const {
+    activeRelayer,
     relayers,
     anchorEl,
     handleClickAway,
@@ -29,17 +30,18 @@ const UserRelayerList = props => {
 
   return (
     <div className="col-md-6">
-      <Button size="small" onClick={openRelayerMenu}>
-        <span>{relayers.length} Active Relayers</span>&nbsp;<KeyboardArrowDown />
+      <Button size="small" component={DashboardBtn}>
+        {relayers[activeRelayer].name}
+      </Button>
+      <Button onClick={openRelayerMenu}>
+        <KeyboardArrowDown />
       </Button>
       <ClickAwayListener onClickAway={handleClickAway}>
         <Paper>
           <Menu open={!!anchorEl} anchorEl={anchorEl}>
             {relayers.map((r, idx) => (
-              <MenuItem key={r.id}>
-                <Link to={`${SITE_MAP.Dashboard}/${idx}`}>
-                  {r.name}
-                </Link>
+              <MenuItem key={r.id} onClick={() => props.$changeRelayer(idx)}>
+                {r.name}
               </MenuItem>
             ))}
             <MenuItem>
@@ -59,4 +61,4 @@ const mapProps = state => ({
   activeRelayer: state.User.activeRelayer,
 })
 
-export default connect(mapProps, { $changeActiveRelayer })(UserRelayerList)
+export default connect(mapProps, { $changeRelayer })(UserRelayerList)
