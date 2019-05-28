@@ -6,7 +6,15 @@ import { withFormik } from 'formik'
 export const wrappers = {
   basicInfoForm: withFormik({
     enableReinitialize: true,
+
+    mapPropsToValues: props => ({
+      name: props.relayer.name,
+      link: props.relayer.link,
+      logo: props.relayer.logo,
+    }),
+
     validateOnChange: false,
+
     validate: values => {
       const errors = {}
 

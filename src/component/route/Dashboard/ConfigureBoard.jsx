@@ -18,7 +18,7 @@ class ConfigureBoard extends React.Component {
   }
 
   render() {
-    const { activeConfig } = this.props
+    const { activeConfig, relayer } = this.props
     const changeConfigItem = idx => () => this.props.$changeConfigItem(idx)
     const isSelected = idx => idx === activeConfig
 
@@ -34,7 +34,7 @@ class ConfigureBoard extends React.Component {
           </List>
         </div>
         <div className="col-9">
-          {activeConfig === 0 && <RelayerInfoConfig />}
+          {activeConfig === 0 && <RelayerInfoConfig relayer={relayer} />}
         </div>
       </Grid>
     )

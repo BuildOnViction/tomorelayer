@@ -39,7 +39,7 @@ const UserRelayerList = props => {
       <ClickAwayListener onClickAway={handleClickAway}>
         <Paper>
           <Menu open={!!anchorEl} anchorEl={anchorEl}>
-            {relayers.map((r, idx) => (
+            {relayers.filter(r => r.id !== activeRelayer.id).map((r, idx) => (
               <MenuItem key={r.id} onClick={() => props.$changeRelayer(r)}>
                 {r.name}
               </MenuItem>

@@ -33,14 +33,13 @@ const styles = {
 
 
 const TabMenu = useStyles(props => {
-  const { activeTab, classes, relayerName } = props
+  const { activeTab, classes } = props
   return (
     <AppBar position="static" className={classes.appBar}>
       <Tabs value={activeTab} onChange={(e, val) => props.$changeTab(val)} className={classes.appMenu} classes={styles.menu}>
         <Tab label="Dashboard" disableRipple className={classes.appTab} />
         <Tab label="Insight" disableRipple className={classes.appTab} />
         <Tab label="Configurations" disableRipple className={classes.appTab} />
-        <Tab label={relayerName} disableRipple disabled className={classes.appLabel} />
       </Tabs>
     </AppBar>
   )
@@ -48,7 +47,6 @@ const TabMenu = useStyles(props => {
 
 const mapProps = state => ({
   activeTab: state.Dashboard.activeTab,
-  relayerName: state.User.activeRelayer.name
 })
 
 export default connect(mapProps, { $changeTab })(TabMenu)

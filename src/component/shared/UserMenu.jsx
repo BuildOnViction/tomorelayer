@@ -36,8 +36,4 @@ const mapProps = state => ({
   auth: state.authStore.auth
 })
 
-const actions = store => ({
-  $logout: state => $logout(state, store)
-})
-
-export default connect(mapProps, actions)(UserMenu)
+export default connect(mapProps, { $logout })(UserMenu)

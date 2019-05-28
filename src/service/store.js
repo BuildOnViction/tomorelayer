@@ -3,7 +3,7 @@ import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
 
 const socket = new WebSocket(socketUrl)
 
-export const initialState = {
+const initialState = {
   authStore: {
     auth: false,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
@@ -55,6 +55,8 @@ export const initialState = {
     content: '',
   }
 }
+export const originalState = JSON.parse(JSON.stringify(initialState))
+Object.freeze(originalState)
 
 const store = createStore(initialState)
 
