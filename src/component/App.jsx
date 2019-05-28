@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
 import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'

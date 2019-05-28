@@ -1,5 +1,6 @@
 import { differenceInMinutes } from 'date-fns'
 import { Client } from 'service/action'
+import { initialState } from 'service/store'
 import { API, STORAGE_ITEMS } from 'service/constant'
 
 
@@ -41,8 +42,7 @@ export const $autoAuthenticated = state => {
   return state
 }
 
-export const $logout = state => {
+export const $logout = (state, store) => {
   window.localStorage.removeItem(STORAGE_ITEMS.authen)
-  window.location.reload()
-  return state
+  store.reset(['authStore', 'User', 'Dashboard'])
 }

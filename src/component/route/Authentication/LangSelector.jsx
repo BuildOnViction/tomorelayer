@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Grid } from 'component/utility'
 import { I18N_LANGS } from 'service/constant'
 import gb from 'style/flags/4x3/gb.svg'

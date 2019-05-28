@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Grid } from 'component/utility'
 import { TextField } from '@material-ui/core'
 import { $toggleRelayerFormModal } from './main_actions'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Avatar, TextField, Button } from '@material-ui/core'
 import { Container, Grid } from 'component/utility'
 import { wrappers } from '../form_logics'

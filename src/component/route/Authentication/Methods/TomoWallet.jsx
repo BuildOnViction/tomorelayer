@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { QRCode } from 'react-qr-svg'
 import * as blk from 'service/blockchain'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'

@@ -1,4 +1,4 @@
-import createStore from 'redux-zero'
+import createStore from '@vutr/redux-zero'
 import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
 
 const socket = new WebSocket(socketUrl)
