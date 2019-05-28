@@ -3,6 +3,7 @@ import { connect } from '@vutr/redux-zero/react'
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import { Grid } from 'component/utility'
 import RelayerInfoConfig from './subcomponents/RelayerInfoConfig'
+import RelayerTradeConfig from './subcomponents/RelayerTradeConfig'
 import { $changeConfigItem } from './actions'
 
 const ListItems = [
@@ -35,6 +36,7 @@ class ConfigureBoard extends React.Component {
         </div>
         <div className="col-9">
           {activeConfig === 0 && <RelayerInfoConfig relayer={relayer} />}
+          {activeConfig === 1 && <RelayerTradeConfig relayer={relayer} />}
         </div>
       </Grid>
     )
