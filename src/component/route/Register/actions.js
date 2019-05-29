@@ -39,19 +39,16 @@ export const $fetchTokens = async state => {
   return state
 }
 
-export const $addToken = async (state, address) => {
-  const token = await blk.ERC20TokenInfo(address)
-  if (!token) {
-    alert(`No such Token at the address: ${address}`)
-    return state
-  }
-  const tokenExist = state.tradableTokens.find(t => t.symbol === token.symbol)
+export const $toggleCustomTokenForm = state => {
+  state.RelayerForm.tokenForm = !state.RelayerForm.tokenForm
+  return state
+}
 
-  if (token && !tokenExist) {
-    const resp = await Client.post(API.token, { tokens: [token] })
-    state.tradableTokens = resp.payload
-    return state
-  }
+export const $addToken = async (state, token) => {
+  const resp = await Client.post(API.token, { tokens: [token] })
+  state.tradableTokens = resp.payload
+  state.RelayerForm.tokenForm = false
+  return state
 }
 
 export const $registerRelayer = async state => {

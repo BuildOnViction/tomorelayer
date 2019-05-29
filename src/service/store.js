@@ -29,6 +29,7 @@ const initialState = {
       makerFee: 0.1,
       takerFee: 0.1,
     },
+    tokenForm: false,
   },
   Dashboard: {
     activeTab: 0,

@@ -1,14 +1,16 @@
+import Card from './Card'
 import Container from './Container'
 import Grid from './Grid'
-import Private from './Private'
-import Card from './Card'
+import LoadSpinner from './LoadSpinner'
 import Modal from './Modal'
+import Private from './Private'
 export * from './FormGroup'
 
 export {
   Card,
   Container,
   Grid,
-  Private,
+  LoadSpinner,
   Modal,
+  Private,
 }

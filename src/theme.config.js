@@ -41,8 +41,8 @@ const theme = createMuiTheme({
     },
     MuiAvatar: {
       root: {
-        width: 200,
-        height: 200,
+        width: 100,
+        height: 100,
         margin: 0,
         borderRadius: 4,
       }

@@ -1,6 +1,6 @@
 export * from './abi'
 
-const isDev = process.env.NODE_ENV === 'development'
+export const isDev = process.env.NODE_ENV === 'development'
 
 const APP_HOST = isDev ? process.env.REACT_APP_HOST : window.location.origin
 const APP_PORT = isDev ? process.env.REACT_APP_PORT : 80
