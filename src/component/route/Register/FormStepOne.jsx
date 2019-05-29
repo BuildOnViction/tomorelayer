@@ -63,11 +63,20 @@ const FormStepOne = props => {
 
 const FormikWrapper = withFormik({
   validateOnChange: false,
-  validate: values => {
+
+  mapPropsToValues: props => ({
+    deposit: props.deposit,
+    coinbase: props.coinbase,
+  }),
+
+  validate: (values, props) => {
     const errors = {}
 
     validateCoinbase(values.coinbase, isValid => {
-      if (!isValid) errors.coinbase = true
+      const isSameAsOwner = values.coinbase.toLowerCase() === props.user.toLowerCase()
+      const isAlreadyUsed = props.used_coinbase.includes(values.coinbase.toLowerCase())
+
+      if (!isValid || isSameAsOwner || isAlreadyUsed) errors.coinbase = true
     })
 
     const currentDeposit = bigNumberify(values.deposit)
@@ -87,16 +96,19 @@ const FormikWrapper = withFormik({
   displayName: 'FormStepOne',
 })(FormStepOne)
 
-const storeConnect = connect(
-  state => ({
-    deposit: state.RelayerForm.relayer_meta.deposit,
-    coinbase: state.RelayerForm.relayer_meta.coinbase,
-  }),
-  {
-    $logout,
-    $submitFormPayload,
-    $cancelRegistration,
-  }
-)
+const mapProps = state => ({
+  deposit: state.RelayerForm.relayer_meta.deposit,
+  coinbase: state.RelayerForm.relayer_meta.coinbase,
+  user: state.authStore.user_meta.address,
+  used_coinbase: state.Relayers.map(r => r.coinbase.toLowerCase()),
+})
+
+const actions = {
+  $logout,
+  $submitFormPayload,
+  $cancelRegistration,
+}
+
+const storeConnect = connect(mapProps, actions)
 
 export default storeConnect(FormikWrapper)
