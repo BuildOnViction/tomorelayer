@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Link } from 'react-router-dom'
 import { Button, ClickAwayListener, Paper, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
@@ -39,7 +39,7 @@ const UserRelayerList = props => {
       <ClickAwayListener onClickAway={handleClickAway}>
         <Paper>
           <Menu open={!!anchorEl} anchorEl={anchorEl}>
-            {relayers.map((r, idx) => (
+            {relayers.filter(r => r.id !== activeRelayer.id).map((r, idx) => (
               <MenuItem key={r.id} onClick={() => props.$changeRelayer(r)}>
                 {r.name}
               </MenuItem>

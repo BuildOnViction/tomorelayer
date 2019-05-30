@@ -11,7 +11,7 @@ error.log
 chains.json
 secrets.json
 .prod.env
-
+.local.env
 
 /.pnp
 .pnp.js

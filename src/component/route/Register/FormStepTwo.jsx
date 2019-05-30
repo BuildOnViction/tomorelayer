@@ -1,6 +1,6 @@
 import React from 'react'
 import { withFormik } from 'formik'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Button, TextField } from '@material-ui/core'
 import { Grid } from 'component/utility'
 import { $backOneStep, $logout, $submitFormPayload } from './actions'

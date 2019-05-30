@@ -2,47 +2,14 @@
 PATH=./node_modules/.bin:$PATH
 # TODO: add 'help'
 
-function kill_port {
-    kill-port $1
-}
-
-
-# TASKS
-function frontend {
-    echo "npm start"
-    npm start
-}
-
 function backend {
-    echo "npm run backend-tunnel"
-    kill-port 8888
-    npm run backend-tunnel
+    # Command to run backend side in production
+    ENV_PATH=.prod.env pipenv run python ./backend/app.py --port=8001
 }
 
-function docker {
-    docker-compose -f docker-compose.dev.yaml up -d
-}
-
-function eb {
-    network="dev"
-    if [ "$1" != "" ]
-    then
-        network="$1"
-    fi
-    # rsync -a embark/plugin.js node_modules/embark-tomo/
-    # echo 'Plugin copied!'
-    npx embark run
-}
-
-function lint-fe {
-    tslint -c ./frontend/tslint.json './frontend/**/*.ts*'
-}
-
-function lint-be {
-    echo "Linting with Flake8............."
-    pipenv run flake8 **/*.py
-    echo "Linting with Pylint............."
-    pipenv run pylint **/*.py
+function frontend {
+    # Command to build frontend scripts in production
+    npm run build
 }
 
 # DEPLOY SCRIPTS
@@ -58,11 +25,11 @@ function dep {
                    if [ "$2" == "swap" ]
                    then
                        # Hot-swapping frontend bundle from local to server
-                       frontend prod
-                       scp -r frontend/dist tor:/srv/www/relayerms/frontend/
+                       npm run build
+                       scp -r frontend/build tor:/srv/www/relayerms/frontend/
                    else
                        echo "Bundle at server side"
-                       ssh tor "cd /srv/www/relayerms && ./Taskfile.sh frontend prod"
+                       ssh tor "cd /srv/www/relayerms && ./Taskfile.sh frontend"
                        ssh tor "service nginx start"
                    fi
                    ;;

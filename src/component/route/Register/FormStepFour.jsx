@@ -1,20 +1,27 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
-import { Button, TextField } from '@material-ui/core'
-import { Grid } from 'component/utility'
-import { $addToken, $backOneStep, $submitFormPayload } from './actions'
+import { connect } from '@vutr/redux-zero/react'
+import { Button, Modal } from '@material-ui/core'
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline'
+import { Container, Grid } from 'component/utility'
+import { $addToken, $backOneStep, $submitFormPayload, $toggleCustomTokenForm } from './actions'
 import FromTokenList from './FromTokenList'
 import ToTokenList from './ToTokenList'
 import PairList from './PairList'
+import NewTokenForm from './NewTokenForm'
 
+
+const NewTokenFormToggleButton = ({ onClick }) => (
+  <Button color="default" onClick={onClick} size="small">
+    <AddCircleOutline />
+    Custom Token
+  </Button>
+)
 
 class FormStepFour extends React.Component {
   state = {
     selectedFromToken: undefined,
     selectedToTokens: [],
     tokenPairs: [],
-    customToken: '',
-    showCustomTokenForm: false,
   }
 
   componentDidMount() {
@@ -76,23 +83,18 @@ class FormStepFour extends React.Component {
     })
   }
 
-  setCustomTokenAddress = e => this.setState({ customToken: e.target.value })
-
-  addNewToken = () => {
-    const address = this.state.customToken
-    this.props.$addToken(address)
-  }
-
-  toggleNewTokenForm = () => this.setState({ showCustomTokenForm: !this.state.showCustomTokenForm })
+  toggleNewTokenForm = () => {}
 
   render() {
-    const { tradableTokens } = this.props
+    const {
+      tradableTokens,
+      tokenForm,
+    } = this.props
+
     const {
       selectedFromToken,
       selectedToTokens,
       tokenPairs,
-      customToken,
-      showCustomTokenForm,
     } = this.state
 
     return (
@@ -131,22 +133,10 @@ class FormStepFour extends React.Component {
           </div>
         </div>
         <div className="col-6 border-all">
-          <Grid className="align-baseline pl-1">
-            <Button type="button" className="mr-2" onClick={this.toggleNewTokenForm}>
-              Add Custom Token
-            </Button>
-            {showCustomTokenForm && (
-              <TextField
-                placeholder="Token address..."
-                type="text"
-                variant="outlined"
-                margin="dense"
-                value={customToken}
-                onChange={this.setCustomTokenAddress}
-              />
-            )}
-          </Grid>
+          <NewTokenFormToggleButton onClick={this.props.$toggleCustomTokenForm} />
+          {tokenForm && <NewTokenForm />}
         </div>
+
         <Grid className="justify-space-between m-0 mt-2">
           <Button variant="outlined" className="mr-1" onClick={this.props.$backOneStep} type="button">
             Back
@@ -155,22 +145,26 @@ class FormStepFour extends React.Component {
             Confirm
           </Button>
         </Grid>
+
       </div>
     )
   }
 }
 
-const storeConnect = connect(
-  state => ({
-    fromTokens: state.RelayerForm.relayer_meta.fromTokens,
-    toTokens: state.RelayerForm.relayer_meta.toTokens,
-    tradableTokens: state.tradableTokens,
-  }),
-  {
-    $submitFormPayload,
-    $backOneStep,
-    $addToken,
-  },
-)
+const mapProps = state => ({
+  fromTokens: state.RelayerForm.relayer_meta.fromTokens,
+  toTokens: state.RelayerForm.relayer_meta.toTokens,
+  tradableTokens: state.tradableTokens,
+  tokenForm: state.RelayerForm.tokenForm,
+})
+
+const actions = {
+  $submitFormPayload,
+  $backOneStep,
+  $addToken,
+  $toggleCustomTokenForm,
+}
+
+const storeConnect = connect(mapProps, actions)
 
 export default storeConnect(FormStepFour)

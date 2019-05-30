@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import { $logout } from './actions'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Avatar, TextField, Button } from '@material-ui/core'
 import { Container, Grid } from 'component/utility'
 import { wrappers } from '../form_logics'
@@ -67,13 +67,7 @@ class RelayerInfoConfig extends React.Component {
   }
 }
 
-const mapProps = state => ({
-  name: state.User.activeRelayer.name,
-  link: state.User.activeRelayer.link,
-  logo: state.User.activeRelayer.logo,
-})
-
-const storeConnect = connect(mapProps, { $submitConfigFormPayload })
+const storeConnect = connect(undefined, { $submitConfigFormPayload })
 const formConnect = wrappers.basicInfoForm(RelayerInfoConfig)
 
 export default storeConnect(formConnect)

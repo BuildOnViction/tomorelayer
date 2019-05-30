@@ -1,6 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Container } from 'component/utility'
 import ProgressBar from './ProgressBar'
 import FormStepOne from './FormStepOne'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
+import { connect } from '@vutr/redux-zero/react'
 import { Button, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
 import { Grid } from 'component/utility'
 import { $backOneStep, $registerRelayer } from './actions'

@@ -1,5 +1,6 @@
 import { differenceInMinutes } from 'date-fns'
 import { Client } from 'service/action'
+import { originalState } from 'service/store'
 import { API, STORAGE_ITEMS } from 'service/constant'
 
 
@@ -20,6 +21,7 @@ export const $fetchRelayers = async (state, store) => {
 
 export const $changeRelayer = (state, activeRelayer) => {
   state.User.activeRelayer = activeRelayer
+  state.Dashboard = { ...originalState.Dashboard }
   return state
 }
 
@@ -43,6 +45,8 @@ export const $autoAuthenticated = state => {
 
 export const $logout = state => {
   window.localStorage.removeItem(STORAGE_ITEMS.authen)
-  window.location.reload()
+  state.authStore = { ...originalState.authStore }
+  state.User = { ...originalState.User }
+  state.Dashboard = { ...originalState.Dashboard }
   return state
 }

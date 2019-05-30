@@ -1,9 +1,9 @@
-import createStore from 'redux-zero'
+import createStore from '@vutr/redux-zero'
 import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
 
 const socket = new WebSocket(socketUrl)
 
-export const initialState = {
+const initialState = {
   authStore: {
     auth: false,
     method: UNLOCK_WALLET_METHODS.TomoWallet,
@@ -29,6 +29,7 @@ export const initialState = {
       makerFee: 0.1,
       takerFee: 0.1,
     },
+    tokenForm: false,
   },
   Dashboard: {
     activeTab: 0,
@@ -55,6 +56,8 @@ export const initialState = {
     content: '',
   }
 }
+export const originalState = JSON.parse(JSON.stringify(initialState))
+Object.freeze(originalState)
 
 const store = createStore(initialState)
 
