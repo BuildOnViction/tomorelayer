@@ -1,14 +1,20 @@
-from os import getenv
+from os import getenv, getcwd
 from os import path
+from logzero import logger
 from dotenv import load_dotenv
 from peewee_async import Manager
 from peewee_asyncext import PooledPostgresqlExtDatabase
 
 # IMPORT ENVIRONMENT VARIABLES
-load_dotenv()
+env_path = getenv('ENV_PATH')
+load_dotenv(dotenv_path=env_path, override=True)
 is_production = getenv('STG') == 'production'
+logger.warn('APPLICATION-STAGE: %s', '=Production=' if is_production else '=Development=')
+
+REACT_APP_HOST = getenv('REACT_APP_HOST')
+REACT_APP_PORT = getenv('REACT_APP_PORT')
 tunnel_url = getenv('TUNNEL_URL')
-base_url = '{}:{}'.format(getenv('REACT_APP_HOST'), getenv('REACT_APP_PORT')) if not is_production else getenv('REACT_APP_HOST')
+base_url = '{}:{}'.format(REACT_APP_HOST, REACT_APP_PORT) if not is_production else REACT_APP_HOST
 # Favor tunneled url over existing url
 base_url = tunnel_url or base_url
 
@@ -30,7 +36,7 @@ settings = {
     'debug': not is_production,
     'login_url': '/login',
     'objects': objects,
-    'port': getenv('REACT_APP_PORT'),
+    'port': REACT_APP_PORT,
     'static_path': base_path + '/static',
     'stg': getenv('STG'),
     'template_path': base_path + '/template',

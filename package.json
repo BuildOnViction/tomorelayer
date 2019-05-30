@@ -25,13 +25,12 @@
   },
   "scripts": {
     "start": "NODE_ENV=development HTTPS=true react-scripts start",
-    "backend-tunnel": "node custom-script.js",
+    "docker": "docker-compose -f docker-compose.dev.yaml up -d",
+    "backend": "node custom-script.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "eb": "embark run",
-    "eb:tes": "embark test",
-    "eb:del": "embark reset",
+    "embark": "embark run",
+    "contract-test": "embark test",
+    "embark-reset": "embark reset",
     "lint": "eslint --ext .jsx,.js src/",
     "pylint": "pipenv run pylint backend/*"
   },

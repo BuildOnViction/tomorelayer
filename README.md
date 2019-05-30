@@ -32,8 +32,8 @@ The following must be included in the development toolbelt:
 -   Python 2.7 (recommended installing with pyenv, if not in the system yet)
 -   pipenv
 -   nvm
+-   node 10+ && npm 6+
 -   Docker
-
 
 Now, install dependencies and get the app started.
 
@@ -49,26 +49,21 @@ $ npm install
 $ pipenv install
 ```
 
-- Export **Taskfile** alias
-``` sh
-$ echo 'alias task="./Taskfile.sh"' >> ~/.bashrc
-$ eval 'alias task="./Taskfile.sh"'
-```
-
 - Fire up database with Docker
 ``` sh
-$ task docker
+$ npm run docker
 ```
 
-- All good, let's get Backend up and running, certainly in a different terminal from the Embark's
+- The frontend - since CREATE-REACT-APP takes quite some time to start - in another terminal
 ``` sh
-$ task backend
+$ npm start
 ```
 
-- Finally, the frontend, in another terminal also
+- Finally, Backend - certainly in another different terminal as well
 ``` sh
-$ task frontend
+$ npm run backend
 ```
+
 
 For any installation/running problem, check out [Troubleshooting](#trouble) guide
 
@@ -86,8 +81,8 @@ Those are where you get started.
 #### Frontend Development
 
 -   Made with *Create-React-App*
--   State Management with *Redux-Zero* for complete isolation of LOGIC from UI
--   Stylesheet developed with SASS's SCSS, with support from *Bootstrap's Grid-System*
+-   State Management with *My own customized version of Redux-Zero* in effort to 100% isolate the LOGICS from the UI
+-   UI/UX Development with [Material-UI](https://material-ui.com/)
 
 
 <a id="orga954538"></a>
@@ -114,6 +109,7 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/r
    - [x] Refactor UI/UX
    - [x] Login
    - [x] RelayerRegistration
+   - [ ] Complete Registration & Configuration Flow for Relayer User
 3. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
