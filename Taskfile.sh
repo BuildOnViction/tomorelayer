@@ -18,18 +18,18 @@ function dep {
         setup) echo ">> CREATE TOR APP at SERVER"
                scp ./deploy/dep.sh tor:~/
                ssh -t tor "~/dep.sh install"
-               echo "Finished. Don't forget the update the local '~/.ssh/config' and change POSTGRES password"
+               echo "Finished"
                ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
-                   scp ./.prod.env tor:/srv/www/relayerms/
+                   scp ./.prod.env tor:/srv/www/tomorelayer/
                    if [ "$2" == "swap" ]
                    then
                        # Hot-swapping frontend bundle from local to server
                        npm run build
-                       scp -r frontend/build tor:/srv/www/relayerms/frontend/
+                       scp -r ./build tor:/srv/www/tomorelayer/
                    else
                        echo "Bundle at server side"
-                       ssh tor "cd /srv/www/relayerms && ./Taskfile.sh frontend"
+                       ssh tor "cd /srv/www/tomorelayer && ./Taskfile.sh frontend"
                        ssh tor "service nginx start"
                    fi
                    ;;
@@ -51,21 +51,21 @@ function dep {
                   then
                       echo ">> SWAPPING BACKEND CODE"
                       # TODO: unconfirmed!
-                      scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
-                      scp ./.prod.env tor:/srv/www/relayerms/
-                      scp -r ./backend tor:/srv/www/relayerms/
+                      scp ./deploy/supervisord.conf tor:/srv/www/tomorelayer/deploy/
+                      scp ./.prod.env tor:/srv/www/tomorelayer/
+                      scp -r ./backend tor:/srv/www/tomorelayer/
                       ssh tor "supervisorctl reread"
                       ssh tor "supervisorctl update"
                   else
-                      scp ./deploy/supervisord.conf tor:/srv/www/relayerms/deploy/
-                      scp ./.prod.env tor:/srv/www/relayerms/
-                      ssh tor "supervisord -c /srv/www/relayerms/deploy/supervisord.conf"
+                      scp ./deploy/supervisord.conf tor:/srv/www/tomorelayer/deploy/
+                      scp ./.prod.env tor:/srv/www/tomorelayer/
+                      ssh tor "supervisord -c /srv/www/tomorelayer/deploy/supervisord.conf"
                   fi
                   ;;
         nginx) echo ">> UPDATE NGINX"
                ssh tor "service nginx stop"
                scp ./deploy/nginx.conf tor:/etc/nginx/
-               scp ./deploy/relayerms.nginx.conf tor:/etc/nginx/sites-available/relayerms
+               scp ./deploy/tomorelayer.nginx.conf tor:/etc/nginx/sites-available/tomorelayer
                ssh tor "service nginx start"
                ;;
         *) echo "Task not recognized"

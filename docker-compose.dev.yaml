@@ -2,7 +2,7 @@ version: '3'
 services:
   pg:
     image: postgres:10-alpine
-    container_name: relayerms
+    container_name: tomorelayer
     volumes:
       - ./.db
     environment:

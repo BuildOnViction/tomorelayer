@@ -27,7 +27,7 @@
     "start": "NODE_ENV=development HTTPS=true react-scripts start",
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
     "backend": "node custom-script.js",
-    "build": "react-scripts build",
+    "build": "cp ./.prod.env ./.env && react-scripts build",
     "embark": "embark run",
     "contract-test": "embark test",
     "embark-reset": "embark reset",

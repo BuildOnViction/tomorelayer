@@ -83,17 +83,17 @@ $ sudo systemctl restart postgresql.service
 - Pull the code there, install application dependencies
 ```shell
 $ cd ~
-$ git clone <repo:relayerms>
-$ cd relayerms
+$ git clone <repo:tomorelayer>
+$ cd tomorelayer
 $ npm install
 $ pipenv install
 ```
 
 Copy your `.prod.env` file to the source code folder. Build the distributed packages
 ```shell
-$ scp <path:to:prod.env> tor:/srv/www/relayerms/
+$ scp <path:to:prod.env> tor:/srv/www/tomorelayer/
 $ ssh tor
-$ cd relayerms
+$ cd tomorelayer
 $ task frontend prod
 ```
 
@@ -101,15 +101,15 @@ $ task frontend prod
 ## Make server go online
 #### Tornado & Supervisor
 ```shell
-$ supervisord -c /srv/www/relayerms/deploy/supervisord.conf
+$ supervisord -c /srv/www/tomorelayer/deploy/supervisord.conf
 ```
 
 #### Nginx & bundled frontend assets
 ```shell
 $ sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
 $ cp /srv/www/deploy/nginx.conf /etc/nginx/
-$ cp /srv/www/deploy/relayerms.nginx.conf /etc/nginx/site-available/relayerms
-$ sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
+$ cp /srv/www/deploy/tomorelayer.nginx.conf /etc/nginx/site-available/tomorelayer
+$ sudo ln -s /etc/nginx/sites-available/tomorelayer /etc/nginx/sites-enabled/tomorelayer
 $ sudo rm -r /etc/ngingx/sites-enabled/default
 $ /etc/init.d/nginx start
 ```

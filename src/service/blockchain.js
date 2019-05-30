@@ -1,6 +1,5 @@
 import { ethers } from 'ethers'
 import { STANDARD_ERC20_ABI } from './abi'
-import { RelayerRegistration } from 'artifacts/contracts'
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
 
@@ -54,15 +53,6 @@ export const toWei = number => {
   return ethers.utils.parseEther(stringified)
 }
 
-export const register = (payload, account, deposit) => RelayerRegistration.methods.register(...Object.values({
-  ...payload,
-})).send({ from: account, value: toWei(deposit) }).then(resp => {
-  return { status: true, details: resp.events.RegisterEvent.returnValues }
-}).catch(err => {
-  return { status: false, details: err }
-})
+export const register = (payload, account, deposit) => {}
 
-export const updateRelayer = async (owner, coinbase, makerFee, takerFee, fromTokens, toTokens) => RelayerRegistration.methods.update(coinbase, makerFee, takerFee, fromTokens, toTokens).send({ from: owner }).then(r => ({
-  status: true,
-  details: r.events.UpdateEvent.returnValues,
-})).catch(r => ({ status: false, details: r }))
+export const updateRelayer = async (owner, coinbase, makerFee, takerFee, fromTokens, toTokens) => {}

@@ -27,15 +27,15 @@ libffi-dev liblzma-dev python-openssl nodejs supervisor"
     mkdir /srv/www
     cd /srv/www
     git clone -b master https://github.com/tomochain/tomorelayer.git
-    cd relayerms
+    cd tomorelayer
     npm install
     pipenv install --python $HOME/.pyenv/shims/python
 
     # Nginx Setup
     sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
-    sudo cp /srv/www/relayerms/deploy/nginx.conf /etc/nginx/nginx.conf
-    sudo cp /srv/www/relayerms/deploy/relayerms.nginx.conf /etc/nginx/sites-available/relayerms
-    sudo ln -s /etc/nginx/sites-available/relayerms /etc/nginx/sites-enabled/relayerms
+    sudo cp /srv/www/tomorelayer/deploy/nginx.conf /etc/nginx/nginx.conf
+    sudo cp /srv/www/tomorelayer/deploy/tomorelayer.nginx.conf /etc/nginx/sites-available/tomorelayer
+    sudo ln -s /etc/nginx/sites-available/tomorelayer /etc/nginx/sites-enabled/tomorelayer
     sudo rm -r /etc/nginx/sites-enabled/default
 
     # Make Task alias

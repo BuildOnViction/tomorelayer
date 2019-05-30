@@ -96,7 +96,7 @@ Those are where you get started.
 
 
 ## Deployment
-Please refer to this short [Deployment Guideline](https://github.com/tomochain/relayerms/tree/master/deploy)
+Please refer to this short [Deployment Guideline](https://github.com/tomochain/tomorelayer/tree/master/deploy)
 
 
 ## Development Roadmap
