@@ -15,6 +15,7 @@ export const API = {
   fetchQRCode: apiBuild('auth?qr_code='),
   token: apiBuild('token'),
   relayer: apiBuild('relayer'),
+  contract: apiBuild('contract'),
 }
 
 export const SOCKET_REQ = {

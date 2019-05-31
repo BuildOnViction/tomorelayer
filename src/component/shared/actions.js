@@ -4,6 +4,18 @@ import { originalState } from 'service/store'
 import { API, STORAGE_ITEMS } from 'service/constant'
 
 
+export const $fetchContract = async (state, store) => {
+  const Contracts = await Client.get(API.contract).then(r => r.payload).catch(() => false)
+
+  if (!Contracts) {
+    alert('Unable to fetch any contracts')
+    return state
+  }
+
+  state.Contracts = Contracts
+  return state
+}
+
 export const $fetchRelayers = async (state, store) => {
   const Relayers = await Client.get(API.relayer).then(r => r.payload).catch(() => false)
 

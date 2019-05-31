@@ -38,6 +38,7 @@ const initialState = {
     },
   },
   tradableTokens: [],
+  Contracts: [],
   Relayers: [],
   User: {
     relayers: [],
