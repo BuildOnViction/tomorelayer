@@ -9,7 +9,7 @@ from peewee_asyncext import PooledPostgresqlExtDatabase
 env_path = getenv('ENV_PATH')
 load_dotenv(dotenv_path=env_path, override=True)
 is_production = getenv('STG') == 'production'
-logger.warn('APPLICATION-STAGE: %s', '=Production=' if is_production else '=Development=')
+logger.warning('APPLICATION-STAGE: %s', '=Production=' if is_production else '=Development=')
 
 REACT_APP_HOST = getenv('REACT_APP_HOST')
 REACT_APP_PORT = getenv('REACT_APP_PORT')
