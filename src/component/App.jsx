@@ -7,11 +7,11 @@ import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
 import { Private } from 'component/utility'
-import { SITE_MAP } from 'service/constant'
+import { SITE_MAP, isDev } from 'service/constant'
 import { $autoAuthenticated, $fetchRelayers } from './shared/actions'
 import 'style/app.scss'
 
-const Router = process.env.STG === 'production' ? BrowserRouter : HashRouter
+const Router = !isDev ? BrowserRouter : HashRouter
 
 class App extends React.Component {
 
