@@ -10,8 +10,8 @@ dist
 error.log
 chains.json
 secrets.json
-.prod.env
-.local.env
+.env.production
+.env.local
 
 /.pnp
 .pnp.js

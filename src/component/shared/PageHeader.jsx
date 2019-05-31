@@ -52,9 +52,9 @@ class PageHeader extends React.Component {
             handleClickAway={this.clickAway}
           />
           <UserMenu
-            openMenu={this.openMenu}
             anchorEl={this.state.userMenuEl}
-            menuItemClick={this.menuItemClick}
+            openMenu={this.openMenu}
+            handleClickAway={this.clickAway}
           />
         </div>
         <div className="col-12 hidden-md hidden-lg hidden-xxl">

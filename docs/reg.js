@@ -1,10 +1,8 @@
 const path = require('path')
 const ethers = require('ethers')
 
-require('dotenv').config({
-  path: path.resolve(process.cwd(), '.local.env')
-})
-
+const envpath = path.resolve(__dirname, '../.env.local')
+require('dotenv').config({ path: envpath })
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
 

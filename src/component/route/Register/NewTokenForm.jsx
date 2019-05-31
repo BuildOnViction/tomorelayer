@@ -18,6 +18,7 @@ class NewTokenForm extends React.Component {
 
   async componentDidUpdate(prevProps) {
     const tokenAddress = this.props.values.address
+    const { used_tokens } = this.props
 
     if (!tokenAddress) return
     if (tokenAddress === prevProps.values.address) return
@@ -28,6 +29,11 @@ class NewTokenForm extends React.Component {
     const handleResult = () => {
       if (!tokenMeta) {
         const invalidTokenAlert = { loading: false, tokenMeta: undefined, alert: 'Invalid TRC-20 Contract Address' }
+        return this.setState(invalidTokenAlert)
+      }
+
+      if (used_tokens.includes(tokenAddress.toLowerCase())) {
+        const invalidTokenAlert = { loading: false, tokenMeta: undefined, alert: 'This Token is already listed' }
         return this.setState(invalidTokenAlert)
       }
 

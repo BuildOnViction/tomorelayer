@@ -1,13 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import { Button, ClickAwayListener, Paper, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import { $logout } from './actions'
 
 
 const UserMenu = props => {
-  if (!props.auth) {
+  const {
+    auth,
+    openMenu,
+    handleClickAway,
+    anchorEl,
+  } = props
+
+  if (!auth) {
     return (
       <div className="col-md-6">
         <Button size="small" component={props => <Link to="/login" {...props} />}>
@@ -19,15 +26,19 @@ const UserMenu = props => {
 
   return (
     <div className="col-md-6">
-      <Button onClick={props.openMenu} size="small">
+      <Button onClick={openMenu} size="small">
         MyWallet&nbsp;
         <KeyboardArrowDown />
       </Button>
-      <Menu id="simple-menu" open={!!props.anchorEl} anchorEl={props.anchorEl}>
-        <MenuItem onClick={props.menuItemClick('profile')}>Profile</MenuItem>
-        <MenuItem onClick={props.menuItemClick('account')}>My account</MenuItem>
-        <MenuItem onClick={props.$logout}>Logout</MenuItem>
-      </Menu>
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <Paper>
+          <Menu open={!!anchorEl} anchorEl={anchorEl}>
+            <MenuItem>Profile</MenuItem>
+            <MenuItem>My account</MenuItem>
+            <MenuItem onClick={props.$logout}>Logout</MenuItem>
+          </Menu>
+        </Paper>
+      </ClickAwayListener>
     </div>
   )
 }

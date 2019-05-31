@@ -4,7 +4,8 @@ PATH=./node_modules/.bin:$PATH
 
 function backend {
     # Command to run backend side in production
-    ENV_PATH=.prod.env pipenv run python ./backend/app.py --port=8001
+    echo ">> INIT A TOR INSTANCE AT PORT $1"
+    ENV_PATH=.env.production pipenv run python ./backend/app.py --port=$1
 }
 
 function frontend {
@@ -18,10 +19,10 @@ function dep {
         setup) echo ">> CREATE TOR APP at SERVER"
                scp ./deploy/dep.sh tor:~/
                ssh -t tor "~/dep.sh install"
-               echo "Finished"
+               echo "Finished. Dont Forget to Update Supervisor Config & Posgtres Password before running Backend"
                ;;
         frontend)  echo ">> BUNDLE AND DEPLOY FRONTEND BUILD"
-                   scp ./.prod.env tor:/srv/www/tomorelayer/
+                   scp ./.env.production tor:/srv/www/tomorelayer/
                    if [ "$2" == "swap" ]
                    then
                        # Hot-swapping frontend bundle from local to server
@@ -52,13 +53,13 @@ function dep {
                       echo ">> SWAPPING BACKEND CODE"
                       # TODO: unconfirmed!
                       scp ./deploy/supervisord.conf tor:/srv/www/tomorelayer/deploy/
-                      scp ./.prod.env tor:/srv/www/tomorelayer/
+                      scp ./.env.production tor:/srv/www/tomorelayer/
                       scp -r ./backend tor:/srv/www/tomorelayer/
                       ssh tor "supervisorctl reread"
                       ssh tor "supervisorctl update"
                   else
                       scp ./deploy/supervisord.conf tor:/srv/www/tomorelayer/deploy/
-                      scp ./.prod.env tor:/srv/www/tomorelayer/
+                      scp ./.env.production tor:/srv/www/tomorelayer/
                       ssh tor "supervisord -c /srv/www/tomorelayer/deploy/supervisord.conf"
                   fi
                   ;;
@@ -67,6 +68,9 @@ function dep {
                scp ./deploy/nginx.conf tor:/etc/nginx/
                scp ./deploy/tomorelayer.nginx.conf tor:/etc/nginx/sites-available/tomorelayer
                ssh tor "service nginx start"
+               ;;
+        pgpwd) echo ">> CHANGE PG PASSWORD to \"$2\""
+               ssh tor "su - postgres -c \"psql -U postgres -d postgres -c \\\"alter user postgres with password '$2';\\\"\""
                ;;
         *) echo "Task not recognized"
            ;;

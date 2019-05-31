@@ -1,7 +1,7 @@
 # Easy way: use Task-runner script to deploy
 
 1. Prepare
-- First, have a local **.prod.env** file.
+- First, have a local **.env.production** file.
 - We are going to use **Taskfile** to run deploy tasks, so it is generally advised to make an alias for it:
 ``` shell
 $ eval 'alias task="./Taskfile.sh"'
@@ -25,7 +25,7 @@ $ task dep setup
 ```
 
 Note:
-- After setup, you may also need to manually change Postgres password depending on your **.prod.env** file.
+- After setup, you may also need to manually change Postgres password depending on your **.env.production** file.
 
 3. Running the Application
 ``` shell
@@ -89,7 +89,7 @@ $ npm install
 $ pipenv install
 ```
 
-Copy your `.prod.env` file to the source code folder. Build the distributed packages
+Copy your `.env.production` file to the source code folder. Build the distributed packages
 ```shell
 $ scp <path:to:prod.env> tor:/srv/www/tomorelayer/
 $ ssh tor

@@ -1,4 +1,6 @@
-require('dotenv').config()
+const path = require('path')
+const envpath = path.resolve(__dirname, '../.env.local')
+require('dotenv').config({ path: envpath })
 
 module.exports = {
   // default applies to all environments

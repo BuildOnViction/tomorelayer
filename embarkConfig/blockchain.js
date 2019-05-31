@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 module.exports = {
   // applies to all environments
   default: {

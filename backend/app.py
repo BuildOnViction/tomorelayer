@@ -1,5 +1,6 @@
 from tornado.platform.asyncio import AsyncIOMainLoop
 from tornado.ioloop import IOLoop
+from logzero import logger
 from tornado.web import Application
 from tornado.options import options
 from tornado.options import define
@@ -17,5 +18,6 @@ if __name__ == "__main__":
     app = Application(route, default_handler_class=NotFoundHandler, **settings)
     app.objects = settings['objects']
     app.blockchain = Blockchain()
+    logger.warn('Running on port: %s', options.port)
     app.listen(options.port)
     IOLoop.current().start()

@@ -1,6 +1,9 @@
 /* global web3, assert, config, contract */
 /* eslint no-unused-expressions: 0 */
-require('dotenv').config()
+const path = require('path')
+const envpath = path.resolve(__dirname, '../.env.development')
+require('dotenv').config({ path: envpath })
+
 const expect = require('chai').expect
 
 const RelayerRegistration = require('Embark/contracts/RelayerRegistration')

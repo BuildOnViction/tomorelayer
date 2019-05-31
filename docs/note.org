@@ -1,7 +1,7 @@
 * TASKS [6/7]
 ** DONE Implement smoother environment-switch strategy
 CLOSED: [2019-01-28 Mon 16:01]
-*** DONE Separate *env* files: *.dev.env*, *.prod.env*, *.stg.env*
+*** DONE Separate *env* files: *.env.local*, *.env.production*, *.env*.development
 *** DONE Custom exec build commands with extra argument to specify what /env/stg/ to use
 ** DONE Fix flow-control for manual contract build & deploy
 CLOSED: [2019-01-29 Tue 21:02]
