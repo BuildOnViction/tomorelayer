@@ -1,7 +1,9 @@
-import { ethers, Wallet, Signer } from 'ethers'
+import { ethers, Signer } from 'ethers'
 import { bigNumber } from '@vutr/purser-core/utils'
-import { UNLOCK_WALLET_METHODS } from 'service/constant'
-import { STANDARD_ERC20_ABI } from './abi'
+import {
+  UNLOCK_WALLET_METHODS,
+  STANDARD_ERC20_ABI,
+} from 'service/constant'
 
 
 class WalletSigner extends Signer {
@@ -45,6 +47,37 @@ const RelayerRegistrationContract = (appstore, providerUse = provider) => {
   const ContractMeta = appstore.Contracts.find(c => c.name === 'RelayerRegistration')
   const contract = new ethers.Contract(ContractMeta.address, ContractMeta.abi, providerUse)
   return contract
+}
+
+export const TxSignerInit = async (method, wallet, payload) => {
+  let signer = {}
+  let providerToUse = provider
+  let overrides = {}
+
+  const isUsingMetaMask = method === UNLOCK_WALLET_METHODS.BrowserWallet
+  const isUsingHardwareWallet = [UNLOCK_WALLET_METHODS.LedgerWallet, UNLOCK_WALLET_METHODS.TrezorWallet].includes(method)
+
+  if (isUsingMetaMask) {
+    providerToUse = new ethers.providers.Web3Provider(window.web3.currentProvider)
+    const accounts = await providerToUse.listAccounts()
+    signer = await providerToUse.getSigner(accounts[0])
+    overrides = {
+      value: ethers.utils.parseEther(payload.value.toString()),
+      gasLimit: ethers.utils.bigNumberify('1000000'),
+    }
+  }
+
+  if (isUsingHardwareWallet) {
+    signer = new WalletSigner(wallet, provider)
+    overrides = { value: payload.value }
+  }
+
+  return {
+    signer,
+    data: payload.data,
+    config: overrides,
+    provider: providerToUse,
+  }
 }
 
 export const getBalance = async address => {
@@ -98,34 +131,20 @@ export const toWei = number => {
 }
 
 export const register = async (payload, store) => {
-  let signer = {}
-  let providerToUse = provider
-  let overrides = {}
-
-  const walletType = store.authStore.user_meta.unlockingMethod
-  const isUsingMetaMask = walletType === UNLOCK_WALLET_METHODS.BrowserWallet
-  const isUsingHardwareWallet = [UNLOCK_WALLET_METHODS.LedgerWallet, UNLOCK_WALLET_METHODS.TrezorWallet].includes(walletType)
-
-  if (isUsingMetaMask) {
-    providerToUse = new ethers.providers.Web3Provider(window.web3.currentProvider)
-    const accounts = await providerToUse.listAccounts()
-    signer = await providerToUse.getSigner(accounts[0])
-    overrides = {
-      value: ethers.utils.parseEther(store.RelayerForm.relayer_meta.deposit.toString()),
-      gasLimit: ethers.utils.bigNumberify('1000000'),
-    }
+  const formData = store.RelayerForm.relayer_meta
+  const userMeta = store.authStore.user_meta
+  const signerPayload = {
+    value: formData.deposit,
+    data: {
+      ...formData,
+      makerFee: formData.makerFee * 10,
+      takerFee: formData.takerFee * 10,
+    },
   }
 
-  if (isUsingHardwareWallet) {
-    const wallet = store.authStore.user_meta.wallet
-    signer = new WalletSigner(wallet, provider)
-    overrides = {
-      value: 25000,
-    }
-  }
-
-  const contract = RelayerRegistrationContract(store, providerToUse)
-  const contractWithSigner = contract.connect(signer)
+  const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, signerPayload)
+  const contract = RelayerRegistrationContract(store, TxSigner.provider)
+  const contractWithSigner = contract.connect(TxSigner.signer)
 
   const {
     coinbase,
@@ -133,7 +152,7 @@ export const register = async (payload, store) => {
     takerFee,
     fromTokens,
     toTokens,
-  } = payload
+  } = TxSigner.data
 
   const tx = await contractWithSigner.register(
     coinbase,
@@ -141,11 +160,18 @@ export const register = async (payload, store) => {
     takerFee,
     fromTokens,
     toTokens,
-    overrides,
-  ).then(r => r).catch(r => r)
-  console.log(tx);
-  return { status: false, details: tx }
+    TxSigner.config,
+  )
+
+  if (tx.wait) {
+    const details = await tx.wait()
+    return { status: true, details }
+  } else {
+    return { status: false, details: tx }
+  }
 
 }
 
-export const updateRelayer = async (owner, coinbase, makerFee, takerFee, fromTokens, toTokens, wallet) => {}
+export const updateRelayer = async (payload, store) => {
+
+}
