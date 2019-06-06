@@ -18,6 +18,8 @@ export const API = {
   contract: apiBuild('contract'),
 }
 
+export const TOMO_COIN_TYPE = 889
+
 export const SOCKET_REQ = {
   getQRCode: 'QR_CODE_LOGIN',
 }

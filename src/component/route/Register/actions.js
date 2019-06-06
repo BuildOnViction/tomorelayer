@@ -62,8 +62,7 @@ export const $registerRelayer = async state => {
   }
 
   // Transact
-  const account = state.authStore.user_meta.address
-  const resp = await blk.register(payload, account, meta.deposit)
+  const resp = await blk.register(payload, state)
 
   if (!resp.status) {
     console.warn(resp)
