@@ -1,4 +1,4 @@
-pragma solidity >=0.4.24;
+pragma solidity 0.4.24;
 
 contract RelayerRegistration {
 
@@ -41,7 +41,7 @@ contract RelayerRegistration {
         RelayerCount = 0;
         MaximumRelayers = maxRelayers;
         MaximumTokenList = maxTokenList;
-        uint baseEth = 1000 ether;
+        uint baseEth = 1 ether;
         MinimumDeposit = minDeposit * baseEth;
         CONTRACT_OWNER = msg.sender;
     }
@@ -76,24 +76,14 @@ contract RelayerRegistration {
         require(minDeposit > 10000);
         MaximumRelayers = maxRelayer;
         MaximumTokenList = maxToken;
-        uint256 baseEth = 1000 ether;
+        uint256 baseEth = 1 ether;
         MinimumDeposit = minDeposit * baseEth;
         emit ConfigEvent(MaximumRelayers,MaximumTokenList, MinimumDeposit);
     }
 
 
     /// @dev State-Alter Methods
-    function register
-        (
-         address coinbase,
-         uint16 makerFee,
-         uint16 takerFee,
-         address[] memory fromTokens,
-         address[] memory toTokens
-         )
-        public
-        payable
-    {
+    function register (address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public payable {
         require(msg.sender != coinbase);
         require(msg.sender != CONTRACT_OWNER, "Contract Owner is forbidden to create a Relayer");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
@@ -115,27 +105,11 @@ contract RelayerRegistration {
 
         RelayerCount++;
 
-        emit RegisterEvent(
-                           RELAYER_LIST[coinbase]._deposit,
-                           RELAYER_LIST[coinbase]._makerFee,
-                           RELAYER_LIST[coinbase]._takerFee,
-                           RELAYER_LIST[coinbase]._fromTokens,
-                           RELAYER_LIST[coinbase]._toTokens);
+        emit RegisterEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._makerFee, RELAYER_LIST[coinbase]._takerFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
     }
 
 
-    function update
-        (
-         address coinbase,
-         uint16 makerFee,
-         uint16 takerFee,
-         address[] memory fromTokens,
-         address[] memory toTokens
-         )
-        public
-        relayerOwnerOnly(coinbase)
-        onlyActiveRelayer(coinbase)
-    {
+    function update (address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
         require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
@@ -146,20 +120,11 @@ contract RelayerRegistration {
         RELAYER_LIST[coinbase]._fromTokens = fromTokens;
         RELAYER_LIST[coinbase]._toTokens = toTokens;
 
-        emit UpdateEvent(
-                         RELAYER_LIST[coinbase]._deposit,
-                         RELAYER_LIST[coinbase]._makerFee,
-                         RELAYER_LIST[coinbase]._takerFee,
-                         RELAYER_LIST[coinbase]._fromTokens,
-                         RELAYER_LIST[coinbase]._toTokens);
+        emit UpdateEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._makerFee, RELAYER_LIST[coinbase]._takerFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
     }
 
 
-    function changeOwnership (address coinbase, address new_owner, address new_coinbase)
-        public
-        relayerOwnerOnly(coinbase)
-        onlyActiveRelayer(coinbase)
-    {
+    function changeOwnership (address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
         require(new_coinbase != address(0));
 
@@ -176,25 +141,14 @@ contract RelayerRegistration {
                 OWNER_LIST[new_coinbase] = new_owner;
                 COINBASE_LIST[new_owner].push(new_coinbase);
 
-                emit ChangeOwnershipEvent(
-                                          RELAYER_LIST[new_coinbase]._deposit,
-                                          RELAYER_LIST[new_coinbase]._makerFee,
-                                          RELAYER_LIST[new_coinbase]._takerFee,
-                                          RELAYER_LIST[new_coinbase]._fromTokens,
-                                          RELAYER_LIST[new_coinbase]._toTokens);
+                emit ChangeOwnershipEvent(RELAYER_LIST[new_coinbase]._deposit, RELAYER_LIST[new_coinbase]._makerFee, RELAYER_LIST[new_coinbase]._takerFee, RELAYER_LIST[new_coinbase]._fromTokens, RELAYER_LIST[new_coinbase]._toTokens);
             }
         }
 
     }
 
 
-    function depositMore(address coinbase)
-        public
-        payable
-        relayerOwnerOnly(coinbase)
-        onlyActiveRelayer(coinbase)
-        nonZeroValue
-    {
+    function depositMore(address coinbase) public payable relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) nonZeroValue {
         RELAYER_LIST[coinbase]._deposit += msg.value;
         emit UpdateEvent(
                          RELAYER_LIST[coinbase]._deposit,
@@ -205,10 +159,7 @@ contract RelayerRegistration {
     }
 
 
-    function resign(address coinbase)
-        public
-        relayerOwnerOnly(coinbase)
-    {
+    function resign(address coinbase) public relayerOwnerOnly(coinbase) {
         require(RELAYER_LIST[coinbase]._deposit > 0, "No relayer associated with this address");
         require(RESIGN_REQUESTS[coinbase] == 0, "Request already received");
         RESIGN_REQUESTS[coinbase] = now + 4 weeks;
@@ -216,10 +167,7 @@ contract RelayerRegistration {
     }
 
 
-    function refund(address coinbase)
-        public
-        relayerOwnerOnly(coinbase)
-    {
+    function refund(address coinbase) public relayerOwnerOnly(coinbase) {
         require(RESIGN_REQUESTS[coinbase] > 0, "Request not found");
         uint256 amount = RELAYER_LIST[coinbase]._deposit;
 
@@ -246,11 +194,7 @@ contract RelayerRegistration {
     }
 
 
-    function getRelayerByCoinbase(address coinbase)
-        public
-        view
-        returns (address, uint256, uint16, uint16, address[] memory, address[] memory)
-    {
+    function getRelayerByCoinbase(address coinbase) public view returns (address, uint256, uint16, uint16, address[] memory, address[] memory) {
         return (OWNER_LIST[coinbase],
                 RELAYER_LIST[coinbase]._deposit,
                 RELAYER_LIST[coinbase]._makerFee,
@@ -260,11 +204,7 @@ contract RelayerRegistration {
     }
 
 
-    function getRelayerByOwner(address owner)
-        public
-        view
-        returns (address[] memory)
-    {
+    function getRelayerByOwner(address owner) public view returns (address[] memory) {
         return (COINBASE_LIST[owner]);
     }
 

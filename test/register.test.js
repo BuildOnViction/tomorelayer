@@ -29,7 +29,7 @@ config({
   contracts: {
     RelayerRegistration: {
       fromIndex: 0,
-      args: [2, 4, 22],
+      args: [2, 4, 22000],
     },
     Token: { deploy: false, },
     ERC20: { deploy: false },
