@@ -33,12 +33,6 @@ export const $cancelRegistration = state => {
   return state
 }
 
-export const $fetchTokens = async state => {
-  const resp = await Client.get(API.token)
-  state.tradableTokens = resp.payload
-  return state
-}
-
 export const $toggleCustomTokenForm = state => {
   state.RelayerForm.tokenForm = !state.RelayerForm.tokenForm
   return state

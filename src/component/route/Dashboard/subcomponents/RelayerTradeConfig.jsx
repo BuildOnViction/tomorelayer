@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
+import TokenPairList from 'component/shared/TokenPairList'
 
 
 const RelayerTradeConfig = ({
@@ -26,16 +27,16 @@ const RelayerTradeConfig = ({
   }
 
   return (
-    <Container className="p-4" maxWidth="xl">
-      <Grid container direction="column" spacing={4}>
+    <Container maxWidth="xl">
+      <Grid container direction="column" spacing={2}>
         <Grid item>
-          <Typography variant="h6" className="row mb-1">
+          <Typography variant="h6" className="row">
             Trading Fee
           </Typography>
         </Grid>
         <Grid item>
-          <Grid container className="border-all border-rounded" spacing={6}>
-            <Grid item lg={6} xl={6} md={6} sm={6} xs={12}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" border={1}>
+            <div className="p-2 w_100">
               <TextField
                 label="Maker Fee (minimum 0.1%)"
                 name="maker_fee"
@@ -48,8 +49,8 @@ const RelayerTradeConfig = ({
                 }}
                 fullWidth
               />
-            </Grid>
-            <Grid item lg={6} xl={6} md={6} sm={6} xs={12}>
+            </div>
+            <div className="p-2 w_100">
               <TextField
                 label="Taker Fee (minimum 0.1%)"
                 name="taker_fee"
@@ -62,10 +63,18 @@ const RelayerTradeConfig = ({
                 }}
                 fullWidth
               />
-            </Grid>
-          </Grid>
+            </div>
+          </Box>
+        </Grid>
+        <Grid item className="mt-2">
+          <Typography variant="h6" className="row">
+            Listed Tokens
+          </Typography>
         </Grid>
         <Grid item>
+          <TokenPairList />
+        </Grid>
+        <Grid item className="mt-2">
           <Box display="flex" justifyContent="flex-end">
             <Button color="primary" variant="contained" type="submit">
               Save
