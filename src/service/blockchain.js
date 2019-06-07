@@ -56,6 +56,7 @@ export const TxSignerInit = async (method, wallet, payload) => {
 
   const isUsingMetaMask = method === UNLOCK_WALLET_METHODS.BrowserWallet
   const isUsingHardwareWallet = [UNLOCK_WALLET_METHODS.LedgerWallet, UNLOCK_WALLET_METHODS.TrezorWallet].includes(method)
+  const isUsingTomoWallet = method === UNLOCK_WALLET_METHODS.TomoWallet
 
   if (isUsingMetaMask) {
     providerToUse = new ethers.providers.Web3Provider(window.web3.currentProvider)
@@ -70,6 +71,12 @@ export const TxSignerInit = async (method, wallet, payload) => {
   if (isUsingHardwareWallet) {
     signer = new WalletSigner(wallet, provider)
     overrides = { value: payload.value }
+  }
+
+  if (isUsingTomoWallet) {
+    // TODO: handle TomoWallet
+    // - making new Dapp for TomoWallet
+    // - generating QR Code
   }
 
   return {

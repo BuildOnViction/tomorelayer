@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.9.2",
-    "@material-ui/icons": "^3.0.2",
+    "@material-ui/core": "^4.0.2",
+    "@material-ui/icons": "^4.0.1",
     "@vutr/purser-core": "^2.1.6",
     "@vutr/purser-ledger": "^1.2.9",
     "@vutr/purser-metamask": "^2.2.4",

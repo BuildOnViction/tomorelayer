@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import { Avatar, TextField, Button } from '@material-ui/core'
-import { Container, Grid } from 'component/utility'
+import { Avatar, Box, Container, Grid, TextField, Button } from '@material-ui/core'
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 
@@ -16,52 +15,58 @@ class RelayerInfoConfig extends React.Component {
     } = this.props
 
     return (
-      <Container className="border-all border-rounded">
-        <Grid className="row col-12 p-4">
-          <form onSubmit={handleSubmit}>
-            <div className="row mb-1">
+      <Container className="border-all border-rounded p-4" maxWidth="xl">
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={5} direction="column">
+            <Grid item>
               <TextField
                 label="Relayer Name"
                 value={values.name || ''}
                 onChange={handleChange}
                 error={errors.name}
                 name="name"
-                className="col-6"
                 helperText={errors.name && <i className="text-alert">Name must not be either empty or too long!</i>}
               />
-            </div>
-            <div className="row mb-1">
+            </Grid>
+            <Grid item>
               <TextField
                 label="Link"
                 value={values.link || ''}
                 name="link"
                 onChange={handleChange}
                 error={errors.link}
-                className="col-6"
                 helperText={errors.link && <i className="text-alert">Invalid URL!</i>}
               />
-            </div>
-            <div className="row mb-1">
+            </Grid>
+            <Grid item>
               <TextField
                 label="Logo"
                 value={values.logo || ''}
                 onChange={handleChange}
                 error={errors.logo}
                 name="logo"
-                className="col-6"
                 helperText={errors.logo && <i className="text-alert">Invalid URL!</i>}
               />
-            </div>
-            <div className="row mt-1 mb-1">
-              <Avatar alt={values.name} src={values.logo} />
-            </div>
-            <Grid className="row justify-end">
-              <Button color="primary" variant="contained" type="submit">
-                Save
-              </Button>
             </Grid>
-          </form>
-        </Grid>
+            <Grid item>
+              <Box display="flex" flexDirection="row">
+                <Avatar alt={values.name} src={values.logo} className="mr-1"/>
+                <div>
+                  <div>instruction 1</div>
+                  <div>instruction 2</div>
+                  <div>instruction 3</div>
+                </div>
+              </Box>
+            </Grid>
+            <Grid item>
+              <Box display="flex" justifyContent="flex-end">
+                <Button color="primary" variant="contained" type="submit">
+                  Save
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </form>
       </Container>
     )
   }
