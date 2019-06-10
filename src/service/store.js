@@ -38,6 +38,16 @@ export const initialState = {
     },
   },
   tradableTokens: [],
+  MajorTokens: [
+    {
+      symbol: 'TOMO',
+      address: '0x0000000000000000000000000000000000000001',
+    },
+    {
+      symbol: 'USDT',
+      address: 'yyyyyy',
+    }
+  ],
   Contracts: [],
   Relayers: [],
   User: {

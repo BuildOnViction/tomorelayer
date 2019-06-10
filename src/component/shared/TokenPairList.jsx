@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
-  Button,
   Checkbox,
   InputAdornment,
   List,
@@ -12,58 +11,92 @@ import {
   TextField,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import MajorTokenFilter from './MajorTokenFilter'
 
-const MajorTokenSelect = ({ name, id, selected }) => (
-  <Button size="small" disableRipple color={selected ? 'primary' : 'default'}>
-    {name}
-  </Button>
-)
 
 class TokenPairList extends React.Component {
-  state = {
-    selected: [],
-    indexes: [],
+  constructor(props) {
+    super(props)
+    this.state = {
+      selected: [],
+      filters: [],
+    }
   }
 
-  pickPair = (p, idx) => () => {
-    const state = { ...this.state }
-    if (!state.indexes.includes(idx)) {
-      state.selected.push(p)
-      state.indexes.push(idx)
-    } else {
-      let position = state.indexes.indexOf(idx)
-      state.indexes.splice(position, 1)
-      position = state.selected.find(pair => pair.from.id === p.from.id && pair.to.id === p.to.id)
-      state.selected.splice(position, 1)
-    }
-
-    this.setState(state)
+  componentDidMount() {
+    const { fromTokens, toTokens, pairs } = this.props
+    const selected = fromTokens.map((addr, idx) => pairs.find(p => p.from.address === addr && p.to.address === toTokens[idx]))
+    this.setState({ selected })
   }
 
-  selectAll = () => {
-    const length = this.props.pairs.length
-    if (this.state.selected.length === length) {
-      this.setState({
-        selected: [],
-        indexes: [],
-      })
-    } else {
-      const indexes = Array.apply(null, { length }).map(Number.call, Number)
-      this.setState({ selected: this.props.pairs, indexes })
-    }
+  filterToken = pairs => {
+    const filters = this.state.filters
+    const filterKeys = Object.keys(filters)
+    if (filterKeys.length === 0) return pairs
+    const reduceFunc = (filteredPairs, key) => filteredPairs.filter(filters[key])
+    return filterKeys.reduce(reduceFunc, pairs)
+  }
+
+  pickPair = pair => () => {
+    const selected = Array.from(this.state.selected)
+    const index = selected.indexOf(pair)
+    index >= 0 ? selected.splice(index, 1) : selected.push(pair)
+    this.setState({ selected }, this.dispatchChange)
+  }
+
+  selectAll = pairs => () => {
+    let selected = Array.from(this.state.selected)
+    const checked = pairs.reduce((acc, p) => acc && selected.includes(p), true)
+
+    pairs.forEach(p => {
+      const index = selected.indexOf(p)
+      checked && index >= 0 && selected.splice(index, 1)
+      !checked && index < 0 && selected.push(p)
+    })
+
+    this.setState({ selected }, this.dispatchChange)
+  }
+
+  isAllChecked = pairs => {
+    const selected = this.state.selected
+    const checked = pairs.reduce((acc, p) => acc && selected.includes(p), true)
+    return checked
+  }
+
+  listFilterByMajorTokens = tokens => {
+    const filters = { ...this.state.filters }
+    const filterByMajorTokens = pair => tokens.includes(pair.from.address)
+    const fallbackFilter = pair => pair
+    filters.filterByMajorTokens = tokens.length > 0 ? filterByMajorTokens : fallbackFilter
+    this.setState({ filters })
+  }
+
+  dispatchChange = () => {
+    const onChange = this.props.onChange
+    const selected = this.state.selected
+    onChange('from_tokens', selected.map(p => p.from.address))
+    onChange('to_tokens', selected.map(p => p.to.address))
   }
 
   render() {
     const {
       pairs,
+      majorTokens,
     } = this.props
+
+    const filteredPairs = this.filterToken(pairs)
+
+    const {
+      selected: selectedPairs,
+    } = this.state
 
     return (
       <Box border={1}>
-        <Box display="flex" justifyContent="space-around" className="p-1" alignItems="center" borderBottom={1}>
-          <MajorTokenSelect name="TOMO" id={1} selected />
-          <MajorTokenSelect name="USDT" id={2} />
-          <MajorTokenSelect name="MAS" id={2} />
+        <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
+          <MajorTokenFilter
+            majorTokens={majorTokens}
+            setFilter={this.listFilterByMajorTokens}
+          />
           <TextField
             label="Search"
             type="text"
@@ -79,29 +112,20 @@ class TokenPairList extends React.Component {
           />
         </Box>
         <List dense className="bg-filled token-list">
-          <ListItem className="pr-1 pl-1 pointer pair-item" onClick={this.selectAll}>
+          <ListItem className="pr-1 pl-1 pointer pair-item" onClick={this.selectAll(filteredPairs)}>
             <ListItemIcon>
-              <Checkbox
-                color="default"
-                tabIndex={-1}
-                disableRipple
-              />
+              <Checkbox color="default" checked={this.isAllChecked(filteredPairs)} />
             </ListItemIcon>
-            <ListItemText primary="Select All" />
+            <ListItemText primary={`Select All (${filteredPairs.length}) pairs`} />
           </ListItem>
-          {pairs.map((p, idx) =>
-            <ListItem key={`${p.from.id}-${p.to.id}`} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p, idx)}>
+          {filteredPairs.map((p, idx) => (
+            <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p)}>
               <ListItemIcon>
-                <Checkbox
-                  color="default"
-                  tabIndex={-1}
-                  checked={this.state.indexes.includes(idx)}
-                  disableRipple
-                />
+                <Checkbox color="default" checked={selectedPairs.includes(p)} />
               </ListItemIcon>
-              <ListItemText primary={`${p.from.symbol}/${p.to.symbol}`} />
+              <ListItemText primary={p.toString()} />
             </ListItem>
-          )}
+          ))}
         </List>
       </Box>
     )
@@ -113,6 +137,7 @@ const mapProps = state => {
   const match = fromToken => tradeTokens.filter(t => t.id !== fromToken.id).map(toToken => ({
     from: fromToken,
     to: toToken,
+    toString: () => `${fromToken.symbol}/${toToken.symbol}`
   }))
   const pairs = []
   tradeTokens.forEach(t => {
@@ -120,13 +145,9 @@ const mapProps = state => {
     list.forEach(pair => pairs.push(pair))
   })
 
-  return { pairs }
+  return { pairs, majorTokens: state.MajorTokens }
 }
 
-const actions = {
-
-}
-
-const storeConnect = connect(mapProps, actions)
+const storeConnect = connect(mapProps)
 
 export default storeConnect(TokenPairList)
