@@ -28,7 +28,7 @@ const FormStepFour = ({
             Choose Trading Pairs of Token
           </Typography>
         </Box>
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <TokenPairList
             fromTokens={values.from_tokens}
             toTokens={values.to_tokens}

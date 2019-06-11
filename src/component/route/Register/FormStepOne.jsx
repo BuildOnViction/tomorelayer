@@ -1,11 +1,9 @@
 import React from 'react'
-import { withFormik } from 'formik'
 import { connect } from '@vutr/redux-zero/react'
-import { Button, TextField } from '@material-ui/core'
+import { Box, Button, Container, TextField, Typography } from '@material-ui/core'
 import { MISC } from 'service/constant'
-import { validateCoinbase, bigNumberify } from 'service/blockchain'
-import { Grid } from 'component/utility'
 import { $cancelRegistration, $logout, $submitFormPayload } from './actions'
+import { wrappers } from './form_logics'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
 
@@ -19,14 +17,16 @@ const FormStepOne = props => {
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
-      <h1 className="register-form--title">
-        Relayer Registration
-      </h1>
-      <div className="register-form--note">
-        <div className="mb-1">You are required to deposit a minimum {MINIMUM_DEPOSIT} TOMO.</div>
-        <div>This deposit will be locked.</div>
-      </div>
-      <div className="col-12 p-0 mt-3 mb-3">
+      <Box textAlign="center" className="mb-3">
+        <Typography component="h1">
+          Relayer Registration
+        </Typography>
+      </Box>
+      <Container maxWidth="sm">
+        <Box display="flex" flexDirection="column" className="mb-2">
+          <div>You are required to deposit a minimum {MINIMUM_DEPOSIT} TOMO.</div>
+          <div>This deposit will be locked.</div>
+        </Box>
         <TextField
           name="deposit"
           label="Deposit"
@@ -48,57 +48,21 @@ const FormStepOne = props => {
           helperText={errors.coinbase && <i className="text-alert">* Invalid coinbase address!</i>}
           fullWidth
         />
-      </div>
-      <Grid className="justify-space-between m-0">
-        <Button variant="outlined" className="mr-1" onClick={props.$cancelRegistration} type="button">
-          Cancel
-        </Button>
-        <Button color="primary" variant="contained" type="submit">
-          Confirm
-        </Button>
-      </Grid>
+        <Box display="flex" justifyContent="space-between" className="mt-2">
+          <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
+            Back
+          </Button>
+          <Button color="primary" variant="contained" type="submit">
+            Confirm
+          </Button>
+        </Box>
+      </Container>
     </form>
   )
 }
 
-const FormikWrapper = withFormik({
-  validateOnChange: false,
-
-  mapPropsToValues: props => ({
-    deposit: props.deposit,
-    coinbase: props.coinbase,
-  }),
-
-  validate: (values, props) => {
-    const errors = {}
-
-    validateCoinbase(values.coinbase, isValid => {
-      const isSameAsOwner = values.coinbase.toLowerCase() === props.user.toLowerCase()
-      const isAlreadyUsed = props.used_coinbase.includes(values.coinbase.toLowerCase())
-
-      if (!isValid || isSameAsOwner || isAlreadyUsed) errors.coinbase = true
-    })
-
-    const currentDeposit = bigNumberify(values.deposit)
-    const invalidDeposit = currentDeposit.lt(MINIMUM_DEPOSIT)
-    if (invalidDeposit) errors.deposit = true
-
-    return errors
-  },
-
-  handleSubmit: (values, { props }) => {
-    props.$submitFormPayload({
-      deposit: values.deposit,
-      coinbase: values.coinbase,
-    })
-  },
-
-  displayName: 'FormStepOne',
-})(FormStepOne)
-
 const mapProps = state => ({
-  deposit: state.RelayerForm.relayer_meta.deposit,
-  coinbase: state.RelayerForm.relayer_meta.coinbase,
+  relayer_meta: state.RelayerForm.relayer_meta,
   user: state.authStore.user_meta.address,
   used_coinbase: state.Relayers.map(r => r.coinbase.toLowerCase()),
 })
@@ -110,5 +74,6 @@ const actions = {
 }
 
 const storeConnect = connect(mapProps, actions)
+const formConnect = wrappers.depositAndCoinbaseForm(FormStepOne)
 
-export default storeConnect(FormikWrapper)
+export default storeConnect(formConnect)

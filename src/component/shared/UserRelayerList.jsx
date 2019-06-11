@@ -62,4 +62,10 @@ const mapProps = state => ({
   activeRelayer: state.User.activeRelayer,
 })
 
-export default connect(mapProps, { $changeRelayer })(UserRelayerList)
+const actions = {
+  $changeRelayer,
+}
+
+const storeConnect = connect(mapProps, actions)
+
+export default storeConnect(UserRelayerList)

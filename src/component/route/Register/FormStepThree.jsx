@@ -1,69 +1,66 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import { Button, InputAdornment, TextField, Typography } from '@material-ui/core'
-import { Grid } from 'component/utility'
+import { Box, Button, Container, InputAdornment, TextField, Typography } from '@material-ui/core'
 import { $backOneStep, $submitFormPayload } from './actions'
 import { wrappers } from './form_logics'
+import * as _ from 'service/helper'
 
 const FormStepThree = props => {
   const {
     values,
     errors,
-    handleChange,
     handleSubmit,
+    setFieldValue,
   } = props
 
-  const handleFeeChange = e => {
-    e.target.value = e.target.value * 10
-    return handleChange(e)
-  }
+  const handleFeeChange = key => e => setFieldValue(e.target.value * 10, key)
+  const formatValue = v => _.round(v/10, 1)
+  const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
-      <h1 className="register-form--title">
-        Choose trading fees
-      </h1>
-      <div className="row mt-2">
-        <div className="col-md-6 pl-0 pr-2">
+      <Box textAlign="center" className="mb-3">
+        <Typography component="h1">
+          Choose Trading Fee
+        </Typography>
+      </Box>
+      <Container maxWidth="sm">
+        <Box display="flex" className="mb-1">
           <TextField
             name="makerFee"
-            label="Maker"
-            value={values.makerFee / 10}
-            onChange={handleFeeChange}
+            label="Maker Fee (min: 0.1%, max: 99.9%)"
+            value={formatValue(values.makerFee)}
+            onChange={handleFeeChange('makerFee')}
             error={errors.makerFee}
             type="number"
-            InputProps={{
-              endAdornment: <InputAdornment position="start">%</InputAdornment>,
-            }}
+            className="mr-1"
+            InputProps={{ endAdornment }}
             fullWidth
           />
-        </div>
-        <div className="col-md-6 pr-0 pl-2">
           <TextField
             name="takerFee"
-            label="Taker"
-            value={values.takerFee / 10}
-            onChange={handleFeeChange}
+            label="Taker Fee (min: 0.1%, max: 99.9%)"
+            value={formatValue(values.takerFee)}
+            onChange={handleFeeChange('takerFee')}
             error={errors.takerFee}
             type="number"
-            InputProps={{
-              endAdornment: <InputAdornment position="start">%</InputAdornment>,
-            }}
+            className="ml-1"
+            InputProps={{ endAdornment }}
             fullWidth
           />
-        </div>
-      </div>
-      <Typography component="h4" className="mb-2">
-        <i>* These fees can be modified later</i>
-      </Typography>
-      <Grid className="justify-space-between m-0">
-        <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
-          Back
-        </Button>
-        <Button color="primary" variant="contained" type="submit">
-          Confirm
-        </Button>
-      </Grid>
+        </Box>
+        <Typography component="h5" className="mb-2">
+          <i>* These fees can be modified later</i>
+        </Typography>
+        <Box display="flex" justifyContent="space-between" className="mt-2">
+          <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
+            Back
+          </Button>
+          <Button color="primary" variant="contained" type="submit">
+            Confirm
+          </Button>
+        </Box>
+      </Container>
     </form>
   )
 }

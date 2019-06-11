@@ -12,20 +12,19 @@ import {
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 import TokenPairList from 'component/shared/TokenPairList'
+import * as _ from 'service/helper'
 
 
 const RelayerTradeConfig = ({
   values,
   errors,
-  handleChange,
   handleSubmit,
   setFieldValue,
 }) => {
 
-  const handleFeeChange = e => {
-    e.target.value = e.target.value * 10
-    return handleChange(e)
-  }
+  const handleFeeChange = key => e => setFieldValue(e.target.value * 10, key)
+  const formatValue = v => _.round(v/10, 1)
+  const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
     <Container maxWidth="xl">
@@ -40,29 +39,25 @@ const RelayerTradeConfig = ({
             <Box display="flex" alignItems="center" justifyContent="space-between" border={1}>
               <div className="p-2 w_100">
                 <TextField
-                  label="Maker Fee (minimum 0.1%)"
+                  label="Maker Fee (min: 0.1%, max: 99.9%)"
                   name="maker_fee"
-                  value={values.maker_fee / 10}
-                  onChange={handleFeeChange}
+                  value={formatValue(values.maker_fee)}
+                  onChange={handleFeeChange('maker_fee')}
                   error={errors.maker_fee}
                   type="number"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                  }}
+                  InputProps={{ endAdornment }}
                   fullWidth
                 />
               </div>
               <div className="p-2 w_100">
                 <TextField
-                  label="Taker Fee (minimum 0.1%)"
+                  label="Taker Fee (min: 0.1%, max: 99.9%)"
                   name="taker_fee"
-                  value={values.taker_fee / 10}
-                  onChange={handleFeeChange}
+                  value={formatValue(values.taker_fee)}
+                  onChange={handleFeeChange('taker_fee')}
                   error={errors.taker_fee}
                   type="number"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                  }}
+                  InputProps={{ endAdornment }}
                   fullWidth
                 />
               </div>

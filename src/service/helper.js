@@ -83,3 +83,8 @@ export const isEmpty = something => {
   if (typeof something === 'object' && Object.keys(something).length === 0) return true
   return false
 }
+
+export const round = (value, precision) => {
+  const multiplier = 10 ** (precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}

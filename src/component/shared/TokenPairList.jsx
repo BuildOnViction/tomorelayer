@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
+  Button,
   Checkbox,
   InputAdornment,
   List,
@@ -97,9 +98,20 @@ class TokenPairList extends React.Component {
       selected: selectedPairs,
     } = this.state
 
+    const isAllChecked = this.isAllChecked(filteredPairs)
+    const selectAllBtnText = `${isAllChecked ? 'Unselect' : 'Select'} All (${filteredPairs.length}) pairs`
+
     return (
       <Box border={1}>
         <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
+          <Button
+            size="small"
+            disableRipple
+            color={isAllChecked ? 'primary' : 'default'}
+            onClick={this.selectAll(filteredPairs)}
+          >
+            {selectAllBtnText}
+          </Button>
           <MajorTokenFilter
             majorTokens={majorTokens}
             setFilter={this.listFilterByMajorTokens}
@@ -119,12 +131,6 @@ class TokenPairList extends React.Component {
           />
         </Box>
         <List dense className="bg-filled token-list">
-          <ListItem className="pr-1 pl-1 pointer pair-item" onClick={this.selectAll(filteredPairs)}>
-            <ListItemIcon>
-              <Checkbox color="default" checked={this.isAllChecked(filteredPairs)} />
-            </ListItemIcon>
-            <ListItemText primary={`Select All (${filteredPairs.length}) pairs`} />
-          </ListItem>
           {filteredPairs.map((p, idx) => (
             <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p)}>
               <ListItemIcon>
