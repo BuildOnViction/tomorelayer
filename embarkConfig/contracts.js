@@ -32,11 +32,9 @@ module.exports = {
       },
       Token: { deploy: false, },
       ERC20: { deploy: false },
-      ERC20Capped: { deploy: false, },
-      ERC20Mintable: { deploy: false, },
-      ERC20Detailed: { deploy: false, },
+      CappedToken: { deploy: false, },
+      DetailedERC20: { deploy: false, },
       SafeMath: { deploy: false, },
-      Roles: { deploy: false, },
       TokenA: {
         fromIndex: 1,
         instanceOf: 'Token',
