@@ -25,8 +25,10 @@ class TokenPairList extends React.Component {
 
   componentDidMount() {
     const { fromTokens, toTokens, pairs } = this.props
-    const selected = fromTokens.map((addr, idx) => pairs.find(p => p.from.address === addr && p.to.address === toTokens[idx]))
-    this.setState({ selected })
+    if (fromTokens && toTokens) {
+      const selected = fromTokens.map((addr, idx) => pairs.find(p => p.from.address === addr && p.to.address === toTokens[idx]))
+      this.setState({ selected })
+    }
   }
 
   filterToken = pairs => {
