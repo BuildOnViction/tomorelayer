@@ -37,10 +37,6 @@ export const wrappers = {
       to_tokens: props.relayer.to_tokens,
     }),
 
-    handleSubmit: (values, { props }) => {
-      console.log('submiting...');
-      console.log('Trade-Value', values);
-      // props.$submitConfigFormPayload(values)
-    },
+    handleSubmit: (values, { props }) => props.$submitConfigFormPayload(values),
   })
 }

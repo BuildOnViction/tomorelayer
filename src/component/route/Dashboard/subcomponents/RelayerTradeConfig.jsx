@@ -18,12 +18,16 @@ import * as _ from 'service/helper'
 const RelayerTradeConfig = ({
   values,
   errors,
+  handleChange,
   handleSubmit,
   setFieldValue,
 }) => {
 
-  const handleFeeChange = key => e => setFieldValue(e.target.value * 10, key)
-  const formatValue = v => _.round(v/10, 1)
+  const handleFeeChange = e => {
+    e.target.value = e.target.value * 10
+    return handleChange(e)
+  }
+  const formatValue = v => _.round(v / 10, 1)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
@@ -42,7 +46,7 @@ const RelayerTradeConfig = ({
                   label="Maker Fee (min: 0.1%, max: 99.9%)"
                   name="maker_fee"
                   value={formatValue(values.maker_fee)}
-                  onChange={handleFeeChange('maker_fee')}
+                  onChange={handleFeeChange}
                   error={errors.maker_fee}
                   type="number"
                   InputProps={{ endAdornment }}
@@ -54,7 +58,7 @@ const RelayerTradeConfig = ({
                   label="Taker Fee (min: 0.1%, max: 99.9%)"
                   name="taker_fee"
                   value={formatValue(values.taker_fee)}
-                  onChange={handleFeeChange('taker_fee')}
+                  onChange={handleFeeChange}
                   error={errors.taker_fee}
                   type="number"
                   InputProps={{ endAdornment }}

@@ -9,12 +9,15 @@ const FormStepThree = props => {
   const {
     values,
     errors,
+    handleChange,
     handleSubmit,
-    setFieldValue,
   } = props
 
-  const handleFeeChange = key => e => setFieldValue(e.target.value * 10, key)
-  const formatValue = v => _.round(v/10, 1)
+  const handleFeeChange = e => {
+    e.target.value = e.target.value * 10
+    return handleChange(e)
+  }
+  const formatValue = v => _.round(v / 10, 1)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
