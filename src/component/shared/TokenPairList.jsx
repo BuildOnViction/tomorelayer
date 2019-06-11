@@ -15,6 +15,11 @@ import MajorTokenFilter from './MajorTokenFilter'
 
 
 class TokenPairList extends React.Component {
+  static defaultProps = {
+    // If we need to extract an array of whole Token-Object, change this prop to false
+    addressOnly: true,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -74,10 +79,10 @@ class TokenPairList extends React.Component {
   }
 
   dispatchChange = () => {
-    const onChange = this.props.onChange
+    const { addressOnly, onChange } = this.props
     const selected = this.state.selected
-    onChange('from_tokens', selected.map(p => p.from.address))
-    onChange('to_tokens', selected.map(p => p.to.address))
+    onChange('from_tokens', selected.map(p => addressOnly ? p.from.address : p.from))
+    onChange('to_tokens', selected.map(p => addressOnly ? p.to.address : p.to))
   }
 
   render() {

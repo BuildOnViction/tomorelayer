@@ -137,9 +137,9 @@ export const toWei = number => {
   return ethers.utils.parseEther(stringified)
 }
 
-export const register = async (payload, store) => {
-  const formData = store.RelayerForm.relayer_meta
-  const userMeta = store.authStore.user_meta
+export const register = async (payload, state) => {
+  const formData = state.RelayerForm.relayer_meta
+  const userMeta = state.authStore.user_meta
   const signerPayload = {
     value: formData.deposit,
     data: {
@@ -150,7 +150,7 @@ export const register = async (payload, store) => {
   }
 
   const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, signerPayload)
-  const contract = RelayerRegistrationContract(store, TxSigner.provider)
+  const contract = RelayerRegistrationContract(state, TxSigner.provider)
   const contractWithSigner = contract.connect(TxSigner.signer)
 
   const {
@@ -179,6 +179,6 @@ export const register = async (payload, store) => {
 
 }
 
-export const updateRelayer = async (payload, store) => {
+export const updateRelayer = async (payload, state) => {
 
 }
