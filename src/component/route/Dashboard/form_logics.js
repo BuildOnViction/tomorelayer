@@ -46,7 +46,9 @@ export const wrappers = {
     }),
 
     handleSubmit: (values, { props }) => {
-      props.$submitConfigFormPayload(values)
+      console.log('submiting...');
+      console.log('Trade-Value', values);
+      // props.$submitConfigFormPayload(values)
     },
   })
 }

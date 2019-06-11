@@ -1,9 +1,9 @@
 import ledger from '@vutr/purser-ledger'
-import trezor from '@colony/purser-trezor'
-import metamask from '@colony/purser-metamask'
+import trezor from '@vutr/purser-trezor'
+import metamask from '@vutr/purser-metamask'
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { SOCKET_REQ, UNLOCK_WALLET_METHODS, STORAGE_ITEMS } from 'service/constant'
+import { SOCKET_REQ, UNLOCK_WALLET_METHODS, STORAGE_ITEMS, TOMO_COIN_TYPE } from 'service/constant'
 
 const { TomoWallet,LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match, assign } = _
@@ -50,9 +50,8 @@ export const $getQRCode = store => state => {
 
 export const $getUnlocked = (state, store) => match({
   [LedgerWallet]: async () => {
-    const { authStore } = state
-    const customDerivationPath = authStore.user_meta.LedgerPath
-    const wallet = await ledger.open({ customDerivationPath })
+    const coinType = TOMO_COIN_TYPE
+    const wallet = await ledger.open({ coinType })
 
     assign(state.authStore.user_meta, {
       address: wallet.address,
@@ -67,7 +66,8 @@ export const $getUnlocked = (state, store) => match({
 
   [TrezorWallet]: async () => {
     const wallet = await trezor.open()
-
+    // NOTE: if Trezor accepts TOMO, we can use
+    // the custom TOMO_COIN_TYPE to get the correct HDPath
     assign(state.authStore.user_meta, {
       address: wallet.address,
       balance: await blk.getBalance(wallet.address),

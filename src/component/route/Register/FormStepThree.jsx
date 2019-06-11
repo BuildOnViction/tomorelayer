@@ -1,9 +1,9 @@
 import React from 'react'
-import { withFormik } from 'formik'
 import { connect } from '@vutr/redux-zero/react'
 import { Button, InputAdornment, TextField, Typography } from '@material-ui/core'
 import { Grid } from 'component/utility'
 import { $backOneStep, $submitFormPayload } from './actions'
+import { wrappers } from './form_logics'
 
 const FormStepThree = props => {
   const {
@@ -12,6 +12,12 @@ const FormStepThree = props => {
     handleChange,
     handleSubmit,
   } = props
+
+  const handleFeeChange = e => {
+    e.target.value = e.target.value * 10
+    return handleChange(e)
+  }
+
   return (
     <form onSubmit={handleSubmit} className="text-left">
       <h1 className="register-form--title">
@@ -22,8 +28,8 @@ const FormStepThree = props => {
           <TextField
             name="makerFee"
             label="Maker"
-            value={values.makerFee}
-            onChange={handleChange}
+            value={values.makerFee / 10}
+            onChange={handleFeeChange}
             error={errors.makerFee}
             type="number"
             InputProps={{
@@ -36,8 +42,8 @@ const FormStepThree = props => {
           <TextField
             name="takerFee"
             label="Taker"
-            value={values.takerFee}
-            onChange={handleChange}
+            value={values.takerFee / 10}
+            onChange={handleFeeChange}
             error={errors.takerFee}
             type="number"
             InputProps={{
@@ -62,34 +68,16 @@ const FormStepThree = props => {
   )
 }
 
-const FormikWrapper = withFormik({
-  validateOnChange: false,
-  validate: values => {
-    const errors = {}
-    if (values.makerFee < 0.1) errors.makerFee = true
-    if (values.takerFee < 0.1) errors.takerFee = true
-    return errors
-  },
+const mapProps = state => ({
+  relayer_meta: state.RelayerForm.relayer_meta,
+})
 
-  handleSubmit: (values, { props }) => {
-    props.$submitFormPayload({
-      makerFee: values.makerFee,
-      takerFee: values.takerFee,
-    })
-  },
+const actions = {
+  $submitFormPayload,
+  $backOneStep,
+}
 
-  displayName: 'FormStepThree',
-})(FormStepThree)
+const storeConnect = connect(mapProps, actions)
+const formConnect = wrappers.marketFeeForm(FormStepThree)
 
-const storeConnect = connect(
-  state => ({
-    makerFee: state.RelayerForm.relayer_meta.makerFee,
-    takerFee: state.RelayerForm.relayer_meta.takerFee,
-  }),
-  {
-    $submitFormPayload,
-    $backOneStep,
-  },
-)
-
-export default storeConnect(FormikWrapper)
+export default storeConnect(formConnect)

@@ -33,12 +33,6 @@ export const $cancelRegistration = state => {
   return state
 }
 
-export const $fetchTokens = async state => {
-  const resp = await Client.get(API.token)
-  state.tradableTokens = resp.payload
-  return state
-}
-
 export const $toggleCustomTokenForm = state => {
   state.RelayerForm.tokenForm = !state.RelayerForm.tokenForm
   return state
@@ -55,15 +49,14 @@ export const $registerRelayer = async state => {
   const meta = state.RelayerForm.relayer_meta
   const payload = {
     coinbase: meta.coinbase,
-    makerFee: meta.makerFee * 10,
-    takerFee: meta.takerFee * 10,
+    makerFee: meta.makerFee,
+    takerFee: meta.takerFee,
     fromTokens: meta.fromTokens.map(p => p.address),
     toTokens: meta.toTokens.map(p => p.address),
   }
 
   // Transact
-  const account = state.authStore.user_meta.address
-  const resp = await blk.register(payload, account, meta.deposit)
+  const resp = await blk.register(payload, state)
 
   if (!resp.status) {
     console.warn(resp)
@@ -76,8 +69,8 @@ export const $registerRelayer = async state => {
     owner: state.authStore.user_meta.address,
     name: meta.name,
     coinbase: meta.coinbase,
-    maker_fee: meta.makerFee * 10,
-    taker_fee: meta.takerFee * 10,
+    maker_fee: meta.makerFee,
+    taker_fee: meta.takerFee,
     from_tokens: meta.fromTokens.map(p => p.address),
     to_tokens: meta.toTokens.map(p => p.address),
   }

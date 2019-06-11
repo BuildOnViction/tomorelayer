@@ -24,10 +24,12 @@ class PageHeader extends React.Component {
     this.setState({ relayerMenuEl: event.currentTarget })
   }
 
-  clickAway = () => this.setState({
-    userMenuEl: null,
-    relayerMenuEl: null,
-  })
+  clickAway = () => () => {
+    this.setState({
+      userMenuEl: null,
+      relayerMenuEl: null,
+    })
+  }
 
   render() {
     return (

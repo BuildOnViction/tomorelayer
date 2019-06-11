@@ -1,5 +1,3 @@
-export * from './abi'
-
 export const isDev = process.env.NODE_ENV === 'development'
 
 const APP_HOST = isDev ? process.env.REACT_APP_HOST : window.location.origin
@@ -17,6 +15,8 @@ export const API = {
   relayer: apiBuild('relayer'),
   contract: apiBuild('contract'),
 }
+
+export const TOMO_COIN_TYPE = 889
 
 export const SOCKET_REQ = {
   getQRCode: 'QR_CODE_LOGIN',
@@ -70,3 +70,58 @@ export const I18N_LANGS = [
 export const STORAGE_ITEMS = {
   authen: '__tomorelayer__authstore__'
 }
+
+export const STANDARD_ERC20_ABI = [
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "name",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  }
+]

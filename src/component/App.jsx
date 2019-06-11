@@ -8,7 +8,7 @@ import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
 import { Private } from 'component/utility'
 import { SITE_MAP, isDev } from 'service/constant'
-import { $autoAuthenticated, $fetchContract, $fetchRelayers } from './shared/actions'
+import { $autoAuthenticated, $fetchContract, $fetchRelayers, $fetchTokens } from './shared/actions'
 import 'style/app.scss'
 
 const Router = !isDev ? BrowserRouter : HashRouter
@@ -18,6 +18,7 @@ class App extends React.Component {
   componentDidMount() {
     this.props.$fetchRelayers()
     this.props.$fetchContract()
+    this.props.$fetchTokens()
     this.props.$autoAuthenticated()
   }
 
@@ -50,6 +51,7 @@ const actions = {
   $autoAuthenticated,
   $fetchContract,
   $fetchRelayers,
+  $fetchTokens,
 }
 
 export default connect(mapProps, actions)(App)

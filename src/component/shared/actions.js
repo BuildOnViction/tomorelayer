@@ -3,6 +3,11 @@ import { Client } from 'service/action'
 import { originalState } from 'service/store'
 import { API, STORAGE_ITEMS } from 'service/constant'
 
+export const $fetchTokens = async state => {
+  const resp = await Client.get(API.token)
+  state.tradableTokens = resp.payload
+  return state
+}
 
 export const $fetchContract = async (state, store) => {
   const Contracts = await Client.get(API.contract).then(r => r.payload).catch(() => false)

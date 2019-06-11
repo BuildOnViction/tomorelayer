@@ -30,7 +30,7 @@ const UserMenu = props => {
         MyWallet&nbsp;
         <KeyboardArrowDown />
       </Button>
-      <ClickAwayListener onClickAway={handleClickAway}>
+      <ClickAwayListener onClickAway={handleClickAway('user-menu')}>
         <Paper>
           <Menu open={!!anchorEl} anchorEl={anchorEl}>
             <MenuItem>Profile</MenuItem>

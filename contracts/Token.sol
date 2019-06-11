@@ -1,16 +1,16 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.4.24;
 
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-solidity/v1.12.0/contracts/token/ERC20/ERC20.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-solidity/v1.12.0/contracts/token/ERC20/DetailedERC20.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-solidity/v1.12.0/contracts/token/ERC20/CappedToken.sol";
 
 /// @dev this ERC20 contract is used for creating Test-Tokens only
-contract Token is ERC20, ERC20Detailed, ERC20Capped {
-    constructor(string memory name, string memory symbol, uint256 totalSupply, uint8 decimals)
-        ERC20Detailed(name, symbol, decimals)
-        ERC20Capped(totalSupply)
+contract Token is ERC20, DetailedERC20, CappedToken {
+    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _cap)
+        DetailedERC20(_name, _symbol, _decimals)
+        CappedToken(_cap)
         ERC20()
         public {
-        _mint(msg.sender, totalSupply * 10 / 100);
+            mint(msg.sender, _cap * 10 / 100);
     }
 }
