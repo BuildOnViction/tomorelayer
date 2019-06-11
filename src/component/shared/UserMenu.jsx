@@ -1,23 +1,25 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
-import { Button, ClickAwayListener, Paper, Menu, MenuItem } from '@material-ui/core'
+import { Button, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import { $logout } from './actions'
 
+const AdapterLink = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)
 
 const UserMenu = props => {
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const handleClick = event => setAnchorEl(event.currentTarget)
+  const handleClose = () => setAnchorEl(null)
+
   const {
     auth,
-    openMenu,
-    handleClickAway,
-    anchorEl,
   } = props
 
   if (!auth) {
     return (
       <div className="col-md-6">
-        <Button size="small" component={props => <Link to="/login" {...props} />}>
+        <Button size="small" component={AdapterLink} to="/login">
           LOGIN
         </Button>
       </div>
@@ -26,19 +28,21 @@ const UserMenu = props => {
 
   return (
     <div className="col-md-6">
-      <Button onClick={openMenu} size="small">
+      <Button onClick={handleClick} size="small" aria-controls="user-menu" aria-haspopup="true">
         MyWallet&nbsp;
         <KeyboardArrowDown />
       </Button>
-      <ClickAwayListener onClickAway={handleClickAway('user-menu')}>
-        <Paper>
-          <Menu open={!!anchorEl} anchorEl={anchorEl}>
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>My account</MenuItem>
-            <MenuItem onClick={props.$logout}>Logout</MenuItem>
-          </Menu>
-        </Paper>
-      </ClickAwayListener>
+      <Menu
+        id="user-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem>Profile</MenuItem>
+        <MenuItem>My account</MenuItem>
+        <MenuItem onClick={props.$logout}>Logout</MenuItem>
+      </Menu>
     </div>
   )
 }

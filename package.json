@@ -21,7 +21,6 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "2.1.8",
     "react-select": "^2.4.3",
-    "uninstall": "0.0.0",
     "valid-url": "^1.0.9"
   },
   "scripts": {
