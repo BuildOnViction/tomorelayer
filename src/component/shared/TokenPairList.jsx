@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import {
+  Badge,
   Box,
   Button,
   Checkbox,
@@ -99,19 +100,21 @@ class TokenPairList extends React.Component {
     } = this.state
 
     const isAllChecked = this.isAllChecked(filteredPairs)
-    const selectAllBtnText = `${isAllChecked ? 'Unselect' : 'Select'} All (${filteredPairs.length}) pairs`
+    const selectAllBtnText = `${isAllChecked ? 'Unselect' : 'Select'} ${filteredPairs.length} pairs`
 
     return (
       <Box border={1}>
         <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
-          <Button
-            size="small"
-            disableRipple
-            color={isAllChecked ? 'primary' : 'default'}
-            onClick={this.selectAll(filteredPairs)}
-          >
-            {selectAllBtnText}
-          </Button>
+          <Badge color="primary" badgeContent={`${selectedPairs.length}`}>
+            <Button
+              size="small"
+              disableRipple
+              color={isAllChecked ? 'primary' : 'default'}
+              onClick={this.selectAll(filteredPairs)}
+            >
+              {selectAllBtnText}
+            </Button>
+          </Badge>
           <MajorTokenFilter
             majorTokens={majorTokens}
             setFilter={this.listFilterByMajorTokens}
@@ -129,6 +132,9 @@ class TokenPairList extends React.Component {
               ),
             }}
           />
+        </Box>
+        <Box>
+
         </Box>
         <List dense className="bg-filled token-list">
           {filteredPairs.map((p, idx) => (
