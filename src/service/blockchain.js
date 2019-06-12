@@ -62,8 +62,9 @@ export const TxSignerInit = async (method, wallet, payload) => {
     providerToUse = new ethers.providers.Web3Provider(window.web3.currentProvider)
     const accounts = await providerToUse.listAccounts()
     signer = await providerToUse.getSigner(accounts[0])
+    const value = payload.value || 0
     overrides = {
-      value: ethers.utils.parseEther(payload.value.toString()),
+      value: ethers.utils.parseEther(value.toString()),
       gasLimit: ethers.utils.bigNumberify('1000000'),
     }
   }
@@ -175,6 +176,34 @@ export const register = async (payload, state) => {
 
 }
 
-export const updateRelayer = async (payload, state) => {
+export const updateRelayer = async (data, state) => {
+  const userMeta = state.authStore.user_meta
+  const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, { data })
+  const contract = RelayerRegistrationContract(state, TxSigner.provider)
+  const contractWithSigner = contract.connect(TxSigner.signer)
 
+  const {
+    coinbase,
+    maker_fee,
+    taker_fee,
+    from_tokens,
+    to_tokens,
+  } = TxSigner.data
+
+  debugger
+  const tx = await contractWithSigner.update(
+    coinbase,
+    maker_fee,
+    taker_fee,
+    from_tokens,
+    to_tokens,
+    TxSigner.config,
+  )
+
+  if (tx.wait) {
+    const details = await tx.wait()
+    return { status: true, details }
+  } else {
+    return { status: false, details: tx }
+  }
 }

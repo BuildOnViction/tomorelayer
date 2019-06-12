@@ -34,14 +34,8 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
 
   if (shouldUpdateChain) {
     console.warn('Relayer on-chain update', configs)
-    const updateChain = await blk.updateRelayer(
-      owner,
-      coinbase,
-      configs.maker_fee,
-      configs.taker_fee,
-      configs.from_tokens,
-      configs.to_tokens,
-    )
+    const updatePayload = { owner, coinbase, ...configs }
+    const updateChain = await blk.updateRelayer(updatePayload, state)
 
     if (!updateChain.status) {
       alert('Unable to update relayer data')
