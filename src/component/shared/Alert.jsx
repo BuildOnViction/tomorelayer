@@ -20,7 +20,7 @@ const variantIcon = {
   info: InfoIcon,
 }
 
-const useStyles1 = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
   success: {
     backgroundColor: green[600],
   },
@@ -47,7 +47,7 @@ const useStyles1 = makeStyles(theme => ({
 }))
 
 function MySnackbarContentWrapper(props) {
-  const classes = useStyles1()
+  const classes = useStyles()
   const { className, message, onClose, variant, ...other } = props
   const Icon = variantIcon[variant]
 
@@ -79,7 +79,7 @@ class Alert extends React.Component {
       <Snackbar
         anchorOrigin={anchor}
         open={open}
-        autoHideDuration={3000}
+        autoHideDuration={4000}
         onClose={selfClose}
       >
         <MySnackbarContentWrapper

@@ -51,7 +51,6 @@
     "exec-sh": "^0.3.2",
     "kill-port": "^1.4.0",
     "localtunnel": "^1.9.1",
-    "node-sass": "^4.12.0",
-    "openzeppelin-solidity": "^2.3.0"
+    "node-sass": "^4.12.0"
   }
 }

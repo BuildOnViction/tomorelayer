@@ -6,7 +6,7 @@ import { API, STORAGE_ITEMS } from 'service/constant'
 export const $fetchTokens = async state => {
   const resp = await Client.get(API.token)
   state.tradableTokens = resp.payload
-  return state
+  return PushAlert(state, AlertVariant.info, 'Fetched tokens')
 }
 
 export const $fetchContract = async (state, store) => {
@@ -17,7 +17,7 @@ export const $fetchContract = async (state, store) => {
   }
 
   state.Contracts = Contracts
-  return state
+  return PushAlert(state, AlertVariant.info, 'Fetched contracts')
 }
 
 export const $fetchRelayers = async (state, store) => {
@@ -32,7 +32,7 @@ export const $fetchRelayers = async (state, store) => {
     state.User.activeRelayer = ownedRelayers[0]
   }
 
-  return state
+  return PushAlert(state, AlertVariant.info, 'Fetched relayers')
 }
 
 export const $changeRelayer = (state, activeRelayer) => {
