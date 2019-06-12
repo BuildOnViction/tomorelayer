@@ -24,18 +24,12 @@ export const initialState = {
       coinbase: '',
       deposit: MISC.MinimumDeposit,
       name: '',
-      fromTokens: [],
-      toTokens: [],
-      makerFee: 1,
-      takerFee: 1,
+      from_tokens: [],
+      to_tokens: [],
+      maker_fee: 1,
+      taker_fee: 1,
     },
     tokenForm: false,
-  },
-  Dashboard: {
-    activeTab: 0,
-    ConfigureBoard: {
-      activeConfig: 0,
-    },
   },
   tradableTokens: [],
   MajorTokens: [
@@ -63,8 +57,9 @@ export const initialState = {
   },
   socket: socket,
   notification: {
-    show: false,
-    content: '',
+    variant: 'info',
+    open: false,
+    message: '',
   }
 }
 export const originalState = JSON.parse(JSON.stringify(initialState))

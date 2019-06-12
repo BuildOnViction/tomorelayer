@@ -1,10 +1,8 @@
 import React from 'react'
-import { withFormik } from 'formik'
 import { connect } from '@vutr/redux-zero/react'
-import { Button, TextField } from '@material-ui/core'
-import { Grid } from 'component/utility'
+import { Button, Box, Container, TextField, Typography } from '@material-ui/core'
 import { $backOneStep, $logout, $submitFormPayload } from './actions'
-
+import { wrappers } from './form_logics'
 
 const FormStepTwo = props => {
   const {
@@ -15,11 +13,13 @@ const FormStepTwo = props => {
   } = props
 
   return (
-    <form onSubmit={handleSubmit} className="text-left">
-      <h1 className="register-form--title">
-        Choose Your Relayer Name
-      </h1>
-      <div className="col-12 p-0 mt-3 mb-1">
+    <form onSubmit={handleSubmit}>
+      <Box textAlign="center" className="mb-3">
+        <Typography component="h1">
+          Choose Relayer Name
+        </Typography>
+      </Box>
+      <Container maxWidth="sm">
         <TextField
           name="name"
           label="Relayer Name"
@@ -31,47 +31,30 @@ const FormStepTwo = props => {
           className="mb-2"
           fullWidth
         />
-      </div>
-      <Grid className="justify-space-between m-0">
-        <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
-          Back
-        </Button>
-        <Button color="primary" variant="contained" type="submit">
-          Confirm
-        </Button>
-      </Grid>
+        <Box display="flex" justifyContent="space-between" className="mt-2">
+          <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
+            Back
+          </Button>
+          <Button color="primary" variant="contained" type="submit">
+            Confirm
+          </Button>
+        </Box>
+      </Container>
     </form>
   )
 }
 
-const FormikWrapper = withFormik({
-  validateOnChange: false,
-  validate: values => {
-    const errors = {}
+const mapProps = state => ({
+  relayer_meta: state.RelayerForm.relayer_meta,
+})
 
-    if (!values.name || values.name.length < 3) {
-      errors.name = true
-    }
+const actions = {
+  $logout,
+  $submitFormPayload,
+  $backOneStep,
+}
 
-    return errors
-  },
+const storeConnect = connect(mapProps, actions)
+const formConnect = wrappers.relayerNameForm(FormStepTwo)
 
-  handleSubmit: (values, { props }) => {
-    props.$submitFormPayload({ name: values.name })
-  },
-
-  displayName: 'FormStepTwo',
-})(FormStepTwo)
-
-const storeConnect = connect(
-  state => ({
-    name: state.RelayerForm.relayer_meta.name,
-  }),
-  {
-    $logout,
-    $submitFormPayload,
-    $backOneStep,
-  }
-)
-
-export default storeConnect(FormikWrapper)
+export default storeConnect(formConnect)

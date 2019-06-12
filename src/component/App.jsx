@@ -6,6 +6,7 @@ import Main from 'component/route/Main'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
+import Alert from 'component/shared/Alert'
 import { Private } from 'component/utility'
 import { SITE_MAP, isDev } from 'service/constant'
 import { $autoAuthenticated, $fetchContract, $fetchRelayers, $fetchTokens } from './shared/actions'
@@ -30,6 +31,7 @@ class App extends React.Component {
           <Route path={SITE_MAP.Home} render={() => (
             <div>
               <PageHeader />
+              <Alert />
               <Switch>
                 <Private path={SITE_MAP.Register} component={Register} />
                 <Route path={SITE_MAP.Home} exact component={Main} />

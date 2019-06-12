@@ -12,20 +12,24 @@ import {
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 import TokenPairList from 'component/shared/TokenPairList'
+import * as _ from 'service/helper'
 
 
-const RelayerTradeConfig = ({
+const FormTrade = ({
   values,
   errors,
   handleChange,
   handleSubmit,
   setFieldValue,
+  isSubmitting,
 }) => {
 
   const handleFeeChange = e => {
     e.target.value = e.target.value * 10
     return handleChange(e)
   }
+  const formatValue = v => _.round(v / 10, 1)
+  const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
     <Container maxWidth="xl">
@@ -40,29 +44,25 @@ const RelayerTradeConfig = ({
             <Box display="flex" alignItems="center" justifyContent="space-between" border={1}>
               <div className="p-2 w_100">
                 <TextField
-                  label="Maker Fee (minimum 0.1%)"
+                  label="Maker Fee (min: 0.1%, max: 99.9%)"
                   name="maker_fee"
-                  value={values.maker_fee / 10}
+                  value={formatValue(values.maker_fee)}
                   onChange={handleFeeChange}
                   error={errors.maker_fee}
                   type="number"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                  }}
+                  InputProps={{ endAdornment }}
                   fullWidth
                 />
               </div>
               <div className="p-2 w_100">
                 <TextField
-                  label="Taker Fee (minimum 0.1%)"
+                  label="Taker Fee (min: 0.1%, max: 99.9%)"
                   name="taker_fee"
-                  value={values.taker_fee / 10}
+                  value={formatValue(values.taker_fee)}
                   onChange={handleFeeChange}
                   error={errors.taker_fee}
                   type="number"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                  }}
+                  InputProps={{ endAdornment }}
                   fullWidth
                 />
               </div>
@@ -82,7 +82,7 @@ const RelayerTradeConfig = ({
           </Grid>
           <Grid item className="mt-2">
             <Box display="flex" justifyContent="flex-end">
-              <Button color="primary" variant="contained" type="submit">
+              <Button color="primary" variant="contained" type="submit" disabled={isSubmitting}>
                 Save
               </Button>
             </Box>
@@ -94,6 +94,6 @@ const RelayerTradeConfig = ({
 }
 
 const storeConnect = connect(undefined, { $submitConfigFormPayload })
-const formConnect = wrappers.tradeOptionForm(RelayerTradeConfig)
+const formConnect = wrappers.tradeForm(FormTrade)
 
 export default storeConnect(formConnect)

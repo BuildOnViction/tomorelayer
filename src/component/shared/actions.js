@@ -1,5 +1,5 @@
 import { differenceInMinutes } from 'date-fns'
-import { Client } from 'service/action'
+import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
 import { originalState } from 'service/store'
 import { API, STORAGE_ITEMS } from 'service/constant'
 
@@ -13,8 +13,7 @@ export const $fetchContract = async (state, store) => {
   const Contracts = await Client.get(API.contract).then(r => r.payload).catch(() => false)
 
   if (!Contracts) {
-    alert('Unable to fetch any contracts')
-    return state
+    return PushAlert(state, AlertVariant.error, 'Cannot fetch any Contract')
   }
 
   state.Contracts = Contracts

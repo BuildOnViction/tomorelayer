@@ -5,7 +5,7 @@ import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 
 
-class RelayerInfoConfig extends React.Component {
+class FormInfo extends React.Component {
   render() {
     const {
       values,
@@ -73,6 +73,6 @@ class RelayerInfoConfig extends React.Component {
 }
 
 const storeConnect = connect(undefined, { $submitConfigFormPayload })
-const formConnect = wrappers.basicInfoForm(RelayerInfoConfig)
+const formConnect = wrappers.infoForm(FormInfo)
 
 export default storeConnect(formConnect)
