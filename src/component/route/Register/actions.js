@@ -1,6 +1,6 @@
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { Client } from 'service/action'
+import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
 import { API, MISC } from 'service/constant'
 
 export const $logout = state => {
@@ -59,9 +59,7 @@ export const $registerRelayer = async state => {
   const resp = await blk.register(payload, state)
 
   if (!resp.status) {
-    console.warn(resp)
-    alert('Cant save a relayer to Blockchain')
-    return state
+    return PushAlert(state, AlertVariant.error, 'Cannot register new relayer to the TomoChain')
   }
 
   // Save Relayer to DB...

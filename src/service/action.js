@@ -16,3 +16,22 @@ export const Client = {
     throw new Error(r.json())
   }),
 }
+
+export const Alert = (state, variant, message) => {
+  // One of special function to control Application Alert
+  // Widely used accross the app so separated
+  const open = true
+  const notification = {
+    open,
+    message,
+    variant,
+  }
+  return { ...state, notification }
+}
+
+export const AlertVariant = {
+  success: 'success',
+  warning: 'warning',
+  info: 'info',
+  error: 'error',
+}

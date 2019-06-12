@@ -21,6 +21,7 @@ const RelayerTradeConfig = ({
   handleChange,
   handleSubmit,
   setFieldValue,
+  isSubmitting,
 }) => {
 
   const handleFeeChange = e => {
@@ -81,7 +82,7 @@ const RelayerTradeConfig = ({
           </Grid>
           <Grid item className="mt-2">
             <Box display="flex" justifyContent="flex-end">
-              <Button color="primary" variant="contained" type="submit">
+              <Button color="primary" variant="contained" type="submit" disabled={isSubmitting}>
                 Save
               </Button>
             </Box>

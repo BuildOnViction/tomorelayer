@@ -63,8 +63,9 @@ export const initialState = {
   },
   socket: socket,
   notification: {
-    show: false,
-    content: '',
+    variant: 'info',
+    open: false,
+    message: '',
   }
 }
 export const originalState = JSON.parse(JSON.stringify(initialState))

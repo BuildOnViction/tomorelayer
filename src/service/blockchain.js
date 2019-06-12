@@ -190,7 +190,6 @@ export const updateRelayer = async (data, state) => {
     to_tokens,
   } = TxSigner.data
 
-  debugger
   const tx = await contractWithSigner.update(
     coinbase,
     maker_fee,

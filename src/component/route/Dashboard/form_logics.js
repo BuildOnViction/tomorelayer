@@ -37,6 +37,9 @@ export const wrappers = {
       to_tokens: props.relayer.to_tokens,
     }),
 
-    handleSubmit: (values, { props }) => props.$submitConfigFormPayload(values),
+    handleSubmit: async (values, meta) => {
+      await meta.props.$submitConfigFormPayload(values)
+      meta.setSubmitting(false)
+    }
   })
 }

@@ -1,5 +1,5 @@
 import * as blk from 'service/blockchain'
-import { Client } from 'service/action'
+import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
 import { API } from 'service/constant'
 
 
@@ -16,30 +16,46 @@ export const $changeConfigItem = (state, activeConfig) => {
 export const $submitConfigFormPayload = async (state, configs = {}) => {
   const relayer = state.User.activeRelayer
 
-  // Update chain
   const {
     id,
     owner,
     coinbase,
   } = relayer
 
-  const shouldUpdateChain = (
-    configs.maker_fee !== relayer.maker_fee ||
-    configs.taker_fee !== relayer.taker_fee ||
-    configs.from_tokens.length !== relayer.from_tokens.length ||
-    configs.to_tokens.length !== relayer.to_tokens.length ||
-    !configs.from_tokens.reduce((_, addr, idx) => addr === relayer.from_tokens[idx]) ||
-    !configs.to_tokens.reduce((_, addr, idx) => addr === relayer.to_tokens[idx])
-  )
+  const FORM = {
+    info: 'info',
+    trade: 'trade',
+    transfer: 'transfer',
+    resign: 'resign',
+  }
 
-  if (shouldUpdateChain) {
-    console.warn('Relayer on-chain update', configs)
+  const ActiveForm = (cfg => {
+    if (cfg.name) return FORM.info
+    if (cfg.maker_fee) return FORM.trade
+    if (cfg.address) return FORM.transfer
+    if (cfg.coinbase) return FORM.resign
+  })(configs)
+
+  // NOTE: nothing to do with FORM.info except saving to DB
+
+  if (ActiveForm === FORM.trade) {
+
+    const shouldUpdateChain = (
+      configs.maker_fee !== relayer.maker_fee ||
+      configs.taker_fee !== relayer.taker_fee ||
+      configs.from_tokens.length !== relayer.from_tokens.length ||
+      configs.to_tokens.length !== relayer.to_tokens.length ||
+      !configs.from_tokens.reduce((_, addr, idx) => addr === relayer.from_tokens[idx]) ||
+      !configs.to_tokens.reduce((_, addr, idx) => addr === relayer.to_tokens[idx])
+    )
+
+    if (!shouldUpdateChain) return state
+
     const updatePayload = { owner, coinbase, ...configs }
     const updateChain = await blk.updateRelayer(updatePayload, state)
 
     if (!updateChain.status) {
-      alert('Unable to update relayer data')
-      return state
+      return PushAlert(state, AlertVariant.error, 'Fail to perform On-Chain Relayer Update')
     }
   }
 
@@ -47,8 +63,7 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
   const updateBackend = await Client.post(API.relayer, { relayer: relayerPayload }).then(resp => resp).catch(() => false)
 
   if (!updateBackend) {
-    alert('Backend update error')
-    return state
+    return PushAlert(state, AlertVariant.error, 'Fail to perform Relayer Database Update')
   }
 
   const relayerIndex = state.Relayers.findIndex(r => r.id === updateBackend.payload.relayer.id)
@@ -56,5 +71,5 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
   state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
   state.User.activeRelayer = updateBackend.payload.relayer
 
-  return state
+  return PushAlert(state, AlertVariant.success, 'Update Successful')
 }
