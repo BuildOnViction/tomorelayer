@@ -49,9 +49,13 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
+      currentCoinbase: props.currentCoinbase,
+      new_address: props.currentAddress,
+      new_coinbase: props.currentCoinbase,
     }),
 
     handleSubmit: async (values, meta) => {
+      console.warn('Transfer Values', values);
       /* await meta.props.$submitConfigFormPayload(values)
        * meta.setSubmitting(false) */
     }
