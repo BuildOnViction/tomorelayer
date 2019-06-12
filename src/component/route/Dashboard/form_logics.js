@@ -2,7 +2,7 @@ import * as validUrl from 'valid-url'
 import { withFormik } from 'formik'
 
 export const wrappers = {
-  basicInfoForm: withFormik({
+  infoForm: withFormik({
     displayName: 'RelayerInfoForm',
     enableReinitialize: true,
     validateOnChange: false,
@@ -26,7 +26,7 @@ export const wrappers = {
     handleSubmit: (values, { props }) => props.$submitConfigFormPayload(values),
   }),
 
-  tradeOptionForm: withFormik({
+  tradeForm: withFormik({
     displayName: 'RelayerTradeOptionForm',
     enableReinitialize: true,
     validateOnChange: false,
@@ -40,6 +40,20 @@ export const wrappers = {
     handleSubmit: async (values, meta) => {
       await meta.props.$submitConfigFormPayload(values)
       meta.setSubmitting(false)
+    }
+  }),
+
+
+  transferForm: withFormik({
+    displayName: 'RelayerTransferForm',
+    enableReinitialize: true,
+    validateOnChange: false,
+    mapPropsToValues: props => ({
+    }),
+
+    handleSubmit: async (values, meta) => {
+      /* await meta.props.$submitConfigFormPayload(values)
+       * meta.setSubmitting(false) */
     }
   })
 }

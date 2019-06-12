@@ -15,7 +15,7 @@ import TokenPairList from 'component/shared/TokenPairList'
 import * as _ from 'service/helper'
 
 
-const RelayerTradeConfig = ({
+const FormTrade = ({
   values,
   errors,
   handleChange,
@@ -94,6 +94,6 @@ const RelayerTradeConfig = ({
 }
 
 const storeConnect = connect(undefined, { $submitConfigFormPayload })
-const formConnect = wrappers.tradeOptionForm(RelayerTradeConfig)
+const formConnect = wrappers.tradeForm(FormTrade)
 
 export default storeConnect(formConnect)

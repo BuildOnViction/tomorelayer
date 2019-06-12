@@ -1,8 +1,9 @@
 import React from 'react'
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import { Grid } from 'component/utility'
-import RelayerInfoConfig from './subcomponents/RelayerInfoConfig'
-import RelayerTradeConfig from './subcomponents/RelayerTradeConfig'
+import FormInfo from './ConfigForms/FormInfo'
+import FormTrade from './ConfigForms/FormTrade'
+import FormTransfer from './ConfigForms/FormTransfer'
 
 const ListItems = [
   'Information',
@@ -36,8 +37,9 @@ export default class ConfigureBoard extends React.Component {
           </List>
         </div>
         <div className="col-9">
-          {activeConfig === 0 && <RelayerInfoConfig relayer={relayer} />}
-          {activeConfig === 1 && <RelayerTradeConfig relayer={relayer} />}
+          {activeConfig === 0 && <FormInfo relayer={relayer} />}
+          {activeConfig === 1 && <FormTrade relayer={relayer} />}
+          {activeConfig === 2 && <FormTransfer relayer={relayer} />}
         </div>
       </Grid>
     )
