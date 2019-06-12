@@ -142,11 +142,7 @@ export const register = async (payload, state) => {
   const userMeta = state.authStore.user_meta
   const signerPayload = {
     value: formData.deposit,
-    data: {
-      ...formData,
-      makerFee: formData.makerFee * 10,
-      takerFee: formData.takerFee * 10,
-    },
+    data: formData,
   }
 
   const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, signerPayload)
@@ -155,18 +151,18 @@ export const register = async (payload, state) => {
 
   const {
     coinbase,
-    makerFee,
-    takerFee,
-    fromTokens,
-    toTokens,
+    maker_fee,
+    taker_fee,
+    from_tokens,
+    to_tokens,
   } = TxSigner.data
 
   const tx = await contractWithSigner.register(
     coinbase,
-    makerFee,
-    takerFee,
-    fromTokens,
-    toTokens,
+    maker_fee,
+    taker_fee,
+    from_tokens,
+    to_tokens,
     TxSigner.config,
   )
 

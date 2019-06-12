@@ -58,8 +58,8 @@ export const wrappers = {
       return errors
     },
     mapPropsToValues: props => ({
-      makerFee: props.relayer_meta.makerFee,
-      takerFee: props.relayer_meta.takerFee,
+      maker_fee: props.relayer_meta.maker_fee,
+      taker_fee: props.relayer_meta.taker_fee,
     }),
     handleSubmit: (values, { props }) => props.$submitFormPayload(values),
   }),
@@ -72,10 +72,7 @@ export const wrappers = {
       from_tokens: props.relayer_meta.from_tokens,
       to_tokens: props.relayer_meta.to_tokens,
     }),
-    handleSubmit: (values, { props }) => props.$submitFormPayload({
-      fromTokens: values.from_tokens,
-      toTokens: values.to_tokens,
-    }),
+    handleSubmit: (values, { props }) => props.$submitFormPayload(values),
   })
 
 }
