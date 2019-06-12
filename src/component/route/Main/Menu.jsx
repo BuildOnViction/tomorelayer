@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
 import { Grid } from 'component/utility'
 import { TextField } from '@material-ui/core'
-import { $toggleRelayerFormModal } from './main_actions'
+import { $toggleRelayerFormModal } from './actions'
 import logo from 'asset/app-logo.png'
 
 const Menu = ({
