@@ -1,10 +1,8 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import { Grid } from 'component/utility'
 import RelayerInfoConfig from './subcomponents/RelayerInfoConfig'
 import RelayerTradeConfig from './subcomponents/RelayerTradeConfig'
-import { $changeConfigItem } from './actions'
 
 const ListItems = [
   'Information',
@@ -13,14 +11,17 @@ const ListItems = [
   'Resign'
 ]
 
-class ConfigureBoard extends React.Component {
-  componentWillUnmount() {
-    this.props.$changeConfigItem(0)
+export default class ConfigureBoard extends React.Component {
+
+  state = {
+    activeConfig: 0,
   }
 
+  changeConfigItem = activeConfig => () => this.setState({ activeConfig })
+
   render() {
-    const { activeConfig, relayer } = this.props
-    const changeConfigItem = idx => () => this.props.$changeConfigItem(idx)
+    const { relayer } = this.props
+    const { activeConfig } = this.state
     const isSelected = idx => idx === activeConfig
 
     return (
@@ -28,7 +29,7 @@ class ConfigureBoard extends React.Component {
         <div className="col-3 pr-2">
           <List component="nav">
             {ListItems.map((item, idx) => (
-              <ListItem key={item} button selected={isSelected(idx)} onClick={changeConfigItem(idx)} disableRipple>
+              <ListItem key={item} button selected={isSelected(idx)} onClick={this.changeConfigItem(idx)}>
                 <ListItemText primary={item} />
               </ListItem>
             ))}
@@ -42,9 +43,3 @@ class ConfigureBoard extends React.Component {
     )
   }
 }
-
-const mapProps = state => ({
-  activeConfig: state.Dashboard.ConfigureBoard.activeConfig
-})
-
-export default connect(mapProps, { $changeConfigItem })(ConfigureBoard)

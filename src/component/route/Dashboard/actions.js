@@ -8,11 +8,6 @@ export const $changeTab = (state, activeTab) => {
   return state
 }
 
-export const $changeConfigItem = (state, activeConfig) => {
-  state.Dashboard.ConfigureBoard.activeConfig = activeConfig
-  return state
-}
-
 export const $submitConfigFormPayload = async (state, configs = {}) => {
   const relayer = state.User.activeRelayer
 

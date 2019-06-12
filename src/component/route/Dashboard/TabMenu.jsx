@@ -1,8 +1,6 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import { AppBar, Tabs, Tab } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { $changeTab } from './actions'
 
 const useStyles = withStyles(theme => ({
   appBar: {
@@ -33,20 +31,16 @@ const styles = {
 
 
 const TabMenu = useStyles(props => {
-  const { activeTab, classes } = props
+  const { activeTab, classes, changeTab } = props
   return (
     <AppBar position="static" className={classes.appBar}>
-      <Tabs value={activeTab} onChange={(e, val) => props.$changeTab(val)} className={classes.appMenu} classes={styles.menu}>
-        <Tab label="Dashboard" disableRipple className={classes.appTab} />
-        <Tab label="Insight" disableRipple className={classes.appTab} />
-        <Tab label="Configurations" disableRipple className={classes.appTab} />
+      <Tabs value={activeTab} onChange={(e, val) => changeTab(val)} className={classes.appMenu} classes={styles.menu}>
+        <Tab label="Dashboard" className={classes.appTab} />
+        <Tab label="Insight" className={classes.appTab} />
+        <Tab label="Configurations" className={classes.appTab} />
       </Tabs>
     </AppBar>
   )
 })
 
-const mapProps = state => ({
-  activeTab: state.Dashboard.activeTab,
-})
-
-export default connect(mapProps, { $changeTab })(TabMenu)
+export default TabMenu

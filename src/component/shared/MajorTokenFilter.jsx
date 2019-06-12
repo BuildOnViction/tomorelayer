@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@material-ui/core'
 
 export const MajorTokenSelect = ({ name, selected, onClick }) => (
-  <Button size="small" disableRipple color={selected ? 'primary' : 'default'} onClick={onClick}>
+  <Button size="small" color={selected ? 'primary' : 'default'} onClick={onClick}>
     {name}
   </Button>
 )

@@ -31,12 +31,6 @@ export const initialState = {
     },
     tokenForm: false,
   },
-  Dashboard: {
-    activeTab: 0,
-    ConfigureBoard: {
-      activeConfig: 0,
-    },
-  },
   tradableTokens: [],
   MajorTokens: [
     {
