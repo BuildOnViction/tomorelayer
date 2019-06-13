@@ -33,7 +33,7 @@ contract RelayerRegistration {
     event ConfigEvent(uint max_relayer, uint max_token, uint256 min_deposit);
     event RegisterEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
     event UpdateEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
-    event ChangeOwnershipEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
+    event TransferEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
     event ResignEvent(uint deposit_release_time, uint256 deposit_amount);
     event RefundEvent(bool success, uint remaining_time, uint256 deposit_amount);
 
@@ -124,7 +124,7 @@ contract RelayerRegistration {
     }
 
 
-    function changeOwnership (address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+    function transfer (address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
         require(new_coinbase != address(0));
 
@@ -141,7 +141,7 @@ contract RelayerRegistration {
                 OWNER_LIST[new_coinbase] = new_owner;
                 COINBASE_LIST[new_owner].push(new_coinbase);
 
-                emit ChangeOwnershipEvent(RELAYER_LIST[new_coinbase]._deposit, RELAYER_LIST[new_coinbase]._makerFee, RELAYER_LIST[new_coinbase]._takerFee, RELAYER_LIST[new_coinbase]._fromTokens, RELAYER_LIST[new_coinbase]._toTokens);
+                emit TransferEvent(RELAYER_LIST[new_coinbase]._deposit, RELAYER_LIST[new_coinbase]._makerFee, RELAYER_LIST[new_coinbase]._takerFee, RELAYER_LIST[new_coinbase]._fromTokens, RELAYER_LIST[new_coinbase]._toTokens);
             }
         }
 

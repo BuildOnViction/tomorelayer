@@ -2,6 +2,7 @@ import { differenceInMinutes } from 'date-fns'
 import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
 import { originalState } from 'service/store'
 import { API, STORAGE_ITEMS } from 'service/constant'
+import * as _ from 'service/helper'
 
 export const $fetchTokens = async state => {
   const resp = await Client.get(API.token)
@@ -27,7 +28,7 @@ export const $fetchRelayers = async (state, store) => {
   state.Relayers = Relayers
 
   if (state.authStore.user_meta.address.length > 0) {
-    const ownedRelayers = Relayers.filter(r => r.owner === state.authStore.user_meta.address)
+    const ownedRelayers = Relayers.filter(r => _.compareString(r.owner, state.authStore.user_meta.address))
     state.User.relayers = ownedRelayers
     state.User.activeRelayer = ownedRelayers[0]
   }

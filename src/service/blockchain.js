@@ -206,3 +206,33 @@ export const updateRelayer = async (data, state) => {
     return { status: false, details: tx }
   }
 }
+
+
+export const transferRelayer = async(data, state) => {
+  const userMeta = state.authStore.user_meta
+  const currentCoinbase = state.User.activeRelayer.coinbase
+  const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, { data })
+  const contract = RelayerRegistrationContract(state, TxSigner.provider)
+  const contractWithSigner = contract.connect(TxSigner.signer)
+
+  const {
+    owner,
+    coinbase,
+  } = TxSigner.data
+
+  // NOTE: the test contract on testnet is still using old_function_name "changeOwnership"
+  // rename if new contract is yet to be deployed.
+  const tx = await contractWithSigner.transfer(
+    currentCoinbase,
+    owner,
+    coinbase,
+    TxSigner.config,
+  )
+  debugger
+  if (tx.wait) {
+    const details = await tx.wait()
+    return { status: true, details }
+  } else {
+    return { status: false, details: tx }
+  }
+}

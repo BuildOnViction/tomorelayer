@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
@@ -37,7 +38,7 @@ const InnerTransferForm = ({
 
   const transferBtnDisabled = (
     isSubmitting ||
-    (currentCoinbase === values.new_coinbase && currentAddress === values.new_address)
+    (currentCoinbase === values.coinbase && currentAddress === values.owner)
   )
 
   return (
@@ -56,22 +57,22 @@ const InnerTransferForm = ({
         </Grid>
         <Grid item>
           <TextField
-            label="New Address"
-            value={values.new_address}
+            label="New Owner"
+            value={values.owner}
             onChange={handleChange}
-            error={errors.new_address}
-            name="new_address"
-            helperText={errors.address && <i className="text-alert">Invalid address!</i>}
+            error={errors.owner}
+            name="owner"
+            helperText={errors.owner && <i className="text-alert">Invalid address!</i>}
             fullWidth
           />
         </Grid>
         <Grid item>
           <TextField
             label="New Coinbase"
-            value={values.new_coinbase}
+            value={values.coinbase}
             onChange={handleChange}
-            error={errors.new_coinbase}
-            name="new_coinbase"
+            error={errors.coinbase}
+            name="coinbase"
             helperText={errors.coinbase && <i className="text-alert">Invalid coinbase!</i>}
             fullWidth
           />
@@ -118,7 +119,7 @@ const mapProps = state => ({
 
 const storeConnect = connect(mapProps, { $submitConfigFormPayload })
 const formConnect = wrappers.transferForm(InnerTransferForm)
-const WrappedTransferForm = storeConnect(formConnect)
+const WrappedTransferForm = withRouter(storeConnect(formConnect))
 
 const FormTransfer = () => {
   const [step, setStep] = React.useState(0)

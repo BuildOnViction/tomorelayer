@@ -126,8 +126,8 @@ contract('RelayerRegistration', async () => {
     return { status: false, details: err }
   })
 
-  const changeOwnership = async (owner, coinbase, newowner, newcoinbase) => RelayerRegistration
-    .methods.changeOwnership(coinbase, newowner, newcoinbase)
+  const transfer = async (owner, coinbase, newowner, newcoinbase) => RelayerRegistration
+    .methods.transfer(coinbase, newowner, newcoinbase)
     .send({ from: owner }).then(success => ({
       status: true,
       details: success.events.ChangeOwnershipEvent.returnValues,
@@ -274,7 +274,7 @@ contract('RelayerRegistration', async () => {
   })
 
 
-  it('CHANGE OWNERSHIP: authorized-only, fresh-coinbase, confirming relayer-owned lists before and after change', async () => {
+  it('TRANSFER: authorized-only, fresh-coinbase, confirming relayer-owned lists before and after change', async () => {
     const owner1 = {
       address: accounts[1],
       coinbase: [accounts[8]],
@@ -291,16 +291,16 @@ contract('RelayerRegistration', async () => {
     response = await getRelayerByOwner(owner2.address)
     expect(response.details.length).to.equal(1)
 
-    response = await changeOwnership(owner1.address, owner2.coinbase[0], owner1.address, accounts[4])
+    response = await transfer(owner1.address, owner2.coinbase[0], owner1.address, accounts[4])
     expect(response.status).to.be.false
 
-    response = await changeOwnership(owner1.address, owner1.coinbase[0], owner1.address, accounts[4])
+    response = await transfer(owner1.address, owner1.coinbase[0], owner1.address, accounts[4])
     expect(response.status).to.be.false
 
-    response = await changeOwnership(owner1.address, accounts[4], owner2.address, accounts[5])
+    response = await transfer(owner1.address, accounts[4], owner2.address, accounts[5])
     expect(response.status).to.be.false
 
-    response = await changeOwnership(owner1.address, owner1.coinbase[0], owner2.address, accounts[4])
+    response = await transfer(owner1.address, owner1.coinbase[0], owner2.address, accounts[4])
     expect(response.status).to.be.true
 
     response = await getRelayerByOwner(owner2.address)
@@ -315,7 +315,7 @@ contract('RelayerRegistration', async () => {
     expect(response.details[0]).to.equal(Address_Zero)
 
     // Transfer back to owner1...
-    response = await changeOwnership(owner2.address, accounts[4], owner1.address, accounts[4])
+    response = await transfer(owner2.address, accounts[4], owner1.address, accounts[4])
     expect(response.status).to.be.true
   })
 
@@ -348,7 +348,7 @@ contract('RelayerRegistration', async () => {
     // No update, no transfer...
     response = await update(owner1.address, owner1.coinbase[0])
     expect(response.status).to.be.false
-    response = await changeOwnership(owner1.address, owner1.coinbase[0], owner2.address, accounts[5])
+    response = await transfer(owner1.address, owner1.coinbase[0], owner2.address, accounts[5])
     expect(response.status).to.be.false
 
     // Unlock

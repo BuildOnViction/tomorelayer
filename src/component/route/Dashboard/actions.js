@@ -27,14 +27,13 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
   const ActiveForm = (cfg => {
     if (cfg.name) return FORM.info
     if (cfg.maker_fee) return FORM.trade
-    if (cfg.address) return FORM.transfer
+    if (cfg.owner) return FORM.transfer
     if (cfg.coinbase) return FORM.resign
   })(configs)
 
   // NOTE: nothing to do with FORM.info except saving to DB
 
   if (ActiveForm === FORM.trade) {
-
     const shouldUpdateChain = (
       configs.maker_fee !== relayer.maker_fee ||
       configs.taker_fee !== relayer.taker_fee ||
@@ -54,6 +53,13 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     }
   }
 
+  if (ActiveForm === FORM.transfer) {
+    const transferChain = await blk.transferRelayer(configs, state)
+    if (!transferChain.status) {
+      return PushAlert(state, AlertVariant.error, 'Fail to perform On-Chain Relayer Transfer')
+    }
+  }
+
   const relayerPayload = { id, ...configs }
   const updateBackend = await Client.post(API.relayer, { relayer: relayerPayload }).then(resp => resp).catch(() => false)
 
@@ -64,7 +70,15 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
   const relayerIndex = state.Relayers.findIndex(r => r.id === updateBackend.payload.relayer.id)
   state.Relayers[relayerIndex] = updateBackend.payload.relayer
   state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
-  state.User.activeRelayer = updateBackend.payload.relayer
 
-  return PushAlert(state, AlertVariant.success, 'Update Successful')
+  if (ActiveForm === FORM.update) {
+    state.User.activeRelayer = updateBackend.payload.relayer
+    return PushAlert(state, AlertVariant.success, 'Update Successful')
+  }
+
+  if (ActiveForm === FORM.transfer) {
+    state.User.activeRelayer = state.User.relayers[0]
+    return PushAlert(state, AlertVariant.success, 'Transfer Successful')
+  }
+
 }

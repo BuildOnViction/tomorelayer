@@ -23,7 +23,10 @@ export const wrappers = {
       return errors
     },
 
-    handleSubmit: (values, { props }) => props.$submitConfigFormPayload(values),
+    handleSubmit: (values, meta) => {
+      meta.props.$submitConfigFormPayload(values)
+      meta.setSubmitting(false)
+    },
   }),
 
   tradeForm: withFormik({
@@ -49,15 +52,14 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      currentCoinbase: props.currentCoinbase,
-      new_address: props.currentAddress,
-      new_coinbase: props.currentCoinbase,
+      owner: props.currentAddress,
+      coinbase: props.currentCoinbase,
     }),
 
     handleSubmit: async (values, meta) => {
-      console.warn('Transfer Values', values);
-      /* await meta.props.$submitConfigFormPayload(values)
-       * meta.setSubmitting(false) */
+      await meta.props.$submitConfigFormPayload(values)
+      meta.setSubmitting(false)
+      setTimeout(() => meta.props.history.push('/'), 1000)
     }
   })
 }
