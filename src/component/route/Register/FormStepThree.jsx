@@ -14,9 +14,10 @@ const FormStepThree = props => {
   } = props
 
   const handleFeeChange = e => {
-    e.target.value = e.target.value * 10
+    e.target.value = _.round(e.target.value * 10, 0)
     return handleChange(e)
   }
+
   const formatValue = v => _.round(v / 10, 1)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
@@ -30,22 +31,22 @@ const FormStepThree = props => {
       <Container maxWidth="sm">
         <Box display="flex" className="mb-1">
           <TextField
-            name="makerFee"
+            name="maker_fee"
             label="Maker Fee (min: 0.1%, max: 99.9%)"
-            value={formatValue(values.makerFee)}
-            onChange={handleFeeChange('makerFee')}
-            error={errors.makerFee}
+            value={formatValue(values.maker_fee)}
+            onChange={handleFeeChange}
+            error={errors.maker_fee}
             type="number"
             className="mr-1"
             InputProps={{ endAdornment }}
             fullWidth
           />
           <TextField
-            name="takerFee"
+            name="taker_fee"
             label="Taker Fee (min: 0.1%, max: 99.9%)"
-            value={formatValue(values.takerFee)}
-            onChange={handleFeeChange('takerFee')}
-            error={errors.takerFee}
+            value={formatValue(values.taker_fee)}
+            onChange={handleFeeChange}
+            error={errors.taker_fee}
             type="number"
             className="ml-1"
             InputProps={{ endAdornment }}
@@ -66,7 +67,7 @@ const FormStepThree = props => {
       </Container>
     </form>
   )
-}
+  }
 
 const mapProps = state => ({
   relayer_meta: state.RelayerForm.relayer_meta,

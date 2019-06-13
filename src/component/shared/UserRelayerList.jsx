@@ -20,7 +20,7 @@ const UserRelayerList = props => {
   if (relayers.length === 0 || !activeRelayer) {
     return (
       <div className="col-md-6">
-        <Button size="small">
+        <Button size="small" component={AdapterLink} to="/register">
           Create your relayer
         </Button>
       </div>

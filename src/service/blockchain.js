@@ -108,7 +108,7 @@ export const register = async (payload, state) => {
   const userMeta = state.authStore.user_meta
   const signerPayload = {
     value: formData.deposit,
-    data: formData,
+    data: payload,
   }
 
   const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, signerPayload)

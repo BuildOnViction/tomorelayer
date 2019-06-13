@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import { Button, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
 import { Grid } from 'component/utility'
+import { round } from 'service/helper'
 import { $backOneStep, $registerRelayer } from './actions'
 
 
@@ -10,9 +11,9 @@ const tableData = meta => {
     { key: 'Relayer Name', value: meta.name },
     { key: 'Coinbase', value: meta.coinbase },
     { key: 'Deposit', value: meta.deposit + ' TOMO' },
-    { key: 'Maker Fee', value: meta.makerFee + ' %' },
-    { key: 'Taker Fee', value: meta.takerFee + ' %' },
-    { key: 'Token Pairs', value: meta.fromTokens.map((t,idx) => `${t.symbol}/${meta.toTokens[idx].symbol}`).join(', ') },
+    { key: 'Maker Fee', value: round(meta.maker_fee / 10, 1) + ' %' },
+    { key: 'Taker Fee', value: round(meta.taker_fee / 10, 1) + ' %' },
+    { key: 'Token Pairs', value: meta.from_tokens.map((t,idx) => `${t.symbol}/${meta.to_tokens[idx].symbol}`).join(', ') },
   ]
 }
 

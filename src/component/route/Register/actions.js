@@ -25,10 +25,10 @@ export const $cancelRegistration = state => {
   state.RelayerForm.relayer_meta = {
     deposit: MISC.MinimumDeposit,
     name: '',
-    fromTokens: [],
-    toTokens: [],
-    makerFee: 0.1,
-    takerFee: 0.1,
+    from_tokens: [],
+    to_tokens: [],
+    maker_fee: 0.1,
+    taker_fee: 0.1,
   }
   return state
 }
@@ -47,12 +47,13 @@ export const $addToken = async (state, token) => {
 
 export const $registerRelayer = async state => {
   const meta = state.RelayerForm.relayer_meta
+
   const payload = {
     coinbase: meta.coinbase,
-    makerFee: meta.makerFee,
-    takerFee: meta.takerFee,
-    fromTokens: meta.fromTokens.map(p => p.address),
-    toTokens: meta.toTokens.map(p => p.address),
+    maker_fee: meta.maker_fee,
+    taker_fee: meta.taker_fee,
+    from_tokens: meta.from_tokens.map(p => p.address),
+    to_tokens: meta.to_tokens.map(p => p.address),
   }
 
   // Transact
@@ -67,10 +68,10 @@ export const $registerRelayer = async state => {
     owner: state.authStore.user_meta.address,
     name: meta.name,
     coinbase: meta.coinbase,
-    maker_fee: meta.makerFee,
-    taker_fee: meta.takerFee,
-    from_tokens: meta.fromTokens.map(p => p.address),
-    to_tokens: meta.toTokens.map(p => p.address),
+    maker_fee: meta.maker_fee,
+    taker_fee: meta.taker_fee,
+    from_tokens: meta.from_tokens.map(p => p.address),
+    to_tokens: meta.to_tokens.map(p => p.address),
   }
 
   const result = await Client.post(API.relayer, { relayer }).then(() => true).catch(() => false)
@@ -100,10 +101,10 @@ export const $resetFormState = state => {
       coinbase: '',
       deposit: MISC.MinimumDeposit,
       name: '',
-      fromTokens: [],
-      toTokens: [],
-      makerFee: 0.1,
-      takerFee: 0.1,
+      from_tokens: [],
+      to_tokens: [],
+      maker_fee: 0.1,
+      taker_fee: 0.1,
     },
   }
 
