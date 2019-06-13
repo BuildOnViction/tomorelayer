@@ -4,6 +4,7 @@ import { Grid } from 'component/utility'
 import FormInfo from './ConfigForms/FormInfo'
 import FormTrade from './ConfigForms/FormTrade'
 import FormTransfer from './ConfigForms/FormTransfer'
+import FormResign from './ConfigForms/FormResign'
 
 const ListItems = [
   'Information',
@@ -39,7 +40,8 @@ export default class ConfigureBoard extends React.Component {
         <div className="col-9">
           {activeConfig === 0 && <FormInfo relayer={relayer} />}
           {activeConfig === 1 && <FormTrade relayer={relayer} />}
-          {activeConfig === 2 && <FormTransfer relayer={relayer} />}
+          {activeConfig === 2 && <FormTransfer />}
+          {activeConfig === 3 && <FormResign />}
         </div>
       </Grid>
     )
