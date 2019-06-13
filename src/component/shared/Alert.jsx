@@ -1,12 +1,10 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import clsx from 'clsx'
+import cx from 'classnames'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ErrorIcon from '@material-ui/icons/Error'
 import InfoIcon from '@material-ui/icons/Info'
-import CloseIcon from '@material-ui/icons/Close'
 import { amber, green } from '@material-ui/core/colors'
-import IconButton from '@material-ui/core/IconButton'
 import Snackbar from '@material-ui/core/Snackbar'
 import SnackbarContent from '@material-ui/core/SnackbarContent'
 import WarningIcon from '@material-ui/icons/Warning'
@@ -46,60 +44,67 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function MySnackbarContentWrapper(props) {
+const MySnackbarContentWrapper = props => {
   const classes = useStyles()
   const { className, message, onClose, variant, ...other } = props
   const Icon = variantIcon[variant]
 
   return (
     <SnackbarContent
-      className={clsx(classes[variant], className)}
+      className={cx(classes[variant], className)}
       aria-describedby="client-snackbar"
       message={
         <span id="client-snackbar" className={classes.message}>
-          <Icon className={clsx(classes.icon, classes.iconVariant)} />
+          <Icon className={cx(classes.icon, classes.iconVariant)} />
           {message}
         </span>
       }
-      action={[
-        <IconButton key="close" aria-label="Close" color="inherit" onClick={onClose}>
-          <CloseIcon className={classes.icon} />
-        </IconButton>,
-      ]}
       {...other}
     />
   )
 }
 
-class Alert extends React.Component {
-  render() {
-    const { message, open, variant, selfClose } = this.props
-    const anchor = {vertical: 'top', horizontal: 'right'}
-    return (
-      <Snackbar
-        anchorOrigin={anchor}
-        open={open}
-        autoHideDuration={4000}
-        onClose={selfClose}
-      >
-        <MySnackbarContentWrapper
-          variant={variant}
-          message={message}
-          onClose={selfClose}
-        />
-      </Snackbar>
-    )
-  }
+const Alert = props => {
+  const { notifications, selfClose } = props
+  const anchor = {vertical: 'bottom', horizontal: 'right'}
+  const alertElementHeight = 58
+  // When anchored from top, need offset to re-calculate position
+  // const offset = notifications.findIndex(n => n.open)
+  const positioning = idx => `translateY(-${alertElementHeight * (notifications.length - idx - 1)}px)`
+  return (
+    <React.Fragment>
+      {notifications.map((n, idx) => (
+        <Snackbar
+          key={idx}
+          anchorOrigin={anchor}
+          open={n.open}
+          autoHideDuration={1000 + idx * 100}
+          onClose={() => selfClose(idx)}
+          style={{ transform: positioning(idx), transition: 'transform .1s' }}
+        >
+          <MySnackbarContentWrapper
+            variant={n.variant}
+            message={n.message}
+          />
+        </Snackbar>
+      ))}
+    </React.Fragment>
+  )
 }
 
-const mapProps = state => state.notification
-const actions = {
-  selfClose: () => ({
-    notification: {
-      open: false,
-    }
-  })
-}
+const mapProps = state => ({
+  notifications: state.notifications
+})
+
+const actions = store => ({
+  selfClose: (state, index) => {
+    let notifications = Array.from(state.notifications)
+    notifications[index].open = false
+    const anyOpenAlert = notifications.find(n => n.open)
+    if (!anyOpenAlert) notifications = []
+    return { notifications }
+  }
+})
 
 const storeConnect = connect(mapProps, actions)
 export default storeConnect(Alert)

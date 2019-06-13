@@ -56,11 +56,7 @@ export const initialState = {
     RelayerFormModal: false,
   },
   socket: socket,
-  notification: {
-    variant: 'info',
-    open: false,
-    message: '',
-  }
+  notifications: [],
 }
 export const originalState = JSON.parse(JSON.stringify(initialState))
 Object.freeze(originalState)
