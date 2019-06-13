@@ -1,45 +1,10 @@
-import { ethers, Signer } from 'ethers'
-import { bigNumber } from '@vutr/purser-core/utils'
+import { ethers } from 'ethers'
 import {
   UNLOCK_WALLET_METHODS,
   STANDARD_ERC20_ABI,
 } from 'service/constant'
+import WalletSigner from 'service/wallet'
 
-
-class WalletSigner extends Signer {
-  _w = undefined
-  provider = undefined
-
-  constructor(_wallet, _provider) {
-    super()
-    this._w = _wallet
-    this.provider = _provider
-  }
-
-  getAddress() {
-    return Promise.resolve(this._w.address);
-  }
-
-  signMessage(msg) {
-    return this._w.signMessage(msg)
-  }
-
-  async sendTransaction(tx) {
-    tx.gasLimit = bigNumber(tx.gasLimit || 1000000).toWei()
-    tx.gasPrice = bigNumber(tx.gasPrice || 10000).toGwei()
-
-    const to = await tx.to
-    tx.to = to
-    tx.inputData = tx.data
-    tx.chainId = this._w.chainId
-    delete tx.data
-
-    tx.value = bigNumber(tx.value || 1)
-    const hexString = await this._w.sign(tx)
-    const resp = await this.provider.sendTransaction(hexString)
-    return resp
-  }
-}
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
 
@@ -228,7 +193,7 @@ export const transferRelayer = async(data, state) => {
     coinbase,
     TxSigner.config,
   )
-  debugger
+
   if (tx.wait) {
     const details = await tx.wait()
     return { status: true, details }
