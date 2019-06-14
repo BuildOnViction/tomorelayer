@@ -1,8 +1,10 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
 import { Box, Button, Container, TextField, Typography } from '@material-ui/core'
 import { MISC } from 'service/constant'
-import { $cancelRegistration, $logout, $submitFormPayload } from './actions'
+import { compose } from 'service/helper'
+import { $cancelRegistration, $submitFormPayload } from './actions'
 import { wrappers } from './form_logics'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
@@ -13,7 +15,13 @@ const FormStepOne = props => {
     errors,
     handleChange,
     handleSubmit,
+    history,
   } = props
+
+  const cancel = () => {
+    props.$cancelRegistration()
+    setTimeout(() => history.push('/'), 300)
+  }
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
@@ -49,8 +57,8 @@ const FormStepOne = props => {
           fullWidth
         />
         <Box display="flex" justifyContent="space-between" className="mt-2">
-          <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
-            Back
+          <Button variant="outlined" className="mr-1" onClick={cancel} type="button">
+            Cancel
           </Button>
           <Button color="primary" variant="contained" type="submit">
             Confirm
@@ -68,7 +76,6 @@ const mapProps = state => ({
 })
 
 const actions = {
-  $logout,
   $submitFormPayload,
   $cancelRegistration,
 }
@@ -76,4 +83,7 @@ const actions = {
 const storeConnect = connect(mapProps, actions)
 const formConnect = wrappers.depositAndCoinbaseForm(FormStepOne)
 
-export default storeConnect(formConnect)
+export default compose(
+  storeConnect,
+  withRouter,
+)(formConnect)

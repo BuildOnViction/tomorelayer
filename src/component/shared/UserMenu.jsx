@@ -12,6 +12,11 @@ const UserMenu = props => {
   const handleClick = event => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
 
+  const menuItemClick = func => () => {
+    setAnchorEl(null)
+    return func()
+  }
+
   const {
     auth,
   } = props
@@ -39,7 +44,7 @@ const UserMenu = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={props.$logout}>Logout</MenuItem>
+        <MenuItem onClick={menuItemClick}>Logout</MenuItem>
       </Menu>
     </div>
   )
@@ -48,5 +53,9 @@ const UserMenu = props => {
 const mapProps = state => ({
   auth: state.authStore.auth
 })
+const actions = {
+  $logout,
+}
+const storeConnect = connect(mapProps, actions)
 
-export default connect(mapProps, { $logout })(UserMenu)
+export default storeConnect(UserMenu)

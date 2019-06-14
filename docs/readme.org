@@ -9,7 +9,8 @@
 - [[#notes][Notes]]
 
 * TODO App Development Progress Tracking
-*** [ ] Fix Menu not auto close on Item click
+*** [X] Fix Menu not auto close on Item click
+CLOSED: [2019-06-14 Fri 14:12]
 *** [ ] Deep route for Dashboard component
 *** [ ] Lazy load main route component
 *** [ ] Go back to login page when change wallet
@@ -19,14 +20,12 @@
 1. Unlock Wallet signin
    - Login work
      1. TomoWallet QR Code
-        - fetch code from Backend
-        - render QR code
+        - Make a wallet instance
         - Unable to register Relayer yet
      2. MetaMask
-        - Show login button
         - Proper action on Wallet/Account change
      3. Cold-Wallet (trezor, ledger)
-        - Switch HD Path
+        - Change address
         - Unable to register Relayer yet
 2. Registration
    - Form (deposit: 25k TOMO, Rate, Pick Token-Matches)

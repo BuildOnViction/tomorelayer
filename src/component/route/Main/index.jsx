@@ -1,8 +1,8 @@
 import React from 'react'
-import { Container } from 'component/utility'
+import { Container } from '@material-ui/core'
 
 const Main = () => (
-  <Container full>
+  <Container maxWidth="xl">
     body
   </Container>
 )

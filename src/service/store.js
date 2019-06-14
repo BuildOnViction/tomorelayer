@@ -53,7 +53,6 @@ export const initialState = {
   },
   toggle: {
     AddressModal: false,
-    RelayerFormModal: false,
   },
   socket: socket,
   notifications: [],
