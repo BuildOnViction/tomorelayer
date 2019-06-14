@@ -6,7 +6,6 @@ import {
   Button,
   Container,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -99,14 +98,14 @@ const InnerTransferForm = ({
             </Typography>
           </DialogContentText>
         </DialogContent>
-        <DialogActions className="p-2">
+        <Box display="flex" justifyContent="space-between" className="p-1">
           <Button onClick={handleClose} color="primary">
-            Disagree
+            Cancel
           </Button>
           <Button onClick={confirmAndClose} color="secondary" variant="contained" autoFocus>
             Proceed
           </Button>
-        </DialogActions>
+        </Box>
       </Dialog>
     </form>
   )

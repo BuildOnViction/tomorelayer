@@ -6,7 +6,6 @@ import {
   Button,
   Container,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -71,18 +70,19 @@ const InnerResignForm = ({
             readOnly
             disabled
             name="Coinbase"
+            label="Coinbase"
             className="mt-1 mb-1"
             fullWidth
           />
         </DialogContent>
-        <DialogActions className="p-2">
+        <Box display="flex" justifyContent="space-between" className="p-1">
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button onClick={confirmAndClose} color="secondary" variant="contained" autoFocus>
             Proceed
           </Button>
-        </DialogActions>
+        </Box>
       </Dialog>
     </form>
   )
