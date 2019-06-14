@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
 import { $changeRelayer } from './actions'
@@ -15,6 +15,7 @@ const UserRelayerList = props => {
   const {
     activeRelayer,
     relayers,
+    history,
   } = props
 
   if (relayers.length === 0 || !activeRelayer) {
@@ -25,6 +26,16 @@ const UserRelayerList = props => {
         </Button>
       </div>
     )
+  }
+
+  const handleMenuItemClick = relayer => () => {
+    setAnchorEl(null)
+    setTimeout(() => props.$changeRelayer(relayer), 300)
+  }
+
+  const createNewRelayer = () => {
+    setAnchorEl(null)
+    setTimeout(() => history.push('/register'), 100)
   }
 
   return (
@@ -43,14 +54,12 @@ const UserRelayerList = props => {
         onClose={handleClose}
       >
         {relayers.filter(r => r.id !== activeRelayer.id).map((r, idx) => (
-          <MenuItem key={r.id} onClick={() => props.$changeRelayer(r)}>
+          <MenuItem key={r.id} onClick={handleMenuItemClick(r)}>
             {r.name}
           </MenuItem>
         ))}
-        <MenuItem>
-          <Link to="/register">
-            New!
-          </Link>
+        <MenuItem onClick={createNewRelayer}>
+          New Relayer
         </MenuItem>
       </Menu>
     </div>
@@ -68,4 +77,4 @@ const actions = {
 
 const storeConnect = connect(mapProps, actions)
 
-export default storeConnect(UserRelayerList)
+export default storeConnect(withRouter(UserRelayerList))

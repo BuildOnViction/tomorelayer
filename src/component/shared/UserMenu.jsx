@@ -39,8 +39,6 @@ const UserMenu = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
         <MenuItem onClick={props.$logout}>Logout</MenuItem>
       </Menu>
     </div>
