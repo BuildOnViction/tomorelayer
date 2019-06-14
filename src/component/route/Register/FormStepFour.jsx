@@ -21,7 +21,7 @@ const FormStepFour = ({
 }) => {
 
   return (
-    <div className="text-left">
+    <div>
       <form onSubmit={handleSubmit}>
         <Box textAlign="center" className="mb-3">
           <Typography component="h1">

@@ -113,7 +113,7 @@ class TokenPairList extends React.Component {
         <Box>
 
         </Box>
-        <List dense className="bg-filled token-list">
+        <List dense className="bg-filled token-list token-list__limited-height">
           {filteredPairs.map((p, idx) => (
             <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p, selectedPairs)}>
               <ListItemIcon>

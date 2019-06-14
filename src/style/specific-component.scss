@@ -241,6 +241,9 @@
 .token-list {
   height: 400px;
   overflow: scroll;
+  &__limited-height {
+    height: 40vh;
+  }
 }
 
 .success-icon {
