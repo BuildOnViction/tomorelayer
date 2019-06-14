@@ -25,9 +25,10 @@ const FormTrade = ({
 }) => {
 
   const handleFeeChange = e => {
-    e.target.value = e.target.value * 10
+    e.target.value = _.round(e.target.value * 10, 0)
     return handleChange(e)
   }
+
   const formatValue = v => _.round(v / 10, 1)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
