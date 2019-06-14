@@ -5,29 +5,34 @@
 #+EMAIL: me@vutr.io`
 
 * Content                                                               :TOC:
-- [[#introduction][Introduction]]
-- [[#steps][Steps]]
+- [[#app-development-progress-tracking][App Development Progress Tracking]]
+- [[#notes][Notes]]
 
-* Introduction
-Notes about workflow
+* TODO App Development Progress Tracking
+*** [ ] Fix Menu not auto close on Item click
+*** [ ] Deep route for Dashboard component
+*** [ ] Lazy load main route component
+*** [ ] Go back to login page when change wallet
+**** [ ] MetaMask
 
-* Steps
-1. Unlock Wallet (signin)
-   - detect web3 on load: redirect to /home if user-address detected else login-page
-   - show login method
+* Notes
+1. Unlock Wallet signin
+   - Login work
      1. TomoWallet QR Code
         - fetch code from Backend
         - render QR code
+        - Unable to register Relayer yet
      2. MetaMask
         - Show login button
+        - Proper action on Wallet/Account change
      3. Cold-Wallet (trezor, ledger)
         - Switch HD Path
+        - Unable to register Relayer yet
 2. Registration
    - Form (deposit: 25k TOMO, Rate, Pick Token-Matches)
    - DEX Build Guide
-   - Issue token
-3. DEX Personnel Administration
-   - ...
-4. Protocol & Smart Contract
+3. Protocol & Smart Contract
    - Entrance fee: 25.000 = fee(5000) + locked(20,000)
    - No withdraw, only resign
+4. Responsiveness apply
+   - Make app responsive & mobile-first
