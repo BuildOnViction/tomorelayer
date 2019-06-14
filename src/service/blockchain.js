@@ -201,3 +201,23 @@ export const transferRelayer = async(data, state) => {
     return { status: false, details: tx }
   }
 }
+
+export const resignRelayer = async (data, state) => {
+  const userMeta = state.authStore.user_meta
+
+  try {
+    const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, { data })
+    const contract = RelayerRegistrationContract(state, TxSigner.provider)
+    const contractWithSigner = contract.connect(TxSigner.signer)
+
+    const {
+      coinbase,
+    } = TxSigner.data
+
+    const tx = await contractWithSigner.resign(coinbase)
+    const details = await tx.wait()
+    return { status: true, details }
+  } catch (e) {
+    return { status: false, details: 'Unable to perform' }
+  }
+}

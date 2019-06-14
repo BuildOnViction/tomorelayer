@@ -83,10 +83,8 @@ export const wrappers = {
     }),
 
     handleSubmit: async (values, meta) => {
-      debugger
       await meta.props.$submitConfigFormPayload(values)
       meta.setSubmitting(false)
-      setTimeout(() => meta.props.history.push('/'), 1000)
     }
   }),
 

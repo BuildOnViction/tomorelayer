@@ -67,6 +67,14 @@ const MySnackbarContentWrapper = props => {
 const Alert = props => {
   const { notifications, selfClose } = props
   const anchor = {vertical: 'bottom', horizontal: 'right'}
+
+  const alertDuration = {
+    success: 1000,
+    info: 500,
+    error: 4000,
+    warning: 2000,
+  }
+
   const alertElementHeight = 58
   // When anchored from top, need offset to re-calculate position
   // const offset = notifications.findIndex(n => n.open)
@@ -78,7 +86,7 @@ const Alert = props => {
           key={idx}
           anchorOrigin={anchor}
           open={n.open}
-          autoHideDuration={1000 + idx * 100}
+          autoHideDuration={alertDuration[n.variant] + idx * 100}
           onClose={() => selfClose(idx)}
           style={{ transform: positioning(idx), transition: 'transform .1s' }}
         >

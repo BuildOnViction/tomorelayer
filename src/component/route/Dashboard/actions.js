@@ -60,6 +60,15 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     }
   }
 
+  if (ActiveForm === FORM.resign) {
+    const resignChain = await blk.resignRelayer(configs, state)
+    if (!resignChain.status) {
+      return PushAlert(state, AlertVariant.error, 'Fail to perform On-Chain Relayer Resignn')
+    }
+    delete configs['coinbase']
+    configs.resigning = true
+  }
+
   const relayerPayload = { id, ...configs }
   const updateBackend = await Client.post(API.relayer, { relayer: relayerPayload }).then(resp => resp).catch(() => false)
 
@@ -67,18 +76,26 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     return PushAlert(state, AlertVariant.error, 'Fail to perform Relayer Database Update')
   }
 
+  // NOTE: replacing current relayer data with returned data
+  // Filter the current user's relayers from all relayers
   const relayerIndex = state.Relayers.findIndex(r => r.id === updateBackend.payload.relayer.id)
   state.Relayers[relayerIndex] = updateBackend.payload.relayer
   state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
+  state.User.activeRelayer = state.User.relayers.find(r => r.id === id) || state.User.relayers[0]
 
-  if (ActiveForm === FORM.update) {
-    state.User.activeRelayer = updateBackend.payload.relayer
-    return PushAlert(state, AlertVariant.success, 'Update Successful')
+  if (ActiveForm in [FORM.update, FORM.info]) {
+    const message = 'Update Successful'
+    return PushAlert(state, AlertVariant.success, message)
+  }
+
+  if (ActiveForm === FORM.resign) {
+    const message = 'Resign request submitted'
+    return PushAlert(state, AlertVariant.success, message)
   }
 
   if (ActiveForm === FORM.transfer) {
-    state.User.activeRelayer = state.User.relayers[0]
-    return PushAlert(state, AlertVariant.success, 'Transfer Successful')
+    const message = 'Transfer Successful'
+    return PushAlert(state, AlertVariant.success, message)
   }
 
 }
