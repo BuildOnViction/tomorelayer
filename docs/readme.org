@@ -9,10 +9,18 @@
 - [[#notes][Notes]]
 
 * TODO App Development Progress Tracking
-*** [X] Fix Menu not auto close on Item click
-CLOSED: [2019-06-14 Fri 14:12]
-*** [ ] Deep route for Dashboard component
-*** [ ] Lazy load main route component
+*** DONE Fix Menu not auto close on Item click
+CLOSED: [2019-06-14 Fri 15:34]
+*** DONE Deep route for Dashboard component
+CLOSED: [2019-06-14 Fri 15:34]
+*** CANCELLED Lazy load main route component
+Reason: Stat-Component is used in both Home route and Dashboard Home Route
+CLOSED: [2019-06-14 Fri 15:34]
+*** [ ] Resigning [0/4]:
+**** [ ] Finish resign request
+**** [ ] Countdown Clock
+**** [ ] Disable all other config board
+**** [ ] Withdraw money UI
 *** [ ] Go back to login page when change wallet
 **** [ ] MetaMask
 

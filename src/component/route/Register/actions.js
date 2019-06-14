@@ -20,7 +20,7 @@ export const $submitFormPayload = (state, payload) => {
 }
 
 export const $cancelRegistration = state => {
-  state.RelayerForm.step = 0
+  state.RelayerForm.step = 1
   state.RelayerForm.relayer_meta = {
     deposit: MISC.MinimumDeposit,
     name: '',

@@ -1,33 +1,24 @@
 import React from 'react'
+import { Switch, Route } from 'react-router'
 import { connect } from '@vutr/redux-zero/react'
-import { Container, Grid } from 'component/utility'
+import { Container, Box } from '@material-ui/core'
 import TabMenu from './TabMenu'
-import RelayerHome from './RelayerHome'
-import ConfigBoard from './ConfigBoard'
+import RelayerStat from './RelayerStat'
+import RelayerInsight from './RelayerInsight'
+import RelayerConfig from './RelayerConfig'
 
 class Dashboard extends React.Component {
-  state = {
-    tab: 0
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.relayerId !== prevProps.relayerId) {
-      this.setState({ tab: 0 })
-    }
-  }
-
-  changeTab = tab => this.setState({ tab })
-
   render() {
-    const { tab } = this.state
     return (
-      <Container>
-        <TabMenu changeTab={this.changeTab} activeTab={tab} />
-        <Grid className="mt-1 row col-12">
-          {tab === 0 && <RelayerHome />}
-          {tab === 1 && <div>insight</div>}
-          {tab === 2 && <ConfigBoard />}
-        </Grid>
+      <Container maxWidth="lg">
+        <TabMenu />
+        <Box>
+          <Switch>
+            <Route path="/dashboard/" exact component={RelayerStat}/>
+            <Route path="/dashboard/insight" component={RelayerInsight}/>
+            <Route path="/dashboard/config" component={RelayerConfig}/>
+          </Switch>
+        </Box>
       </Container>
     )
   }

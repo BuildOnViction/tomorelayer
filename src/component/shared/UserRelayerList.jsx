@@ -1,11 +1,11 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
-import { Link, withRouter } from 'react-router-dom'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
+import { AdapterLink } from 'component/shared/Adapters'
 import { $changeRelayer } from './actions'
 
-const AdapterLink = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)
 
 const UserRelayerList = props => {
   const [anchorEl, setAnchorEl] = React.useState(null)

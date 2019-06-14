@@ -1,10 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
-import { Grid } from 'component/utility'
 import CheckCircle from '@material-ui/icons/CheckCircle'
-
-const AdapterLink = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)
+import { Grid } from 'component/utility'
+import { AdapterLink } from 'component/shared/Adapters'
 
 const SuccessRegistration = () => (
   <div className="text-left">
