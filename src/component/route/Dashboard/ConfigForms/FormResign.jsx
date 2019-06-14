@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { TransferNotice } from './PresentComponents'
+import { ResignNotice } from './PresentComponents'
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 
@@ -101,7 +101,7 @@ const FormResign = () => {
   const nextStep = () => setStep(1)
   return (
     <Container className="border-all border-rounded p-5" maxWidth="xl">
-      {step === 0 && <TransferNotice confirm={nextStep} />}
+      {step === 0 && <ResignNotice confirm={nextStep} />}
       {step === 1 && <WrappedResignForm />}
     </Container>
   )

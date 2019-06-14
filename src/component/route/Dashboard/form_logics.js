@@ -40,6 +40,17 @@ export const wrappers = {
       to_tokens: props.relayer.to_tokens,
     }),
 
+    validate: values => {
+      const errors = {}
+      const fees = ['maker_fee', 'taker_fee']
+
+      fees.forEach(k => {
+        if (values[k] < 1 || values[k] > 999) errors[k] = true
+      })
+
+      return errors
+    },
+
     handleSubmit: async (values, meta) => {
       await meta.props.$submitConfigFormPayload(values)
       meta.setSubmitting(false)

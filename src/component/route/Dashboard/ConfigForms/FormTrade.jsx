@@ -20,8 +20,10 @@ const FormTrade = ({
   errors,
   handleChange,
   handleSubmit,
-  setFieldValue,
   isSubmitting,
+  resetForm,
+  setFieldValue,
+  relayer,
 }) => {
 
   const handleFeeChange = e => {
@@ -31,6 +33,16 @@ const FormTrade = ({
 
   const formatValue = v => _.round(v / 10, 1)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
+
+  const feeNotChanged = ['maker_fee', 'taker_fee'].every(k => values[k] === relayer[k])
+  const tokenNotChanged = ['from_tokens', 'to_tokens'].every(k => {
+    const addrSet = new Set(relayer[k])
+    const equalLength = values[k].length === relayer[k].length
+    const hasItem = values[k].every(addr => addrSet.has(addr))
+    return equalLength && hasItem
+  })
+
+  const disableSubmit = isSubmitting || (feeNotChanged && tokenNotChanged)
 
   return (
     <Container maxWidth="xl">
@@ -82,8 +94,11 @@ const FormTrade = ({
             />
           </Grid>
           <Grid item className="mt-2">
-            <Box display="flex" justifyContent="flex-end">
-              <Button color="primary" variant="contained" type="submit" disabled={isSubmitting}>
+            <Box display="flex" justifyContent="space-between">
+              <Button type="button" onClick={resetForm} disabled={disableSubmit}>
+                Reset
+              </Button>
+              <Button color="primary" variant="contained" type="submit" disabled={disableSubmit}>
                 Save
               </Button>
             </Box>
@@ -94,7 +109,10 @@ const FormTrade = ({
   )
 }
 
-const storeConnect = connect(undefined, { $submitConfigFormPayload })
+const mapProps = state => ({
+  relayer: state.User.activeRelayer
+})
+const storeConnect = connect(mapProps, { $submitConfigFormPayload })
 const formConnect = wrappers.tradeForm(FormTrade)
 
 export default storeConnect(formConnect)

@@ -30,7 +30,7 @@ class TokenHandler(BaseHandler):
                     'name': obj.name,
                     'symbol': obj.symbol,
                     'logo': obj.logo,
-                    'address': obj.address,
+                    'address': obj.address.lower(),
                     'total_supply': obj.total_supply,
                 })
 

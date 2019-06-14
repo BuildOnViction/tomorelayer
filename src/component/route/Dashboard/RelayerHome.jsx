@@ -11,7 +11,7 @@ const RelayerHome = ({ relayer }) => {
 }
 
 const mapProps = state => ({
-
+  relayer: state.User.activeRelayer
 })
 
 export default connect(mapProps)(RelayerHome)

@@ -5,25 +5,28 @@ import TabMenu from './TabMenu'
 import RelayerHome from './RelayerHome'
 import ConfigBoard from './ConfigBoard'
 
-
 class Dashboard extends React.Component {
   state = {
-    activeTab: 0,
+    tab: 0
   }
 
-  changeTab = activeTab => this.setState({ activeTab })
+  componentDidUpdate(prevProps) {
+    if (this.props.relayerId !== prevProps.relayerId) {
+      this.setState({ tab: 0 })
+    }
+  }
+
+  changeTab = tab => this.setState({ tab })
 
   render() {
-    const { activeTab } = this.state
-    const { activeRelayer } = this.props
-
+    const { tab } = this.state
     return (
       <Container>
-        <TabMenu changeTab={this.changeTab} activeTab={activeTab} />
+        <TabMenu changeTab={this.changeTab} activeTab={tab} />
         <Grid className="mt-1 row col-12">
-          {activeTab === 0 && <RelayerHome relayer={activeRelayer} />}
-          {activeTab === 1 && <div>insight</div>}
-          {activeTab === 2 && <ConfigBoard relayer={activeRelayer} />}
+          {tab === 0 && <RelayerHome />}
+          {tab === 1 && <div>insight</div>}
+          {tab === 2 && <ConfigBoard />}
         </Grid>
       </Container>
     )
@@ -31,7 +34,9 @@ class Dashboard extends React.Component {
 }
 
 const mapProps = state => ({
-  activeRelayer: state.User.activeRelayer,
+  relayerId: state.User.activeRelayer.id
 })
 
-export default connect(mapProps)(Dashboard)
+const storeConnect = connect(mapProps)
+
+export default storeConnect(Dashboard)
