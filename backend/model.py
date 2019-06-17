@@ -61,24 +61,24 @@ def loaddata():
     # to update this data over time
     initial_tokens = [
         {
-            'name': 'Wrapped TOMO',
-            'address': 'addressxxx',
+            'name': 'TOMO',
+            'address': '0x0000000000000000000000000000000000000001',
             'logo': '',
             'total_supply': '10000000000000000000000000',
-            'symbol': 'WTOMO',
+            'symbol': 'TOMO',
         },
         {
             'name': 'USD-Tether',
             'address': 'yyyyyy',
             'logo': '',
-            'total_supply': '99999999',
+            'total_supply': '2000000',
             'symbol': 'USDT',
         },
         {
-            'name': 'Triip Coin',
+            'name': 'TriipProtocol',
             'address': 'zzzzzzzz',
             'logo': '',
-            'total_supply': '1111111111',
+            'total_supply': '2000000',
             'symbol': 'TRIIP',
         },
     ]

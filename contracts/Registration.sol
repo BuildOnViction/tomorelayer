@@ -70,7 +70,7 @@ contract RelayerRegistration {
 
 
     /// @dev Contract Config Modifications
-    function reconfigure (uint maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
+    function reconfigure(uint maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
         require(maxRelayer > RelayerCount);
         require(maxToken > 4 && maxToken < 1001);
         require(minDeposit > 10000);
@@ -83,7 +83,7 @@ contract RelayerRegistration {
 
 
     /// @dev State-Alter Methods
-    function register (address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public payable {
+    function register(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public payable {
         require(msg.sender != coinbase);
         require(msg.sender != CONTRACT_OWNER, "Contract Owner is forbidden to create a Relayer");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
@@ -109,7 +109,7 @@ contract RelayerRegistration {
     }
 
 
-    function update (address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+    function update(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
         require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
@@ -124,7 +124,7 @@ contract RelayerRegistration {
     }
 
 
-    function transfer (address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+    function transfer(address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
         require(new_coinbase != address(0));
 

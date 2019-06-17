@@ -43,7 +43,7 @@ const UserMenu = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={menuItemClick}>Logout</MenuItem>
+        <MenuItem onClick={menuItemClick(props.$logout)}>Logout</MenuItem>
       </Menu>
     </div>
   )
