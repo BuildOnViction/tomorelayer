@@ -89,6 +89,7 @@ export const $registerRelayer = async state => {
 
   state.Relayers = relayers
   state.User.relayers = relayers.filter(r => r.owner === state.authStore.user_meta.address)
+  state.User.activeRelayer = _.last(state.User.relayers)
   state.RelayerForm.step = state.RelayerForm.step + 1
   return state
 }

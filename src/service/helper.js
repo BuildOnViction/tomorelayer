@@ -96,3 +96,8 @@ export const compareString = (stra, strb, caseSensitive = false) => {
 
   return stra === strb
 }
+
+export const last = someArray => {
+  const length = someArray.length
+  return someArray[length - 1]
+}
