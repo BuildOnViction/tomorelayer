@@ -16,13 +16,24 @@ CLOSED: [2019-06-14 Fri 15:34]
 *** CANCELLED Lazy load main route component
 Reason: Stat-Component is used in both Home route and Dashboard Home Route
 CLOSED: [2019-06-14 Fri 15:34]
-*** [ ] Resigning [0/4]:
-**** [ ] Finish resign request
-**** [ ] Countdown Clock
-**** [ ] Disable all other config board
+*** [ ] Resigning [3/4]:
+**** DONE Finish resign request
+CLOSED: [2019-06-17 Mon 17:56]
+**** DONE Countdown Clock
+CLOSED: [2019-06-17 Mon 17:56]
+**** DONE Disable all other config board
+CLOSED: [2019-06-17 Mon 17:56]
 **** [ ] Withdraw money UI
 *** [ ] Go back to login page when change wallet
 **** [ ] MetaMask
+*** [ ] Error catch boundary
+**** [ ] Backend api endpoint to present error & Slack integration
+**** [ ] Frontend setup
+*** [ ] Quality Control
+**** [ ] Setup husky
+**** [ ] Backend test
+**** [ ] Frontend test with Mocha
+*** [ ] Deploy to Test Server
 
 * Notes
 1. Unlock Wallet signin
