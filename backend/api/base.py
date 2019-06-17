@@ -14,7 +14,11 @@ class BaseHandler(RequestHandler):
 
     def set_default_headers(self):
         if not is_production:
-            self.set_header("Access-Control-Allow-Origin", "*")
+            # FIXME: for production, cant allow CORS
+            self.set_header("access-control-allow-origin", "*")
+            self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+            self.set_header('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS')
+            self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type")
 
     def get_current_user(self):
         return self.get_secure_cookie('user_id')
@@ -26,6 +30,10 @@ class BaseHandler(RequestHandler):
 
         if valid_content_type:
             self.request_body = json.loads(self.request.body)
+
+    def options(self):
+        self.set_status(204)
+        self.finish()
 
     def json_response(self, response={}, meta={}):
         standard_resp = {

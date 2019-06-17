@@ -1,5 +1,6 @@
 from playhouse.shortcuts import model_to_dict
 from model import Relayer
+from exception import InvalidValueException
 from .base import BaseHandler
 
 
@@ -23,6 +24,15 @@ class RelayerHandler(BaseHandler):
 
             response.update({'relayer': model_to_dict(obj)})
             self.json_response(response)
+
+    async def delete(self):
+        """Delete a relayer"""
+        relayer_id = self.request_body.get('id')
+        if not relayer_id:
+            raise InvalidValueException(detail='relayer id must not be empty')
+        relayer = Relayer.get(Relayer.id == relayer_id)
+        result = relayer.delete_instance()
+        self.json_response({'deleted':result})
 
     async def get(self):
         relayers = []

@@ -15,6 +15,16 @@ export const Client = {
     if (r.ok) return r.json()
     throw new Error(r.json())
   }),
+  delete: (api, value) => fetch(api, {
+    method: 'delete',
+    body: JSON.stringify(value),
+    headers: {
+      Accept: 'application/json; charset=UTF-8',
+    },
+  }).then(r => {
+    if (r.ok) return r.json()
+    throw new Error(r.json())
+  }),
 }
 
 export const Alert = (state, variant, message) => {

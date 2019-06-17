@@ -1,3 +1,4 @@
+import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
 import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
 import { API } from 'service/constant'
@@ -85,7 +86,7 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
   const relayerIndex = state.Relayers.findIndex(r => r.id === updateBackend.payload.relayer.id)
   state.Relayers[relayerIndex] = updateBackend.payload.relayer
   state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
-  state.User.activeRelayer = state.User.relayers.find(r => r.id === id) || state.User.relayers[0]
+  state.User.activeRelayer = state.User.relayers.find(r => r.id === id) || _.first(state.User.relayers)
 
   if (ActiveForm in [FORM.update, FORM.info]) {
     const message = 'Update Successful'
@@ -102,4 +103,29 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
     return PushAlert(state, AlertVariant.success, message)
   }
 
+}
+
+export const $refundRelayer = async state => {
+  const relayerId = state.User.activeRelayer.id
+  const relayerName = state.User.activeRelayer.name
+
+  const refundChain = await blk.refundRelayer(state)
+  if (!refundChain.status) {
+    const message = 'Unable to ask for refund yet'
+    return PushAlert(state, AlertVariant.error, message)
+  }
+
+  const resp = await Client.delete(API.relayer, { id: relayerId })
+                           .then(resp => resp)
+                           .catch(() => false)
+  if (!resp) {
+    const message = `Error removing relayer of id: ${relayerId}`
+    return PushAlert(state, AlertVariant.error, message)
+  }
+
+  state.Relayers = state.Relayers.filter(r => r.id !== relayerId)
+  state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
+  state.User.activeRelayer = _.first(state.User.relayers)
+  const message = `Complete resignation of Relayer ${relayerName}`
+  return PushAlert(state, AlertVariant.success, message)
 }

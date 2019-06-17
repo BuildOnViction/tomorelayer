@@ -98,11 +98,15 @@ export const compareString = (stra, strb, caseSensitive = false) => {
 }
 
 export const last = someArray => {
+  if (!someArray || !someArray.length) return undefined
   const length = someArray.length
   return someArray[length - 1]
 }
 
-export const first = someArray => someArray[0]
+export const first = someArray => {
+  if (!someArray || !someArray.length) return undefined
+  return someArray[0]
+}
 
 export const pick = keys => obj => {
   let result = {}

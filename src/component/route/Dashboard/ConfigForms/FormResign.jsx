@@ -13,11 +13,10 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { refundRelayer } from 'service/blockchain'
 import { CountdownClock } from 'component/shared/CountdownClock'
 import { ResignNotice } from './PresentComponents'
 import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload } from '../actions'
+import { $submitConfigFormPayload, $refundRelayer } from '../actions'
 
 const InnerResignForm = ({
   coinbase,
@@ -118,7 +117,6 @@ class FormResign extends React.Component {
   renderWithdrawForm = lock_time => {
     const date = new Date(lock_time * 1000)
     const elapsed = date - Date.now() > 0
-    const refund = async () => refundRelayer(this.props.storeState)
     return (
       <Container className="border-all border-rounded p-5" maxWidth="xl">
         <Box display="flex" flexDirection="column">
@@ -136,7 +134,7 @@ class FormResign extends React.Component {
             <CountdownClock date={date} />
           </Box>
           <Box display="flex" justifyContent="center" m={2}>
-            <Button onClick={refund} disabled={elapsed} color="primary" variant="contained">
+            <Button onClick={this.props.$refundRelayer} disabled={elapsed} color="primary" variant="contained">
               Refund
             </Button>
           </Box>
@@ -159,6 +157,10 @@ const mapProps = state => ({
   lock_time: state.User.activeRelayer.lock_time,
 })
 
-const outerConnect = connect(mapProps)
+const actions = {
+  $refundRelayer,
+}
+
+const outerConnect = connect(mapProps, actions)
 
 export default outerConnect(FormResign)
