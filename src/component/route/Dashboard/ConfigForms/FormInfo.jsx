@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import { Avatar, Box, Container, Grid, TextField, Button } from '@material-ui/core'
+import { Avatar, Box, Container, Grid, TextField, Button, Typography } from '@material-ui/core'
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
 
@@ -12,10 +12,22 @@ class FormInfo extends React.Component {
       errors,
       handleChange,
       handleSubmit,
+      isSubmitting,
+      relayer,
     } = this.props
+
+    const inputDisabled = isSubmitting || relayer.resigning
+
 
     return (
       <Container className="border-all border-rounded p-4" maxWidth="xl">
+        {relayer.resigning && (
+          <Box>
+            <Typography component="h4">
+              This relayer has been requested to deactivated. Updating relayer is no longer allowed.
+            </Typography>
+          </Box>
+        )}
         <form onSubmit={handleSubmit}>
           <Grid container spacing={5} direction="column">
             <Grid item>
@@ -26,6 +38,7 @@ class FormInfo extends React.Component {
                 error={errors.name}
                 name="name"
                 helperText={errors.name && <i className="text-alert">Name must not be either empty or too long!</i>}
+                disabled={inputDisabled}
               />
             </Grid>
             <Grid item>
@@ -36,6 +49,7 @@ class FormInfo extends React.Component {
                 onChange={handleChange}
                 error={errors.link}
                 helperText={errors.link && <i className="text-alert">Invalid URL!</i>}
+                disabled={inputDisabled}
               />
             </Grid>
             <Grid item>
@@ -46,6 +60,7 @@ class FormInfo extends React.Component {
                 error={errors.logo}
                 name="logo"
                 helperText={errors.logo && <i className="text-alert">Invalid URL!</i>}
+                disabled={inputDisabled}
               />
             </Grid>
             <Grid item>
@@ -60,7 +75,7 @@ class FormInfo extends React.Component {
             </Grid>
             <Grid item>
               <Box display="flex" justifyContent="flex-end">
-                <Button color="primary" variant="contained" type="submit">
+                <Button color="primary" variant="contained" type="submit" disabled={inputDisabled}>
                   Save
                 </Button>
               </Box>
@@ -73,7 +88,7 @@ class FormInfo extends React.Component {
 }
 
 const mapProps = state => ({
-  relayer: state.User.activeRelayer
+  relayer: state.User.activeRelayer,
 })
 const storeConnect = connect(mapProps, { $submitConfigFormPayload })
 const formConnect = wrappers.infoForm(FormInfo)

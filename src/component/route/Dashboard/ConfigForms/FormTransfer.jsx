@@ -114,15 +114,31 @@ const InnerTransferForm = ({
 const mapProps = state => ({
   currentAddress: state.authStore.user_meta.address,
   currentCoinbase: state.User.activeRelayer.coinbase,
+  resigning: state.User.activeRelayer.resigning,
 })
 
 const storeConnect = connect(mapProps, { $submitConfigFormPayload })
 const formConnect = wrappers.transferForm(InnerTransferForm)
 const WrappedTransferForm = withRouter(storeConnect(formConnect))
 
-const FormTransfer = () => {
+const FormTransfer = props => {
   const [step, setStep] = React.useState(0)
   const nextStep = () => setStep(1)
+
+  if (props.resigning) {
+    return (
+      <Container className="border-all border-rounded p-5" maxWidth="xl">
+        <Typography component="h5">
+          <Box>
+            <Typography component="h4">
+              This relayer has been requested to deactivated. Transferring relayer is no longer allowed.
+            </Typography>
+          </Box>
+        </Typography>
+      </Container>
+    )
+  }
+
   return (
     <Container className="border-all border-rounded p-5" maxWidth="xl">
       {step === 0 && <TransferNotice confirm={nextStep} />}
@@ -131,4 +147,8 @@ const FormTransfer = () => {
   )
 }
 
-export default FormTransfer
+const outerStoreConnect = state => ({
+  resigning: state.User.activeRelayer.resigning
+})
+
+export default connect(outerStoreConnect)(FormTransfer)

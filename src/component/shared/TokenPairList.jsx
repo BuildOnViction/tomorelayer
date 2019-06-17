@@ -42,6 +42,7 @@ class TokenPairList extends React.Component {
   }
 
   pickPair = (pair, selected) => () => {
+    if (this.props.disabled) return
     const index = selected.indexOf(pair)
     index >= 0 ? selected.splice(index, 1) : selected.push(pair)
     this.setState({ selected }, this.dispatchChange)
@@ -61,7 +62,7 @@ class TokenPairList extends React.Component {
   setFilters = {
     tokens: tokens => {
       const filters = { ...this.state.filters }
-      const filterByMajorTokens = pair => tokens.includes(pair.from.address)
+      const filterByMajorTokens = pair => tokens.includes(pair.from.address) || tokens.includes(pair.to.address)
       const fallbackFilter = pair => pair
       filters.filterByMajorTokens = tokens.length > 0 ? filterByMajorTokens : fallbackFilter
       this.setState({ filters })
@@ -76,7 +77,7 @@ class TokenPairList extends React.Component {
   }
 
   render() {
-    const { pairs, majorTokens } = this.props
+    const { pairs, majorTokens, disabled } = this.props
     const { selected: selectedPairs } = this.state
     const filteredPairs = this.applyFilters(pairs)
     const isAllChecked = this.isAllChecked(filteredPairs, selectedPairs)
@@ -85,13 +86,15 @@ class TokenPairList extends React.Component {
     return (
       <Box border={1}>
         <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
-          <Badge color="primary" badgeContent={`${selectedPairs.length}`}>
-            <MajorTokenSelect
-              name={selectAllBtnText}
-              onClick={this.selectAll(filteredPairs, selectedPairs, isAllChecked)}
-              selected={isAllChecked}
-            />
-          </Badge>
+          {!disabled && (
+            <Badge color="primary" badgeContent={`${selectedPairs.length}`}>
+              <MajorTokenSelect
+                name={selectAllBtnText}
+                onClick={this.selectAll(filteredPairs, selectedPairs, isAllChecked)}
+                selected={isAllChecked}
+              />
+            </Badge>
+          )}
           <MajorTokenFilter
             majorTokens={majorTokens}
             setFilter={this.setFilters.tokens}
@@ -117,7 +120,7 @@ class TokenPairList extends React.Component {
           {filteredPairs.map((p, idx) => (
             <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p, selectedPairs)}>
               <ListItemIcon>
-                <Checkbox color="default" checked={selectedPairs.includes(p)} />
+                <Checkbox color="default" checked={selectedPairs.includes(p)} disabled={disabled} />
               </ListItemIcon>
               <ListItemText primary={p.toString()} />
             </ListItem>
@@ -141,7 +144,7 @@ const mapProps = state => {
   }
 
   tradeTokens.sort(tokenSorting).forEach((fromToken, fromIndex) => {
-    const toTokens = tradeTokens.filter((_, toIndex) => toIndex > fromIndex)
+    const toTokens = tradeTokens.filter((_, toIndex) => toIndex !== fromIndex)
     toTokens.forEach(toToken => pairs.push({
       from: fromToken,
       to: toToken,

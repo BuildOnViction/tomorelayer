@@ -117,7 +117,7 @@ class FormResign extends React.Component {
 
   renderWithdrawForm = lock_time => {
     const date = new Date(lock_time * 1000)
-    const elapsed = date - Date.now() < 0
+    const elapsed = date - Date.now() > 0
     const refund = async () => refundRelayer(this.props.storeState)
     return (
       <Container className="border-all border-rounded p-5" maxWidth="xl">
@@ -132,11 +132,11 @@ class FormResign extends React.Component {
               You can ask for withdrawal after the deposit lock-time has elapsed
             </Typography>
           </Box>
-          <Box m={3}>
+          <Box m={8}>
             <CountdownClock date={date} />
           </Box>
           <Box display="flex" justifyContent="center" m={2}>
-            <Button onClick={refund} disabled={elapsed} color="primary">
+            <Button onClick={refund} disabled={elapsed} color="primary" variant="contained">
               Refund
             </Button>
           </Box>

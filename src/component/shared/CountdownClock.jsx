@@ -1,5 +1,4 @@
 import React from 'react'
-import cx from 'classnames'
 import { Box } from '@material-ui/core'
 
 export class CountdownClock extends React.Component {

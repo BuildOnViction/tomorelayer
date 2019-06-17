@@ -42,7 +42,8 @@ const FormTrade = ({
     return equalLength && hasItem
   })
 
-  const disableSubmit = isSubmitting || (feeNotChanged && tokenNotChanged)
+  const disableSubmit = feeNotChanged && tokenNotChanged
+  const disableForm = relayer.resigning || isSubmitting
 
   return (
     <Container maxWidth="xl">
@@ -65,6 +66,7 @@ const FormTrade = ({
                   type="number"
                   InputProps={{ endAdornment }}
                   fullWidth
+                  disabled={disableForm}
                 />
               </div>
               <div className="p-2 w_100">
@@ -77,6 +79,7 @@ const FormTrade = ({
                   type="number"
                   InputProps={{ endAdornment }}
                   fullWidth
+                  disabled={disableForm}
                 />
               </div>
             </Box>
@@ -91,14 +94,15 @@ const FormTrade = ({
               fromTokens={values.from_tokens}
               toTokens={values.to_tokens}
               onChange={setFieldValue}
+              disabled={disableForm}
             />
           </Grid>
           <Grid item className="mt-2">
             <Box display="flex" justifyContent="space-between">
-              <Button type="button" onClick={resetForm} disabled={disableSubmit}>
+              <Button type="button" onClick={resetForm} disabled={disableSubmit || disableForm}>
                 Reset
               </Button>
-              <Button color="primary" variant="contained" type="submit" disabled={disableSubmit}>
+              <Button color="primary" variant="contained" type="submit" disabled={disableSubmit || disableForm}>
                 Save
               </Button>
             </Box>
