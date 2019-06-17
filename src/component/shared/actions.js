@@ -7,6 +7,7 @@ import * as _ from 'service/helper'
 export const $fetchTokens = async state => {
   const resp = await Client.get(API.token)
   state.tradableTokens = resp.payload
+  state.MajorTokens = resp.payload.filter(t => t.is_major)
   return PushAlert(state, AlertVariant.info, 'Fetched tokens')
 }
 

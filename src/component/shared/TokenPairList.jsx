@@ -130,15 +130,23 @@ class TokenPairList extends React.Component {
 
 const mapProps = state => {
   const tradeTokens = state.tradableTokens
-  const match = fromToken => tradeTokens.filter(t => t.id !== fromToken.id).map(toToken => ({
-    from: fromToken,
-    to: toToken,
-    toString: () => `${fromToken.symbol}/${toToken.symbol}`
-  }))
+
   const pairs = []
-  tradeTokens.forEach(t => {
-    const list = match(t)
-    list.forEach(pair => pairs.push(pair))
+  const tokenSorting = (a, b) => {
+    // NOTE: this may be adjusted in the future depending on each token's liquidity
+    if (a.is_major && b.is_major) return a.symbol.localeCompare(b.symbol)
+    if (!a.is_major && !b.is_major) return a.symbol.localeCompare(b.symbol)
+    if (a.is_major && !b.is_major) return -1
+    if (!a.is_major && b.is_major) return 1
+  }
+
+  tradeTokens.sort(tokenSorting).forEach((fromToken, fromIndex) => {
+    const toTokens = tradeTokens.filter((_, toIndex) => toIndex > fromIndex)
+    toTokens.forEach(toToken => pairs.push({
+      from: fromToken,
+      to: toToken,
+      toString: () => `${fromToken.symbol}/${toToken.symbol}`
+    }))
   })
 
   return { pairs, majorTokens: state.MajorTokens }

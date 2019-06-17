@@ -32,16 +32,7 @@ export const initialState = {
     tokenForm: false,
   },
   tradableTokens: [],
-  MajorTokens: [
-    {
-      symbol: 'TOMO',
-      address: '0x0000000000000000000000000000000000000001',
-    },
-    {
-      symbol: 'USDT',
-      address: 'yyyyyy',
-    }
-  ],
+  MajorTokens: [],
   Contracts: [],
   Relayers: [],
   User: {

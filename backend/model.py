@@ -48,6 +48,7 @@ class Token(PwModel):
     logo = pw.CharField(null=True)
     address = pw.CharField(unique=True, max_length=200)
     total_supply = pw.CharField()
+    is_major = pw.BooleanField(default=False)
 
 
 def loaddata():
