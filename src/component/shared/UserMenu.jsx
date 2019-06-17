@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from '@vutr/redux-zero/react'
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown'
@@ -14,6 +15,13 @@ const UserMenu = props => {
   const menuItemClick = func => () => {
     setAnchorEl(null)
     return func()
+  }
+
+  const logout = () => {
+    props.history.push('/')
+    setTimeout(() => {
+      props.$logout()
+    }, 200)
   }
 
   const {
@@ -43,7 +51,7 @@ const UserMenu = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={menuItemClick(props.$logout)}>Logout</MenuItem>
+        <MenuItem onClick={menuItemClick(logout)}>Logout</MenuItem>
       </Menu>
     </div>
   )
@@ -52,9 +60,11 @@ const UserMenu = props => {
 const mapProps = state => ({
   auth: state.authStore.auth
 })
+
 const actions = {
-  $logout,
+  $logout
 }
+
 const storeConnect = connect(mapProps, actions)
 
-export default storeConnect(UserMenu)
+export default storeConnect(withRouter(UserMenu))

@@ -266,3 +266,23 @@
 .pair-item:hover {
   background: #f7f7f7;
 }
+
+.countdown-col {
+
+  &-element {
+    text-align: center;
+    color: #555;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  &-element-number {
+    font-size: 20px;
+    border-bottom: solid 1px #ddd;
+  }
+
+  &-element-text {
+    font-size: 14px;
+  }
+
+}

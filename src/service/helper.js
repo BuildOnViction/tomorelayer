@@ -101,3 +101,11 @@ export const last = someArray => {
   const length = someArray.length
   return someArray[length - 1]
 }
+
+export const first = someArray => someArray[0]
+
+export const pick = keys => obj => {
+  let result = {}
+  keys.forEach(k => when(obj[k]).do(() => result[k] = obj[k]))
+  return result
+}

@@ -13,6 +13,8 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
+import { refundRelayer } from 'service/blockchain'
+import { CountdownClock } from 'component/shared/CountdownClock'
 import { ResignNotice } from './PresentComponents'
 import { wrappers } from '../form_logics'
 import { $submitConfigFormPayload } from '../actions'
@@ -88,23 +90,75 @@ const InnerResignForm = ({
   )
 }
 
-const mapProps = state => ({
+const formProps = state => ({
   coinbase: state.User.activeRelayer.coinbase,
 })
-
-const storeConnect = connect(mapProps, { $submitConfigFormPayload })
+const formActions = { $submitConfigFormPayload }
+const innerFormStoreConnect = connect(formProps, formActions)
 const formConnect = wrappers.resignForm(InnerResignForm)
-const WrappedResignForm = withRouter(storeConnect(formConnect))
+const WrappedResignForm = withRouter(innerFormStoreConnect(formConnect))
 
-const FormResign = () => {
-  const [step, setStep] = React.useState(0)
-  const nextStep = () => setStep(1)
-  return (
-    <Container className="border-all border-rounded p-5" maxWidth="xl">
-      {step === 0 && <ResignNotice confirm={nextStep} />}
-      {step === 1 && <WrappedResignForm />}
-    </Container>
-  )
+
+class FormResign extends React.Component {
+  state = {
+    step: 0
+  }
+
+  nextStep = () => this.setState({ step: 1 })
+
+  renderResignForm = step => {
+    return (
+      <Container className="border-all border-rounded p-5" maxWidth="xl">
+        {step === 0 && <ResignNotice confirm={this.nextStep} />}
+        {step === 1 && <WrappedResignForm />}
+      </Container>
+    )
+  }
+
+  renderWithdrawForm = lock_time => {
+    const date = new Date(lock_time * 1000)
+    const elapsed = date - Date.now() < 0
+    const refund = async () => refundRelayer(this.props.storeState)
+    return (
+      <Container className="border-all border-rounded p-5" maxWidth="xl">
+        <Box display="flex" flexDirection="column">
+          <Box m={2}>
+            <Typography component="h1">
+              Refund
+            </Typography>
+          </Box>
+          <Box m={3}>
+            <Typography component="div">
+              You can ask for withdrawal after the deposit lock-time has elapsed
+            </Typography>
+          </Box>
+          <Box m={3}>
+            <CountdownClock date={date} />
+          </Box>
+          <Box display="flex" justifyContent="center" m={2}>
+            <Button onClick={refund} disabled={elapsed} color="primary">
+              Refund
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    )
+  }
+
+  render() {
+    const step = this.state.step
+    const { resigning, lock_time } = this.props
+    return resigning ? this.renderWithdrawForm(lock_time) : this.renderResignForm(step)
+  }
 }
 
-export default FormResign
+
+const mapProps = state => ({
+  storeState: state,
+  resigning: state.User.activeRelayer.resigning,
+  lock_time: state.User.activeRelayer.lock_time,
+})
+
+const outerConnect = connect(mapProps)
+
+export default outerConnect(FormResign)

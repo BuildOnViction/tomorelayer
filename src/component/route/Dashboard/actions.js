@@ -62,11 +62,15 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
 
   if (ActiveForm === FORM.resign) {
     const resignChain = await blk.resignRelayer(configs, state)
+
     if (!resignChain.status) {
       return PushAlert(state, AlertVariant.error, 'Fail to perform On-Chain Relayer Resignn')
     }
+
     delete configs['coinbase']
+    const releaseTime = resignChain.details.events[0].args.deposit_release_time
     configs.resigning = true
+    configs.lock_time = releaseTime.toString() * 1
   }
 
   const relayerPayload = { id, ...configs }

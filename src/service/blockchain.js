@@ -221,3 +221,26 @@ export const resignRelayer = async (data, state) => {
     return { status: false, details: 'Unable to perform' }
   }
 }
+
+export const refundRelayer = async state => {
+  const userMeta = state.authStore.user_meta
+  const data = {
+    coinbase: state.User.activeRelayer.coinbase
+  }
+
+  try {
+    const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, { data })
+    const contract = RelayerRegistrationContract(state, TxSigner.provider)
+    const contractWithSigner = contract.connect(TxSigner.signer)
+
+    const {
+      coinbase,
+    } = TxSigner.data
+
+    const tx = await contractWithSigner.refund(coinbase)
+    const details = await tx.wait()
+    return { status: true, details }
+  } catch (e) {
+    return { status: false, details: 'Unable to request refund' }
+  }
+}

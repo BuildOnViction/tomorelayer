@@ -40,6 +40,7 @@ class Relayer(PwModel):
     logo = pw.CharField(max_length=200, null=True)
     link = pw.CharField(max_length=255, null=True)
     resigning = pw.BooleanField(default=False)
+    lock_time = pw.IntegerField(null=True)
 
 
 class Token(PwModel):

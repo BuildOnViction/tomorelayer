@@ -1,7 +1,8 @@
 import React from 'react'
 import cx from 'classnames'
+import { Box } from '@material-ui/core'
 
-export class Countdown extends React.Component {
+export class CountdownClock extends React.Component {
   constructor(props) {
     super(props)
 
@@ -78,36 +79,36 @@ export class Countdown extends React.Component {
     const countDown = this.state
 
     return (
-      <div className={cx("neal-countdown", this.props.className)}>
-        <span className="countdown-col">
+      <Box display="flex" justifyContent="space-between" className="pl-2 pr-2">
+        <Box className="countdown-col">
           <span className="countdown-col-element">
             <strong className="countdown-col-element-number">{this.addLeadingZeros(countDown.days)}</strong>
             <span className="countdown-col-element-text">{countDown.days === 1 ? 'Day' : 'Days'}</span>
           </span>
-        </span>
+        </Box>
 
-        <span className="countdown-col">
+        <Box className="countdown-col">
           <span className="countdown-col-element">
             <strong className="countdown-col-element-number">{this.addLeadingZeros(countDown.hours)}</strong>
             <span className="countdown-col-element-text">Hours</span>
           </span>
-        </span>
+        </Box>
 
 
-        <span className="countdown-col">
+        <Box className="countdown-col">
           <span className="countdown-col-element">
             <strong className="countdown-col-element-number">{this.addLeadingZeros(countDown.min)}</strong>
             <span className="countdown-col-element-text">Min</span>
           </span>
-        </span>
+        </Box>
 
-        <span className="countdown-col">
+        <Box className="countdown-col">
           <span className="countdown-col-element">
             <strong className="countdown-col-element-number">{this.addLeadingZeros(countDown.sec)}</strong>
             <span className="countdown-col-element-text">Sec</span>
           </span>
-        </span>
-      </div>
+        </Box>
+      </Box>
     )
   }
 }
