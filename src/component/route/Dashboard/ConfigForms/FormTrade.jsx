@@ -21,7 +21,6 @@ const FormTrade = ({
   handleChange,
   handleSubmit,
   isSubmitting,
-  resetForm,
   setFieldValue,
   relayer,
 }) => {
@@ -98,10 +97,7 @@ const FormTrade = ({
             />
           </Grid>
           <Grid item className="mt-2">
-            <Box display="flex" justifyContent="space-between">
-              <Button type="button" onClick={resetForm} disabled={disableSubmit || disableForm}>
-                Reset
-              </Button>
+            <Box display="flex" justifyContent="flex-end">
               <Button color="primary" variant="contained" type="submit" disabled={disableSubmit || disableForm}>
                 Save
               </Button>
