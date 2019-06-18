@@ -1,11 +1,12 @@
 export const isDev = process.env.NODE_ENV === 'development'
 
 const APP_HOST = isDev ? process.env.REACT_APP_HOST : window.location.origin
-const APP_PORT = isDev ? process.env.REACT_APP_PORT : 80
+const APP_PORT = process.env.REACT_APP_PORT
 const APP_SOCKET = isDev ? process.env.REACT_APP_SOCKET : window.location.origin.replace('http', 'ws')
 
-export const baseUrl = `${APP_HOST}:${APP_PORT}`
-export const socketUrl = `${APP_SOCKET}:${APP_PORT}/socket`
+const fixBaseUrl = protocol => isDev ? `${protocol}:${APP_PORT}` : protocol
+export const baseUrl = fixBaseUrl(APP_HOST)
+export const socketUrl = `${fixBaseUrl(APP_SOCKET)}/socket`
 const apiPrefix = 'api'
 const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
 
