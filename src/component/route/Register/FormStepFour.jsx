@@ -6,7 +6,10 @@ import {
   Container,
   Typography,
 } from '@material-ui/core'
-import { $addToken, $backOneStep, $submitFormPayload, $toggleCustomTokenForm } from './actions'
+import {
+  $backOneStep,
+  $submitFormPayload,
+} from './actions'
 import TokenPairList from 'component/shared/TokenPairList'
 import { wrappers } from './form_logics'
 
