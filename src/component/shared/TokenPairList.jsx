@@ -143,19 +143,25 @@ const mapProps = state => {
     if (!a.is_major && b.is_major) return 1
   }
 
-  const makePairs = (fromToken, fromIndex) => {
+
+  // NOTE: make pairs of Quote-only-Tokens
+  tradeTokens.filter(t => t.is_major).forEach((fromToken, fromIndex) => {
     const toTokens = tradeTokens.filter((_, toIndex) => toIndex !== fromIndex)
     toTokens.forEach(toToken => pairs.push({
       from: fromToken,
       to: toToken,
       toString: () => `${fromToken.symbol}/${toToken.symbol}`
     }))
-  }
-
-  // NOTE: make pairs of Quote-only-Tokens
-  tradeTokens.filter(t => t.is_major).forEach(makePairs)
+  })
   // NOTE: make pairs of Base/Quote-Tokens
-  tradeTokens.sort(tokenSorting).filter(t => !t.is_major).forEach(makePairs)
+  tradeTokens.sort(tokenSorting).filter(t => !t.is_major).forEach(fromToken => {
+    const toTokens = tradeTokens.filter(toToken => toToken.address !== fromToken.address)
+    toTokens.forEach(toToken => pairs.push({
+      from: fromToken,
+      to: toToken,
+      toString: () => `${fromToken.symbol}/${toToken.symbol}`
+    }))
+  })
 
   return { pairs, majorTokens: state.MajorTokens }
 }

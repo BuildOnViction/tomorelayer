@@ -4,7 +4,6 @@ import { connect } from '@vutr/redux-zero/react'
 import { Container, Box } from '@material-ui/core'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
-import RelayerInsight from './RelayerInsight'
 import RelayerConfig from './RelayerConfig'
 
 class Dashboard extends React.Component {
@@ -15,7 +14,6 @@ class Dashboard extends React.Component {
         <Box>
           <Switch>
             <Route path="/dashboard/" exact component={RelayerStat}/>
-            <Route path="/dashboard/insight" component={RelayerInsight}/>
             <Route path="/dashboard/config" component={RelayerConfig}/>
           </Switch>
         </Box>

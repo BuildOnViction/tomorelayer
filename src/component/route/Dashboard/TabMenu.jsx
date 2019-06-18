@@ -36,10 +36,8 @@ const mapRouteToValue = path => {
   switch(path) {
     case '/dashboard/':
       return 0
-    case '/dashboard/insight':
-      return 1
     case '/dashboard/config':
-      return 2
+      return 1
     default:
       return 0
   }
@@ -52,7 +50,6 @@ const TabMenu = useStyles(props => {
     <AppBar position="static" className={classes.appBar}>
       <Tabs value={mapRouteToValue(path)} className={classes.appMenu} classes={styles.menu}>
         <Tab label="Dashboard" className={classes.appTab} component={AdapterLink} to="/dashboard/" />
-        <Tab label="Insight" className={classes.appTab} component={AdapterLink} to="/dashboard/insight" />
         <Tab label="Configurations" className={classes.appTab} component={AdapterLink} to="/dashboard/config" />
       </Tabs>
     </AppBar>
