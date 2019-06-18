@@ -24,6 +24,10 @@ CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Disable all other config board
 CLOSED: [2019-06-17 Mon 17:56]
 **** [ ] Withdraw money UI
+*** [ ] Refactoring
+**** [ ] Make Backend-Service
+**** [ ] Fix responsiveness (Container & Grid & Box issues)
+**** [ ] Change rate from 1000 to 10,000
 *** [ ] Go back to login page when change wallet
 **** [ ] MetaMask
 *** [ ] Error catch boundary
@@ -33,7 +37,8 @@ CLOSED: [2019-06-17 Mon 17:56]
 **** [ ] Setup husky
 **** [ ] Backend test
 **** [ ] Frontend test with Mocha
-*** [ ] Deploy to Test Server
+*** DONE Deploy to Test Server
+CLOSED: [2019-06-18 Tue 17:31]
 
 * Notes
 1. Unlock Wallet signin
