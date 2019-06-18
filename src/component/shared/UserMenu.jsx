@@ -17,16 +17,7 @@ const UserMenu = props => {
     return func()
   }
 
-  const logout = () => {
-    props.history.push('/')
-    setTimeout(() => {
-      props.$logout()
-    }, 200)
-  }
-
-  const {
-    auth,
-  } = props
+  const { auth } = props
 
   if (!auth) {
     return (
@@ -51,7 +42,9 @@ const UserMenu = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={menuItemClick(logout)}>Logout</MenuItem>
+        <MenuItem onClick={menuItemClick(props.$logout)}>
+          Logout
+        </MenuItem>
       </Menu>
     </div>
   )

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Switch, Route } from 'react-router'
-import { connect } from '@vutr/redux-zero/react'
 import { Container, Box } from '@material-ui/core'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
@@ -22,10 +21,4 @@ class Dashboard extends React.Component {
   }
 }
 
-const mapProps = state => ({
-  relayerId: state.User.activeRelayer.id
-})
-
-const storeConnect = connect(mapProps)
-
-export default storeConnect(Dashboard)
+export default Dashboard

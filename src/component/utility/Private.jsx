@@ -12,7 +12,7 @@ const Private = ({
   ...rest
 }) => {
 
-  if (!activeRelayer && path === '/dashboard') {
+  if (!activeRelayer && path.includes('/dashboard')) {
     return <Redirect to="/" />
   }
 
