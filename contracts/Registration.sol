@@ -88,8 +88,8 @@ contract RelayerRegistration {
         require(msg.sender != CONTRACT_OWNER, "Contract Owner is forbidden to create a Relayer");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
         /// @dev valid relayer configuration
-        require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
-        require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
+        require(makerFee >= 1 && makerFee < 10000, "Invalid Maker Fee");
+        require(takerFee >= 1 && takerFee < 10000, "Invalid Taker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
@@ -110,8 +110,8 @@ contract RelayerRegistration {
 
 
     function update(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
-        require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
-        require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
+        require(makerFee >= 1 && makerFee < 10000, "Invalid Maker Fee");
+        require(takerFee >= 1 && takerFee < 10000, "Invalid Taker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
