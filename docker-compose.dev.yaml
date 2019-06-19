@@ -9,3 +9,12 @@ services:
       - POSTGRES_PASSWORD=root
     ports:
       - 5432:5432
+  pgtest:
+    image: postgres:10-alpine
+    container_name: tomorelayer-test
+    volumes:
+      - ./.db_test
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5434:5432
