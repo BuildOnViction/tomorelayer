@@ -63,8 +63,9 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      owner: props.currentAddress,
-      coinbase: props.currentCoinbase,
+      currentCoinbase: props.relayer.coinbase,
+      owner: props.relayer.owner,
+      coinbase: props.relayer.coinbase,
     }),
 
     handleSubmit: async (values, meta) => {
@@ -79,7 +80,7 @@ export const wrappers = {
     enableReinitialize: false,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      coinbase: props.coinbase
+      coinbase: props.relayer.coinbase
     }),
 
     handleSubmit: async (values, meta) => {

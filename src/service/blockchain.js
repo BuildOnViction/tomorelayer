@@ -175,12 +175,12 @@ export const updateRelayer = async (data, state) => {
 
 export const transferRelayer = async(data, state) => {
   const userMeta = state.authStore.user_meta
-  const currentCoinbase = state.User.activeRelayer.coinbase
   const TxSigner = await TxSignerInit(userMeta.unlockingMethod, userMeta.wallet, { data })
   const contract = RelayerRegistrationContract(state, TxSigner.provider)
   const contractWithSigner = contract.connect(TxSigner.signer)
 
   const {
+    currentCoinbase,
     owner,
     coinbase,
   } = TxSigner.data
