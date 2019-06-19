@@ -28,13 +28,9 @@ module.exports = {
     contracts: {
       RelayerRegistration: {
         fromIndex: 0,
-        args: [50, 40, 25],
+        args: [50, 40, 25000],
       },
       Token: { deploy: false, },
-      ERC20: { deploy: false },
-      CappedToken: { deploy: false, },
-      DetailedERC20: { deploy: false, },
-      SafeMath: { deploy: false, },
       TokenA: {
         fromIndex: 1,
         instanceOf: 'Token',

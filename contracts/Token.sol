@@ -7,9 +7,9 @@ import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-solidity/v1.
 /// @dev this ERC20 contract is used for creating Test-Tokens only
 contract Token is ERC20, DetailedERC20, CappedToken {
     constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _cap)
+        ERC20()
         DetailedERC20(_name, _symbol, _decimals)
         CappedToken(_cap)
-        ERC20()
         public {
             mint(msg.sender, _cap * 10 / 100);
     }
