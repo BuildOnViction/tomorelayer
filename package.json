@@ -28,7 +28,7 @@
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
     "backend": "node custom-script.js",
     "test": "jest --forceExit",
-    "contract-test": "embark test test/register.test.js",
+    "contract-test": "embark test test/relayer-contract.test.js",
     "embark": "embark run",
     "build": "react-scripts build",
     "lint": "eslint --ext .jsx,.js src/",
@@ -60,7 +60,7 @@
   "jest": {
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "register.test.js"
+      "relayer-contract.test.js"
     ],
     "bail": true
   }
