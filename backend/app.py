@@ -10,7 +10,7 @@ from settings import settings
 from blockchain import Blockchain
 from api.base import NotFoundHandler
 
-define("port", default=settings['port'], help="app port", type=int)
+define("port", default=8888, help="app port", type=int)
 
 if __name__ == "__main__":
     parse_command_line()

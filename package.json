@@ -28,12 +28,10 @@
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
     "backend": "node custom-script.js",
     "build": "react-scripts build",
-    "embark": "embark run",
-    "contract-test": "embark test",
-    "embark-reset": "embark reset",
     "lint": "eslint --ext .jsx,.js src/",
     "pylint": "pipenv run pylint backend/*"
   },
+  "proxy": "http://localhost:8888",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -46,11 +44,12 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "dotenv": "^7.0.0",
-    "embark": "^4.0.2",
-    "embarkjs-connector-web3": "^4.0.0",
     "exec-sh": "^0.3.2",
     "kill-port": "^1.4.0",
     "localtunnel": "^1.9.1",
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.12.0",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.8.10"
   }
 }

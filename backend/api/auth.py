@@ -1,5 +1,5 @@
+from os import getenv
 import json
-from settings import base_url
 from .base import BaseHandler
 from .socket import SocketClient
 
@@ -29,10 +29,8 @@ class AuthSocketHandler():
     def get_qr_code(identity):
         from datetime import datetime
         message = '[Relayer {}] Login'.format(datetime.now().strftime('%x %H-%M-%S'))
-        url = '{base_url}/api/auth?verifyId={identity}'.format(
-            base_url=base_url,
-            identity=identity,
-        )
+        tunnel = getenv('TUNNEL_URL', '')
+        url = '{tunnel}/api/auth?verifyId={identity}'.format(tunnel=tunnel, identity=identity)
 
         return json.dumps({
             'type': 'QR_CODE_REQUEST',
