@@ -27,7 +27,7 @@ CLOSED: [2019-06-17 Mon 17:56]
 CLOSED: [2019-06-19 Wed 11:05]
 *** [ ] Refactoring
 **** [ ] Fix proxying host & port
-**** [ ] Make script to dump & load json data to database for testing
+**** [ ] Migrating script for testing
 **** [ ] Make Backend-Service
 **** [ ] Fix responsiveness (Container & Grid & Box issues)
 **** [ ] Change rate from 1000 to 10,000
@@ -39,7 +39,8 @@ CLOSED: [2019-06-19 Wed 11:05]
 *** [ ] Quality Control
 **** [ ] Setup husky
 **** [ ] Backend test
-**** [ ] Frontend test with Mocha
+**** [ ] Frontend test with Jest
+**** [ ] Integrate ESDoc
 *** DONE Deploy to Test Server
 CLOSED: [2019-06-18 Tue 17:31]
 
