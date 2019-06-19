@@ -27,6 +27,7 @@
     "start": "HTTPS=true react-scripts start",
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
     "backend": "node custom-script.js",
+    "test": "jest --forceExit",
     "build": "react-scripts build",
     "lint": "eslint --ext .jsx,.js src/",
     "pylint": "pipenv run pylint backend/*"
@@ -44,6 +45,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "dotenv": "^7.0.0",
+    "embarkjs-connector-web3": "^4.0.0",
     "exec-sh": "^0.3.2",
     "kill-port": "^1.4.0",
     "localtunnel": "^1.9.1",
@@ -51,5 +53,12 @@
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.8.10"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "register.test.js"
+    ],
+    "bail": true
   }
 }
