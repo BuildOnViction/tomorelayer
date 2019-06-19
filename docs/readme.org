@@ -16,15 +16,17 @@ CLOSED: [2019-06-14 Fri 15:34]
 *** CANCELLED Lazy load main route component
 Reason: Stat-Component is used in both Home route and Dashboard Home Route
 CLOSED: [2019-06-14 Fri 15:34]
-*** [ ] Resigning [3/4]:
+*** [ ] Resigning [4/4]:
 **** DONE Finish resign request
 CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Countdown Clock
 CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Disable all other config board
 CLOSED: [2019-06-17 Mon 17:56]
-**** [ ] Withdraw money UI
+**** DONE Withdraw money UI
+CLOSED: [2019-06-19 Wed 11:05]
 *** [ ] Refactoring
+**** [ ] Make script to dump & load json data to database for testing
 **** [ ] Make Backend-Service
 **** [ ] Fix responsiveness (Container & Grid & Box issues)
 **** [ ] Change rate from 1000 to 10,000
