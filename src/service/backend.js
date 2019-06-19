@@ -40,23 +40,33 @@ const API = {
   token: '/api/token',
 }
 
+const proxiedAPI = new Proxy(API, {
+  get(property) {
+    if (process.env.NODE_ENV === 'test') {
+      const pjson = require('./package.json')
+      return pjson.proxy + API[property]
+    }
+    return API[property]
+  }
+})
+
 /* API ENDPOINTS THAT ACCEPT REQUESTS FROM ORIGIN */
-export const getContracts = async () => HttpClient.get(API.contract)
+export const getContracts = async () => HttpClient.get(proxiedAPI.contract)
                                                   .then(getPayload)
                                                   .catch(logging)
 
-export const getTokens = async () => HttpClient.get(API.token)
+export const getTokens = async () => HttpClient.get(proxiedAPI.token)
                                                .then(getPayload)
                                                .catch(logging)
 
-export const getRelayers = async () => HttpClient.get(API.relayer)
+export const getRelayers = async () => HttpClient.get(proxiedAPI.relayer)
                                                  .then(getPayload)
                                                  .catch(logging)
 
-export const updateRelayer = async relayer => HttpClient.post(API.relayer, { relayer })
+export const updateRelayer = async relayer => HttpClient.post(proxiedAPI.relayer, { relayer })
                                                         .then(getPayload)
                                                         .catch(logging)
 
-export const deleteRelayer = async relayerId => HttpClient.delete(`${API.relayer}?id=${relayerId}`)
+export const deleteRelayer = async relayerId => HttpClient.delete(`${proxiedAPI.relayer}?id=${relayerId}`)
                                                         .then(getPayload)
                                                         .catch(logging)

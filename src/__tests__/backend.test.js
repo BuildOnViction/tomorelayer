@@ -1,7 +1,9 @@
+import setup from './database'
+
 let db, conn, Contract
 
 beforeAll(async () => {
-  db = await require('./database')()
+  db = await setup()
   conn = db.conn
   Contract = db.Contract
 })

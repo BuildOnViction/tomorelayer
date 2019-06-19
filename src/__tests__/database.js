@@ -1,6 +1,7 @@
+import Sequelize from 'sequelize'
+
 const fs = require('fs')
 const path = require('path')
-const Sequelize = require('sequelize')
 
 const setup = async () => {
   const TEST_DB_URI = 'postgres://postgres:root@localhost:5434/postgres'
@@ -48,4 +49,4 @@ const setup = async () => {
   }
 }
 
-module.exports = setup
+export default setup

@@ -27,7 +27,7 @@
     "start": "HTTPS=true react-scripts start",
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
     "backend": "node custom-script.js",
-    "test": "jest --forceExit",
+    "test": "react-scripts test",
     "contract-test": "embark test test/relayer-contract.test.js",
     "embark": "embark run",
     "build": "react-scripts build",

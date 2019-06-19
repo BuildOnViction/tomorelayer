@@ -26,7 +26,8 @@ CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Withdraw money UI
 CLOSED: [2019-06-19 Wed 11:05]
 *** [ ] Refactoring
-**** [ ] Fix proxying host & port
+**** DONE Fix proxying host & port
+CLOSED: [2019-06-19 Wed 19:40]
 **** [ ] Migrating script for testing
 **** [ ] Make Backend-Service
 **** [ ] Fix responsiveness (Container & Grid & Box issues)
