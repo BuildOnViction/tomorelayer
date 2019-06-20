@@ -1,5 +1,9 @@
 // SETUP ENV CONSTANTS
 import * as _ from './helper'
+import { IS_DEV } from 'service/constant'
+
+export const BACKEND_URI = IS_DEV ? 'http://localhost:8888' : ''
+export const SOCKET_URI = BACKEND_URI.replace('http', 'ws')
 
 const genericHandler = response => {
   if (response.ok) return response.json()
@@ -48,9 +52,9 @@ const API = {
 
 const proxiedAPI = new Proxy(API, {
   get(obj, property) {
-    if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV !== 'production') {
       // NOTE: using default development backend with .env.test
-      const endpoint = 'http://localhost:8888' + obj[property]
+      const endpoint = BACKEND_URI + obj[property]
       return endpoint
     }
     return obj[property]
@@ -66,7 +70,7 @@ export const getRelayers = async () => HttpClient.get(proxiedAPI.relayer)
                                                  .then(getPayload)
                                                  .catch(logging)
 
-export const saveRelayer = async relayer => HttpClient.post(proxiedAPI.relayer, relayer)
+export const createRelayer = async relayer => HttpClient.post(proxiedAPI.relayer, relayer)
                                                       .then(getPayload)
                                                       .catch(logging)
 
@@ -79,5 +83,9 @@ export const deleteRelayer = async relayerId => HttpClient.delete(`${proxiedAPI.
                                                           .catch(logging)
 
 export const getTokens = async () => HttpClient.get(proxiedAPI.token)
+                                               .then(getPayload)
+                                               .catch(logging)
+
+export const createToken = async token => HttpClient.post(proxiedAPI.token, token)
                                                .then(getPayload)
                                                .catch(logging)

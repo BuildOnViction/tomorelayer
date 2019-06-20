@@ -79,7 +79,7 @@ describe('Testing Relayer API', () => {
 
   let relayerId
 
-  test('#1. save a relayers', async done => {
+  test('#1. create a relayers', async done => {
     const count = await Relayer.count()
     expect(count).toEqual(0)
 
@@ -92,7 +92,7 @@ describe('Testing Relayer API', () => {
       from_tokens: [],
       to_tokens: [],
     }
-    const newRelayer = await http.saveRelayer(dummyRelayer)
+    const newRelayer = await http.createRelayer(dummyRelayer)
     expect(newRelayer.id).toBe(1)
 
     relayerId = newRelayer.id
@@ -141,13 +141,25 @@ describe('Testing Relayer API', () => {
 
 describe('Testing Token API', () => {
 
-  test('#1. Save a new token', async () => {
-    let request = await http.getTokens()
+  let request
+
+  test('#1. get tokens', async () => {
+    request = await http.getTokens()
     expect(request.length).toEqual(0)
 
-    // 5 dummy tokens to be created
+  })
+
+  test('#2. create new token', async () => {
+
     const tokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/token.dummy.json')))
-    await Promise.all(tokens.map(async t => Token.create(t)))
+    request = await http.createToken(tokens[0])
+    expect(Boolean(request.id)).toBe(true)
+
+    request = await http.getTokens()
+    expect(request.length).toEqual(1)
+
+    // 4 more dummy tokens to be created
+    await Promise.all(tokens.slice(1).map(async t => Token.create(t)))
 
     request = await http.getTokens()
     expect(request.length).toEqual(5)
