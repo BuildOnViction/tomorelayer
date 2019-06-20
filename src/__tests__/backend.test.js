@@ -20,7 +20,6 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await conn.drop()
-  console.warn('======== DROPPED ALL TABLES ==========')
   await conn.close()
 })
 
