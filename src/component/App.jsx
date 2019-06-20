@@ -8,11 +8,11 @@ import Register from 'component/route/Register'
 import PageHeader from 'component/shared/PageHeader'
 import Alert from 'component/shared/Alert'
 import { Private } from 'component/utility'
-import { SITE_MAP, isDev } from 'service/constant'
+import { SITE_MAP, IS_DEV } from 'service/constant'
 import { $autoAuthenticated, $fetchContract, $fetchRelayers, $fetchTokens } from './shared/actions'
 import 'style/app.scss'
 
-const Router = !isDev ? BrowserRouter : HashRouter
+const Router = IS_DEV ? HashRouter : BrowserRouter
 
 class App extends React.Component {
 

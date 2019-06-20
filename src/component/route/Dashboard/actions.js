@@ -1,7 +1,7 @@
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
-import { API } from 'service/constant'
+import * as http from 'service/backend'
+import { PushAlert, AlertVariant } from 'service/frontend'
 
 
 export const $changeTab = (state, activeTab) => {
@@ -75,7 +75,7 @@ export const $submitConfigFormPayload = async (state, configs = {}) => {
   }
 
   const relayerPayload = { id, ...configs }
-  const updateBackend = await Client.post(API.relayer, { relayer: relayerPayload }).then(resp => resp).catch(() => false)
+  const updateBackend = await http.updateRelayer(relayerPayload)
 
   if (!updateBackend) {
     return PushAlert(state, AlertVariant.error, 'Fail to perform Relayer Database Update')
@@ -115,9 +115,8 @@ export const $refundRelayer = async state => {
     return PushAlert(state, AlertVariant.error, message)
   }
 
-  const resp = await Client.delete(API.relayer, { id: relayerId })
-                           .then(resp => resp)
-                           .catch(() => false)
+  const resp = await http.deleteRelayer(relayerId)
+
   if (!resp) {
     const message = `Error removing relayer of id: ${relayerId}`
     return PushAlert(state, AlertVariant.error, message)

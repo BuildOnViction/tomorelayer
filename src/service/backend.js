@@ -1,9 +1,7 @@
-// SETUP ENV CONSTANTS
-import * as _ from './helper'
 import { IS_DEV } from 'service/constant'
 
 export const BACKEND_URI = IS_DEV ? 'http://localhost:8888' : ''
-export const SOCKET_URI = BACKEND_URI.replace('http', 'ws')
+export const SOCKET_URI = BACKEND_URI.replace('http', 'ws') + '/socket'
 
 const genericHandler = response => {
   if (response.ok) return response.json()

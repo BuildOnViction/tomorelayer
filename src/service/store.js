@@ -1,7 +1,8 @@
 import createStore from '@vutr/redux-zero'
-import { UNLOCK_WALLET_METHODS, MISC, socketUrl } from './constant'
+import { UNLOCK_WALLET_METHODS, MISC } from './constant'
+import { SOCKET_URI } from './backend'
 
-const socket = new WebSocket(socketUrl)
+const socket = new WebSocket(SOCKET_URI)
 
 export const initialState = {
   authStore: {

@@ -1,27 +1,6 @@
-export const isDev = process.env.NODE_ENV === 'development'
-
-const APP_HOST = isDev ? process.env.REACT_APP_HOST : window.location.origin
-const APP_PORT = process.env.REACT_APP_PORT
-const APP_SOCKET = isDev ? process.env.REACT_APP_SOCKET : window.location.origin.replace('http', 'ws')
-
-const fixBaseUrl = protocol => isDev ? `${protocol}:${APP_PORT}` : protocol
-export const baseUrl = fixBaseUrl(APP_HOST)
-export const socketUrl = `${fixBaseUrl(APP_SOCKET)}/socket`
-const apiPrefix = 'api'
-const apiBuild = resource => [baseUrl, apiPrefix, resource].join('/')
-
-export const API = {
-  fetchQRCode: apiBuild('auth?qr_code='),
-  token: apiBuild('token'),
-  relayer: apiBuild('relayer'),
-  contract: apiBuild('contract'),
-}
+export const IS_DEV = process.env.NODE_ENV !== 'production'
 
 export const TOMO_COIN_TYPE = 889
-
-export const SOCKET_REQ = {
-  getQRCode: 'QR_CODE_LOGIN',
-}
 
 export const SITE_MAP = {
   Authentication: '/login',

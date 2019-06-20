@@ -1,20 +1,21 @@
 import { differenceInMinutes } from 'date-fns'
-import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
+import { PushAlert, AlertVariant } from 'service/frontend'
+import * as http from 'service/backend'
 import { originalState } from 'service/store'
-import { API, STORAGE_ITEMS } from 'service/constant'
+import { STORAGE_ITEMS } from 'service/constant'
 import * as _ from 'service/helper'
 
 export const $fetchTokens = async state => {
-  const resp = await Client.get(API.token)
-  state.tradableTokens = resp.payload
-  state.MajorTokens = resp.payload.filter(t => t.is_major)
+  const resp = await http.getTokens()
+  state.tradableTokens = resp
+  state.MajorTokens = resp.filter(t => t.is_major)
   return PushAlert(state, AlertVariant.info, 'Fetched tokens')
 }
 
 export const $fetchContract = async (state, store) => {
-  const Contracts = await Client.get(API.contract).then(r => r.payload).catch(() => false)
+  const Contracts = await http.getContracts()
 
-  if (!Contracts) {
+  if (Contracts.error) {
     return PushAlert(state, AlertVariant.error, 'Cannot fetch any Contract')
   }
 
@@ -23,9 +24,9 @@ export const $fetchContract = async (state, store) => {
 }
 
 export const $fetchRelayers = async (state, store) => {
-  const Relayers = await Client.get(API.relayer).then(r => r.payload).catch(() => false)
+  const Relayers = await http.getRelayers()
 
-  if (!Relayers) return state
+  if (Relayers.error) return state
   state.Relayers = Relayers
 
   if (state.authStore.user_meta.address.length > 0) {

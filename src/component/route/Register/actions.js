@@ -1,7 +1,8 @@
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { Client, Alert as PushAlert, AlertVariant } from 'service/action'
-import { API, MISC } from 'service/constant'
+import * as http from 'service/backend'
+import { PushAlert, AlertVariant } from 'service/frontend'
+import { MISC } from 'service/constant'
 
 export const $logout = state => {
   state.authStore.auth = false
@@ -38,8 +39,8 @@ export const $toggleCustomTokenForm = state => {
 }
 
 export const $addToken = async (state, token) => {
-  const resp = await Client.post(API.token, { tokens: [token] })
-  state.tradableTokens = resp.payload
+  const resp = await http.createToken(token)
+  state.tradableTokens = resp
   state.RelayerForm.tokenForm = false
   return state
 }
@@ -73,22 +74,15 @@ export const $registerRelayer = async state => {
     to_tokens: meta.to_tokens.map(p => p.address),
   }
 
-  const result = await Client.post(API.relayer, { relayer }).then(() => true).catch(() => false)
+  const result = await http.createRelayer(relayer)
 
   if (!result) {
     // NOTE: alert
     return state
   }
 
-  const relayers = await Client.get(API.relayer).then(r => r.payload).catch(() => false)
-
-  if (!relayers) {
-    // NOTE: alert
-    return state
-  }
-
-  state.Relayers = relayers
-  state.User.relayers = relayers.filter(r => r.owner === state.authStore.user_meta.address)
+  state.Relayers = [...state.Relayers, result]
+  state.User.relayers = state.Relayers.filter(r => r.owner === state.authStore.user_meta.address)
   state.User.activeRelayer = _.last(state.User.relayers)
   state.RelayerForm.step = state.RelayerForm.step + 1
   return state

@@ -3,7 +3,7 @@ import trezor from '@vutr/purser-trezor'
 import metamask from '@vutr/purser-metamask'
 import * as _ from 'service/helper'
 import * as blk from 'service/blockchain'
-import { SOCKET_REQ, UNLOCK_WALLET_METHODS, STORAGE_ITEMS, TOMO_COIN_TYPE } from 'service/constant'
+import { UNLOCK_WALLET_METHODS, STORAGE_ITEMS, TOMO_COIN_TYPE } from 'service/constant'
 
 const { TomoWallet,LedgerWallet, TrezorWallet, BrowserWallet } = UNLOCK_WALLET_METHODS
 const { match, assign } = _
@@ -36,7 +36,7 @@ export const $getQRCode = store => state => {
   }
 
   const getQR = () => socket.send(JSON.stringify({
-    request: SOCKET_REQ.getQRCode,
+    request: 'QR_CODE_LOGIN',
     meta: { agentQuery },
   }))
 
