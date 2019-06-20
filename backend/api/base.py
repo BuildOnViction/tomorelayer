@@ -3,8 +3,8 @@ import traceback
 from tornado.web import HTTPError
 from tornado.web import ErrorHandler as TorErrorHandler
 from tornado.web import RequestHandler
-from peewee import IntegrityError
-from logger import logger
+from peewee import PeeweeException
+from logzero import logger
 from settings import settings, is_production
 from exception import *
 
@@ -15,10 +15,9 @@ class BaseHandler(RequestHandler):
     def set_default_headers(self):
         if not is_production:
             # FIXME: for production, cant allow CORS
-            self.set_header("access-control-allow-origin", "*")
-            self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-            self.set_header('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS')
-            self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type")
+            self.set_header("Access-Control-Allow-Origin", "*")
+            self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,x-requested-with")
+            self.set_header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, DELETE, OPTIONS')
 
     def get_current_user(self):
         return self.get_secure_cookie('user_id')
@@ -45,34 +44,33 @@ class BaseHandler(RequestHandler):
     def write_error(self, status_code, **kwargs):
         _, http_exception, stack_trace = kwargs['exc_info']
 
-        is_integrity_error = isinstance(http_exception, IntegrityError)
-        is_custom_error = isinstance(http_exception, CustomException)
-        is_uncaught_error = status_code == 500 and not is_integrity_error and not is_custom_error
-
         error = {
             'code': status_code,
             'message': self._reason,
             'detail': str(http_exception),
         }
 
-        if is_uncaught_error:
-            # Something wrong with server's handler
-            logger.exception(http_exception)
-            traceback.print_tb(stack_trace)
-            if settings['stg'] == 'development':
-                breakpoint()
-
-        if is_custom_error:
+        if isinstance(http_exception, CustomException):
             error['code'] = http_exception.status_code
             error['message'] = http_exception.message
             error['detail'] = http_exception.detail
 
-        if is_integrity_error:
-            # FIXME: handle all peewee error in one-separete handler
-            message, detail, _ = str(http_exception).split('\n')
-            error['code'] = 400
-            error['message'] = message
-            error['detail'] = detail.replace('DETAIL:  ', '')
+        elif isinstance(http_exception, PeeweeException):
+            error['code'] = 500
+            error['message'] = 'DatabaseError: {}'.format(http_exception)
+            error['detail'] = self.request_body
+
+        elif isinstance(http_exception, LookupError):
+            error['code'] = 500
+            error['message'] = 'LookupError: {}'.format(http_exception)
+            error['detail'] = self.request_body
+
+        else:
+            logger.exception(http_exception)
+            traceback.print_tb(stack_trace)
+            # TODO: report...
+            if settings['stg'] == 'development':
+                breakpoint()
 
         self.set_status(error['code'])
         self.finish(json.dumps({'error': error}))

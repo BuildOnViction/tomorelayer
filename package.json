@@ -26,8 +26,9 @@
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
-    "backend": "node custom-script.js",
-    "test": "react-scripts test",
+    "backend": "NODE_ENV=local node custom-script.js",
+    "backend:test": "NODE_ENV=test node custom-script.js",
+    "test": "react-scripts test --testPathIgnorePatterns database.js",
     "contract-test": "embark test test/relayer-contract.test.js",
     "embark": "embark run",
     "build": "react-scripts build",
@@ -57,11 +58,5 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.8.10"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "relayer-contract.test.js"
-    ],
-    "bail": true
-  }
+  "jest": {}
 }

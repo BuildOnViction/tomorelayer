@@ -7,15 +7,8 @@ class TokenHandler(BaseHandler):
 
     def get(self):
         """Return all available tokens for trading"""
-        tokens = []
-        try:
-            tokens = [model_to_dict(token or {}) for token in Token.select()]
-        except Exception:
-            # No Token in DB yet
-            pass
-
+        tokens = [model_to_dict(token or {}) for token in Token.select()]
         self.json_response(tokens)
-
 
     async def post(self):
         """Add new token"""

@@ -1,10 +1,10 @@
 import Sequelize from 'sequelize'
 
-const fs = require('fs')
-const path = require('path')
+export const TEST_DB_URI = 'postgres://postgres:root@localhost:5434/postgres'
+export const TEST_CONTRACT_ADDRESS = '0x6214de5b30c872e09db48e88798476ecce8c8da2'
 
 const setup = async () => {
-  const TEST_DB_URI = 'postgres://postgres:root@localhost:5434/postgres'
+
   const sequelize = new Sequelize(TEST_DB_URI, {
     logging: void 0,
   })
@@ -33,19 +33,105 @@ const setup = async () => {
     tableName: 'contract',
   })
 
+  const Relayer = sequelize.define('relayer', {
+    owner: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    coinbase: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    maker_fee: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
+    taker_fee: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
+    from_tokens: {
+      type: Sequelize.ARRAY(Sequelize.TEXT),
+      allowNull: false,
+      defaultValue: []
+    },
+    to_tokens: {
+      type: Sequelize.ARRAY(Sequelize.TEXT),
+      allowNull: false,
+      defaultValue: []
+    },
+    logo: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    link: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    resigning: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    lock_time: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    }
+  }, {
+    timestamps: false,
+    tableName: 'relayer',
+  })
+
+  const Token = sequelize.define('token', {
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    symbol: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    logo: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    address: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    total_supply: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    is_major: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+  }, {
+    timestamps: false,
+    tableName: 'token',
+  })
+
   await sequelize.drop()
   await sequelize.sync({ force: true })
-
-  const abi = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/relayer.abi.json')))
-  await Contract.create({
-    name: 'RelayerRegistration',
-    address: '0x000000000001',
-    abi,
-  })
 
   return {
     conn: sequelize,
     Contract,
+    Relayer,
+    Token,
   }
 }
 
