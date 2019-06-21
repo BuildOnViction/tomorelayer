@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import cx from 'classnames'
 import { Grid } from 'component/utility'
 
@@ -29,7 +28,4 @@ const ProgressBar = ({ step }) => {
   )
 }
 
-const mapProps = store => ({
-  step: store.RelayerForm.step
-})
-export default connect(mapProps)(ProgressBar)
+export default ProgressBar

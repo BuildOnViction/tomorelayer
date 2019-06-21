@@ -10,14 +10,14 @@ export const wrappers = {
     displayName: 'FormStepOne',
     validateOnChange: false,
     mapPropsToValues: props => ({
-      deposit: props.relayer_meta.deposit,
-      coinbase: props.relayer_meta.coinbase,
+      deposit: props.deposit,
+      coinbase: props.coinbase,
     }),
     validate: (values, props) => {
       const errors = {}
       validateCoinbase(values.coinbase, isValid => {
-        const isSameAsOwner = values.coinbase.toLowerCase() === props.user.toLowerCase()
-        const isAlreadyUsed = props.used_coinbase.includes(values.coinbase.toLowerCase())
+        const isSameAsOwner = values.coinbase.toLowerCase() === props.userAddress.toLowerCase()
+        const isAlreadyUsed = props.usedCoinbases.includes(values.coinbase.toLowerCase())
         if (!isValid || isSameAsOwner || isAlreadyUsed) errors.coinbase = true
       })
       const currentDeposit = bigNumberify(values.deposit)
@@ -25,24 +25,21 @@ export const wrappers = {
       if (invalidDeposit) errors.deposit = true
       return errors
     },
-    handleSubmit: (values, { props }) => props.$submitFormPayload({
-      deposit: values.deposit,
-      coinbase: values.coinbase,
-    }),
+    handleSubmit: (values, { props }) => props.submitPayload(values)
   }),
 
   relayerNameForm: withFormik({
     displayName: 'RelayerRegisterNameForm',
     validateOnChange: false,
     mapPropsToValues: props => ({
-      name: props.relayer_meta.name,
+      name: props.name,
     }),
     validate: values => {
       const errors = {}
       if (!values.name || values.name.length < 3) errors.name = true
       return errors
     },
-    handleSubmit: (values, { props }) => props.$submitFormPayload(values),
+    handleSubmit: (values, { props }) => props.submitPayload(values)
   }),
 
   marketFeeForm: withFormik({
@@ -58,10 +55,10 @@ export const wrappers = {
       return errors
     },
     mapPropsToValues: props => ({
-      maker_fee: props.relayer_meta.maker_fee,
-      taker_fee: props.relayer_meta.taker_fee,
+      maker_fee: props.maker_fee,
+      taker_fee: props.taker_fee,
     }),
-    handleSubmit: (values, { props }) => props.$submitFormPayload(values),
+    handleSubmit: (values, { props }) => props.submitPayload(values)
   }),
 
   tokenPairForm: withFormik({
@@ -69,10 +66,10 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      from_tokens: props.relayer_meta.from_tokens,
-      to_tokens: props.relayer_meta.to_tokens,
+      from_tokens: props.from_tokens,
+      to_tokens: props.to_tokens,
     }),
-    handleSubmit: (values, { props }) => props.$submitFormPayload(values),
+    handleSubmit: (values, { props }) => props.submitPayload(values)
   })
 
 }

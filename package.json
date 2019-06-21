@@ -29,6 +29,7 @@
     "backend": "NODE_ENV=local node custom-script.js",
     "backend:test": "NODE_ENV=test node custom-script.js",
     "test": "react-scripts test --testPathIgnorePatterns database.js",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache --testPathIgnorePatterns database.js",
     "contract-test": "embark test test/relayer-contract.test.js",
     "embark": "embark run",
     "build": "react-scripts build",

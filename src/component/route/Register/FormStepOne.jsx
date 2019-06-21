@@ -1,13 +1,7 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
-import { connect } from '@vutr/redux-zero/react'
 import { Box, Button, Container, TextField, Typography } from '@material-ui/core'
 import { MISC } from 'service/constant'
-import { compose } from 'service/helper'
-import { $cancelRegistration, $submitFormPayload } from './actions'
 import { wrappers } from './form_logics'
-
-const MINIMUM_DEPOSIT = MISC.MinimumDeposit
 
 const FormStepOne = props => {
   const {
@@ -15,13 +9,7 @@ const FormStepOne = props => {
     errors,
     handleChange,
     handleSubmit,
-    history,
   } = props
-
-  const cancel = () => {
-    props.$cancelRegistration()
-    setTimeout(() => history.push('/'), 300)
-  }
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
@@ -32,13 +20,13 @@ const FormStepOne = props => {
       </Box>
       <Container maxWidth="sm">
         <Box display="flex" flexDirection="column" className="mb-2">
-          <div>You are required to deposit a minimum {MINIMUM_DEPOSIT} TOMO.</div>
+          <div>You are required to deposit a minimum {MISC.MinimumDeposit} TOMO.</div>
           <div>This deposit will be locked.</div>
         </Box>
         <TextField
           name="deposit"
           label="Deposit"
-          placeholder={`minimum ${MINIMUM_DEPOSIT}`}
+          placeholder={`minimum ${MISC.MinimumDeposit}`}
           value={values.deposit}
           onChange={handleChange}
           error={errors.deposit}
@@ -56,10 +44,7 @@ const FormStepOne = props => {
           helperText={errors.coinbase && <i className="text-alert">* Invalid coinbase address!</i>}
           fullWidth
         />
-        <Box display="flex" justifyContent="space-between" className="mt-2">
-          <Button variant="outlined" className="mr-1" onClick={cancel} type="button">
-            Cancel
-          </Button>
+        <Box display="flex" justifyContent="flex-end" className="mt-2">
           <Button color="primary" variant="contained" type="submit">
             Confirm
           </Button>
@@ -69,21 +54,4 @@ const FormStepOne = props => {
   )
 }
 
-const mapProps = state => ({
-  relayer_meta: state.RelayerForm.relayer_meta,
-  user: state.authStore.user_meta.address,
-  used_coinbase: state.Relayers.map(r => r.coinbase.toLowerCase()),
-})
-
-const actions = {
-  $submitFormPayload,
-  $cancelRegistration,
-}
-
-const storeConnect = connect(mapProps, actions)
-const formConnect = wrappers.depositAndCoinbaseForm(FormStepOne)
-
-export default compose(
-  storeConnect,
-  withRouter,
-)(formConnect)
+export default wrappers.depositAndCoinbaseForm(FormStepOne)
