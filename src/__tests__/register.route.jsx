@@ -10,7 +10,7 @@ import {
 import userEvent from '@testing-library/user-event'
 import 'jest-dom/extend-expect'
 import { MISC } from 'service/constant'
-import { Register } from './index'
+import { Register } from 'component/route/Register'
 
 /**
  * Testing Actions for Register Flow

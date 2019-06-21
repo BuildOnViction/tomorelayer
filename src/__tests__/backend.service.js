@@ -1,5 +1,5 @@
-import setup, { TEST_CONTRACT_ADDRESS } from './database'
-import * as http from '../service/backend'
+import setup, { TEST_CONTRACT_ADDRESS } from './_database.setup.js'
+import * as http from 'service/backend'
 
 const fs = require('fs')
 const path = require('path')
@@ -31,7 +31,7 @@ describe('Testing Contract API', () => {
     let count = await Contract.count()
     expect(count).toEqual(0)
 
-    const abi = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/relayer.abi.json')))
+    const abi = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_relayer.abi.json')))
     await Contract.create({
       name: 'RelayerRegistration',
       address: TEST_CONTRACT_ADDRESS,
@@ -150,7 +150,7 @@ describe('Testing Token API', () => {
 
   test('#2. create new token', async () => {
 
-    const tokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/token.dummy.json')))
+    const tokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_token.dummy.json')))
     request = await http.createToken(tokens[0])
     expect(Boolean(request.id)).toBe(true)
 
