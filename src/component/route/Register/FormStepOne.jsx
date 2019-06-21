@@ -26,6 +26,7 @@ const FormStepOne = props => {
         <TextField
           name="deposit"
           label="Deposit"
+          id="deposit-input"
           placeholder={`minimum ${MISC.MinimumDeposit}`}
           value={values.deposit}
           onChange={handleChange}
@@ -37,7 +38,8 @@ const FormStepOne = props => {
         />
         <TextField
           name="coinbase"
-          label="Coinbase Address"
+          label="Coinbase"
+          id="coinbase-input"
           value={values.coinbase}
           onChange={handleChange}
           error={errors.coinbase}

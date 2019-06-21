@@ -1,7 +1,5 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import { Box, Button, Container, InputAdornment, TextField, Typography } from '@material-ui/core'
-import { $backOneStep, $submitFormPayload } from './actions'
 import { wrappers } from './form_logics'
 import * as _ from 'service/helper'
 
@@ -11,14 +9,15 @@ const FormStepThree = props => {
     errors,
     handleChange,
     handleSubmit,
+    goBack,
   } = props
 
   const handleFeeChange = e => {
-    e.target.value = _.round(e.target.value * 10, 0)
+    e.target.value = _.round(e.target.value * 100, 0)
     return handleChange(e)
   }
 
-  const formatValue = v => _.round(v / 10, 1)
+  const formatValue = v => _.round(v / 100, 2)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
@@ -32,7 +31,8 @@ const FormStepThree = props => {
         <Box display="flex" className="mb-1">
           <TextField
             name="maker_fee"
-            label="Maker Fee (min: 0.1%, max: 99.9%)"
+            label="Maker Fee (min: 0.01%, max: 99.9%)"
+            id="maker_fee-input"
             value={formatValue(values.maker_fee)}
             onChange={handleFeeChange}
             error={errors.maker_fee}
@@ -43,7 +43,8 @@ const FormStepThree = props => {
           />
           <TextField
             name="taker_fee"
-            label="Taker Fee (min: 0.1%, max: 99.9%)"
+            label="Taker Fee (min: 0.01%, max: 99.9%)"
+            id="taker_fee-input"
             value={formatValue(values.taker_fee)}
             onChange={handleFeeChange}
             error={errors.taker_fee}
@@ -57,7 +58,7 @@ const FormStepThree = props => {
           <i>* These fees can be modified later</i>
         </Typography>
         <Box display="flex" justifyContent="space-between" className="mt-2">
-          <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
+          <Button variant="outlined" className="mr-1" onClick={goBack} type="button">
             Back
           </Button>
           <Button color="primary" variant="contained" type="submit">
@@ -69,16 +70,4 @@ const FormStepThree = props => {
   )
   }
 
-const mapProps = state => ({
-  relayer_meta: state.RelayerForm.relayer_meta,
-})
-
-const actions = {
-  $submitFormPayload,
-  $backOneStep,
-}
-
-const storeConnect = connect(mapProps, actions)
-const formConnect = wrappers.marketFeeForm(FormStepThree)
-
-export default storeConnect(formConnect)
+export default wrappers.marketFeeForm(FormStepThree)

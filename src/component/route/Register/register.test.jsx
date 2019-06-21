@@ -1,7 +1,11 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { act, Simulate } from 'react-dom/test-utils'
-
+import {
+  render,
+  fireEvent,
+  cleanup,
+  waitForElement,
+} from '@testing-library/react'
+import 'jest-dom/extend-expect'
 import { MISC } from 'service/constant'
 import { Register } from './index'
 
@@ -14,17 +18,7 @@ import { Register } from './index'
  * - Registration form will be a Wizard Form, but some of its actions will be mutating state
  */
 
-let container
-
-beforeEach(() => {
-  container = document.createElement('div')
-  document.body.appendChild(container)
-})
-
-afterEach(() => {
-  document.body.removeChild(container)
-  container = null
-})
+afterAll(cleanup)
 
 describe('Test RegisterForm No Break', () => {
   /**
@@ -34,67 +28,102 @@ describe('Test RegisterForm No Break', () => {
    * Form submission should present a valid payload
    * @test {RegisterForm}
    */
-  it('#1. Register Step 1: deposit & coinbase', async () => {
-    const validCoinbase = '0x2db13BfFD639c756383e98BCb34BB918Ae5A5b12'
+
+  let renderUtils
+  let countInputs
+  let container
+
+  const finalPayload = {
+    coinbase: '0x2db13BfFD639c756383e98BCb34BB918Ae5A5b12',
+    deposit: '25000',
+    name: 'abcxyz',
+  }
+
+  it('#Step 1: deposit & coinbase form', async () => {
+    const validCoinbase = finalPayload.coinbase
     const userAddress = '0x070aA7AD03B89B3278f19d34F119DD3C2a244675'
     const usedCoinbases = []
+    renderUtils = render(<Register userAddress={userAddress} usedCoinbases={usedCoinbases} />)
+    const {
+      getByText,
+      getByLabelText,
+      findByText,
+      findByLabelText,
+    } = renderUtils
+    container = renderUtils.container
 
-    act(() => {
-      ReactDOM.render(<Register userAddress={userAddress} usedCoinbases={usedCoinbases} />, container)
-    })
+    countInputs = () => Array.from(container.querySelectorAll('input')).length
+    expect(countInputs()).toBe(2)
 
-    const inputs = Array.from(container.querySelectorAll('input'))
+    const depositInput = getByLabelText('Deposit')
+    const coinbaseInput = getByLabelText('Coinbase')
+    expect(parseInt(depositInput.value)).toEqual(MISC.MinimumDeposit)
+
+    expect(getByText(/confirm/i)).toBeInTheDocument()
+    // NOTE: cannot use getByText('Confirm') to find button,
+    // because MUI wraps the content within a SPAN element inside button
     const submitButton = container.querySelector('button[type="submit"]')
-    expect(inputs.length).toBe(2)
 
-    const depositInput = inputs[0]
-    const coinbaseInput = inputs[1]
+    expect(depositInput).toBeInTheDocument()
+    expect(coinbaseInput).toBeInTheDocument()
+    expect(submitButton).toBeInTheDocument()
 
-    expect(depositInput.name).toBe('deposit')
-    expect(parseInt(depositInput.value)).toBe(MISC.MinimumDeposit)
-    expect(coinbaseInput.name).toBe('coinbase')
-    expect(coinbaseInput.value).toBe('')
+    fireEvent.change(coinbaseInput, { target: { value: userAddress } })
+    fireEvent.click(submitButton)
+    await findByText(/invalid coinbase/i)
 
-    const beforeErrorText = Array.from(container.querySelectorAll('.text-alert'))
-    expect(beforeErrorText.length).toBe(0)
+    fireEvent.change(coinbaseInput, { target: { value: validCoinbase } })
+    fireEvent.change(depositInput, { target: { value: '22000' } })
+    fireEvent.click(submitButton)
+    await findByText(/minimum deposit is 25,000 TOMO/i)
 
-    coinbaseInput.value = userAddress
-    Simulate.change(coinbaseInput)
-
-    act(() => {
-      // NOTE: Simulate click on submitButton will not work.
-      submitButton.dispatchEvent(new MouseEvent('click', {bubbles: true}))
-      console.log('dispatch submit')
-    })
-
-    const waitForRender = new Promise(res => {
-      setTimeout(() => {
-        const afterErrorText = Array.from(container.querySelectorAll('.text-alert'))
-        expect(afterErrorText.length).toBe(1)
-        res()
-      })
-    })
-
-    await waitForRender
-
-    // Use a valid coinbase
-    coinbaseInput.value = validCoinbase
-    Simulate.change(coinbaseInput)
-
-    act(() => {
-      submitButton.dispatchEvent(new MouseEvent('click', {bubbles: true}))
-      console.log('dispatch submit again')
-    })
-
-    const waitForReRender = new Promise(res => {
-      setTimeout(() => {
-        const afterErrorText = container.querySelectorAll('.text-alert')
-        expect(Boolean(afterErrorText)).toBe(false)
-        res()
-      })
-    })
-
-    await waitForReRender
-
+    // Valid submit, unmount Step 1, successfully move to step 2
+    fireEvent.change(depositInput, { target: { value: '25000' } })
+    fireEvent.click(submitButton)
+    await findByLabelText('Relayer Name')
+    expect(countInputs()).toBe(1)
   })
+
+  it('#Step 2: relayer name', async () => {
+    const {
+      getByLabelText,
+      findByText,
+      findByLabelText,
+      container,
+    } = renderUtils
+
+    expect(countInputs()).toBe(1)
+    let nameInput = getByLabelText('Relayer Name')
+    let submitButton = container.querySelector('button[type="submit"]')
+    const backButton = container.querySelector('button[type="button"]')
+
+    const shortName = 'ab'
+    const longName = Array.from({ length: 201 }).fill('a').join('')
+
+    fireEvent.change(nameInput, { target: { value: shortName } })
+    fireEvent.click(submitButton)
+    await findByText(/name is too short/i)
+
+    fireEvent.change(nameInput, { target: { value: longName } })
+    fireEvent.click(submitButton)
+    await findByText(/name is too long/i)
+
+    // Going back and forth between steps
+    fireEvent.click(backButton)
+    const coinbaseInput = await findByLabelText('Coinbase')
+    expect(coinbaseInput.value).toBe(finalPayload.coinbase)
+    expect(countInputs()).toBe(2)
+    submitButton = container.querySelector('button[type="submit"]')
+    fireEvent.click(submitButton)
+    nameInput = await waitForElement(() => getByLabelText('Relayer Name'))
+
+    // Submit FormStepTwo
+    // Valid submit, unmount Step 1, successfully move to step 2
+    submitButton = container.querySelector('button[type="submit"]')
+    fireEvent.change(nameInput, { target: { value: finalPayload.name } })
+    fireEvent.click(submitButton)
+
+    await findByLabelText(/maker fee/i)
+  })
+
 })

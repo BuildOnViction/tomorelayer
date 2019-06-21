@@ -36,7 +36,8 @@ export const wrappers = {
     }),
     validate: values => {
       const errors = {}
-      if (!values.name || values.name.length < 3) errors.name = true
+      if (values.name.length < 3) errors.name = 'Relayer name is too short.'
+      if (values.name.length > 200) errors.name = 'Relayer name is too long.'
       return errors
     },
     handleSubmit: (values, { props }) => props.submitPayload(values)
@@ -50,7 +51,7 @@ export const wrappers = {
       const errors = {}
       Object.keys(values).forEach(feeType => {
         const fee = values[feeType]
-        if (fee > 999 || fee < 1) errors[feeType] = true
+        if (fee > 9999 || fee < 1) errors[feeType] = true
       })
       return errors
     },

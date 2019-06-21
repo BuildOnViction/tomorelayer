@@ -1,7 +1,5 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import { Button, Box, Container, TextField, Typography } from '@material-ui/core'
-import { $backOneStep, $logout, $submitFormPayload } from './actions'
 import { wrappers } from './form_logics'
 
 const FormStepTwo = props => {
@@ -10,6 +8,7 @@ const FormStepTwo = props => {
     errors,
     handleChange,
     handleSubmit,
+    goBack,
   } = props
 
   return (
@@ -23,16 +22,17 @@ const FormStepTwo = props => {
         <TextField
           name="name"
           label="Relayer Name"
+          id="name-input"
           value={values.name}
           onChange={handleChange}
-          error={errors.name}
-          helperText={errors.name && <i className="text-alert">* Name length must be more than 3 characters</i>}
+          error={Boolean(errors.name)}
+          helperText={errors.name && <i className="text-alert">* {errors.name}</i>}
           type="text"
           className="mb-2"
           fullWidth
         />
         <Box display="flex" justifyContent="space-between" className="mt-2">
-          <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
+          <Button variant="outlined" className="mr-1" onClick={goBack} type="button">
             Back
           </Button>
           <Button color="primary" variant="contained" type="submit">
@@ -44,17 +44,4 @@ const FormStepTwo = props => {
   )
 }
 
-const mapProps = state => ({
-  relayer_meta: state.RelayerForm.relayer_meta,
-})
-
-const actions = {
-  $logout,
-  $submitFormPayload,
-  $backOneStep,
-}
-
-const storeConnect = connect(mapProps, actions)
-const formConnect = wrappers.relayerNameForm(FormStepTwo)
-
-export default storeConnect(formConnect)
+export default wrappers.relayerNameForm(FormStepTwo)

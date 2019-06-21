@@ -12,20 +12,28 @@ import { MISC } from 'service/constant'
 
 
 export class Register extends React.Component {
-  state = {
-    step: 1,
-    payload: {
-      deposit: MISC.MinimumDeposit,
-      coinbase: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      step: 1,
+      payload: {
+        owner: props.userAddress,
+        deposit: MISC.MinimumDeposit,
+        coinbase: '',
+        name: '',
+        maker_fee: 1,
+        taker_fee: 1,
+      }
     }
   }
 
   handleSubmit = values => this.setState({
     step: this.state.step + 1,
-    payload: {
-      ...this.state.payload,
-      ...values,
-    }
+    payload: { ...this.state.payload, ...values }
+  })
+
+  goBack = () => this.setState({
+    step: this.state.step - 1
   })
 
   render() {
@@ -47,13 +55,25 @@ export class Register extends React.Component {
             {step === 1 && (
               <FormStepOne
                 {...payload}
-                submitPayload={this.handleSubmit}
                 userAddress={userAddress}
                 usedCoinbases={usedCoinbases}
+                submitPayload={this.handleSubmit}
               />
             )}
-            {step === 2 && <FormStepTwo {...payload}/>}
-            {step === 3 && <FormStepThree {...payload} />}
+            {step === 2 && (
+              <FormStepTwo
+                {...payload}
+                goBack={this.goBack}
+                submitPayload={this.handleSubmit}
+              />
+            )}
+            {step === 3 && (
+              <FormStepThree
+                {...payload}
+                goBack={this.goBack}
+                submitPayload={this.handleSubmit}
+              />
+            )}
             {step === 4 && <FormStepFour {...payload} />}
             {step === 5 && <Review {...payload} />}
             {step === 6 && <SuccessRegistration />}
