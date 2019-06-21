@@ -15,7 +15,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import MajorTokenFilter, { MajorTokenSelect } from './MajorTokenFilter'
 
 
-class TokenPairList extends React.Component {
+export class TokenPairList extends React.Component {
   static defaultProps = {
     // If we need to extract an array of whole Token-Object, change this prop to false
     addressOnly: true,
@@ -131,30 +131,33 @@ class TokenPairList extends React.Component {
   }
 }
 
-const mapProps = state => {
+export const mapProps = state => {
+  // NOTE: this paring funcion will be quite expensive if the number of tokens is big enough
+  // Must consider memoization by then
   const tradeTokens = state.tradableTokens
 
   const pairs = []
-  const tokenSorting = (a, b) => {
-    // NOTE: this may be adjusted in the future depending on each token's liquidity
-    if (a.is_major && b.is_major) return a.symbol.localeCompare(b.symbol)
-    if (!a.is_major && !b.is_major) return a.symbol.localeCompare(b.symbol)
-    if (a.is_major && !b.is_major) return -1
-    if (!a.is_major && b.is_major) return 1
-  }
 
-  const makePairs = fromToken => {
-    const toTokens = tradeTokens.filter(toToken => toToken.address !== fromToken.address)
-    toTokens.forEach(toToken => pairs.push({
+  tradeTokens.forEach((fromToken, fromIdx) => {
+    tradeTokens.filter((toToken, toIdx) => {
+      if (fromIdx === toIdx) return false
+      if (toToken.is_major) return true
+      if (!fromToken.is_major) return true
+      return false
+    }).forEach((toToken, toIdx) => pairs.push({
       from: fromToken,
       to: toToken,
       toString: () => `${fromToken.symbol}/${toToken.symbol}`
     }))
-  }
-  // NOTE: make pairs of Quote-only-Tokens
-  tradeTokens.filter(t => t.is_major).forEach(makePairs)
-  // NOTE: make pairs of Base/Quote-Tokens
-  tradeTokens.sort(tokenSorting).filter(t => !t.is_major).forEach(makePairs)
+  })
+
+  pairs.sort((a, b) => {
+    if (a.from.symbol === b.from.symbol) return 1 * a.to.symbol.localeCompare(b.to.symbol)
+    if (a.from.symbol === 'TOMO') return -1
+    if (b.from.symbol === 'TOMO') return 1
+    if (a.from.is_major && b.from.is_major) return 1 * a.from.symbol.localeCompare(b.from.symbol)
+    return 1 * a.from.symbol.localeCompare(b.from.symbol)
+  })
 
   return { pairs, majorTokens: state.MajorTokens }
 }
