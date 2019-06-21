@@ -53,6 +53,8 @@
     "dotenv": "^7.0.0",
     "embark": "^4.0.2",
     "embarkjs-connector-web3": "^4.0.0",
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "exec-sh": "^0.3.2",
     "jest-dom": "^3.5.0",
     "kill-port": "^1.4.0",
