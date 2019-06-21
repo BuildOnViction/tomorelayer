@@ -15,120 +15,71 @@ import SearchIcon from '@material-ui/icons/Search'
 import MajorTokenFilter, { MajorTokenSelect } from './MajorTokenFilter'
 
 
-export class TokenPairList extends React.Component {
-  static defaultProps = {
-    // If we need to extract an array of whole Token-Object, change this prop to false
-    addressOnly: true,
+export const FilterControl = ({ onFilterChange }) => (
+  <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
+
+  </Box>
+)
+
+const handleClickPair = (pairs, index) => {
+  // Each action should return a new `checkList`
+  const items = Array.from(pairs)
+  const pair = items[index]
+
+  if (pair.checked) {
+    delete pair['checked']
+  } else {
+    pair.checked = true
   }
+  return items
+}
 
-  state = {
-    selected: [],
-    filters: [],
-  }
+export const PairList = ({ items, onCheck }) => {
+  const onClick = (items, idx) => () => onCheck(handleClickPair(items, idx))
+  const ariaLabel = pair => `${pair.toString().toLowerCase()}-input`
+  return (
+    <List dense className="bg-filled token-list token-list__limited-height">
+      {items.map((p, idx) => (
+        <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={onClick(items, idx)}>
+          <ListItemIcon>
+            <Checkbox
+              color="default"
+              checked={Boolean(p.checked)}
+              inputProps={{ 'aria-labelledby': ariaLabel(p) }}
+            />
+          </ListItemIcon>
+          <ListItemText primary={p.toString()} id={ariaLabel(p)} />
+        </ListItem>
+      ))}
+    </List>
+  )
+}
 
-  componentDidMount() {
-    const { fromTokens, toTokens, pairs } = this.props
-    if (!fromTokens || !fromTokens.length) return
-    const selected = fromTokens.map((addr, idx) => pairs.find(p => p.from.address === addr && p.to.address === toTokens[idx]))
-    this.setState({ selected })
-  }
+export const makeCheckList = (fromTokens, toTokens, pairs, pairMapping) => {
+  const checkedPairs = Array.from(pairs)
+  fromTokens.forEach((tokenAddress, idx) => {
+    const key = `${tokenAddress}${toTokens[idx]}`
+    const pairIndex = pairMapping[key]
+    checkedPairs[pairIndex]['checked'] = true
+  })
+  return checkedPairs
+}
 
-  applyFilters = pairs => {
-    const filters = this.state.filters
-    const filterKeys = Object.keys(filters)
-    if (filterKeys.length === 0) return pairs
-    const reduceFunc = (filteredPairs, key) => filteredPairs.filter(filters[key])
-    return filterKeys.reduce(reduceFunc, pairs)
-  }
+export const TokenPairList = ({
+  fromTokens,
+  toTokens,
+  onChange,
+  pairs,
+  pairMapping,
+}) => {
 
-  pickPair = (pair, selected) => () => {
-    if (this.props.disabled) return
-    const index = selected.indexOf(pair)
-    index >= 0 ? selected.splice(index, 1) : selected.push(pair)
-    this.setState({ selected }, this.dispatchChange)
-  }
-
-  selectAll = (pairs, selected, checked) => () => {
-    pairs.forEach(p => {
-      const index = selected.indexOf(p)
-      checked && index >= 0 && selected.splice(index, 1)
-      !checked && index < 0 && selected.push(p)
-    })
-    this.setState({ selected }, this.dispatchChange)
-  }
-
-  isAllChecked = (pairs, selected) => pairs.reduce((acc, p) => acc && selected.includes(p), true)
-
-  setFilters = {
-    tokens: tokens => {
-      const filters = { ...this.state.filters }
-      const filterByMajorTokens = pair => tokens.includes(pair.from.address) || tokens.includes(pair.to.address)
-      const fallbackFilter = pair => pair
-      filters.filterByMajorTokens = tokens.length > 0 ? filterByMajorTokens : fallbackFilter
-      this.setState({ filters })
-    }
-  }
-
-  dispatchChange = () => {
-    const { addressOnly, onChange } = this.props
-    const selected = this.state.selected
-    onChange('from_tokens', selected.map(p => addressOnly ? p.from.address : p.from))
-    onChange('to_tokens', selected.map(p => addressOnly ? p.to.address : p.to))
-  }
-
-  render() {
-    const { pairs, majorTokens, disabled } = this.props
-    const { selected: selectedPairs } = this.state
-    const filteredPairs = this.applyFilters(pairs)
-    const isAllChecked = this.isAllChecked(filteredPairs, selectedPairs)
-    const selectAllBtnText = `${isAllChecked ? 'Unselect' : 'Select'} ${filteredPairs.length} pairs`
-
-    return (
-      <Box border={1}>
-        <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
-          {!disabled && (
-            <Badge color="primary" badgeContent={`${selectedPairs.length}`}>
-              <MajorTokenSelect
-                name={selectAllBtnText}
-                onClick={this.selectAll(filteredPairs, selectedPairs, isAllChecked)}
-                selected={isAllChecked}
-              />
-            </Badge>
-          )}
-          <MajorTokenFilter
-            majorTokens={majorTokens}
-            setFilter={this.setFilters.tokens}
-          />
-          <TextField
-            label="Search"
-            type="text"
-            variant="outlined"
-            margin="dense"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-        <Box>
-
-        </Box>
-        <List dense className="bg-filled token-list token-list__limited-height">
-          {filteredPairs.map((p, idx) => (
-            <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p, selectedPairs)}>
-              <ListItemIcon>
-                <Checkbox color="default" checked={selectedPairs.includes(p)} disabled={disabled} />
-              </ListItemIcon>
-              <ListItemText primary={p.toString()} />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    )
-  }
+  const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping)
+  const onCheck = newItems => console.log(newItems)
+  return (
+    <Box border={1}>
+      <PairList items={items} onCheck={onCheck} />
+    </Box>
+  )
 }
 
 export const mapProps = state => {
@@ -137,6 +88,12 @@ export const mapProps = state => {
   const tradeTokens = state.tradableTokens
 
   const pairs = []
+
+  // NOTE: due to concern over the excessive size of token-pairs array each relayer may has,
+  // we keep a special Object called `pairMapping` utilizing `fromAddress/toAddress` as key
+  // and `index` of the pair in array pair - for faster query/retrieve data
+  // the object, being memoized as well, should be saved in the store for referrence
+  const pairMapping = {}
 
   tradeTokens.forEach((fromToken, fromIdx) => {
     tradeTokens.filter((toToken, toIdx) => {
@@ -159,7 +116,11 @@ export const mapProps = state => {
     return 1 * a.from.symbol.localeCompare(b.from.symbol)
   })
 
-  return { pairs, majorTokens: state.MajorTokens }
+  pairs.forEach((p, idx) => {
+    pairMapping[`${p.from.address}${p.to.address}`] = idx
+  })
+
+  return { pairs, pairMapping }
 }
 
 const storeConnect = connect(mapProps)
