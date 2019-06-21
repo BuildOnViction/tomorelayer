@@ -11,7 +11,7 @@ import {
   $submitFormPayload,
 } from './actions'
 import TokenPairList from 'component/shared/TokenPairList'
-import { wrappers } from './form_logics'
+import { wrappers } from './forms'
 
 
 const FormStepFour = ({

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Button, Container, InputAdornment, TextField, Typography } from '@material-ui/core'
-import { wrappers } from './form_logics'
+import { wrappers } from './forms'
 import * as _ from 'service/helper'
 
 const FormStepThree = props => {
@@ -12,12 +12,6 @@ const FormStepThree = props => {
     goBack,
   } = props
 
-  const handleFeeChange = e => {
-    e.target.value = _.round(e.target.value * 100, 0)
-    return handleChange(e)
-  }
-
-  const formatValue = v => _.round(v / 100, 2)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
@@ -33,24 +27,34 @@ const FormStepThree = props => {
             name="maker_fee"
             label="Maker Fee (min: 0.01%, max: 99.9%)"
             id="maker_fee-input"
-            value={formatValue(values.maker_fee)}
-            onChange={handleFeeChange}
+            value={values.maker_fee}
+            onChange={handleChange}
             error={errors.maker_fee}
             type="number"
             className="mr-1"
             InputProps={{ endAdornment }}
+            inputProps={{
+              step: 0.01,
+              max: 99.99,
+              min: 0.01,
+            }}
             fullWidth
           />
           <TextField
             name="taker_fee"
             label="Taker Fee (min: 0.01%, max: 99.9%)"
             id="taker_fee-input"
-            value={formatValue(values.taker_fee)}
-            onChange={handleFeeChange}
+            value={values.taker_fee}
+            onChange={handleChange}
             error={errors.taker_fee}
             type="number"
             className="ml-1"
             InputProps={{ endAdornment }}
+            inputProps={{
+              step: 0.01,
+              max: 99.99,
+              min: 0.01,
+            }}
             fullWidth
           />
         </Box>

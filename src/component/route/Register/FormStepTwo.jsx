@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Box, Container, TextField, Typography } from '@material-ui/core'
-import { wrappers } from './form_logics'
+import { wrappers } from './forms'
 
 const FormStepTwo = props => {
   const {

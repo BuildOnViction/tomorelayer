@@ -45,13 +45,12 @@ export const wrappers = {
 
   marketFeeForm: withFormik({
     displayName: 'RelayerRegisterMarketFeeForm',
-    enableReinitialize: true,
     validateOnChange: false,
     validate: values => {
       const errors = {}
       Object.keys(values).forEach(feeType => {
-        const fee = values[feeType]
-        if (fee > 9999 || fee < 1) errors[feeType] = true
+        const fee = parseFloat(values[feeType])
+        if (fee > 99.99 || fee < 0.01) errors[feeType] = true
       })
       return errors
     },

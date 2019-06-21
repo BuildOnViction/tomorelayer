@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Button, Container, TextField, Typography } from '@material-ui/core'
 import { MISC } from 'service/constant'
-import { wrappers } from './form_logics'
+import { wrappers } from './forms'
 
 const FormStepOne = props => {
   const {

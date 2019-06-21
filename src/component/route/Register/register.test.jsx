@@ -3,8 +3,11 @@ import {
   render,
   fireEvent,
   cleanup,
+  wait,
   waitForElement,
+  waitForDomChange,
 } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import 'jest-dom/extend-expect'
 import { MISC } from 'service/constant'
 import { Register } from './index'
@@ -18,6 +21,49 @@ import { Register } from './index'
  * - Registration form will be a Wizard Form, but some of its actions will be mutating state
  */
 
+
+let countInputs
+let container
+
+const userAddress = '0x070aA7AD03B89B3278f19d34F119DD3C2a244675'
+const usedCoinbases = []
+
+const finalPayload = {
+  coinbase: '0x2db13BfFD639c756383e98BCb34BB918Ae5A5b12',
+  deposit: '25000',
+  name: 'abcxyz',
+}
+
+let getByText,
+    getAllByText,
+    getByLabelText,
+    findByText,
+    findAllByText,
+    findByLabelText,
+    findAllByLabelText,
+    debug;
+
+beforeAll(() => {
+  const renderUtils = render((
+    <Register
+      userAddress={userAddress}
+      usedCoinbases={usedCoinbases}
+    />
+  ))
+
+  container = renderUtils.container
+  getByText = renderUtils.getByText
+  getAllByText = renderUtils.getAllByText
+  getByLabelText = renderUtils.getByLabelText
+  findByText = renderUtils.findByText
+  findAllByText = renderUtils.findAllByText
+  findByLabelText = renderUtils.findByLabelText
+  findAllByLabelText = renderUtils.findAllByLabelText
+  debug = renderUtils.debug
+
+  countInputs = () => Array.from(container.querySelectorAll('input')).length
+})
+
 afterAll(cleanup)
 
 describe('Test RegisterForm No Break', () => {
@@ -29,30 +75,8 @@ describe('Test RegisterForm No Break', () => {
    * @test {RegisterForm}
    */
 
-  let renderUtils
-  let countInputs
-  let container
-
-  const finalPayload = {
-    coinbase: '0x2db13BfFD639c756383e98BCb34BB918Ae5A5b12',
-    deposit: '25000',
-    name: 'abcxyz',
-  }
-
   it('#Step 1: deposit & coinbase form', async () => {
     const validCoinbase = finalPayload.coinbase
-    const userAddress = '0x070aA7AD03B89B3278f19d34F119DD3C2a244675'
-    const usedCoinbases = []
-    renderUtils = render(<Register userAddress={userAddress} usedCoinbases={usedCoinbases} />)
-    const {
-      getByText,
-      getByLabelText,
-      findByText,
-      findByLabelText,
-    } = renderUtils
-    container = renderUtils.container
-
-    countInputs = () => Array.from(container.querySelectorAll('input')).length
     expect(countInputs()).toBe(2)
 
     const depositInput = getByLabelText('Deposit')
@@ -85,18 +109,12 @@ describe('Test RegisterForm No Break', () => {
   })
 
   it('#Step 2: relayer name', async () => {
-    const {
-      getByLabelText,
-      findByText,
-      findByLabelText,
-      container,
-    } = renderUtils
-
     expect(countInputs()).toBe(1)
     let nameInput = getByLabelText('Relayer Name')
     let submitButton = container.querySelector('button[type="submit"]')
     const backButton = container.querySelector('button[type="button"]')
 
+    // NOTE: name-length within 3~200
     const shortName = 'ab'
     const longName = Array.from({ length: 201 }).fill('a').join('')
 
@@ -124,6 +142,36 @@ describe('Test RegisterForm No Break', () => {
     fireEvent.click(submitButton)
 
     await findByLabelText(/maker fee/i)
+  })
+
+  it('#Step 3: market fee form', async () => {
+    expect(countInputs()).toBe(2)
+
+    const makerFeeInput = getByLabelText(/maker fee/i)
+    expect(parseFloat(makerFeeInput.value)).toEqual(0.01)
+    expect(makerFeeInput.attributes['type'].value).toBe('number')
+    expect(makerFeeInput.attributes['step'].value).toBe('0.01')
+    expect(makerFeeInput.attributes['max'].value).toBe('99.99')
+    expect(makerFeeInput.attributes['min'].value).toBe('0.01')
+
+    const takerFeeInput = getByLabelText(/taker fee/i)
+    expect(parseFloat(takerFeeInput.value)).toEqual(0.01)
+    expect(takerFeeInput.attributes['type'].value).toBe('number')
+    expect(takerFeeInput.attributes['step'].value).toBe('0.01')
+    expect(takerFeeInput.attributes['max'].value).toBe('99.99')
+    expect(takerFeeInput.attributes['min'].value).toBe('0.01')
+
+    const submitButton = container.querySelector('button[type="submit"]')
+    const invalidFee = 10000000 // not within 0.01 ~ 99.99
+    fireEvent.change(makerFeeInput, { target: { value: invalidFee } })
+    fireEvent.change(takerFeeInput, { target: { value: invalidFee } })
+    fireEvent.click(submitButton)
+
+    // NOTE: no alert, just using error-highlight from MUI's built-ins
+    const updatedInputs = await findAllByLabelText(/maker fee/i)
+    Array.from(updatedInputs).forEach(input => {
+      expect(input.attributes['aria-invalid'].value).toBe('true')
+    })
   })
 
 })

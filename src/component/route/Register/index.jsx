@@ -21,8 +21,8 @@ export class Register extends React.Component {
         deposit: MISC.MinimumDeposit,
         coinbase: '',
         name: '',
-        maker_fee: 1,
-        taker_fee: 1,
+        maker_fee: 0.01,
+        taker_fee: 0.01,
       }
     }
   }
