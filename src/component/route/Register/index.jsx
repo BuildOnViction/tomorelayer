@@ -38,6 +38,10 @@ export class Register extends React.Component {
     step: this.state.step - 1
   })
 
+  confirmRegister = () => {
+    console.log('Confirm register');
+  }
+
   render() {
     const {
       step,
@@ -83,7 +87,13 @@ export class Register extends React.Component {
                 submitPayload={this.handleSubmit}
               />
             )}
-            {step === 5 && <Review {...payload} />}
+            {step === 5 && (
+              <Review
+                meta={payload}
+                goBack={this.goBack}
+                registerRelayer={this.confirmRegister}
+              />
+            )}
             {step === 6 && <SuccessRegistration />}
           </div>
         </Box>

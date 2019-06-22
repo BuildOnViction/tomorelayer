@@ -17,6 +17,11 @@ const FormStepFour = ({
   goBack,
 }) => {
 
+  const setPairsValues = (selected) => {
+   setFieldValue('from_tokens', selected.fromTokens)
+   setFieldValue('to_tokens', selected.toTokens)
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -27,9 +32,9 @@ const FormStepFour = ({
         </Box>
         <Container maxWidth="md">
           <TokenPairList
-            fromTokens={values.fromTokens}
-            toTokens={values.toTokens}
-            onChange={setFieldValue}
+            fromTokens={values.from_tokens}
+            toTokens={values.to_tokens}
+            onChange={setPairsValues}
           />
           <Box display="flex" justifyContent="space-between" className="mt-2">
             <Button variant="outlined" className="mr-1" onClick={goBack} type="button">

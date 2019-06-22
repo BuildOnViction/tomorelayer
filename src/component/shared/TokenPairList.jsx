@@ -75,11 +75,11 @@ const handleClickPair = (pairs, index) => {
   return items
 }
 
-export const PairList = ({ items, onCheck }) => {
+export const PairList = ({ items, onCheck, filter }) => {
   const onClick = (items, idx) => () => onCheck(handleClickPair(items, idx))
   return (
     <List dense className="bg-filled token-list token-list__limited-height">
-      {items.map((p, idx) => (
+      {items.filter(filter).map((p, idx) => (
         <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={onClick(items, idx)}>
           <ListItemIcon>
             <Checkbox
@@ -115,17 +115,22 @@ export const TokenPairList = ({
 }) => {
 
   const [filter, setFilter] = React.useState(null)
+  const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping)
 
-  const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping).filter(p => filter ? filter(p) : p)
-  const onCheck = newItems => onChange({
-    fromTokens: newItems.filter(p => p.checked).map(p => p.from.address),
-    toTokens: newItems.filter(p => p.checked).map(p => p.to.address),
-  })
+  const onCheck = newItems => {
+    document.__memoizedUserSelectedPairs__ = newItems
+    onChange({
+      fromTokens: newItems.filter(p => p.checked).map(p => p.from.address),
+      toTokens: newItems.filter(p => p.checked).map(p => p.to.address),
+    })
+  }
+
+  const noFilter = p => p
 
   return (
     <Box border={1}>
       <FilterControl tokensForFilter={quoteTokens} onFilterChange={setFilter} />
-      <PairList items={items} onCheck={onCheck} />
+      <PairList items={items} onCheck={onCheck} filter={filter || noFilter} />
     </Box>
   )
 }
