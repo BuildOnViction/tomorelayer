@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import {
-  Badge,
+  Button,
   Box,
   Checkbox,
   InputAdornment,
@@ -12,14 +12,55 @@ import {
   TextField,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import MajorTokenFilter, { MajorTokenSelect } from './MajorTokenFilter'
 
 
-export const FilterControl = ({ onFilterChange }) => (
-  <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
+export const FilterControl = ({
+  onFilterChange,
+  tokensForFilter,
+}) => {
 
-  </Box>
-)
+  const tokenFilters = tokensForFilter.reduce((obj, token) => {
+    obj[token.symbol] = pair => pair.from.symbol === token.symbol || pair.to.symbol === token.symbol
+    return obj
+  }, {})
+
+  const filterControls = {
+    ALL: pair => pair,
+    SEARCH: regex => pair => regex.exec(`${pair.from.symbol}${pair.to.symbol}${pair.from.name}${pair.to.name}`),
+    ...tokenFilters
+  }
+
+  return (
+    <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
+      <Button size="small" onClick={() => onFilterChange(filterControls.ALL)}>
+        ALL
+      </Button>
+      {tokensForFilter.map(tk => (
+        <Button size="small"
+          key={tk.address}
+          onClick={() => onFilterChange(filterControls[tk.symbol])}
+        >
+          {tk.symbol}
+        </Button>
+      ))}
+      <TextField
+        label="Search"
+        type="text"
+        variant="outlined"
+        margin="dense"
+        name="Search"
+        id="search-input"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Box>
+  )
+}
 
 const handleClickPair = (pairs, index) => {
   // Each action should return a new `checkList`
@@ -36,7 +77,6 @@ const handleClickPair = (pairs, index) => {
 
 export const PairList = ({ items, onCheck }) => {
   const onClick = (items, idx) => () => onCheck(handleClickPair(items, idx))
-  const ariaLabel = pair => `${pair.toString().toLowerCase()}-input`
   return (
     <List dense className="bg-filled token-list token-list__limited-height">
       {items.map((p, idx) => (
@@ -45,10 +85,10 @@ export const PairList = ({ items, onCheck }) => {
             <Checkbox
               color="default"
               checked={Boolean(p.checked)}
-              inputProps={{ 'aria-labelledby': ariaLabel(p) }}
+              inputProps={{ 'aria-labelledby': p.toString() }}
             />
           </ListItemIcon>
-          <ListItemText primary={p.toString()} id={ariaLabel(p)} />
+          <ListItemText primary={p.toString()} id={p.toString()} />
         </ListItem>
       ))}
     </List>
@@ -68,15 +108,25 @@ export const makeCheckList = (fromTokens, toTokens, pairs, pairMapping) => {
 export const TokenPairList = ({
   fromTokens,
   toTokens,
+  quoteTokens,
   onChange,
   pairs,
   pairMapping,
 }) => {
 
-  const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping)
-  const onCheck = newItems => console.log(newItems)
+  const noFilter = pair => pair
+  const [filter, setFilter] = React.useState(noFilter)
+
+  const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping).filter(p => filter ? filter(p) : p)
+  const onCheck = newItems => onChange({
+    fromTokens: newItems.filter(p => p.checked).map(p => p.from.address),
+    toTokens: newItems.filter(p => p.checked).map(p => p.to.address),
+  })
+
+
   return (
     <Box border={1}>
+      <FilterControl tokensForFilter={quoteTokens} onFilterChange={setFilter} />
       <PairList items={items} onCheck={onCheck} />
     </Box>
   )
@@ -120,7 +170,11 @@ export const mapProps = state => {
     pairMapping[`${p.from.address}${p.to.address}`] = idx
   })
 
-  return { pairs, pairMapping }
+  return {
+    pairs,
+    pairMapping,
+    quoteTokens: tradeTokens.filter(t => t.is_major),
+  }
 }
 
 const storeConnect = connect(mapProps)

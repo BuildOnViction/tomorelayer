@@ -3,15 +3,11 @@ import {
   render,
   fireEvent,
   cleanup,
-  wait,
-  waitForElement,
-  waitForDomChange,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
-
 import {
   TokenPairList,
-  PairList,
+  FilterControl,
   mapProps as MapStateToProps,
   makeCheckList as MakeCheckList,
 } from 'component/shared/TokenPairList'
@@ -41,7 +37,6 @@ const Tokens = rawtokens.map((t, idx) => {
 
 const { pairs, pairMapping } = MapStateToProps({ tradableTokens: Tokens })
 
-afterAll(cleanup)
 
 describe('Stateless Pair-Builder Function', () => {
 
@@ -74,55 +69,93 @@ describe('Stateless Pair-Builder Function', () => {
 
 
 describe('Testing TokenPairList', () => {
+  // Given initial selected paris: [TOMO/BTC, ETH/TOMO]
+  const tomoAddr = Tokens.find(t => t.symbol === 'TOMO').address
+  const btcAddr = Tokens.find(t => t.symbol === 'BTC').address
+  const ethAddr = Tokens.find(t => t.symbol === 'ETH').address
 
-  it('#1 MapStateToProps should produce correct PairMapping', () => {
+  const quoteTokens = Tokens.filter(t => t.is_major)
+
+  const fromTokens = [tomoAddr, ethAddr]
+  const toTokens = [btcAddr, tomoAddr]
+
+  afterEach(cleanup)
+
+
+  it('#1 MapStateToProps & MakeCheckList should behave properly', () => {
     expect(pairs.length).toEqual(Object.keys(pairMapping).length)
     const firstKey = `${pairs[0].from.address}${pairs[0].to.address}`
     expect(pairMapping[firstKey]).toBe(0)
-  })
-
-  it('#2 MakeCheckList is correct & PairList should render properly', async () => {
-    // Given initial selected paris: [TOMO/BTC, ETH/TOMO]
-    const tomoAddr = Tokens.find(t => t.symbol === 'TOMO').address
-    const btcAddr = Tokens.find(t => t.symbol === 'BTC').address
-    const ethAddr = Tokens.find(t => t.symbol === 'ETH').address
-
-    const fromTokens = [tomoAddr, ethAddr]
-    const toTokens = [btcAddr, tomoAddr]
 
     const checkList = MakeCheckList(fromTokens, toTokens, pairs, pairMapping)
     // Refer to `quoteTokensAtListHead` above
     checkList.forEach((p, idx) => {
       expect(Boolean(p.checked)).toBe(idx === 0 || idx === 5)
     })
+  })
 
-    let newlist
-    const onCheck = list => { newlist = list }
+
+  it('#2. Testing FilterControl', async () => {
+    let result
+    const changeFilters = filter => {
+      result = pairs.filter(filter)
+    }
+
+    const majorTokens = Tokens.filter(t => t.is_major)
+
     const {
-      getAllByText,
+      getByText,
       getByLabelText,
-      findByLabelText,
-      debug,
+    } = render(<FilterControl onFilterChange={changeFilters} tokensForFilter={majorTokens} />)
+
+    const ALLBtn = getByText('ALL')
+    const TOMOBtn = getByText('TOMO')
+    getByText('BTC')
+    getByText('ETH')
+    getByLabelText('Search')
+
+    fireEvent.click(TOMOBtn)
+    const expectedFilteredPair = pairs.filter(p => p.from.address === tomoAddr || p.to.address === tomoAddr).map(p => p.toString())
+    expect(expectedFilteredPair.length).toEqual(result.length)
+    expect(result.every(p => expectedFilteredPair.includes(p.toString()))).toBe(true)
+
+    fireEvent.click(ALLBtn)
+    expect(pairs.length).toEqual(result.length)
+
+  })
+
+
+  it('#3. TokenPairList should render properly and selected token-paris can be change on check/uncheck', () => {
+    let result
+    const onChange = data => {
+      expect(data.fromTokens.length).toEqual(data.toTokens.length)
+      result = data
+    }
+
+    const {
       container,
-    } = render((<PairList items={checkList} onCheck={onCheck} />))
+    } = render((
+      <TokenPairList
+        fromTokens={fromTokens}
+        toTokens={toTokens}
+        quoteTokens={quoteTokens}
+        pairs={pairs}
+        pairMapping={pairMapping}
+        onChange={onChange}
+      />
+    ))
 
-    const checkboxes = Array.from(container.querySelectorAll('input'))
-    expect(checkboxes.length).toEqual(pairs.length)
-
-    // NOTE: getByLabelText(ariaLabel(firstPair)) not working,
-    // as Test engine cannot find label maybe due to how MUI render
     const inputs = Array.from(container.querySelectorAll('input'))
-    expect(inputs[0]).toHaveAttribute('checked')
-    expect(inputs[5]).toHaveAttribute('checked')
-    expect(inputs[3]).not.toHaveAttribute('checked')
+    expect(inputs.length).toEqual(pairs.length + 1)
+    expect(inputs[1]).toHaveAttribute('checked')
+    expect(inputs[6]).toHaveAttribute('checked')
+    expect(inputs[4]).not.toHaveAttribute('checked')
 
-    fireEvent.click(inputs[3])
-    const pickedPair = newlist[3]
-    expect(pickedPair.checked).toBe(true)
+    fireEvent.click(inputs[4])
+    expect(result.fromTokens.length).toBe(3)
 
-    fireEvent.click(inputs[5])
-    const uncheckedPair = newlist[5]
-    expect(uncheckedPair.checked).toBe(undefined)
+    fireEvent.click(inputs[6])
+    expect(result.fromTokens.length).toBe(2)
   })
 
 })
