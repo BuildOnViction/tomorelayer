@@ -23,6 +23,8 @@ export class Register extends React.Component {
         name: '',
         maker_fee: 0.01,
         taker_fee: 0.01,
+        from_tokens: [],
+        to_tokens: [],
       }
     }
   }
@@ -74,7 +76,13 @@ export class Register extends React.Component {
                 submitPayload={this.handleSubmit}
               />
             )}
-            {step === 4 && <FormStepFour {...payload} />}
+            {step === 4 && (
+              <FormStepFour
+                {...payload}
+                goBack={this.goBack}
+                submitPayload={this.handleSubmit}
+              />
+            )}
             {step === 5 && <Review {...payload} />}
             {step === 6 && <SuccessRegistration />}
           </div>

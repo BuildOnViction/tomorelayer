@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Button, Container, InputAdornment, TextField, Typography } from '@material-ui/core'
 import { wrappers } from './forms'
-import * as _ from 'service/helper'
 
 const FormStepThree = props => {
   const {

@@ -114,15 +114,13 @@ export const TokenPairList = ({
   pairMapping,
 }) => {
 
-  const noFilter = pair => pair
-  const [filter, setFilter] = React.useState(noFilter)
+  const [filter, setFilter] = React.useState(null)
 
   const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping).filter(p => filter ? filter(p) : p)
   const onCheck = newItems => onChange({
     fromTokens: newItems.filter(p => p.checked).map(p => p.from.address),
     toTokens: newItems.filter(p => p.checked).map(p => p.to.address),
   })
-
 
   return (
     <Box border={1}>

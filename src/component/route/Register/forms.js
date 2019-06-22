@@ -66,8 +66,8 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      from_tokens: props.from_tokens,
-      to_tokens: props.to_tokens,
+      fromTokens: props.from_tokens,
+      toTokens: props.to_tokens,
     }),
     handleSubmit: (values, { props }) => props.submitPayload(values)
   })

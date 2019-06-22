@@ -1,18 +1,12 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
   Button,
   Container,
   Typography,
 } from '@material-ui/core'
-import {
-  $backOneStep,
-  $submitFormPayload,
-} from './actions'
 import TokenPairList from 'component/shared/TokenPairList'
 import { wrappers } from './forms'
-
 
 const FormStepFour = ({
   values,
@@ -20,7 +14,7 @@ const FormStepFour = ({
   handleChange,
   handleSubmit,
   setFieldValue,
-  ...props
+  goBack,
 }) => {
 
   return (
@@ -33,13 +27,12 @@ const FormStepFour = ({
         </Box>
         <Container maxWidth="md">
           <TokenPairList
-            fromTokens={values.from_tokens}
-            toTokens={values.to_tokens}
+            fromTokens={values.fromTokens}
+            toTokens={values.toTokens}
             onChange={setFieldValue}
-            addressOnly={false}
           />
           <Box display="flex" justifyContent="space-between" className="mt-2">
-            <Button variant="outlined" className="mr-1" onClick={props.$backOneStep} type="button">
+            <Button variant="outlined" className="mr-1" onClick={goBack} type="button">
               Back
             </Button>
             <Button color="primary" variant="contained" type="submit">
@@ -52,16 +45,4 @@ const FormStepFour = ({
   )
 }
 
-const mapProps = state => ({
-  relayer_meta: state.RelayerForm.relayer_meta,
-})
-
-const actions = {
-  $submitFormPayload,
-  $backOneStep,
-}
-
-const storeConnect = connect(mapProps, actions)
-const formConnect = wrappers.tokenPairForm(FormStepFour)
-
-export default storeConnect(formConnect)
+export default wrappers.tokenPairForm(FormStepFour)
