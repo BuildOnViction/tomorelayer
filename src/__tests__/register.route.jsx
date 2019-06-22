@@ -3,14 +3,15 @@ import {
   render,
   fireEvent,
   cleanup,
-  wait,
   waitForElement,
-  waitForDomChange,
 } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import 'jest-dom/extend-expect'
+
+import { Provider } from '@vutr/redux-zero/react'
+import createStore from '@vutr/redux-zero'
+
 import { MISC } from 'service/constant'
-import { Register } from 'component/route/Register'
+import Register from 'component/route/Register'
 
 /**
  * Testing Actions for Register Flow
@@ -44,11 +45,35 @@ let getByText,
     debug;
 
 beforeAll(() => {
+  const fs = require('fs')
+  const path = require('path')
+  const rawtokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_token.dummy.json')))
+  const quoteTokens = ['TOMO', 'ETH', 'BTC']
+  const Tokens = rawtokens.map((t, idx) => {
+    if (quoteTokens.includes(t.symbol)) {
+      t['is_major'] = true
+    }
+    t.id = idx
+    return t
+  })
+
+  const store = createStore({
+    tradableTokens: Tokens,
+    authStore: {
+      user_meta: {
+        address: userAddress
+      }
+    },
+    Relayers: [
+      {coinbase: usedCoinbases}
+    ]
+  })
+
+
   const renderUtils = render((
-    <Register
-      userAddress={userAddress}
-      usedCoinbases={usedCoinbases}
-    />
+    <Provider store={store}>
+      <Register />
+    </Provider>
   ))
 
   container = renderUtils.container
@@ -172,6 +197,20 @@ describe('Test RegisterForm No Break', () => {
     Array.from(updatedInputs).forEach(input => {
       expect(input.attributes['aria-invalid'].value).toBe('true')
     })
+
+    fireEvent.change(makerFeeInput, { target: { value: 10 } })
+    fireEvent.change(takerFeeInput, { target: { value: 0.12 } })
+    fireEvent.click(submitButton)
+    await findByText('Choose Trading Pairs of Token')
+  })
+
+  it('#Step 4: trade token form', async () => {
+    // const checkbox = getByLabelText('USDT/BTC') => not working... not sure why
+    const checkbox = container.querySelector('input[aria-labelledby="USDT/BTC"]')
+    fireEvent.click(checkbox)
+
+    const submitButton = getByText(/confirm/i)
+    fireEvent.click(submitButton)
   })
 
 })

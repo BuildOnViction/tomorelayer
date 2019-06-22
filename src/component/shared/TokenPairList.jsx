@@ -30,16 +30,15 @@ export const FilterControl = ({
     ...tokenFilters
   }
 
+  const handleBtn = control => () => onFilterChange(control)
+
   return (
     <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
-      <Button size="small" onClick={() => onFilterChange(filterControls.ALL)}>
+      <Button size="small" onClick={handleBtn(filterControls.ALL)}>
         ALL
       </Button>
       {tokensForFilter.map(tk => (
-        <Button size="small"
-          key={tk.address}
-          onClick={() => onFilterChange(filterControls[tk.symbol])}
-        >
+        <Button size="small" key={tk.address} onClick={handleBtn(filterControls[tk.symbol])}>
           {tk.symbol}
         </Button>
       ))}
@@ -118,18 +117,20 @@ export const TokenPairList = ({
   const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping)
 
   const onCheck = newItems => {
-    document.__memoizedUserSelectedPairs__ = newItems
+    const checked = document.__memoizedUserSelectedPairs__ = newItems.filter(p => p.checked)
     onChange({
-      fromTokens: newItems.filter(p => p.checked).map(p => p.from.address),
-      toTokens: newItems.filter(p => p.checked).map(p => p.to.address),
+      fromTokens: checked.map(p => p.from.address),
+      toTokens: checked.map(p => p.to.address),
     })
   }
 
   const noFilter = p => p
 
+  const changeFilter = f => setFilter(f)
+
   return (
     <Box border={1}>
-      <FilterControl tokensForFilter={quoteTokens} onFilterChange={setFilter} />
+      <FilterControl tokensForFilter={quoteTokens} onFilterChange={changeFilter} />
       <PairList items={items} onCheck={onCheck} filter={filter || noFilter} />
     </Box>
   )
