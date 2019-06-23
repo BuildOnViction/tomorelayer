@@ -204,13 +204,4 @@ describe('Test RegisterForm No Break', () => {
     await findByText('Choose Trading Pairs of Token')
   })
 
-  it('#Step 4: trade token form', async () => {
-    // const checkbox = getByLabelText('USDT/BTC') => not working... not sure why
-    const checkbox = container.querySelector('input[aria-labelledby="USDT/BTC"]')
-    fireEvent.click(checkbox)
-
-    const submitButton = getByText(/confirm/i)
-    fireEvent.click(submitButton)
-  })
-
 })

@@ -3,13 +3,17 @@ import {
   render,
   fireEvent,
   cleanup,
+  wait,
+  waitForElement,
+  waitForDomChange,
 } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import 'jest-dom/extend-expect'
-import {
-  TokenPairList,
-  FilterControl,
+import { Provider, connect } from '@vutr/redux-zero/react'
+import createStore from '@vutr/redux-zero'
+
+import TokenPairList, {
   mapProps as MapStateToProps,
-  makeCheckList as MakeCheckList,
 } from 'component/shared/TokenPairList'
 
 const fs = require('fs')
@@ -35,7 +39,7 @@ const Tokens = rawtokens.map((t, idx) => {
   return t
 })
 
-const { pairs, pairMapping } = MapStateToProps({ tradableTokens: Tokens })
+const { pairs } = MapStateToProps({ tradableTokens: Tokens })
 
 
 describe('Stateless Pair-Builder Function', () => {
@@ -79,83 +83,143 @@ describe('Testing TokenPairList', () => {
   const fromTokens = [tomoAddr, ethAddr]
   const toTokens = [btcAddr, tomoAddr]
 
-  afterEach(cleanup)
+  let testRender
+
+  afterAll(cleanup)
 
 
-  it('#1 MapStateToProps & MakeCheckList should behave properly', () => {
-    expect(pairs.length).toEqual(Object.keys(pairMapping).length)
-    const firstKey = `${pairs[0].from.address}${pairs[0].to.address}`
-    expect(pairMapping[firstKey]).toBe(0)
+  it('#1 List should work with check/uncheck as expected', async () => {
 
-    const checkList = MakeCheckList(fromTokens, toTokens, pairs, pairMapping)
-    // Refer to `quoteTokensAtListHead` above
-    checkList.forEach((p, idx) => {
-      expect(Boolean(p.checked)).toBe(idx === 0 || idx === 5)
-    })
-  })
+    let testingValue = {}
 
+    const ParentComponent = class extends React.Component {
+      state = {
+        value: {
+          'from_tokens': [tomoAddr, btcAddr],
+          'to_tokens': [ethAddr, tomoAddr],
+        }
+      }
 
-  it('#2. Testing FilterControl', async () => {
-    let result
-    const changeFilters = filter => {
-      result = pairs.filter(filter)
+      onChange = pairs => {
+        testingValue = pairs
+
+        const value = {
+          from_tokens: pairs.map(p => p.from.address),
+          to_tokens: pairs.map(p => p.to.address),
+        }
+
+        this.setState({ value })
+      }
+
+      render() {
+        return (
+          <TokenPairList
+            onChange={this.onChange}
+            value={this.state.value}
+          />
+        )
+      }
     }
 
-    const majorTokens = Tokens.filter(t => t.is_major)
+    const store = createStore({
+      tradableTokens: Tokens
+    })
+
+    testRender = render(
+      <Provider store={store}>
+        <ParentComponent />
+      </Provider>
+    )
 
     const {
       getByText,
+      getAllByText,
       getByLabelText,
-    } = render(<FilterControl onFilterChange={changeFilters} tokensForFilter={majorTokens} />)
-
-    const ALLBtn = getByText('ALL')
-    const TOMOBtn = getByText('TOMO')
-    getByText('BTC')
-    getByText('ETH')
-    getByLabelText('Search')
-
-    fireEvent.click(TOMOBtn)
-    const expectedFilteredPair = pairs.filter(p => p.from.address === tomoAddr || p.to.address === tomoAddr).map(p => p.toString())
-    expect(expectedFilteredPair.length).toEqual(result.length)
-    expect(result.every(p => expectedFilteredPair.includes(p.toString()))).toBe(true)
-
-    fireEvent.click(ALLBtn)
-    expect(pairs.length).toEqual(result.length)
-
-  })
-
-
-  it('#3. TokenPairList should render properly and selected token-paris can be change on check/uncheck', () => {
-    let result
-    const onChange = data => {
-      expect(data.fromTokens.length).toEqual(data.toTokens.length)
-      result = data
-    }
-
-    const {
+      getAllByLabelText,
+      getByPlaceholderText,
+      findByText,
+      findAllByText,
       container,
-    } = render((
-      <TokenPairList
-        fromTokens={fromTokens}
-        toTokens={toTokens}
-        quoteTokens={quoteTokens}
-        pairs={pairs}
-        pairMapping={pairMapping}
-        onChange={onChange}
-      />
-    ))
+    } = testRender
 
-    const inputs = Array.from(container.querySelectorAll('input'))
-    expect(inputs.length).toEqual(pairs.length + 1)
-    expect(inputs[1]).toHaveAttribute('checked')
-    expect(inputs[6]).toHaveAttribute('checked')
-    expect(inputs[4]).not.toHaveAttribute('checked')
+    const Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+    expect(Checkboxes.length).toEqual(pairs.length)
 
-    fireEvent.click(inputs[4])
-    expect(result.fromTokens.length).toBe(3)
+    const TOMO_ETH_Checkbox = getByLabelText('TOMO/ETH')
+    expect(TOMO_ETH_Checkbox.checked).toBe(true)
 
-    fireEvent.click(inputs[6])
-    expect(result.fromTokens.length).toBe(2)
+    const BTC_TOMO_Checkbox = getByLabelText('BTC/TOMO')
+    expect(BTC_TOMO_Checkbox.checked).toBe(true)
+
+    const firstCheckbox = getByLabelText('TOMO/BTC')
+    expect(firstCheckbox).toBe(Checkboxes[0])
+
+    // NOTE: user can just click on MenuItem instead of direct interaction with checkbox
+    const FirstRowItem = getByText('TOMO/BTC')
+    fireEvent.click(FirstRowItem)
+    expect(firstCheckbox.checked).toBe(true)
+    expect(testingValue.length).toBe(3)
+
   })
+
+  it('#2 Testing filter', async () => {
+    const {
+      getByText,
+      getAllByText,
+      getByLabelText,
+      getAllByLabelText,
+      getByPlaceholderText,
+      findByText,
+      findAllByText,
+      container,
+      debug
+    } = testRender
+
+    const ALLButton = getByText('ALL')
+    const TOMOButton = getByText('TOMO')
+    const ETHButton = getByText('ETH')
+    const BTCButton = getByText('BTC')
+    const SearchInput = getByPlaceholderText(/search/i)
+
+
+    const TOMO_RelatedPairs = pairs.filter(p => p.toString().includes('TOMO'))
+    fireEvent.click(TOMOButton)
+    let Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+    expect(Checkboxes.length).toEqual(TOMO_RelatedPairs.length)
+
+    const firstCheckbox = getByLabelText('TOMO/BTC')
+    expect(firstCheckbox).toBe(Checkboxes[0])
+
+    const ETH_RelatedPairs = pairs.filter(p => p.toString().includes('ETH'))
+    fireEvent.click(ETHButton)
+    Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+    expect(Checkboxes.length).toEqual(ETH_RelatedPairs.length)
+
+    fireEvent.click(ALLButton)
+    Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+    expect(Checkboxes.length).toEqual(pairs.length)
+
+    fireEvent.change(SearchInput, { target: { value: 'et' } })
+    let Search_RelatedPairs = pairs.filter(pair => /et/i.exec(`${pair.toString()}${pair.from.name}${pair.to.name}`))
+    await wait(() => {
+      Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+      expect(Checkboxes.length).toEqual(Search_RelatedPairs.length)
+    })
+
+    fireEvent.change(SearchInput, { target: { value: 'ii' } })
+    Search_RelatedPairs = pairs.filter(pair => /ii/i.exec(`${pair.toString()}${pair.from.name}${pair.to.name}`))
+    await wait(() => {
+      Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+      expect(Checkboxes.length).toEqual(Search_RelatedPairs.length)
+    })
+
+    const BTC_RelatedPairs = pairs.filter(p => p.toString().includes('BTC'))
+    fireEvent.click(BTCButton)
+    Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
+    expect(Checkboxes.length).toEqual(BTC_RelatedPairs.length)
+
+  })
+
+
 
 })

@@ -13,127 +13,142 @@ import {
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
+class TokenPairList extends React.Component {
 
-export const FilterControl = ({
-  onFilterChange,
-  tokensForFilter,
-}) => {
-
-  const tokenFilters = tokensForFilter.reduce((obj, token) => {
-    obj[token.symbol] = pair => pair.from.symbol === token.symbol || pair.to.symbol === token.symbol
-    return obj
-  }, {})
-
-  const filterControls = {
+  FILTER_CONTROLS = {
     ALL: pair => pair,
-    SEARCH: regex => pair => regex.exec(`${pair.from.symbol}${pair.to.symbol}${pair.from.name}${pair.to.name}`),
-    ...tokenFilters
+    SEARCH: str => pair => {
+      if (!str || !str.length) return true
+      const regex = new RegExp(str, 'i')
+      const searchField = `${pair.toString()}${pair.from.name}${pair.to.name}`
+      return regex.exec(searchField)
+    }
   }
 
-  const handleBtn = control => () => onFilterChange(control)
-
-  return (
-    <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
-      <Button size="small" onClick={handleBtn(filterControls.ALL)}>
-        ALL
-      </Button>
-      {tokensForFilter.map(tk => (
-        <Button size="small" key={tk.address} onClick={handleBtn(filterControls[tk.symbol])}>
-          {tk.symbol}
-        </Button>
-      ))}
-      <TextField
-        label="Search"
-        type="text"
-        variant="outlined"
-        margin="dense"
-        name="Search"
-        id="search-input"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-    </Box>
-  )
-}
-
-const handleClickPair = (pairs, index) => {
-  // Each action should return a new `checkList`
-  const items = Array.from(pairs)
-  const pair = items[index]
-
-  if (pair.checked) {
-    delete pair['checked']
-  } else {
-    pair.checked = true
+  state = {
+    activeFilter: 'ALL',
+    searchText: undefined,
+    debounceText: '',
   }
-  return items
-}
 
-export const PairList = ({ items, onCheck, filter }) => {
-  const onClick = (items, idx) => () => onCheck(handleClickPair(items, idx))
-  return (
-    <List dense className="bg-filled token-list token-list__limited-height">
-      {items.filter(filter).map((p, idx) => (
-        <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={onClick(items, idx)}>
-          <ListItemIcon>
-            <Checkbox
-              color="default"
-              checked={Boolean(p.checked)}
-              inputProps={{ 'aria-labelledby': p.toString() }}
-            />
-          </ListItemIcon>
-          <ListItemText primary={p.toString()} id={p.toString()} />
-        </ListItem>
-      ))}
-    </List>
-  )
-}
-
-export const makeCheckList = (fromTokens, toTokens, pairs, pairMapping) => {
-  const checkedPairs = Array.from(pairs)
-  fromTokens.forEach((tokenAddress, idx) => {
-    const key = `${tokenAddress}${toTokens[idx]}`
-    const pairIndex = pairMapping[key]
-    checkedPairs[pairIndex]['checked'] = true
-  })
-  return checkedPairs
-}
-
-export const TokenPairList = ({
-  fromTokens,
-  toTokens,
-  quoteTokens,
-  onChange,
-  pairs,
-  pairMapping,
-}) => {
-
-  const [filter, setFilter] = React.useState(null)
-  const items = makeCheckList(fromTokens, toTokens, pairs, pairMapping)
-
-  const onCheck = newItems => {
-    const checked = document.__memoizedUserSelectedPairs__ = newItems.filter(p => p.checked)
-    onChange({
-      fromTokens: checked.map(p => p.from.address),
-      toTokens: checked.map(p => p.to.address),
+  componentDidMount() {
+    this.props.quoteTokens.forEach(t => {
+      const symbol = t.symbol
+      this.FILTER_CONTROLS[symbol] = pair => pair.from.symbol === symbol || pair.to.symbol === symbol
     })
   }
 
-  const noFilter = p => p
+  componentDidUpdate(prevProps, prevStates) {
+    const {
+      debounceText,
+      activeFilter,
+    } = this.state
 
-  const changeFilter = f => setFilter(f)
+    const searchActive = debounceText.length > 0 && debounceText !== prevStates.debounceText
 
-  return (
-    <Box border={1}>
-      <FilterControl tokensForFilter={quoteTokens} onFilterChange={changeFilter} />
-      <PairList items={items} onCheck={onCheck} filter={filter || noFilter} />
-    </Box>
-  )
+    if (searchActive && activeFilter !== 'SEARCH') {
+      this.setState({ activeFilter: 'SEARCH' })
+    }
+
+    if (searchActive) {
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.debounce = undefined
+        this.setState({ searchText: this.state.debounceText })
+      }, 1000)
+    }
+
+    if (activeFilter !== 'SEARCH' && prevStates.activeFilter === 'SEARCH') {
+      clearTimeout(this.debounce)
+      this.debounce = undefined
+      this.setState({ searchText: undefined, debounceText: '' })
+    }
+
+  }
+
+  debounce = undefined
+
+  setFilter = activeFilter => () => {
+    this.setState({ activeFilter })
+  }
+
+  searchInputChange = e => this.setState({ debounceText: e.target.value })
+
+  handleItemClick = pair => () => {
+    const index = this.props.pairs.indexOf(pair)
+    const newList = Array.from(this.props.pairs)
+    newList[index].checked = !newList[index].checked
+    const checkedList = newList.filter(p => p.checked)
+    return this.props.onChange(checkedList)
+  }
+
+  makeCheckList = (pairs, pairMapping, value) => {
+    const result = Array.from(pairs)
+    if (!value) return result
+    const mappingKeys = value.from_tokens.map((from, idx) => `${from}${value.to_tokens[idx]}`)
+    mappingKeys.forEach(key => {
+      const pairIndex = pairMapping[key]
+      result[pairIndex].checked = true
+    })
+    return result
+  }
+
+  render() {
+    const {
+      quoteTokens,
+      pairs,
+      pairMapping,
+      value,
+    } = this.props
+
+    const checkList = this.makeCheckList(pairs, pairMapping, value)
+    const {
+      searchText,
+      activeFilter,
+    } = this.state
+
+    const filterFunction = activeFilter !== 'SEARCH' ? this.FILTER_CONTROLS[activeFilter] : this.FILTER_CONTROLS[activeFilter](searchText)
+
+    return (
+      <Box>
+        <Box>
+          <button onClick={this.setFilter('ALL')} type="button">
+            ALL
+          </button>
+          {quoteTokens.map(token => (
+            <button key={token.address} onClick={this.setFilter(token.symbol)} type="button">
+              {token.symbol}
+            </button>
+          ))}
+          <input
+            name="search-input"
+            type="text"
+            value={this.state.debounceText}
+            placeholder="Search"
+            onChange={this.searchInputChange}
+          />
+        </Box>
+        <Box>
+          <List dense className="bg-filled token-list token-list__limited-height">
+            {checkList.filter(filterFunction).map(p => (
+              <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.handleItemClick(p)}>
+                <ListItemIcon>
+                  <Checkbox
+                    color="default"
+                    checked={p.checked}
+                    inputProps={{
+                      'aria-label': p.toString(),
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary={p.toString()}/>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Box>
+    )
+  }
 }
 
 export const mapProps = state => {
@@ -158,7 +173,8 @@ export const mapProps = state => {
     }).forEach((toToken, toIdx) => pairs.push({
       from: fromToken,
       to: toToken,
-      toString: () => `${fromToken.symbol}/${toToken.symbol}`
+      toString: () => `${fromToken.symbol}/${toToken.symbol}`,
+      checked: false,
     }))
   })
 
