@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import { Container, Box } from '@material-ui/core'
+import { MISC } from 'service/constant'
+import * as blk from 'service/blockchain'
+import * as http from 'service/backend'
+import { PushAlert, AlertVariant } from 'service/frontend'
 import ProgressBar from './ProgressBar'
 import FormStepOne from './FormStepOne'
 import FormStepTwo from './FormStepTwo'
@@ -8,7 +12,6 @@ import FormStepThree from './FormStepThree'
 import FormStepFour from './FormStepFour'
 import Review from './Review'
 import SuccessRegistration from './SuccessRegistration'
-import { MISC } from 'service/constant'
 
 
 export class Register extends React.Component {
@@ -38,8 +41,24 @@ export class Register extends React.Component {
     step: this.state.step - 1
   })
 
-  confirmRegister = () => {
-    console.log('Confirm register');
+  confirmRegister = async () => {
+    const payload = this.state.payload
+
+    const { status, details } = await blk.register(payload)
+
+    if (!status) {
+      // NOTE: technically, this should happen if either...
+      // 1. gas too low, or
+      // 2. user refused to sign Tx
+      return this.props.pushAlert({
+        variant: AlertVariant.error,
+        message: details,
+      })
+    }
+
+    const newRelayer = await http.createRelayer(payload)
+    this.props.saveNewRelayer(newRelayer)
+    this.setState({ step: 6 })
   }
 
   render() {
@@ -107,6 +126,14 @@ const mapProps = state => ({
   usedCoinbases: state.Relayers.map(t => t.coinbase),
 })
 
-const storeConnect = connect(mapProps)
+const actions = store => ({
+  pushAlert: PushAlert,
+  saveNewRelayer: (state, relayer) => {
+    const Relayers = [ ...state.Relayers, relayer ]
+    return { Relayers }
+  },
+})
+
+const storeConnect = connect(mapProps, actions)
 
 export default storeConnect(Register)

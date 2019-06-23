@@ -27,7 +27,7 @@ export const Client = {
   }),
 }
 
-export const PushAlert = (state, variant, message) => {
+export const PushAlert = (state, { variant, message }) => {
   // One of special function to control Application Alert
   // Widely used accross the app so separated
   const open = true

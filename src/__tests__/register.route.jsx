@@ -4,14 +4,21 @@ import {
   fireEvent,
   cleanup,
   waitForElement,
+  wait,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
+import { HashRouter } from 'react-router-dom'
 
 import { Provider } from '@vutr/redux-zero/react'
 import createStore from '@vutr/redux-zero'
 
+import setup from './_database.setup.js'
+
 import { MISC } from 'service/constant'
 import Register from 'component/route/Register'
+import Alert from 'component/shared/Alert'
+
+import * as blk from 'service/blockchain'
 
 /**
  * Testing Actions for Register Flow
@@ -36,12 +43,11 @@ const finalPayload = {
 }
 
 let getByText,
-    getAllByText,
     getByLabelText,
     findByText,
-    findAllByText,
     findByLabelText,
     findAllByLabelText,
+    // eslint-disable-next-line
     debug;
 
 beforeAll(() => {
@@ -66,22 +72,26 @@ beforeAll(() => {
     },
     Relayers: [
       {coinbase: usedCoinbases}
-    ]
+    ],
+    notifications: [],
   })
 
 
   const renderUtils = render((
     <Provider store={store}>
-      <Register />
+      <HashRouter>
+        <div>
+          <Alert />
+          <Register />
+        </div>
+      </HashRouter>
     </Provider>
   ))
 
   container = renderUtils.container
   getByText = renderUtils.getByText
-  getAllByText = renderUtils.getAllByText
   getByLabelText = renderUtils.getByLabelText
   findByText = renderUtils.findByText
-  findAllByText = renderUtils.findAllByText
   findByLabelText = renderUtils.findByLabelText
   findAllByLabelText = renderUtils.findAllByLabelText
   debug = renderUtils.debug
@@ -99,6 +109,17 @@ describe('Test RegisterForm No Break', () => {
    * Form submission should present a valid payload
    * @test {RegisterForm}
    */
+
+  let conn
+
+  beforeAll(async () => {
+    conn = await setup()
+  })
+
+  afterAll(async () => {
+    await conn.drop()
+    await conn.close()
+  })
 
   it('#Step 1: deposit & coinbase form', async () => {
     const validCoinbase = finalPayload.coinbase
@@ -202,6 +223,47 @@ describe('Test RegisterForm No Break', () => {
     fireEvent.change(takerFeeInput, { target: { value: 0.12 } })
     fireEvent.click(submitButton)
     await findByText('Choose Trading Pairs of Token')
+  })
+
+  it('#Step 4: choose trading pair', async () => {
+
+    const TOMO_BTC = getByText('TOMO/BTC')
+    const ETH_TOMO = getByText('ETH/TOMO')
+
+    fireEvent.click(TOMO_BTC)
+    fireEvent.click(ETH_TOMO)
+
+    const submitButton = container.querySelector('button[type="submit"]')
+    fireEvent.click(submitButton)
+
+    await findByText(/review/i)
+  })
+
+  it('#Step 5: review & register', async () => {
+    getByText('10.00%')
+    getByText('0.12%')
+    getByText(finalPayload.coinbase)
+    getByText(finalPayload.name)
+    getByText(/TOMO\/BTC/)
+    getByText(/ETH\/TOMO/)
+
+    const spyBlockchainService = jest.spyOn(blk, 'register')
+    spyBlockchainService.mockReturnValue({ status: false, details: 'fake error' })
+
+    const submitButton = getByText(/confirm/i)
+    fireEvent.click(submitButton)
+
+    await findByText(/fake error/i)
+
+    spyBlockchainService.mockReturnValue({ status: true, details: '' })
+    fireEvent.click(submitButton)
+
+    await wait()
+  })
+
+  it('#Step 6: success notify', async () => {
+    await findByText(/succes/i)
+    await findByText(/dashboard/i)
   })
 
 })

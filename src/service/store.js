@@ -49,8 +49,6 @@ export const initialState = {
   socket: socket,
   notifications: [],
 }
-export const originalState = JSON.parse(JSON.stringify(initialState))
-Object.freeze(originalState)
 
 const store = createStore(initialState)
 

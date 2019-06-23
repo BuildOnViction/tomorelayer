@@ -17,9 +17,10 @@ const FormStepFour = ({
   goBack,
 }) => {
 
-  const setPairsValues = (selected) => {
-   setFieldValue('from_tokens', selected.fromTokens)
-   setFieldValue('to_tokens', selected.toTokens)
+  const setPairsValues = pairs => {
+    document.__memoizedUserSelectedPairs__ = pairs
+    setFieldValue('from_tokens', pairs.map(p => p.from.address))
+    setFieldValue('to_tokens', pairs.map(p => p.to.address))
   }
 
   return (
@@ -32,8 +33,7 @@ const FormStepFour = ({
         </Box>
         <Container maxWidth="md">
           <TokenPairList
-            fromTokens={values.from_tokens}
-            toTokens={values.to_tokens}
+            value={values}
             onChange={setPairsValues}
           />
           <Box display="flex" justifyContent="space-between" className="mt-2">

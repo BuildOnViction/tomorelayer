@@ -86,7 +86,7 @@ export const isEmpty = something => {
 
 export const round = (value, precision) => {
   const multiplier = 10 ** (precision || 0);
-  return Math.round(value * multiplier) / multiplier;
+  return (Math.round(value * multiplier) / multiplier).toFixed(precision);
 }
 
 export const compareString = (stra, strb, caseSensitive = false) => {

@@ -25,8 +25,6 @@ afterAll(async () => {
 
 describe('Testing Contract API', () => {
 
-  let contractId
-
   test('#1. manually save a contract to Database', async done => {
     let count = await Contract.count()
     expect(count).toEqual(0)
@@ -56,7 +54,7 @@ describe('Testing Contract API', () => {
     payload = await http.getContracts()
     expect(payload.length).toEqual(2)
 
-    contractId = registrationContract.id
+    // contractId = registrationContract.id
     done()
   })
 
@@ -97,6 +95,7 @@ describe('Testing Relayer API', () => {
     relayerId = newRelayer.id
 
     done()
+    // NOTE: testing Failure API (logging, resopnse)
   })
 
 

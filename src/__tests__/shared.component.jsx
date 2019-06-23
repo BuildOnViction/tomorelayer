@@ -4,12 +4,9 @@ import {
   fireEvent,
   cleanup,
   wait,
-  waitForElement,
-  waitForDomChange,
 } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import 'jest-dom/extend-expect'
-import { Provider, connect } from '@vutr/redux-zero/react'
+import { Provider } from '@vutr/redux-zero/react'
 import createStore from '@vutr/redux-zero'
 
 import TokenPairList, {
@@ -73,15 +70,10 @@ describe('Stateless Pair-Builder Function', () => {
 
 
 describe('Testing TokenPairList', () => {
-  // Given initial selected paris: [TOMO/BTC, ETH/TOMO]
+  // Given initial selected paris: [TOMO/ETH, BTC/TOMO]
   const tomoAddr = Tokens.find(t => t.symbol === 'TOMO').address
   const btcAddr = Tokens.find(t => t.symbol === 'BTC').address
   const ethAddr = Tokens.find(t => t.symbol === 'ETH').address
-
-  const quoteTokens = Tokens.filter(t => t.is_major)
-
-  const fromTokens = [tomoAddr, ethAddr]
-  const toTokens = [btcAddr, tomoAddr]
 
   let testRender
 
@@ -133,12 +125,7 @@ describe('Testing TokenPairList', () => {
 
     const {
       getByText,
-      getAllByText,
       getByLabelText,
-      getAllByLabelText,
-      getByPlaceholderText,
-      findByText,
-      findAllByText,
       container,
     } = testRender
 
@@ -165,14 +152,9 @@ describe('Testing TokenPairList', () => {
   it('#2 Testing filter', async () => {
     const {
       getByText,
-      getAllByText,
       getByLabelText,
-      getAllByLabelText,
       getByPlaceholderText,
-      findByText,
-      findAllByText,
       container,
-      debug
     } = testRender
 
     const ALLButton = getByText('ALL')
@@ -219,7 +201,5 @@ describe('Testing TokenPairList', () => {
     expect(Checkboxes.length).toEqual(BTC_RelatedPairs.length)
 
   })
-
-
 
 })

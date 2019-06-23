@@ -84,7 +84,6 @@ class TokenPairList extends React.Component {
 
   makeCheckList = (pairs, pairMapping, value) => {
     const result = Array.from(pairs)
-    if (!value) return result
     const mappingKeys = value.from_tokens.map((from, idx) => `${from}${value.to_tokens[idx]}`)
     mappingKeys.forEach(key => {
       const pairIndex = pairMapping[key]
@@ -181,7 +180,6 @@ export const mapProps = state => {
   pairs.sort((a, b) => {
     if (a.from.symbol === b.from.symbol) return 1 * a.to.symbol.localeCompare(b.to.symbol)
     if (a.from.symbol === 'TOMO') return -1
-    if (b.from.symbol === 'TOMO') return 1
     if (a.from.is_major && b.from.is_major) return 1 * a.from.symbol.localeCompare(b.from.symbol)
     return 1 * a.from.symbol.localeCompare(b.from.symbol)
   })
