@@ -34,7 +34,8 @@
     "embark": "embark run",
     "build": "react-scripts build",
     "lint": "eslint --ext .jsx,.js src/",
-    "pylint": "pipenv run pylint backend/*"
+    "pylint": "pipenv run pylint backend/*",
+    "doc": "esdoc -c .esdoc.json"
   },
   "proxy": "http://localhost:8888",
   "eslintConfig": {
@@ -54,6 +55,10 @@
     "embark": "^4.0.2",
     "embarkjs-connector-web3": "^4.0.0",
     "esdoc": "^1.1.0",
+    "esdoc-coverage-plugin": "^1.1.0",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-jsx-plugin": "^1.0.0",
+    "esdoc-lint-plugin": "^1.0.2",
     "esdoc-standard-plugin": "^1.0.0",
     "exec-sh": "^0.3.2",
     "jest-dom": "^3.5.0",

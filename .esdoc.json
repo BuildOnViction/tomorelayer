@@ -1,5 +1,52 @@
 {
   "source": "./src",
   "destination": "./docs",
-  "plugins": [{"name": "esdoc-standard-plugin"}]
+  "includes": ["\\.jsx?"],
+  "plugins": [
+    {
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "test": {
+          "source": "./src/__tests__/",
+          "interfaces": ["describe", "it", "context", "suite", "test"],
+          "includes": ["(spec|Spec|test|Test)\\.jsx?"],
+          "excludes": ["\\.config\\.js$"]
+        }
+      }
+    },
+    {
+      "name": "esdoc-ecmascript-proposal-plugin",
+      "option": {
+        "all": true
+      }
+    },
+    {
+      "name": "esdoc-coverage-plugin",
+      "option": {
+        "enable": true,
+        "kind": [
+          "class",
+          "method",
+          "member",
+          "get",
+          "set",
+          "constructor",
+          "function",
+          "variable"
+        ]
+      }
+    },
+    {
+      "name": "esdoc-jsx-plugin",
+      "option": {
+        "enable": true
+      }
+    },
+    {
+      "name": "esdoc-lint-plugin",
+      "option": {
+        "enable": true
+      }
+    }
+  ]
 }

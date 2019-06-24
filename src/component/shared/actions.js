@@ -1,7 +1,6 @@
 import { differenceInMinutes } from 'date-fns'
 import { PushAlert, AlertVariant } from 'service/frontend'
 import * as http from 'service/backend'
-import { originalState } from 'service/store'
 import { STORAGE_ITEMS } from 'service/constant'
 import * as _ from 'service/helper'
 
@@ -39,9 +38,11 @@ export const $fetchRelayers = async (state, store) => {
 }
 
 export const $changeRelayer = (state, activeRelayer) => {
-  state.User.activeRelayer = activeRelayer
-  state.Dashboard = { ...originalState.Dashboard }
-  return state
+  return {
+    User: {
+      activeRelayer
+    }
+  }
 }
 
 export const $autoAuthenticated = state => {
@@ -62,10 +63,6 @@ export const $autoAuthenticated = state => {
   return state
 }
 
-export const $logout = state => {
-  window.localStorage.removeItem(STORAGE_ITEMS.authen)
-  state.authStore = { ...originalState.authStore }
-  state.User = { ...originalState.User }
-  state.Dashboard = { ...originalState.Dashboard }
-  return state
+export const $logout = (state, store) => {
+  store.resetStore()
 }

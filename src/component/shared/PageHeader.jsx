@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Box, TextField } from '@material-ui/core'
 import logo from 'asset/app-logo.png'
-import UserMenu from './UserMenu'
-import UserRelayerList from './UserRelayerList'
 
 const PageHeader = () => (
   <Box
@@ -27,8 +25,7 @@ const PageHeader = () => (
       />
     </div>
     <div className="col-md-4 text-center row">
-      <UserRelayerList />
-      <UserMenu />
+      menu...
     </div>
     <div className="col-12 hidden-md hidden-lg hidden-xxl">
       <TextField

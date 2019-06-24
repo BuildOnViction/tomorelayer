@@ -19,10 +19,10 @@ export const ALERT = {
 }
 
 export const UNLOCK_WALLET_METHODS = {
-  TomoWallet: 'TomoWallet',
-  LedgerWallet: 'LedgerWallet',
-  TrezorWallet: 'TrezorWallet',
-  BrowserWallet: 'MetaMask/TrustWallet/MidasWallet',
+  TomoWallet: 'Tomo Wallet',
+  LedgerWallet: 'Ledger Wallet',
+  TrezorWallet: 'Trezor Wallet',
+  BrowserWallet: 'MetaMask',
 }
 
 export const Tokenizer = (symbol, address) => ({ symbol, address })

@@ -1,6 +1,5 @@
 import React from 'react'
-import { List, ListItem, ListItemText } from '@material-ui/core'
-import { Grid } from 'component/utility'
+import { Grid, List, ListItem, ListItemText } from '@material-ui/core'
 import FormInfo from './ConfigForms/FormInfo'
 import FormTrade from './ConfigForms/FormTrade'
 import FormTransfer from './ConfigForms/FormTransfer'

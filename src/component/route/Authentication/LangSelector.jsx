@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import { Grid } from 'component/utility'
+import { Grid } from '@material-ui/core'
 import { I18N_LANGS } from 'service/constant'
 import gb from 'style/flags/4x3/gb.svg'
 import vn from 'style/flags/4x3/vn.svg'
@@ -14,16 +14,16 @@ const flags = {
 
 class LangSelector extends React.Component {
   render() {
-    const { lang, changeLang } = this.props
+    const { Lang, changeLang } = this.props
     return (
       <Grid className="align-center">
         <img
-          alt={lang}
-          src={flags[lang]}
+          alt={Lang}
+          src={flags[Lang]}
           className="lang-flag pointer"
           onClick={this.openDropdown}
         />
-        <select onChange={e => changeLang(e.target.value)} value={lang} className="lang-select">
+        <select onChange={e => changeLang(e.target.value)} value={Lang} className="lang-select">
           {I18N_LANGS.map(op => (
             <option value={op.value} key={op.value}>
               {op.label}
@@ -36,17 +36,11 @@ class LangSelector extends React.Component {
 }
 
 const mapProps = store => ({
-  lang: store.global.lang
+  Lang: store.Lang
 })
 
 const actions = () => ({
-  changeLang: (state, lang) => ({
-    ...state,
-    global: {
-      ...state.global,
-      lang
-    }
-  })
+  changeLang: (state, Lang) => ({ Lang })
 })
 
 export default connect(mapProps, actions)(LangSelector)
