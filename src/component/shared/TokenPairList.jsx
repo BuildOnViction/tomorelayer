@@ -153,7 +153,7 @@ class TokenPairList extends React.Component {
 export const mapProps = state => {
   // NOTE: this paring funcion will be quite expensive if the number of tokens is big enough
   // Must consider memoization by then
-  const tradeTokens = state.tradableTokens
+  const Tokens = state.Tokens
 
   const pairs = []
 
@@ -163,8 +163,8 @@ export const mapProps = state => {
   // the object, being memoized as well, should be saved in the store for referrence
   const pairMapping = {}
 
-  tradeTokens.forEach((fromToken, fromIdx) => {
-    tradeTokens.filter((toToken, toIdx) => {
+  Tokens.forEach((fromToken, fromIdx) => {
+    Tokens.filter((toToken, toIdx) => {
       if (fromIdx === toIdx) return false
       if (toToken.is_major) return true
       if (!fromToken.is_major) return true
@@ -191,7 +191,7 @@ export const mapProps = state => {
   return {
     pairs,
     pairMapping,
-    quoteTokens: tradeTokens.filter(t => t.is_major),
+    quoteTokens: Tokens.filter(t => t.is_major),
   }
 }
 

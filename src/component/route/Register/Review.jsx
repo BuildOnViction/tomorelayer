@@ -1,6 +1,5 @@
 import React from 'react'
-import { Button, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
-import { Grid } from 'component/utility'
+import { Box, Button, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
 import { round } from 'service/helper'
 
 
@@ -41,14 +40,14 @@ const Review = ({
           </TableBody>
         </Table>
       </div>
-      <Grid className="justify-space-between m-0 mt-2">
-        <Button variant="outlined" className="mr-1" onClick={goBack} type="button">
+      <Box display="flex" justifyContent="space-between" className="mt-2">
+        <Button variant="outlined" className="mr-1" type="button" onClick={goBack}>
           Back
         </Button>
         <Button color="primary" variant="contained" type="button" onClick={registerRelayer}>
           Confirm
         </Button>
-      </Grid>
+      </Box>
     </div>
   )
 }

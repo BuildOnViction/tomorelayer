@@ -8,7 +8,7 @@ import {
 import 'jest-dom/extend-expect'
 import { Provider } from '@vutr/redux-zero/react'
 import createStore from '@vutr/redux-zero'
-
+import { initialState } from 'service/store'
 import TokenPairList, {
   mapProps as MapStateToProps,
 } from 'component/shared/TokenPairList'
@@ -36,7 +36,7 @@ const Tokens = rawtokens.map((t, idx) => {
   return t
 })
 
-const { pairs } = MapStateToProps({ tradableTokens: Tokens })
+const { pairs } = MapStateToProps({ Tokens })
 
 
 describe('Stateless Pair-Builder Function', () => {
@@ -114,7 +114,8 @@ describe('Testing TokenPairList', () => {
     }
 
     const store = createStore({
-      tradableTokens: Tokens
+      ...initialState,
+      Tokens: Tokens,
     })
 
     testRender = render(

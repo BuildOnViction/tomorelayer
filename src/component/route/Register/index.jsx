@@ -122,7 +122,7 @@ export class Register extends React.Component {
 }
 
 const mapProps = state => ({
-  userAddress: state.authStore.user_meta.address,
+  userAddress: state.user.address,
   usedCoinbases: state.Relayers.map(t => t.coinbase),
 })
 

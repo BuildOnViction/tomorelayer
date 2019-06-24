@@ -19,6 +19,7 @@ import Register from 'component/route/Register'
 import Alert from 'component/shared/Alert'
 
 import * as blk from 'service/blockchain'
+import { initialState } from 'service/store'
 
 /**
  * Testing Actions for Register Flow
@@ -64,16 +65,15 @@ beforeAll(() => {
   })
 
   const store = createStore({
-    tradableTokens: Tokens,
-    authStore: {
-      user_meta: {
-        address: userAddress
-      }
+    ...initialState,
+    user: {
+      ...initialState,
+      address: userAddress,
     },
+    Tokens: Tokens,
     Relayers: [
       {coinbase: usedCoinbases}
     ],
-    notifications: [],
   })
 
 
