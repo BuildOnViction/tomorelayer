@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Container,
   Grid,
@@ -85,7 +84,7 @@ export default class LedgerWallet extends React.Component {
                 fullWidth
               />
             </Grid>
-            <Grid item justify="center">
+            <Grid item>
               <Button onClick={this.unlock} variant="contained">
                 Connect
               </Button>

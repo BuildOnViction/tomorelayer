@@ -35,24 +35,28 @@ const PendingLogin = ({ qrcode }) => (
   <Container maxWidth="md">
     <Grid container spacing={4} justify="center" alignItems="center" className="p-2">
 
-      <Grid sm={12} md={7} direction="column">
+      <Grid item sm={12} md={7} container justify="center">
         <Typography component="h4">
           Scan QR code using TomoWallet to unlock
         </Typography>
         <Typography component="div" className="mt-1 mb-1">
           Haven’t installed TomoWallet yet? Download below
         </Typography>
-        <Grid item direction="row">
-          <a href="https://goo.gl/MvE1GV" className="mr-1">
-            <img alt="" src={appstore} height="40" />
-          </a>
-          <a href="https://goo.gl/4tFQzY" className="">
-            <img alt="" src={googleplay} height="40" />
-          </a>
+        <Grid item container justify="center" spacing={2}>
+          <Grid item sm={6} md={4}>
+            <a href="https://goo.gl/MvE1GV">
+              <img alt="" src={appstore} height="40" />
+            </a>
+          </Grid>
+          <Grid item sm={6} md={4}>
+            <a href="https://goo.gl/4tFQzY">
+              <img alt="" src={googleplay} height="40" />
+            </a>
+          </Grid>
         </Grid>
       </Grid>
 
-      <Grid sm={12} md={3} justify="center" container>
+      <Grid sm={12} md={3} container justify="center" item>
         <QRCode
           bgColor="#FFFFFF"
           fgColor="#000000"

@@ -113,3 +113,9 @@ export const pick = keys => obj => {
   keys.forEach(k => when(obj[k]).do(() => result[k] = obj[k]))
   return result
 }
+
+export const ThrowOn = (shit, message) => {
+  if (shit) {
+    throw message
+  }
+}

@@ -51,7 +51,7 @@ export default class SoftwareWallet extends React.Component {
                 fullWidth
               />
             </Grid>
-            <Grid item justify="center">
+            <Grid item>
               <Button onClick={this.importWallet} variant="contained">
                 Import
               </Button>

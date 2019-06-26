@@ -84,7 +84,7 @@ export default class TrezorWallet extends React.Component {
                 disabled
               />
             </Grid>
-            <Grid item justify="center">
+            <Grid item>
               <Button onClick={this.unlock} variant="contained">
                 Connect
               </Button>

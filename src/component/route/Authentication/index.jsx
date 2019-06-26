@@ -4,11 +4,6 @@ import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
   Container,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   Typography,
 } from '@material-ui/core'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
@@ -92,7 +87,9 @@ class Authentication extends React.Component {
       unlockingMethod,
       QRCodeLink,
     } = this.state
-
+    // NOTE: QRCode component's render is very expensive and will cause
+    // lagging on switching between methods
+    // So we keep it on the DOM instead of disposing the component
     return (
       <Box display="flex" flexDirection="column">
         <Container maxWidth="md">
@@ -102,7 +99,9 @@ class Authentication extends React.Component {
               using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
             </Typography>
           </MethodBar>
-          {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}
+          <div style={{ display: unlockingMethod === 0 ? 'initial' : 'none' }}>
+            <TomoWallet qrCode={QRCodeLink} />
+          </div>
           {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
           {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
           {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}

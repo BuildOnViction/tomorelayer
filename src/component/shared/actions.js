@@ -1,68 +1,44 @@
 import { differenceInMinutes } from 'date-fns'
-import { PushAlert, AlertVariant } from 'service/frontend'
 import * as http from 'service/backend'
 import { STORAGE_ITEMS } from 'service/constant'
 import * as _ from 'service/helper'
 
-export const $fetchTokens = async state => {
-  const resp = await http.getTokens()
-  state.tradableTokens = resp
-  state.MajorTokens = resp.filter(t => t.is_major)
-  return PushAlert(state, AlertVariant.info, 'Fetched tokens')
+
+export const FetchTokens = async (state) => {
+  const Tokens = await http.getTokens()
+  _.ThrowOn(Tokens.error, `Fetch Token Error: ${Tokens.error}`)
+  return { Tokens }
 }
 
-export const $fetchContract = async (state, store) => {
+
+export const FetchContract = async (state) => {
   const Contracts = await http.getContracts()
-
-  if (Contracts.error) {
-    return PushAlert(state, AlertVariant.error, 'Cannot fetch any Contract')
-  }
-
-  state.Contracts = Contracts
-  return PushAlert(state, AlertVariant.info, 'Fetched contracts')
+  _.ThrowOn(Contracts.error, `Fetch Contract Error: ${Contracts.error}`)
+  return { Contracts }
 }
 
-export const $fetchRelayers = async (state, store) => {
+
+export const FetchRelayers = async (state, store) => {
   const Relayers = await http.getRelayers()
-
-  if (Relayers.error) return state
-  state.Relayers = Relayers
-
-  if (state.authStore.user_meta.address.length > 0) {
-    const ownedRelayers = Relayers.filter(r => _.compareString(r.owner, state.authStore.user_meta.address))
-    state.User.relayers = ownedRelayers
-    state.User.activeRelayer = ownedRelayers[0]
-  }
-
-  return PushAlert(state, AlertVariant.info, 'Fetched relayers')
+  _.ThrowOn(Relayers.error, `Fetch Relayer Error: ${Relayers.error}`)
+  return { Relayers }
 }
 
-export const $changeRelayer = (state, activeRelayer) => {
-  return {
-    User: {
-      activeRelayer
-    }
-  }
-}
 
-export const $autoAuthenticated = state => {
-  let authStore = window.localStorage.getItem(STORAGE_ITEMS.authen)
-  if (!authStore) return state
-  authStore = JSON.parse(authStore)
+export const AutoAuthenticated = state => {
+  let user = window.localStorage.getItem(STORAGE_ITEMS.user)
 
-  const lastSession = new Date(authStore.lastSession)
+  if (!user) return {}
+  user = JSON.parse(user)
+
+  const lastSession = new Date(user.lastSession)
   const now = Date.now()
   const difference = differenceInMinutes(now, lastSession)
 
   if (difference < state.authStore.expire) {
-    state.authStore = authStore
-    return state
+    return { user }
   }
 
-  window.localStorage.removeItem(STORAGE_ITEMS.authen)
-  return state
-}
-
-export const $logout = (state, store) => {
-  store.resetStore()
+  window.localStorage.removeItem(STORAGE_ITEMS.user)
+  return {}
 }

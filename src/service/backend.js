@@ -36,10 +36,16 @@ const HttpClient = {
 
 const getPayload = r => r.payload
 
-const logging = async error => error.json().then(err => {
-  // TODO: if err.code === 500, do something
-  return err
-})
+const logging = async error => {
+  try {
+    return error.json().then(err => {
+      // TODO: if err.code === 500, do something
+      return err
+    })
+  } catch (e) {
+    return { error }
+  }
+}
 
 const API = {
   auth: '/api/auth',

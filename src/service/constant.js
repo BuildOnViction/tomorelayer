@@ -48,7 +48,7 @@ export const I18N_LANGS = [
 ]
 
 export const STORAGE_ITEMS = {
-  authen: '__tomorelayer__authstore__'
+  user: '__tomorelayer__user__'
 }
 
 export const STANDARD_ERC20_ABI = [

@@ -37,6 +37,7 @@ let getByText,
     findAllByText,
     findByLabelText,
     findAllByLabelText,
+    getByDisplayValue,
     // eslint-disable-next-line
     debug;
 
@@ -57,6 +58,7 @@ beforeAll(() => {
   container = renderUtils.container
   getByText = renderUtils.getByText
   getByLabelText = renderUtils.getByLabelText
+  getByDisplayValue = renderUtils.getByDisplayValue
   findByText = renderUtils.findByText
   findAllByText = renderUtils.findAllByText
   findByLabelText = renderUtils.findByLabelText
@@ -134,7 +136,8 @@ describe('Test Authentication & WalletUnlock Component', () => {
     const LedgerWallet_Select = getByText(/ledger wallet/i)
     fireEvent.click(LedgerWallet_Select)
 
-    await findByText(/select hd path/i)
+    await findByText(/hd path/i)
+    getByDisplayValue("m/44'/889'/0'/0")
     const connnectBtn = getByText(/connect/i)
 
     /**
@@ -189,6 +192,7 @@ describe('Test Authentication & WalletUnlock Component', () => {
     fireEvent.click(Trezor_Select)
 
     await findByText(/connect/i)
+    getByDisplayValue("m/44'/60'/0'/0")
 
   })
 
