@@ -22,8 +22,7 @@ const MethodOptions = [
   UNLOCK_WALLET_METHODS.BrowserWallet,
   UNLOCK_WALLET_METHODS.LedgerWallet,
   UNLOCK_WALLET_METHODS.TrezorWallet,
-  // NOTE: just waiting for implementation
-  'Private Key/Mnemonnic'
+  UNLOCK_WALLET_METHODS.SoftwareWallet,
 ]
 
 /**
@@ -92,7 +91,7 @@ class Authentication extends React.Component {
     // So we keep it on the DOM instead of disposing the component
     return (
       <Box display="flex" flexDirection="column">
-        <Container maxWidth="md">
+        <Container maxWidth="md" className="pt-4">
           <Header />
           <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
             <Typography component="small" className="text-alert">

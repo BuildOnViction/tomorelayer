@@ -1,41 +1,56 @@
 import React from 'react'
+import { connect } from '@vutr/redux-zero/react'
 import { Link } from 'react-router-dom'
-import { Box, TextField } from '@material-ui/core'
+import {
+  Button,
+  Container,
+  Grid,
+  TextField,
+} from '@material-ui/core'
+import { AdapterLink } from './Adapters'
+import { UserMenu, RelayerMenu } from './Menus'
 import logo from 'asset/app-logo.png'
 
-const PageHeader = () => (
-  <Box
-    display="flex"
-    justifyContent="space-between"
-    alignContent="center"
-    alignItems="center"
-    className="main-menu"
-  >
-    <div className="col-md-3 col-xs-2 col-xxs-2">
-      <Link to="/">
-        <img alt="logo" src={logo} height="40" />
-      </Link>
-    </div>
-    <div className="col-md-5 hidden-sm hidden-xs hidden-xxs">
-      <TextField
-        label="Search"
-        margin="dense"
-        variant="outlined"
-        fullWidth
-      />
-    </div>
-    <div className="col-md-4 text-center row">
-      menu...
-    </div>
-    <div className="col-12 hidden-md hidden-lg hidden-xxl">
-      <TextField
-        label="Search"
-        margin="dense"
-        variant="outlined"
-        fullWidth
-      />
-    </div>
-  </Box>
-)
+class PageHeader extends React.Component {
 
-export default PageHeader
+  render() {
+
+    const {
+      auth,
+      userRelayers,
+    } = this.props
+
+    return (
+      <div style={{ background: 'white' }}>
+        <Container maxWidth="md" className="p-1 mb-1">
+          <Grid container direction="row" justify="space-between" alignItems="center" spacing={4}>
+            <Grid item sm={3} md={2}>
+              <Link to="/">
+                <img alt="logo" src={logo} height="40" />
+              </Link>
+            </Grid>
+            <Grid item sm={false} md={6}>
+              <TextField placeholder="Search..." fullWidth variant="outlined" margin="dense" />
+            </Grid>
+            <Grid item sm={6} md={4} container justify="space-around" direction="row" spacing={4}>
+              {auth && userRelayers.length > 0 && <RelayerMenu relayers={userRelayers} />}
+              {auth && userRelayers.length === 0 && <Button component={AdapterLink} to="/register">Start a Relayer</Button>}
+              {auth && <UserMenu />}
+              {!auth && <Button component={AdapterLink} to="/login">Login</Button>}
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
+    )
+  }
+}
+
+const mapProps = state => ({
+  auth: state.auth,
+  userRelayers: (state.derived.userRelayers || []).map(r => ({ id: r.id, name: r.name })),
+})
+
+const actions = store => ({
+})
+
+export default connect(mapProps, actions)(PageHeader)

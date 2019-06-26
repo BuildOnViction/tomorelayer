@@ -23,6 +23,7 @@ export const UNLOCK_WALLET_METHODS = {
   LedgerWallet: 'Ledger Wallet',
   TrezorWallet: 'Trezor Wallet',
   BrowserWallet: 'MetaMask',
+  SoftwareWallet: 'Private Key/Mnemonnic',
 }
 
 export const Tokenizer = (symbol, address) => ({ symbol, address })

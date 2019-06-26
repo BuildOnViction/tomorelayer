@@ -31,7 +31,7 @@ const Private = ({
 
 
 const storeConnect = connect(state => ({
-  auth: state.authStore.auth,
-  activeRelayer: state.User.activeRelayer,
+  auth: state.auth,
+  activeRelayer: state.user.activeRelayer,
 }))
 export default withRouter(storeConnect(Private))

@@ -50,7 +50,7 @@ class App extends React.Component {
         <Switch>
           <Route path={SITE_MAP.Authentication} component={Authentication} />
           <Route path={SITE_MAP.Home} render={() => (
-            <div>
+            <div style={{ background: '#ddd' }}>
               <PageHeader />
               <Alert />
               <Switch>
@@ -67,7 +67,7 @@ class App extends React.Component {
 }
 
 const mapProps = state => ({
-  relayers: state.Relayers
+  relayers: state.Relayers,
 })
 
 const actions = {
