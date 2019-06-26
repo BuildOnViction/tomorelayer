@@ -6,9 +6,6 @@ const socket = new WebSocket(SOCKET_URI)
 export const initialState = {
   auth: false,
   user: {
-    auth: false,
-    wallet: undefined,
-    address: '',
     expire: 60, // minutes
   },
   Tokens: [],

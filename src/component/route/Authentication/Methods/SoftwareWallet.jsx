@@ -52,7 +52,7 @@ export default class SoftwareWallet extends React.Component {
               />
             </Grid>
             <Grid item justify="center">
-              <Button onClick={this.importWallet} variant="outlined">
+              <Button onClick={this.importWallet} variant="contained">
                 Import
               </Button>
             </Grid>

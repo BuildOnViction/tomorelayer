@@ -77,7 +77,7 @@ export default class TrezorWallet extends React.Component {
           <Grid container alignItems="flex-end" justify="center">
             <Grid item sm={10} md={5} lg={4} className="pr-3 pl-3">
               <TextField
-                label="Select HD path"
+                label="HD path"
                 value={hdpath}
                 onChange={this.changePath}
                 fullWidth
@@ -85,7 +85,7 @@ export default class TrezorWallet extends React.Component {
               />
             </Grid>
             <Grid item justify="center">
-              <Button onClick={this.unlock} variant="outlined">
+              <Button onClick={this.unlock} variant="contained">
                 Connect
               </Button>
             </Grid>
