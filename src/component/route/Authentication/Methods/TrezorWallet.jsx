@@ -1,12 +1,13 @@
 import React from 'react'
 import {
-  Box,
   Button,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  Grid,
   Radio,
   RadioGroup,
   TextField,
@@ -71,39 +72,49 @@ export default class TrezorWallet extends React.Component {
     } = this.state
 
     return (
-      <Box display="flex" justifyContent="center">
+      <Container maxWidth="md">
         {!trezorWallet && (
-          <Box display="flex" justifyContent="space-between" alignItems="end">
-            <TextField
-              label="Select HD path"
-              value={hdpath}
-              onChange={this.changePath}
-            />
-            <Button onClick={this.unlock} variant="outlined">
-              Connect
-            </Button>
-          </Box>
+          <Grid container alignItems="flex-end" justify="center">
+            <Grid item sm={10} md={5} lg={4} className="pr-3 pl-3">
+              <TextField
+                label="Select HD path"
+                value={hdpath}
+                onChange={this.changePath}
+                fullWidth
+                disabled
+              />
+            </Grid>
+            <Grid item justify="center">
+              <Button onClick={this.unlock} variant="outlined">
+                Connect
+              </Button>
+            </Grid>
+          </Grid>
         )}
 
         {trezorWallet && (
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Box display="flex" flexDirection="column" className="p-1">
+          <Grid container alignItems="flex-end" justify="center">
+            <Grid item>
               <Typography component="div">
                 Address: {activeAddress}
               </Typography>
               <Typography component="div">
                 Balance: {activeBalance} TOMO
               </Typography>
-            </Box>
-            <Box display="flex" flexDirection="row" justifyContent="space-between">
-              <Button onClick={this.changeAddress} variant="outlined">
-                Change Address
-              </Button>
-              <Button onClick={this.confirm} variant="outlined">
-                Confirm
-              </Button>
-            </Box>
-          </Box>
+            </Grid>
+            <Grid item container>
+              <Grid item sm={6} md={12}>
+                <Button onClick={this.changeAddress} variant="outlined">
+                  Change Address
+                </Button>
+              </Grid>
+              <Grid item sm={6} md={12}>
+                <Button onClick={this.confirm} variant="outlined">
+                  Confirm
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
         )}
 
         <Dialog
@@ -136,7 +147,7 @@ export default class TrezorWallet extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </Box>
+      </Container>
     )
   }
 }

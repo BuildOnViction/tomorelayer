@@ -2,6 +2,8 @@ import React from 'react'
 import {
   Box,
   Button,
+  Container,
+  Grid,
   TextField,
   Typography,
 } from '@material-ui/core'
@@ -37,19 +39,24 @@ export default class SoftwareWallet extends React.Component {
     } = this.state
 
     return (
-      <Box display="flex" justifyContent="center">
+      <Container maxWidth="md">
         {!wallet && (
-          <Box display="flex" justifyContent="space-between" alignItems="end">
-            <TextField
-              label="Enter your private key or Mnemonic"
-              value={privateKey}
-              onChange={this.changeKey}
-              type="password"
-            />
-            <Button onClick={this.importWallet} variant="outlined">
-              Import
-            </Button>
-          </Box>
+          <Grid container alignItems="flex-end" justify="center">
+            <Grid item sm={10} md={6} className="pr-3">
+              <TextField
+                label="Enter your private key or Mnemonic"
+                value={privateKey}
+                onChange={this.changeKey}
+                type="password"
+                fullWidth
+              />
+            </Grid>
+            <Grid item justify="center">
+              <Button onClick={this.importWallet} variant="outlined">
+                Import
+              </Button>
+            </Grid>
+          </Grid>
         )}
 
         {wallet && (
@@ -72,7 +79,7 @@ export default class SoftwareWallet extends React.Component {
             </Box>
           </Box>
         )}
-      </Box>
+      </Container>
     )
   }
 }

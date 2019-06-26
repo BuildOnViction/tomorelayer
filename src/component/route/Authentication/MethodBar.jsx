@@ -7,7 +7,8 @@ const mainColor = '#00a99d'
 const BoxWrap = withStyles({
   root: {
     margin: '50px auto',
-    width: '700px',
+    maxWidth: '700px',
+    overflow: 'break',
   }
 })(props => <Box {...props} />)
 
@@ -16,7 +17,7 @@ const StyledAppBar = withStyles({
     backgroundColor: 'transparent',
     border: `solid 1px ${mainColor}`,
     boxShadow: 'inset 1px 1px 3px 0px rgba(0,0,0,.2)',
-    borderRadius: 5,
+    borderRadius: 8,
     marginBottom: 10,
   }
 })(props => <AppBar {...props} />)
@@ -28,9 +29,10 @@ const StyledTabs = withStyles({
     backgroundColor: 'transparent',
     '& > div': {
       width: '100%',
-      height: '110px',
+      height: '100px',
       backgroundColor: mainColor,
-      transform: 'translateY(-108px)',
+      transform: 'translateY(-98px)',
+      borderRadius: 5,
       zIndex: -1,
     },
   },
@@ -41,9 +43,10 @@ const StyledTab = withStyles(theme => ({
     textTransform: 'none',
     color: 'gray',
     fontWeight: theme.typography.fontWeightRegular,
-    fontSize: theme.typography.pxToRem(16),
-    padding: 25,
-    height: 108,
+    fontSize: 14,
+    padding: 20,
+    height: 100,
+    minWidth: 100,
   },
   selected: {
     color: 'white',
@@ -62,6 +65,7 @@ const MethodBar = ({
         value={value}
         onChange={(_, value) => onChange(value)}
         variant="fullWidth"
+        scrollButtons="auto"
       >
         {options.map(op => <StyledTab label={op} key={op} />)}
       </StyledTabs>
