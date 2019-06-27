@@ -1,7 +1,6 @@
 import React from 'react'
 import { ethers } from 'ethers'
 import { Box, Button, Typography } from '@material-ui/core'
-
 import metamask from '@vutr/purser-metamask'
 import * as blk from 'service/blockchain'
 import WalletSigner from 'service/wallet'

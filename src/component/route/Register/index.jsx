@@ -1,4 +1,3 @@
-import { ethers } from 'ethers'
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import { Container, Box, Paper } from '@material-ui/core'
@@ -49,20 +48,19 @@ export class Register extends React.Component {
     const { status, details } = await blk.register(
       relayerContract,
       wallet,
-      payload.coinbase,
-      payload.taker_fee * 100,
-      payload.maker_fee * 100,
-      payload.from_tokens,
-      payload.to_tokens,
+      [
+        payload.coinbase,
+        payload.taker_fee * 100,
+        payload.maker_fee * 100,
+        payload.from_tokens,
+        payload.to_tokens,
+      ],
       {
-        value: blk.toWei(payload.deposit)
+        value: blk.toWei(payload.deposit),
       }
     )
 
     if (!status) {
-      // NOTE: technically, this should happen if either...
-      // 1. gas too low, or
-      // 2. user refused to sign Tx
       return this.props.pushAlert({
         variant: AlertVariant.error,
         message: details,

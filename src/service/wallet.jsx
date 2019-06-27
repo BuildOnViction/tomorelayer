@@ -1,4 +1,4 @@
-import { Signer } from 'ethers'
+import { Signer, utils } from 'ethers'
 import { bigNumber } from '@vutr/purser-core/utils'
 
 export default class WalletSigner extends Signer {
@@ -19,13 +19,15 @@ export default class WalletSigner extends Signer {
     return Promise.resolve(this._wallet.address)
   }
 
-  signMessage(msg) {
-    return this._wallet.signMessage(msg)
+  async signMessage(message) {
+    const str = await this._wallet.signMessage(message)
+    return str
   }
 
-  async sendTransaction(tx) {
-    tx.gasLimit = bigNumber(tx.gasLimit || 1000000).toWei()
-    tx.gasPrice = bigNumber(tx.gasPrice || 10000).toGwei()
+  async sendTransaction(originaltx) {
+    const tx = { ...originaltx }
+    tx.gasLimit = bigNumber(tx.gasLimit || 1000000)
+    tx.gasPrice = bigNumber(tx.gasPrice ? tx.gasPrice.toNumber() : '10000').toGwei()
 
     const to = await tx.to
     tx.to = to
@@ -33,9 +35,12 @@ export default class WalletSigner extends Signer {
     tx.chainId = this._wallet.chainId
     delete tx.data
 
-    tx.value = bigNumber(tx.value || 1)
-    const hexString = await this._wallet.sign(tx)
-    const resp = await this._provider.sendTransaction(hexString)
-    return resp
+    tx.value = bigNumber(tx.value ? tx.value.toString() : '0')
+    const resp = await this._wallet.sign(tx)
+    const rawTx = utils.parseTransaction(resp)
+    return this._provider.getTransaction(rawTx.hash).then((tx) => {
+      if (tx === null) return undefined
+      return this._provider._wrapTransaction(tx, rawTx.hash)
+    })
   }
 }
