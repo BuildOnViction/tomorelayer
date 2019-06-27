@@ -65,7 +65,6 @@
     "jest-dom": "^3.5.0",
     "kill-port": "^1.4.0",
     "localtunnel": "^1.9.1",
-    "lodash": "^4.17.11",
     "node-sass": "^4.12.0",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
