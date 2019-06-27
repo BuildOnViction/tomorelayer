@@ -91,23 +91,25 @@ class Authentication extends React.Component {
     // lagging on switching between methods
     // So we keep it on the DOM instead of disposing the component
     return (
-      <Box display="flex" flexDirection="column">
-        <Container maxWidth="md" className="pt-4">
-          <Header />
-          <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
-            <Typography component="small" className="text-alert">
-              using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
-            </Typography>
-          </MethodBar>
-          <div style={{ display: unlockingMethod === 0 ? 'initial' : 'none' }}>
-            <TomoWallet qrCode={QRCodeLink} />
-          </div>
-          {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 4 && <SoftwareWallet onConfirm={this.confirmWallet} />}
-        </Container>
-      </Box>
+      <div className="login-page">
+        <Box display="flex" flexDirection="column">
+          <Container maxWidth="md" className="pt-4">
+            <Header />
+            <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
+              <Typography component="small" className="text-alert">
+                using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
+              </Typography>
+            </MethodBar>
+            <div style={{ display: unlockingMethod === 0 ? 'initial' : 'none' }}>
+              <TomoWallet qrCode={QRCodeLink} />
+            </div>
+            {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
+            {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
+            {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}
+            {unlockingMethod === 4 && <SoftwareWallet onConfirm={this.confirmWallet} />}
+          </Container>
+        </Box>
+      </div>
     )
   }
 }

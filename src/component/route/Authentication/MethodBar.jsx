@@ -33,7 +33,7 @@ const StyledTabs = withStyles({
       backgroundColor: mainColor,
       transform: 'translateY(-98px)',
       borderRadius: 5,
-      zIndex: -1,
+      zIndex: 0,
     },
   },
 })(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />)
@@ -47,6 +47,7 @@ const StyledTab = withStyles(theme => ({
     padding: 20,
     height: 100,
     minWidth: 100,
+    zIndex: 1,
   },
   selected: {
     color: 'white',

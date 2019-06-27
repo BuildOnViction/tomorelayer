@@ -1,35 +1,7 @@
-.stretched {
+.login-page {
+  width: 100vw;
   height: 100vh;
-}
-
-.main {
-  background: #f8f8fd;
-}
-
-.elevated {
-  box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.03);
-}
-
-.card {
-  background: #fff;
-  min-height: 500px;
-  min-width: 100px;
-  margin: 1em;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* LOGIN PAGE */
-.container.auth-container {
-  max-width: 800px;
-}
-
-.container.address-list {
-  max-width: 700px;
   background: white;
-  padding: 20px;
-  border-radius: 5px;
-  border: solid 1px #ddd;
 }
 
 .lang-select {
@@ -65,138 +37,6 @@
   margin: 0 auto;
 }
 
-.method-select {
-  border: solid 1px $light-green;
-  border-radius: 5px;
-  box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.3);
-}
-
-.method-select__option {
-  width: 25%;
-  height: 100px;
-  border: solid 2px transparent;
-  padding: $space;
-
-  &.method-select__option--active {
-    background: $green;
-    border-bottom: solid 4px $dark-green;
-    * {
-      color: white !important;
-    }
-  }
-}
-
-.method-option__title * {
-  font-weight: 200;
-  word-wrap: break-word;
-}
-
-.method-body {
-  min-height: 300px;
-}
-
-.tomowallet-method-content {
-  width: 60%;
-  text-align-last: left;
-}
-
-.tomowallet-method-qrcode {
-  width: auto;
-}
-
-.btn-unlock {
-  background: $green;
-  color: white;
-  border-color: transparent;
-
-  &:hover {
-    background: darken($green, 10);
-  }
-}
-
-.hardware-wallet-method__path {
-  text-align-last: left;
-  width: 50%;
-
-  input {
-    border-color: $green;
-    width: 100%;
-  }
-
-  input.form-input--disabled {
-    border-color: #bbb;
-    background: #ccc;
-    color: white;
-  }
-}
-
-.address-info {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 50px;
-  &:hover {
-    background: #eee;
-  }
-}
-
-.address-info__address {
-  width: 60%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.address-info__balance {
-  width: 20%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.address-info__currency {
-  width: auto;
-}
-
-.address-container {
-  height: 100vh;
-  overflow: hidden;
-}
-
-.address-container__header {
-  height: auto;
-  background: $dark-green;
-  box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.55);
-  color: white;
-}
-
-.address-container__body {
-  height: 90vh;
-  overflow: scroll;
-  flex-wrap: nowrap;
-}
-
-.main-menu {
-  margin-bottom: 2em;
-  background-color: #f2f2f2;
-  > div {
-    padding: 10px 20px;
-  }
-}
-
-
-.coinbase-logout:hover {
-  color: map-get($text-color-map, primary);
-}
-
-.menu-item--cancel {
-  border-top: solid 1px #eaeaea !important;
-}
-
-
-/* REGISTER PAGE */
-.register-progress--container {
-  width: 300px;
-  margin: 0 auto;
-}
-
 .register-progress--step {
   width: 40px;
   height: 40px;
@@ -228,24 +68,6 @@
   }
 }
 
-.register-form--container {
-  width: 600px;
-  margin: 10px auto;
-  padding: 20px;
-}
-
-.register-form--container__expand {
-  width: 1000px;
-}
-
-.token-list {
-  height: 400px;
-  overflow: scroll;
-  &__limited-height {
-    height: 40vh;
-  }
-}
-
 .success-icon {
   font-size: 40px !important;
   color: green;
@@ -261,10 +83,6 @@
 .tab-menu--indicator {
   background-color: #828282 !important;
   height: 4px !important;
-}
-
-.pair-item:hover {
-  background: #f7f7f7;
 }
 
 .countdown-col {

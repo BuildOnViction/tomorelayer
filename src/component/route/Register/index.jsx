@@ -28,7 +28,8 @@ export class Register extends React.Component {
         taker_fee: 0.01,
         from_tokens: [],
         to_tokens: [],
-      }
+      },
+      newRelayerId: undefined,
     }
   }
 
@@ -69,13 +70,14 @@ export class Register extends React.Component {
 
     const newRelayer = await http.createRelayer(payload)
     this.props.saveNewRelayer(newRelayer)
-    this.setState({ step: 6 })
+    this.setState({ step: 6, newRelayerId: newRelayer.id })
   }
 
   render() {
     const {
       step,
       payload,
+      newRelayerId,
     } = this.state
 
     const {
@@ -125,7 +127,7 @@ export class Register extends React.Component {
                   registerRelayer={this.confirmRegister}
                 />
               )}
-              {step === 6 && <SuccessRegistration />}
+              {step === 6 && <SuccessRegistration relayerId={newRelayerId} />}
             </div>
           </Box>
         </Paper>
