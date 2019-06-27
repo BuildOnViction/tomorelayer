@@ -67,13 +67,15 @@ beforeAll(() => {
   const store = createStore({
     ...initialState,
     user: {
-      ...initialState,
-      address: userAddress,
+      ...initialState.user,
     },
     Tokens: Tokens,
     Relayers: [
       {coinbase: usedCoinbases}
     ],
+    derived: {
+      userAddress: userAddress,
+    }
   })
 
 
@@ -248,7 +250,7 @@ describe('Test RegisterForm No Break', () => {
     getByText(/ETH\/TOMO/)
 
     const spyBlockchainService = jest.spyOn(blk, 'register')
-    spyBlockchainService.mockReturnValue({ status: false, details: 'fake error' })
+    spyBlockchainService.mockReturnValue({ status: false, details: { error: 'fake error' } })
 
     const submitButton = getByText(/confirm/i)
     fireEvent.click(submitButton)

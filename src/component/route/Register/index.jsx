@@ -64,7 +64,7 @@ export class Register extends React.Component {
     if (!status) {
       return this.props.pushAlert({
         variant: AlertVariant.error,
-        message: details,
+        message: details.error,
       })
     }
 

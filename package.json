@@ -27,6 +27,7 @@
     "start": "HTTPS=true react-scripts start",
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
     "backend": "NODE_ENV=local node custom-script.js",
+    "backend:notunnel": "ENV_PATH=.env.test pipenv run python ./backend/app.py",
     "backend:test": "NODE_ENV=test node custom-script.js",
     "test": "react-scripts test --testPathIgnorePatterns .*\\.setup\\.js",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache --testPathIgnorePatterns .*\\.setup\\.js",
