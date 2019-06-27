@@ -79,6 +79,7 @@ class Authentication extends React.Component {
   confirmWallet = wallet => {
     // NOTE: convert PurserWallet to a ready-use WalletSigner
     this.props.saveWallet(wallet)
+    this.props.history.push('/')
   }
 
   render () {
@@ -118,7 +119,7 @@ const mapProps = state => ({
 const actions = store => ({
   saveWallet: (state, wallet) => {
     const user = { ...state.user, wallet }
-    return { user }
+    return { user, auth: true }
   }
 })
 

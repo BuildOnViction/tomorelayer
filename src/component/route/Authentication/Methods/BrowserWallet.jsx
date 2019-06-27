@@ -1,7 +1,10 @@
 import React from 'react'
+import { ethers } from 'ethers'
 import { Box, Button, Typography } from '@material-ui/core'
+
 import metamask from '@vutr/purser-metamask'
 import * as blk from 'service/blockchain'
+import WalletSigner from 'service/wallet'
 
 
 export default class BrowserWallet extends React.Component {
@@ -19,7 +22,11 @@ export default class BrowserWallet extends React.Component {
     this.setState({ address, balance })
   }
 
-  confirm = () => this.props.onConfirm(this.wallet)
+  confirm = () => {
+    const provider = new ethers.providers.Web3Provider(window.web3.currentProvider)
+    const signer = new WalletSigner(this.wallet, provider)
+    this.props.onConfirm(signer)
+  }
 
   render() {
     const {

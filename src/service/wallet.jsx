@@ -2,21 +2,25 @@ import { Signer } from 'ethers'
 import { bigNumber } from '@vutr/purser-core/utils'
 
 export default class WalletSigner extends Signer {
-  _w = undefined
-  provider = undefined
+  _wallet = undefined
+  _provider = undefined
 
-  constructor(_wallet, _provider) {
+  constructor(wallet, provider) {
     super()
-    this._w = _wallet
-    this.provider = _provider
+    this._wallet = wallet
+    this._provider = provider
+  }
+
+  get provider() {
+    return this._provider
   }
 
   getAddress() {
-    return Promise.resolve(this._w.address);
+    return Promise.resolve(this._wallet.address)
   }
 
   signMessage(msg) {
-    return this._w.signMessage(msg)
+    return this._wallet.signMessage(msg)
   }
 
   async sendTransaction(tx) {
@@ -26,12 +30,12 @@ export default class WalletSigner extends Signer {
     const to = await tx.to
     tx.to = to
     tx.inputData = tx.data
-    tx.chainId = this._w.chainId
+    tx.chainId = this._wallet.chainId
     delete tx.data
 
     tx.value = bigNumber(tx.value || 1)
-    const hexString = await this._w.sign(tx)
-    const resp = await this.provider.sendTransaction(hexString)
+    const hexString = await this._wallet.sign(tx)
+    const resp = await this._provider.sendTransaction(hexString)
     return resp
   }
 }

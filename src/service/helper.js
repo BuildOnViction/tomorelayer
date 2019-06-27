@@ -114,6 +114,12 @@ export const pick = keys => obj => {
   return result
 }
 
+export const exceptKeys = keys => obj => {
+  let result = {...obj}
+  keys.forEach(k => delete result[k])
+  return result
+}
+
 export const ThrowOn = (shit, message) => {
   if (shit) {
     throw message

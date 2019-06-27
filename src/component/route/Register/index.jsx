@@ -1,6 +1,7 @@
+import { ethers } from 'ethers'
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-import { Container, Box } from '@material-ui/core'
+import { Container, Box, Paper } from '@material-ui/core'
 import { MISC } from 'service/constant'
 import * as blk from 'service/blockchain'
 import * as http from 'service/backend'
@@ -43,8 +44,20 @@ export class Register extends React.Component {
 
   confirmRegister = async () => {
     const payload = this.state.payload
+    const { wallet, relayerContract } = this.props
 
-    const { status, details } = await blk.register(payload)
+    const { status, details } = await blk.register(
+      relayerContract,
+      wallet,
+      payload.coinbase,
+      payload.taker_fee * 100,
+      payload.maker_fee * 100,
+      payload.from_tokens,
+      payload.to_tokens,
+      {
+        value: blk.toWei(payload.deposit)
+      }
+    )
 
     if (!status) {
       // NOTE: technically, this should happen if either...
@@ -74,55 +87,59 @@ export class Register extends React.Component {
 
     return (
       <Container maxWidth="md">
-        <Box display="flex" justifyContent="center" flexDirection="column">
-          {step < 5 && (<ProgressBar step={step} />)}
-          <div className="mt-2">
-            {step === 1 && (
-              <FormStepOne
-                {...payload}
-                userAddress={userAddress}
-                usedCoinbases={usedCoinbases}
-                submitPayload={this.handleSubmit}
-              />
-            )}
-            {step === 2 && (
-              <FormStepTwo
-                {...payload}
-                goBack={this.goBack}
-                submitPayload={this.handleSubmit}
-              />
-            )}
-            {step === 3 && (
-              <FormStepThree
-                {...payload}
-                goBack={this.goBack}
-                submitPayload={this.handleSubmit}
-              />
-            )}
-            {step === 4 && (
-              <FormStepFour
-                {...payload}
-                goBack={this.goBack}
-                submitPayload={this.handleSubmit}
-              />
-            )}
-            {step === 5 && (
-              <Review
-                meta={payload}
-                goBack={this.goBack}
-                registerRelayer={this.confirmRegister}
-              />
-            )}
-            {step === 6 && <SuccessRegistration />}
-          </div>
-        </Box>
+        <Paper className="p-3 m-3">
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            {step < 5 && (<ProgressBar step={step} />)}
+            <div className="mt-2">
+              {step === 1 && (
+                <FormStepOne
+                  {...payload}
+                  userAddress={userAddress}
+                  usedCoinbases={usedCoinbases}
+                  submitPayload={this.handleSubmit}
+                />
+              )}
+              {step === 2 && (
+                <FormStepTwo
+                  {...payload}
+                  goBack={this.goBack}
+                  submitPayload={this.handleSubmit}
+                />
+              )}
+              {step === 3 && (
+                <FormStepThree
+                  {...payload}
+                  goBack={this.goBack}
+                  submitPayload={this.handleSubmit}
+                />
+              )}
+              {step === 4 && (
+                <FormStepFour
+                  {...payload}
+                  goBack={this.goBack}
+                  submitPayload={this.handleSubmit}
+                />
+              )}
+              {step === 5 && (
+                <Review
+                  meta={payload}
+                  goBack={this.goBack}
+                  registerRelayer={this.confirmRegister}
+                />
+              )}
+              {step === 6 && <SuccessRegistration />}
+            </div>
+          </Box>
+        </Paper>
       </Container>
     )
   }
 }
 
 const mapProps = state => ({
-  userAddress: state.user.address,
+  relayerContract: state.Contracts.find(c => c.name === 'RelayerRegistration' && !c.obsolete),
+  userAddress: state.derived.userAddress,
+  wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase),
 })
 

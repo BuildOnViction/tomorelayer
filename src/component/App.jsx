@@ -50,7 +50,7 @@ class App extends React.Component {
         <Switch>
           <Route path={SITE_MAP.Authentication} component={Authentication} />
           <Route path={SITE_MAP.Home} render={() => (
-            <div style={{ background: '#ddd' }}>
+            <div>
               <PageHeader />
               <Alert />
               <Switch>
