@@ -1,7 +1,7 @@
 import LoadSpinner from './LoadSpinner'
-import Private from './Private'
+import Protected from './ProtectedRoute'
 
 export {
   LoadSpinner,
-  Private,
+  Protected,
 }

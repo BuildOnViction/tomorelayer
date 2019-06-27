@@ -1,15 +1,19 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
+import { SITE_MAP, IS_DEV } from 'service/constant'
+import { PushAlert, AlertVariant } from 'service/frontend'
+import { Protected } from 'component/utility'
+
+import PageHeader from 'component/shared/PageHeader'
+import Alert from 'component/shared/Alert'
+
 import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
-import PageHeader from 'component/shared/PageHeader'
-import Alert from 'component/shared/Alert'
-import { Private } from 'component/utility'
-import { SITE_MAP, IS_DEV } from 'service/constant'
-import { PushAlert, AlertVariant } from 'service/frontend'
+import Logout from 'component/route/Logout'
+
 
 import {
   AutoAuthenticated,
@@ -45,6 +49,11 @@ class App extends React.Component {
   }
 
   render() {
+
+    const {
+      authorized,
+    } = this.props
+
     return (
       <Router>
         <Switch>
@@ -54,9 +63,10 @@ class App extends React.Component {
               <PageHeader />
               <Alert />
               <Switch>
-                <Private path={SITE_MAP.Register} component={Register} />
                 <Route path={SITE_MAP.Home} exact component={Main} />
-                <Private path={SITE_MAP.Dashboard} component={Dashboard} />
+                <Protected path={SITE_MAP.Register} component={Register} condition={authorized} redirect={SITE_MAP.Authentication} />
+                <Protected path={SITE_MAP.Dashboard} component={Dashboard} condition={authorized} redirect={SITE_MAP.Authentication} />
+                <Route path={SITE_MAP.Logout} component={Logout} />
               </Switch>
             </div>
           )} />
@@ -68,6 +78,7 @@ class App extends React.Component {
 
 const mapProps = state => ({
   relayers: state.Relayers,
+  authorized: state.auth,
 })
 
 const actions = {

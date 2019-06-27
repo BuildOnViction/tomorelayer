@@ -42,3 +42,20 @@ export const AutoAuthenticated = state => {
   window.localStorage.removeItem(STORAGE_ITEMS.user)
   return {}
 }
+
+export const LogOut = state => {
+  window.localStorage.removeItem(STORAGE_ITEMS.user)
+  const user = {...state.user}
+
+  for (const key in user) {
+    if (key !== 'expire') delete user[key]
+  }
+
+  const derived = {...state.derived}
+
+  for (const key in derived) {
+    if (key.includes('user')) delete derived[key]
+  }
+
+  return { auth: false, user, derived }
+}

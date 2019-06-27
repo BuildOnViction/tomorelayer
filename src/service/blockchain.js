@@ -1,18 +1,10 @@
 import { ethers } from 'ethers'
 import {
-  UNLOCK_WALLET_METHODS,
   STANDARD_ERC20_ABI,
 } from 'service/constant'
-import WalletSigner from 'service/wallet'
 
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
-
-const RelayerRegistrationContract = (appstore, providerUse = provider) => {
-  const ContractMeta = appstore.Contracts.find(c => c.name === 'RelayerRegistration')
-  const contract = new ethers.Contract(ContractMeta.address, ContractMeta.abi, providerUse)
-  return contract
-}
 
 export const getBalance = async address => {
   const weiBalance = await provider.getBalance(address)

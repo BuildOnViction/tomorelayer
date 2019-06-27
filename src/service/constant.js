@@ -9,6 +9,7 @@ export const SITE_MAP = {
   Relayers: '/relayers',
   Register: '/register',
   Dashboard: '/dashboard',
+  Logout: '/logout',
 }
 
 export const ALERT = {
