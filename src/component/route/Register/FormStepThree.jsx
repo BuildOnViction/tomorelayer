@@ -1,5 +1,11 @@
 import React from 'react'
-import { Box, Button, Container, InputAdornment, TextField, Typography } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+} from '@material-ui/core'
 import { wrappers } from './forms'
 
 const FormStepThree = props => {
@@ -10,8 +16,6 @@ const FormStepThree = props => {
     handleSubmit,
     goBack,
   } = props
-
-  const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
@@ -31,7 +35,6 @@ const FormStepThree = props => {
             error={errors.maker_fee}
             type="number"
             className="mr-1"
-            InputProps={{ endAdornment }}
             inputProps={{
               step: 0.01,
               max: 99.99,
@@ -48,7 +51,6 @@ const FormStepThree = props => {
             error={errors.taker_fee}
             type="number"
             className="ml-1"
-            InputProps={{ endAdornment }}
             inputProps={{
               step: 0.01,
               max: 99.99,
@@ -71,6 +73,6 @@ const FormStepThree = props => {
       </Container>
     </form>
   )
-  }
+}
 
 export default wrappers.marketFeeForm(FormStepThree)

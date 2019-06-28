@@ -4,14 +4,14 @@ import {
   Button,
   Box,
   Checkbox,
-  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   TextField,
 } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
+import LoadSpinner from 'component/utility/LoadSpinner'
+
 
 class TokenPairList extends React.Component {
 
@@ -29,6 +29,7 @@ class TokenPairList extends React.Component {
     activeFilter: 'ALL',
     searchText: undefined,
     debounceText: '',
+    isSearching: false,
   }
 
   componentDidMount() {
@@ -51,10 +52,11 @@ class TokenPairList extends React.Component {
     }
 
     if (searchActive) {
+      this.setState({ isSearching: true })
       clearTimeout(this.debounce)
       this.debounce = setTimeout(() => {
         this.debounce = undefined
-        this.setState({ searchText: this.state.debounceText })
+        this.setState({ searchText: this.state.debounceText, isSearching: false })
       }, 1000)
     }
 
@@ -104,31 +106,41 @@ class TokenPairList extends React.Component {
     const {
       searchText,
       activeFilter,
+      isSearching,
     } = this.state
 
     const filterFunction = activeFilter !== 'SEARCH' ? this.FILTER_CONTROLS[activeFilter] : this.FILTER_CONTROLS[activeFilter](searchText)
 
     return (
-      <Box>
-        <Box>
-          <button onClick={this.setFilter('ALL')} type="button">
+      <Box border={1}>
+        <Box display="flex" justifyContent="space-around" alignItems="center" borderBottom={1}>
+          <Button onClick={this.setFilter('ALL')} type="button" size="small" className="m-1">
             ALL
-          </button>
+          </Button>
           {quoteTokens.map(token => (
-            <button key={token.address} onClick={this.setFilter(token.symbol)} type="button">
+            <Button key={token.address} onClick={this.setFilter(token.symbol)} type="button" size="small" className="m-1">
               {token.symbol}
-            </button>
+            </Button>
           ))}
-          <input
+          <TextField
             name="search-input"
             type="text"
             value={this.state.debounceText}
             placeholder="Search"
             onChange={this.searchInputChange}
+            fullWidth
+            className="m-1"
+            variant="outlined"
+            margin="dense"
           />
         </Box>
-        <Box>
-          <List dense className="bg-filled token-list token-list__limited-height">
+        <Box style={{ position: 'relative' }}>
+          {isSearching && (
+            <div className="search-overlay">
+              <LoadSpinner />
+            </div>
+          )}
+          <List dense className="bg-filled token-list token-list__limited-height" style={{ maxHeight: 400, overflow: 'scroll' }}>
             {checkList.filter(filterFunction).map(p => (
               <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.handleItemClick(p)}>
                 <ListItemIcon>
