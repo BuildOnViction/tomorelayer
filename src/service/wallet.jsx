@@ -35,6 +35,9 @@ export default class WalletSigner extends Signer {
     tx.chainId = this._wallet.chainId
     delete tx.data
 
+    const nonce = await this._provider.getTransactionCount(this._wallet.address)
+    tx.nonce = nonce
+
     tx.value = bigNumber(tx.value ? tx.value.toString() : '0')
     const resp = await this._wallet.sign(tx)
     const rawTx = utils.parseTransaction(resp)

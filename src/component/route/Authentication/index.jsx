@@ -100,9 +100,7 @@ class Authentication extends React.Component {
                 using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
               </Typography>
             </MethodBar>
-            <div style={{ display: unlockingMethod === 0 ? 'initial' : 'none' }}>
-              <TomoWallet qrCode={QRCodeLink} />
-            </div>
+            {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}
             {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
             {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
             {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}

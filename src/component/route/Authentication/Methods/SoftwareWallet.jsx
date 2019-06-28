@@ -7,8 +7,10 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
+import { ethers } from 'ethers'
 import software from '@vutr/purser-software'
 import * as blk from 'service/blockchain'
+import WalletSigner from 'service/wallet'
 
 
 export default class SoftwareWallet extends React.Component {
@@ -26,9 +28,20 @@ export default class SoftwareWallet extends React.Component {
     balance: undefined,
   })
 
-  importWallet = async () => {}
+  importWallet = async () => {
+    const privateKey = this.state.privateKey
+    const isMnemonic = privateKey.includes(' ')
+    const walletArgument = isMnemonic ? { mnemonic: privateKey } : { privateKey }
+    const wallet = await software.open({ ...walletArgument, chainId: 89 })
+    const balance = await blk.getBalance(wallet.address)
+    this.setState({ wallet, balance })
+  }
 
-  confirm = () => this.props.onConfirm(this.state.wallet)
+  confirm = async () => {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
+    const signer = new WalletSigner(this.state.wallet, provider)
+    this.props.onConfirm(signer)
+  }
 
   render() {
 
@@ -60,7 +73,7 @@ export default class SoftwareWallet extends React.Component {
         )}
 
         {wallet && (
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column">
             <Box display="flex" flexDirection="column" className="p-1">
               <Typography component="div">
                 Address: {wallet.address}
@@ -69,11 +82,11 @@ export default class SoftwareWallet extends React.Component {
                 Balance: {balance} TOMO
               </Typography>
             </Box>
-            <Box display="flex" flexDirection="row" justifyContent="space-between">
-              <Button onClick={this.changeAddress} variant="outlined">
+            <Box display="flex" justifyContent="center">
+              <Button onClick={this.changeAddress} variant="contained" size="small" className="m-1">
                 Change Address
               </Button>
-              <Button onClick={this.confirm} variant="outlined">
+              <Button onClick={this.confirm} variant="contained" size="small" className="m-1">
                 Confirm
               </Button>
             </Box>

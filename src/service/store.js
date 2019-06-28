@@ -20,7 +20,7 @@ export const initialState = {
   derived: {},
 }
 
-const derivedMiddleware = store => next => async action => {
+const derivationMiddleware = store => next => async action => {
   // NOTE: Here we calculate any derived state if neccessary
   // eg: an owner's related-only data to his related relayers
   const currentState = store.getState()
@@ -47,7 +47,7 @@ const derivedMiddleware = store => next => async action => {
   return next(action)
 }
 
-const middlewares = applyMiddleware(derivedMiddleware)
+const middlewares = applyMiddleware(derivationMiddleware)
 
 const store = createStore(initialState, middlewares)
 

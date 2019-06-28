@@ -69,6 +69,14 @@ export class Register extends React.Component {
     }
 
     const newRelayer = await http.createRelayer(payload)
+
+    if (newRelayer.error) {
+      return this.props.pushAlert({
+        variant: AlertVariant.error,
+        message: newRelayer.error,
+      })
+    }
+
     this.props.saveNewRelayer(newRelayer)
     this.setState({ step: 6, newRelayerId: newRelayer.id })
   }
@@ -147,7 +155,16 @@ const actions = store => ({
   pushAlert: PushAlert,
   saveNewRelayer: (state, relayer) => {
     const Relayers = [ ...state.Relayers, relayer ]
-    return { Relayers }
+    let derived = { ...state.derived }
+
+    if (state.derived.userRelayers) {
+      derived = {
+        ...state.derived,
+        userRelayers: [...state.derived.userRelayers, relayer],
+      }
+    }
+
+    return { Relayers, derived }
   },
 })
 

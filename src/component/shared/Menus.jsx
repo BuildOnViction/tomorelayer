@@ -89,7 +89,7 @@ export const RelayerMenu = ({ relayers }) => {
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList>
                   {relayers.map(r => (
-                    <MenuItem component={AdapterLink} to={`/dashboard/${r.id}`}>
+                    <MenuItem component={AdapterLink} to={`/dashboard/${r.id}`} key={r.id}>
                       {r.name}
                     </MenuItem>
                   ))}
