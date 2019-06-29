@@ -27,13 +27,15 @@ const derivationMiddleware = store => next => async action => {
 
   if (
     currentState.user.wallet &&
-    currentState.Relayers &&
     !currentState.derived.userRelayers
   ) {
     const Relayers = currentState.Relayers
     const userWallet = currentState.user.wallet
     const userAddress = await userWallet.getAddress()
-    const userRelayers = Relayers.filter(r => r.owner === userAddress)
+    const userRelayers = {}
+    Relayers.filter(r => r.owner === userAddress).forEach(r => {
+      userRelayers[r.coinbase] = r
+    })
 
     store.setState({
       derived: {

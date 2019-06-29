@@ -47,7 +47,7 @@ class PageHeader extends React.Component {
 
 const mapProps = state => ({
   auth: state.auth,
-  userRelayers: (state.derived.userRelayers || []).map(r => ({ id: r.id, name: r.name })),
+  userRelayers: Object.values(state.derived.userRelayers || {}).map(r => ({ coinbase: r.coinbase, name: r.name })),
 })
 
 const actions = store => ({

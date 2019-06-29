@@ -77,7 +77,7 @@ export const RelayerMenu = ({ relayers }) => {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        Active Relayer
+        RELAYERS
       </Button>
       <Popper open={open} anchorEl={anchorRef.current} transition disablePortal>
         {({ TransitionProps, placement }) => (
@@ -89,7 +89,7 @@ export const RelayerMenu = ({ relayers }) => {
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList>
                   {relayers.map(r => (
-                    <MenuItem component={AdapterLink} to={`/dashboard/${r.id}`} key={r.id}>
+                    <MenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
                       {r.name}
                     </MenuItem>
                   ))}

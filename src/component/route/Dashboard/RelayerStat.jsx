@@ -1,17 +1,18 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
-// import { Container, Grid } from 'component/utility'
 
-const RelayerHome = ({ relayer }) => {
+const RelayerHome = ({ relayers, match }) => {
+  const coinbase = match.params.coinbase
+  const activeRelayer = relayers[coinbase]
   return (
     <div>
-      Dashboard of Relayer {relayer.name}
+      Dashboard of Relayer {activeRelayer.name}
     </div>
   )
 }
 
 const mapProps = state => ({
-  relayer: state.User.activeRelayer
+  relayers: state.derived.userRelayers
 })
 
 export default connect(mapProps)(RelayerHome)

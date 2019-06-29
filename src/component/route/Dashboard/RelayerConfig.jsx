@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from '@vutr/redux-zero/react'
 import {
   Grid,
   List,
@@ -18,9 +19,10 @@ const ListItems = [
   'Resign'
 ]
 
-const ConfigBoard = () => {
+const ConfigBoard = ({ match, relayers }) => {
   const [formstep, setFormstep] = React.useState(0)
   const changeForm = step => () => setFormstep(step)
+  const relayer = relayers[match.params.coinbase]
 
   return (
     <Paper>
@@ -35,14 +37,19 @@ const ConfigBoard = () => {
           </List>
         </div>
         <div className="col-9">
-          {formstep === 0 && <FormInfo />}
-          {formstep === 1 && <FormTrade />}
-          {formstep === 2 && <FormTransfer />}
-          {formstep === 3 && <FormResign />}
+          {formstep === 0 && <FormInfo relayer={relayer} />}
+          {formstep === 1 && <FormTrade relayer={relayer} />}
+          {formstep === 2 && <FormTransfer relayer={relayer} />}
+          {formstep === 3 && <FormResign relayer={relayer} />}
         </div>
       </Grid>
     </Paper>
   )
 }
 
-export default ConfigBoard
+
+const mapProps = state => ({
+  relayers: state.derived.userRelayers
+})
+
+export default connect(mapProps)(ConfigBoard)
