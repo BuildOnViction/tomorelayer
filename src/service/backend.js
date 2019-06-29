@@ -16,19 +16,19 @@ const HttpClient = {
   get: async api => fetch(api).then(genericHandler),
 
   post: async (api, value) => fetch(api, {
-    method: 'post',
+    method: 'POST',
     body: JSON.stringify(value),
     headers: defaultHeader,
   }).then(genericHandler),
 
   patch: async (api, value) => fetch(api, {
-    method: 'patch',
+    method: 'PATCH',
     body: JSON.stringify(value),
     headers: defaultHeader,
   }).then(genericHandler),
 
   delete: async api => fetch(api, {
-    method: 'delete',
+    method: 'DELETE',
     headers: defaultHeader,
   }).then(genericHandler),
 

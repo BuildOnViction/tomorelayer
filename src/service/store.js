@@ -25,15 +25,14 @@ const derivationMiddleware = store => next => async action => {
   // eg: an owner's related-only data to his related relayers
   const currentState = store.getState()
 
-  if (
-    currentState.user.wallet &&
-    !currentState.derived.userRelayers
-  ) {
-    const Relayers = currentState.Relayers
-    const userWallet = currentState.user.wallet
-    const userAddress = await userWallet.getAddress()
+  const noUserRelayers = !currentState.derived.userRelayers || !Object.keys(currentState.derived.userRelayers).length
+  const wallet = currentState.user.wallet
+  const relayers = currentState.Relayers
+
+  if (noUserRelayers && wallet && relayers) {
+    const userAddress = await wallet.getAddress()
     const userRelayers = {}
-    Relayers.filter(r => r.owner === userAddress).forEach(r => {
+    relayers.filter(r => r.owner === userAddress).forEach(r => {
       userRelayers[r.coinbase] = r
     })
 

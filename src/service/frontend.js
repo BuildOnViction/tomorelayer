@@ -1,3 +1,6 @@
+import { bindActions } from '@vutr/redux-zero/utils'
+import store from './store'
+
 export const PushAlert = (state, { variant, message }) => {
   // One of special function to control Application Alert
   // Widely used accross the app so separated
@@ -6,6 +9,8 @@ export const PushAlert = (state, { variant, message }) => {
   state.notifications = [...state.notifications, newNotification]
   return state
 }
+
+export const StatePushAlert = (variant, message) => bindActions({ PushAlert }, store).PushAlert({ variant, message })
 
 export const AlertVariant = {
   success: 'success',
