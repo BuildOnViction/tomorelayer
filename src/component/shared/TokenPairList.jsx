@@ -140,7 +140,7 @@ class TokenPairList extends React.Component {
               <LoadSpinner />
             </div>
           )}
-          <List dense className="bg-filled token-list token-list__limited-height" style={{ maxHeight: 400, overflow: 'scroll' }}>
+          <List dense className="bg-filled token-list token-list__limited-height" style={{ maxHeight: 300, overflow: 'scroll' }}>
             {checkList.filter(filterFunction).map(p => (
               <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.handleItemClick(p)}>
                 <ListItemIcon>

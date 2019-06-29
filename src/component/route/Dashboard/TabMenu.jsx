@@ -6,7 +6,7 @@ import { AdapterLink } from 'component/shared/Adapters'
 
 const useStyles = withStyles(theme => ({
   appBar: {
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     color: 'inherit',
     boxShadow: 'none',
     margin: '2em auto',
