@@ -25,7 +25,7 @@ const ConfigBoard = ({ match, relayers }) => {
   const relayer = relayers[match.params.coinbase]
 
   return (
-    <Paper>
+    <Paper className="p-2">
       <Grid className="row">
         <div className="col-3 pr-2">
           <List component="nav">

@@ -134,15 +134,11 @@ const FormTransfer = props => {
   )
 }
 
-const mapProps = state => ({
-  relayer: state.User.activeRelayer,
-})
-
 const actions = {
   $submitConfigFormPayload,
 }
 
-const storeConnect = connect(mapProps, actions)
+const storeConnect = connect(undefined, actions)
 
 export default compose(
   withRouter,

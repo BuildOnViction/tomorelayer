@@ -87,10 +87,7 @@ class FormInfo extends React.Component {
   }
 }
 
-const mapProps = state => ({
-  relayer: state.User.activeRelayer,
-})
-const storeConnect = connect(mapProps, { $submitConfigFormPayload })
+const storeConnect = connect(undefined, { $submitConfigFormPayload })
 const formConnect = wrappers.infoForm(FormInfo)
 
 export default storeConnect(formConnect)

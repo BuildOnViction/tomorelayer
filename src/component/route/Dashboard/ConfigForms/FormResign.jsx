@@ -130,7 +130,6 @@ const FormResign = props => {
 
 const mapProps = state => ({
   storeState: state,
-  relayer: state.User.activeRelayer,
 })
 
 const actions = {

@@ -30,8 +30,13 @@ const FormTrade = ({
     return handleChange(e)
   }
 
-  const formatValue = v => _.round(v / 10, 1)
+  const formatValue = v => _.round(v / 10, 2)
   const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
+
+  const setPairsValues = pairs => {
+    setFieldValue('from_tokens', pairs.map(p => p.from.address))
+    setFieldValue('to_tokens', pairs.map(p => p.to.address))
+  }
 
   const feeNotChanged = ['maker_fee', 'taker_fee'].every(k => values[k] === relayer[k])
   const tokenNotChanged = ['from_tokens', 'to_tokens'].every(k => {
@@ -90,10 +95,8 @@ const FormTrade = ({
           </Grid>
           <Grid item>
             <TokenPairList
-              fromTokens={values.from_tokens}
-              toTokens={values.to_tokens}
-              onChange={setFieldValue}
-              disabled={disableForm}
+              value={values}
+              onChange={setPairsValues}
             />
           </Grid>
           <Grid item className="mt-2">
@@ -109,10 +112,7 @@ const FormTrade = ({
   )
 }
 
-const mapProps = state => ({
-  relayer: state.User.activeRelayer
-})
-const storeConnect = connect(mapProps, { $submitConfigFormPayload })
+const storeConnect = connect(undefined, { $submitConfigFormPayload })
 const formConnect = wrappers.tradeForm(FormTrade)
 
 export default storeConnect(formConnect)
