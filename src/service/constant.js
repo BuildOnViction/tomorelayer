@@ -12,13 +12,6 @@ export const SITE_MAP = {
   Logout: '/logout',
 }
 
-export const ALERT = {
-  success: 'success',
-  error: 'error',
-  warning: 'warning',
-  info: 'info',
-}
-
 export const UNLOCK_WALLET_METHODS = {
   TomoWallet: 'Tomo Wallet',
   LedgerWallet: 'Ledger Wallet',
@@ -27,20 +20,8 @@ export const UNLOCK_WALLET_METHODS = {
   SoftwareWallet: 'Private Key/Mnemonnic',
 }
 
-export const Tokenizer = (symbol, address) => ({ symbol, address })
-
-export const TRADABLE_TOKENS = [
-  Tokenizer('WTOMO', 'wrappedtomo-address'),
-  Tokenizer('TRIIP', 'triip-address'),
-]
-
 export const MISC = {
   MinimumDeposit: 25000,
-  AvailableTradePairs: [
-    'TOMO/TRIIP',
-    'TOMO/MAS',
-    'TOMO/USD',
- ],
 }
 
 export const I18N_LANGS = [

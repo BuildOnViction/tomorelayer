@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import { Container, Box, Paper } from '@material-ui/core'
-import { MISC } from 'service/constant'
+import { MISC, SITE_MAP } from 'service/constant'
 import * as blk from 'service/blockchain'
 import * as http from 'service/backend'
 import { PushAlert, AlertVariant } from 'service/frontend'
@@ -20,7 +20,7 @@ export class Register extends React.Component {
     this.state = {
       step: 1,
       payload: {
-        owner: props.userAddress,
+        owner: '',
         deposit: MISC.MinimumDeposit,
         coinbase: '',
         name: '',
@@ -28,9 +28,18 @@ export class Register extends React.Component {
         taker_fee: 0.01,
         from_tokens: [],
         to_tokens: [],
-      },
-      newRelayerId: undefined,
+      }
     }
+  }
+
+  async componentDidMount() {
+    const userAddress = await this.props.wallet.getAddress()
+    this.setState({
+      payload: {
+        ...this.state.payload,
+        owner: userAddress,
+      }
+    })
   }
 
   handleSubmit = values => this.setState({
@@ -43,7 +52,12 @@ export class Register extends React.Component {
   })
 
   confirmRegister = async () => {
-    const payload = this.state.payload
+    const payload = {
+      ...this.state.payload,
+      taker_fee: this.state.payload.taker_fee * 100,
+      maker_fee: this.state.payload.maker_fee * 100,
+    }
+
     const { wallet, relayerContract } = this.props
 
     const { status, details } = await blk.register(
@@ -51,8 +65,8 @@ export class Register extends React.Component {
       wallet,
       [
         payload.coinbase,
-        payload.taker_fee * 100,
-        payload.maker_fee * 100,
+        payload.taker_fee,
+        payload.maker_fee,
         payload.from_tokens,
         payload.to_tokens,
       ],
@@ -69,27 +83,19 @@ export class Register extends React.Component {
     }
 
     const newRelayer = await http.createRelayer(payload)
-
-    if (newRelayer.error) {
-      return this.props.pushAlert({
-        variant: AlertVariant.error,
-        message: newRelayer.error,
-      })
-    }
-
     this.props.saveNewRelayer(newRelayer)
-    this.setState({ step: 6, newRelayerId: newRelayer.id })
+    this.setState({ step: 6 })
   }
 
   render() {
     const {
       step,
       payload,
-      newRelayerId,
     } = this.state
 
+    const userAddress = payload.owner
+
     const {
-      userAddress,
       usedCoinbases,
     } = this.props
 
@@ -135,7 +141,7 @@ export class Register extends React.Component {
                   registerRelayer={this.confirmRegister}
                 />
               )}
-              {step === 6 && <SuccessRegistration relayerId={newRelayerId} />}
+              {step === 6 && <SuccessRegistration navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`} />}
             </div>
           </Box>
         </Paper>
@@ -146,7 +152,6 @@ export class Register extends React.Component {
 
 const mapProps = state => ({
   relayerContract: state.Contracts.find(c => c.name === 'RelayerRegistration' && !c.obsolete),
-  userAddress: state.derived.userAddress,
   wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase),
 })
@@ -155,16 +160,7 @@ const actions = store => ({
   pushAlert: PushAlert,
   saveNewRelayer: (state, relayer) => {
     const Relayers = [ ...state.Relayers, relayer ]
-    let derived = { ...state.derived }
-
-    if (state.derived.userRelayers) {
-      derived = {
-        ...state.derived,
-        userRelayers: [...state.derived.userRelayers, relayer],
-      }
-    }
-
-    return { Relayers, derived }
+    return { Relayers }
   },
 })
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
   Button,
@@ -9,8 +8,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload } from '../actions'
+import { wrappers } from './forms'
 import TokenPairList from 'component/shared/TokenPairList'
 import * as _ from 'service/helper'
 
@@ -112,7 +110,4 @@ const FormTrade = ({
   )
 }
 
-const storeConnect = connect(undefined, { $submitConfigFormPayload })
-const formConnect = wrappers.tradeForm(FormTrade)
-
-export default storeConnect(formConnect)
+export default wrappers.tradeForm(FormTrade)

@@ -1,7 +1,7 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import { Switch, Redirect, Route } from 'react-router'
 import { Container, Box } from '@material-ui/core'
+import { SITE_MAP } from 'service/constant'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
@@ -9,14 +9,18 @@ import RelayerConfig from './RelayerConfig'
 class Dashboard extends React.Component {
   render() {
 
+    const baseUrl = SITE_MAP.Dashboard
+
     const {
       relayers,
     } = this.props
 
-    const ExactPathRender = () => relayers[0] ? (
-      <Redirect path={`/dashboard/${relayers[0].coinbase}`} />
+    const firstRelayer = Object.values(relayers)[0]
+
+    const ExactPathRender = () => firstRelayer ? (
+      <Redirect path={`${baseUrl}/${firstRelayer.coinbase}`} />
     ) : (
-      <Redirect path="/register" />
+      <Redirect path={SITE_MAP.Register} />
     )
 
     return (
@@ -24,9 +28,16 @@ class Dashboard extends React.Component {
         <TabMenu />
         <Box>
           <Switch>
-            <Route path="/dashboard" exact render={ExactPathRender} />
-            <Route path="/dashboard/:coinbase" exact component={RelayerStat}/>
-            <Route path="/dashboard/:coinbase/config" component={RelayerConfig}/>
+            <Route path={baseUrl} exact render={ExactPathRender} />
+            <Route
+              path={`${baseUrl}/:coinbase`}
+              exact
+              render={props => <RelayerStat relayers={relayers} {...props} />}
+            />
+            <Route
+              path={`${baseUrl}/:coinbase/config`}
+              render={props => <RelayerConfig relayers={relayers} {...props} />}
+            />
           </Switch>
         </Box>
       </Container>
@@ -34,10 +45,4 @@ class Dashboard extends React.Component {
   }
 }
 
-const mapProps = state => ({
-  relayers: state.derived.userRelayers
-})
-
-const storeConnect = connect(mapProps)
-
-export default storeConnect(Dashboard)
+export default Dashboard

@@ -15,8 +15,8 @@ import {
 import { compose } from 'service/helper'
 import { CountdownClock } from 'component/shared/CountdownClock'
 import { ResignNotice } from './PresentComponents'
-import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload, $refundRelayer } from '../actions'
+import { wrappers } from './forms'
+import { SubmitConfigFormPayload, RefundRelayer } from '../actions'
 
 
 const FormResign = props => {
@@ -59,7 +59,7 @@ const FormResign = props => {
             <CountdownClock date={date} />
           </Box>
           <Box display="flex" justifyContent="center" m={2}>
-            <Button onClick={props.$refundRelayer} disabled={elapsed} color="primary" variant="contained">
+            <Button onClick={props.RefundRelayer} disabled={elapsed} color="primary" variant="contained">
               Refund
             </Button>
           </Box>
@@ -133,8 +133,8 @@ const mapProps = state => ({
 })
 
 const actions = {
-  $refundRelayer,
-  $submitConfigFormPayload,
+  RefundRelayer,
+  SubmitConfigFormPayload,
 }
 
 const storeConnect = connect(mapProps, actions)

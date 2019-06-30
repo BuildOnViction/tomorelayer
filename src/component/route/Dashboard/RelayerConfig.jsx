@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import {
   Grid,
   List,
@@ -9,8 +8,9 @@ import {
 } from '@material-ui/core'
 import FormInfo from './ConfigForms/FormInfo'
 import FormTrade from './ConfigForms/FormTrade'
-import FormTransfer from './ConfigForms/FormTransfer'
-import FormResign from './ConfigForms/FormResign'
+/*
+ * import FormTransfer from './ConfigForms/FormTransfer'
+ * import FormResign from './ConfigForms/FormResign' */
 
 const ListItems = [
   'Information',
@@ -39,17 +39,13 @@ const ConfigBoard = ({ match, relayers }) => {
         <div className="col-9">
           {formstep === 0 && <FormInfo relayer={relayer} />}
           {formstep === 1 && <FormTrade relayer={relayer} />}
-          {formstep === 2 && <FormTransfer relayer={relayer} />}
-          {formstep === 3 && <FormResign relayer={relayer} />}
+          {/*
+              {formstep === 2 && <FormTransfer relayer={relayer} />}
+              {formstep === 3 && <FormResign relayer={relayer} />} */}
         </div>
       </Grid>
     </Paper>
   )
 }
 
-
-const mapProps = state => ({
-  relayers: state.derived.userRelayers
-})
-
-export default connect(mapProps)(ConfigBoard)
+export default ConfigBoard

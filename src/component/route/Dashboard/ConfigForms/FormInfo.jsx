@@ -1,8 +1,6 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import { Avatar, Box, Container, Grid, TextField, Button, Typography } from '@material-ui/core'
-import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload } from '../actions'
+import { wrappers } from './forms'
 
 
 class FormInfo extends React.Component {
@@ -87,7 +85,4 @@ class FormInfo extends React.Component {
   }
 }
 
-const storeConnect = connect(undefined, { $submitConfigFormPayload })
-const formConnect = wrappers.infoForm(FormInfo)
-
-export default storeConnect(formConnect)
+export default wrappers.infoForm(FormInfo)

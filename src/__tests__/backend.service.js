@@ -25,7 +25,7 @@ afterAll(async () => {
 
 describe('Testing Contract API', () => {
 
-  test('#1. manually save a contract to Database', async done => {
+  it('#1. manually save a contract to Database', async done => {
     let count = await Contract.count()
     expect(count).toEqual(0)
 
@@ -58,7 +58,7 @@ describe('Testing Contract API', () => {
     done()
   })
 
-  test.skip('#2. Update contract status', async () => {
+  it.skip('#2. Update contract status', async () => {
     /* NOTE: not implemented yet
      * for admin only
      */
@@ -76,7 +76,7 @@ describe('Testing Relayer API', () => {
 
   let relayerId
 
-  test('#1. create a relayers', async done => {
+  it('#1. create a relayers', async done => {
     const count = await Relayer.count()
     expect(count).toEqual(0)
 
@@ -102,7 +102,7 @@ describe('Testing Relayer API', () => {
   })
 
 
-  test('#2. update a relayer', async () => {
+  it('#2. update a relayer', async () => {
     const updatedRelayer = await http.updateRelayer({
       id: relayerId,
       maker_fee: 5,
@@ -123,7 +123,7 @@ describe('Testing Relayer API', () => {
   })
 
 
-  test('#3. delete a relayer(after a successful refundEvent)', async () => {
+  it('#3. delete a relayer(after a successful refundEvent)', async () => {
     let request = await http.deleteRelayer(null)
     expect(request.error.code).toBe(500)
 
@@ -144,13 +144,13 @@ describe('Testing Token API', () => {
 
   let request
 
-  test('#1. get tokens', async () => {
+  it('#1. get tokens', async () => {
     request = await http.getTokens()
     expect(request.length).toEqual(0)
 
   })
 
-  test('#2. create new token', async () => {
+  it('#2. create new token', async () => {
 
     const tokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_token.dummy.json')))
     request = await http.createToken(tokens[0])
@@ -172,7 +172,7 @@ describe('Testing public API', () => {
 
   let request
 
-  test('Get all public resources', async () => {
+  it('Get all public resources', async () => {
     request = await http.getPublicResource()
     expect(request.Contracts.length).toEqual(2)
     expect(request.Relayers.length).toEqual(0)

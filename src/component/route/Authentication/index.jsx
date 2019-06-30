@@ -77,19 +77,17 @@ class Authentication extends React.Component {
   changeMethod = (unlockingMethod) => this.setState({ unlockingMethod })
 
   confirmWallet = wallet => {
-    // NOTE: convert PurserWallet to a ready-use WalletSigner
     this.props.saveWallet(wallet)
     this.props.history.push('/')
   }
 
   render () {
+
     const {
       unlockingMethod,
       QRCodeLink,
     } = this.state
-    // NOTE: QRCode component's render is very expensive and will cause
-    // lagging on switching between methods
-    // So we keep it on the DOM instead of disposing the component
+
     return (
       <div className="login-page">
         <Box display="flex" flexDirection="column">
@@ -119,7 +117,7 @@ const mapProps = state => ({
 const actions = store => ({
   saveWallet: (state, wallet) => {
     const user = { ...state.user, wallet }
-    return { user, auth: true }
+    return { user }
   }
 })
 

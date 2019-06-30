@@ -64,18 +64,20 @@ beforeAll(() => {
     return t
   })
 
+  const mockedWalletSigner = {
+    getAddress: async () => Promise.resolve(userAddress),
+  }
+
   const store = createStore({
     ...initialState,
     user: {
       ...initialState.user,
+      wallet: mockedWalletSigner,
     },
     Tokens: Tokens,
     Relayers: [
       {coinbase: usedCoinbases}
     ],
-    derived: {
-      userAddress: userAddress,
-    }
   })
 
 
@@ -264,8 +266,7 @@ describe('Test RegisterForm No Break', () => {
   })
 
   it('#Step 6: success notify', async () => {
-    await findByText(/succes/i)
-    await findByText(/dashboard/i)
+    await findByText(/success/i)
   })
 
 })

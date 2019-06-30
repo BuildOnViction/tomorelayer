@@ -15,8 +15,8 @@ import {
 } from '@material-ui/core'
 import { compose } from 'service/helper'
 import { TransferNotice } from './PresentComponents'
-import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload } from '../actions'
+import { wrappers } from '../form'
+import { SubmitConfigFormPayload } from '../actions'
 
 
 const FormTransfer = props => {
@@ -135,7 +135,7 @@ const FormTransfer = props => {
 }
 
 const actions = {
-  $submitConfigFormPayload,
+  SubmitConfigFormPayload,
 }
 
 const storeConnect = connect(undefined, actions)
