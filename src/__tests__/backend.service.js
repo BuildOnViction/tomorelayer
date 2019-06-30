@@ -92,6 +92,9 @@ describe('Testing Relayer API', () => {
     const newRelayer = await http.createRelayer(dummyRelayer)
     expect(newRelayer.id).toBe(1)
 
+    const getRelayers = await http.getRelayers()
+    expect(getRelayers.length).toBe(1)
+
     relayerId = newRelayer.id
 
     done()
