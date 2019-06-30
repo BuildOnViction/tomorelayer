@@ -166,3 +166,16 @@ describe('Testing Token API', () => {
     expect(request.length).toEqual(5)
   })
 })
+
+
+describe('Testing public API', () => {
+
+  let request
+
+  test('Get all public resources', async () => {
+    request = await http.getPublicResource()
+    expect(request.Contracts.length).toEqual(2)
+    expect(request.Relayers.length).toEqual(0)
+    expect(request.Tokens.length).toEqual(5)
+  })
+})

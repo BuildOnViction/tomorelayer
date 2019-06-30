@@ -52,6 +52,7 @@ const API = {
   contract: '/api/contract',
   relayer: '/api/relayer',
   token: '/api/token',
+  public: '/api/public',
 }
 
 const proxiedAPI = new Proxy(API, {
@@ -66,6 +67,10 @@ const proxiedAPI = new Proxy(API, {
 })
 
 /* API ENDPOINTS THAT ACCEPT REQUESTS FROM ORIGIN */
+export const getPublicResource = async () => HttpClient.get(proxiedAPI.public)
+                                                  .then(getPayload)
+                                                  .catch(logging)
+
 export const getContracts = async () => HttpClient.get(proxiedAPI.contract)
                                                   .then(getPayload)
                                                   .catch(logging)
