@@ -2,7 +2,6 @@ import * as validUrl from 'valid-url'
 import { withFormik } from 'formik'
 import * as http from 'service/backend'
 import * as blk from 'service/blockchain'
-import { StatePushAlert, AlertVariant } from 'service/frontend'
 
 export const wrappers = {
   infoForm: withFormik({
@@ -27,8 +26,8 @@ export const wrappers = {
     },
 
     handleSubmit: async (values, meta) => {
-      await http.updateRelayer({ ...values, id: meta.props.relayer.id })
-      StatePushAlert(AlertVariant.success, 'updated relayer')
+      const relayer = await http.updateRelayer({ ...values, id: meta.props.relayer.id })
+      meta.props.alert({ relayer, message: 'relayer info updated' })
       meta.setSubmitting(false)
     },
   }),
@@ -64,8 +63,8 @@ export const wrappers = {
       }
 
       await blk.updateRelayer(payload)
-      await http.updateRelayer(payload)
-      StatePushAlert(AlertVariant.success, 'Relayer Trade Options Updated')
+      const relayer = await http.updateRelayer(payload)
+      meta.props.alert({ relayer, message: 'relayer trade options updated' })
       meta.setSubmitting(false)
     }
   }),
@@ -81,16 +80,17 @@ export const wrappers = {
     }),
 
     handleSubmit: async (values, meta) => {
-      await blk.transferRelayer(meta.props.relayer)
-      await http.updateRelayer({
+      await blk.transferRelayer({
+        ...values,
+        currentCoinbase: meta.props.relayer.coinbase,
+      })
+      const relayer = await http.updateRelayer({
         owner: values.owner,
         coinbase: values.coinbase,
         id: meta.props.relayer.id,
       })
-      // change state...
-      StatePushAlert(AlertVariant.success, 'Relayer Transfered Successfuly')
+      meta.props.alert({ relayer, message: 'relayer transfered successfuly' })
       meta.setSubmitting(false)
-      setTimeout(() => meta.props.history.push('/'), 1000)
     }
   }),
 

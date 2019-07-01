@@ -7,9 +7,11 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
+import { connect } from '@vutr/redux-zero/react'
+import { compose } from 'service/helper'
+import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 import TokenPairList from 'component/shared/TokenPairList'
-import * as _ from 'service/helper'
 
 
 const FormTrade = ({
@@ -26,13 +28,6 @@ const FormTrade = ({
     setFieldValue('from_tokens', pairs.map(p => p.from.address))
     setFieldValue('to_tokens', pairs.map(p => p.to.address))
   }
-
-  const tokenNotChanged = ['from_tokens', 'to_tokens'].every(k => {
-    const addrSet = new Set(relayer[k])
-    const equalLength = values[k].length === relayer[k].length
-    const hasItem = values[k].every(addr => addrSet.has(addr))
-    return equalLength && hasItem
-  })
 
   const disableSubmit = false
   const disableForm = relayer.resigning || isSubmitting
@@ -110,4 +105,6 @@ const FormTrade = ({
   )
 }
 
-export default wrappers.tradeForm(FormTrade)
+const storeConnect = connect(undefined, { alert: UpdateRelayer })
+const formConnect = wrappers.tradeForm
+export default compose(formConnect, storeConnect)(FormTrade)

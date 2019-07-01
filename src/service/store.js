@@ -4,7 +4,6 @@ import { SOCKET_URI } from './backend'
 const socket = new WebSocket(SOCKET_URI)
 
 export const initialState = {
-  auth: false,
   user: {
     wallet: undefined,
     expire: 60, // minutes
@@ -15,6 +14,7 @@ export const initialState = {
   Lang: 'en',
   socket: socket,
   notifications: [],
+  shouldUpdateUserRelayers: false,
 }
 
 const store = createStore(initialState)

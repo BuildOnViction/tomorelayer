@@ -3,6 +3,7 @@ import { connect } from '@vutr/redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
 import { SITE_MAP, IS_DEV } from 'service/constant'
 import { PushAlert, AlertVariant } from 'service/frontend'
+import * as _ from 'service/helper'
 import { Protected } from 'component/utility'
 import PageHeader from 'component/shared/PageHeader'
 import Alert from 'component/shared/Alert'
@@ -24,16 +25,13 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    const errorAlert = message => this.props.PushAlert({ message, variant: AlertVariant.error })
-    const successAlert = message => this.props.PushAlert({ message, variant: AlertVariant.success })
-
     try {
       await this.props.FetchPublic()
-      successAlert('fetched all resources')
-
-      // this.props.AutoAuthenticated()
     } catch (error) {
-      errorAlert(error)
+      this.props.PushAlert({
+        message: error.toString(),
+        variant: AlertVariant.error,
+      })
     }
   }
 
@@ -43,13 +41,13 @@ class App extends React.Component {
 
     const shouldFilterUserRelayer = (relayersJustFetched && this.props.user.wallet) || (userJustLoggedIn && this.props.relayers.length)
 
-    if (shouldFilterUserRelayer) {
+    if (shouldFilterUserRelayer || this.props.shouldUpdateUserRelayers) {
       const userAddress = await this.props.user.wallet.getAddress()
       const userRelayers = {}
-      this.props.relayers.filter(r => r.owner === userAddress).forEach(r => {
+      this.props.relayers.filter(r => _.compareString(r.owner, userAddress)).forEach(r => {
         userRelayers[r.coinbase] = r
       })
-      this.setState({ userRelayers })
+      this.setState({ userRelayers }, () => this.props.finishUpdateUserRelayers())
     }
   }
 
@@ -99,11 +97,13 @@ class App extends React.Component {
 const mapProps = state => ({
   relayers: state.Relayers,
   user: state.user,
+  shouldUpdateUserRelayers: state.shouldUpdateUserRelayers,
 })
 
 const actions = {
   FetchPublic,
   PushAlert,
+  finishUpdateUserRelayers: () => ({ shouldUpdateUserRelayers: false })
 }
 
 export default connect(mapProps, actions)(App)

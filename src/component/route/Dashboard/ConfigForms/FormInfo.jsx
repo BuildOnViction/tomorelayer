@@ -1,5 +1,8 @@
 import React from 'react'
 import { Avatar, Box, Container, Grid, TextField, Button, Typography } from '@material-ui/core'
+import { connect } from '@vutr/redux-zero/react'
+import { compose } from 'service/helper'
+import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 
 
@@ -88,4 +91,6 @@ class FormInfo extends React.Component {
   }
 }
 
-export default wrappers.infoForm(FormInfo)
+const storeConnect = connect(undefined, { alert: UpdateRelayer })
+const formConnect = wrappers.infoForm
+export default compose(formConnect, storeConnect)(FormInfo)

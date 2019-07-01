@@ -38,11 +38,14 @@ global.document.createRange = () => ({
 
 let getByText,
     getByLabelText,
+    getAllByText,
+    getByDisplayValue,
+    getByTestId,
     findByText,
     findAllByText,
     findByLabelText,
+    findByTestId,
     findAllByLabelText,
-    getByDisplayValue,
     // eslint-disable-next-line
     debug;
 
@@ -58,7 +61,7 @@ const DummyRelayerOne = {
   id: 1,
   name: 'RelayerOne',
   owner: testWalletAddress,
-  coinbase: 'xxx',
+  coinbase: '0x91xxxzzz',
   maker_fee: 1,
   taker_fee: 50,
   from_tokens: [],
@@ -69,7 +72,7 @@ const DummyRelayerTwo = {
   id: 2,
   name: 'RelayerTwo',
   owner: testWalletAddress,
-  coinbase: 'yyy',
+  coinbase: '0x101010101',
   maker_fee: 20,
   taker_fee: 3,
   from_tokens: [],
@@ -114,12 +117,15 @@ describe('Test Main App', () => {
     })
   }, store).saveWallet(wallet)
 
-  const spyBackend = jest.spyOn(http, 'getPublicResource')
-  spyBackend.mockReturnValue({
+  http.getPublicResource = jest.fn().mockResolvedValue({
     Relayers: [DummyRelayerOne, DummyRelayerTwo],
     Tokens: Tokens,
     Contracts: [],
   })
+
+  const testChangeName = 'TestNameOne'
+  const testChangeCoinbase = '0x0000000000000001'
+
 
 
   it('Render without crash', async () => {
@@ -132,20 +138,24 @@ describe('Test Main App', () => {
       </Provider>
     )
 
+    expect(http.getPublicResource).toHaveBeenCalled()
+
     container = renderUtils.container
     getByText = renderUtils.getByText
+    getAllByText = renderUtils.getAllByText
     getByLabelText = renderUtils.getByLabelText
     getByDisplayValue = renderUtils.getByDisplayValue
+    getByTestId = renderUtils.getByTestId
     findByText = renderUtils.findByText
+    findByTestId = renderUtils.findByTestId
     findAllByText = renderUtils.findAllByText
     findByLabelText = renderUtils.findByLabelText
     findAllByLabelText = renderUtils.findAllByLabelText
     debug = renderUtils.debug
 
-    await wait(() => {
-      getByText(/fetched all resources/i)
-    })
+    await wait()
 
+    getByText(/fetched all resources/i)
     getByText(/login/i)
     getByText(/start a relayer/i)
 
@@ -168,6 +178,8 @@ describe('Test Main App', () => {
 
 
   it('Test Relayer-Info Config', async () => {
+    // NOTE: not testing error input yet
+
     const configTab = getByText(/Configuration/i)
     fireEvent.click(configTab)
 
@@ -184,7 +196,6 @@ describe('Test Main App', () => {
     const saveBtn = container.querySelector('button[type="submit"]')
 
 
-    const testChangeName = 'TestNameOne'
     http.updateRelayer = jest.fn().mockResolvedValue({
       ...DummyRelayerOne,
       name: testChangeName,
@@ -192,15 +203,16 @@ describe('Test Main App', () => {
 
     fireEvent.change(relayerNameInput, { target: { value: testChangeName }})
     fireEvent.click(saveBtn)
+    await wait()
 
-    await wait(() => {
-      expect(http.updateRelayer).toHaveBeenCalledWith({ id: 1, name: testChangeName })
-    })
+    expect(http.updateRelayer).toHaveBeenCalledWith({ id: 1, name: testChangeName })
 
   })
 
 
   it('Test Relayer-Trade Config', async () => {
+    // NOTE: not testing error input yet
+
     const tradeOption = getByText(/trade options/i)
     fireEvent.click(tradeOption)
 
@@ -222,23 +234,82 @@ describe('Test Main App', () => {
     fireEvent.click(sampleTokenPair)
     await wait()
 
-    http.updateRelayer = jest.fn()
+    const expectedPayload = {
+      ...DummyRelayerOne,
+      name: testChangeName,
+      maker_fee: 8,
+      from_tokens: [TomoAddr],
+      to_tokens: [BtcAddr],
+    }
+
+    http.updateRelayer = jest.fn().mockResolvedValue(expectedPayload)
     blk.updateRelayer = jest.fn().mockResolvedValue({ status: true })
 
     fireEvent.click(saveBtn)
+    await wait()
 
-    await wait(() => {
-      const expectedPayload = {
-        ...DummyRelayerOne,
-        maker_fee: 8,
-        from_tokens: [TomoAddr],
-        to_tokens: [BtcAddr],
-      }
+    expect(blk.updateRelayer).toHaveBeenCalledWith(expectedPayload)
+    expect(http.updateRelayer).toHaveBeenCalledWith(expectedPayload)
+  })
 
-      expect(blk.updateRelayer).toHaveBeenCalledWith(expectedPayload)
-      expect(http.updateRelayer).toHaveBeenCalledWith(expectedPayload)
 
+  it('Test Relayer-Transfer Config', async () => {
+    const transferMenuItem = getByText(/transfer/i)
+    fireEvent.click(transferMenuItem)
+
+    await findByText(/what you need to know/i)
+    const proceedBtn = getByText(/i understand/i)
+
+    fireEvent.click(proceedBtn)
+    await wait()
+
+    const currentCoinbaseHiddenInput = getByTestId(/current-coinbase-input/i)
+    expect(currentCoinbaseHiddenInput).not.toBeVisible()
+
+    getByDisplayValue(DummyRelayerOne.owner)
+    const newCoinbaseInput = getByTestId(/new-coinbase-input/i)
+
+    const transferRequestBtn = getByTestId(/proceed-transfer-request/i)
+    // At least one of the two values must be channged to request transfer
+    expect(transferRequestBtn).toBeDisabled()
+
+    fireEvent.change(newCoinbaseInput, { target: { value: testChangeCoinbase }})
+    await wait()
+
+    expect(transferRequestBtn).not.toBeDisabled()
+
+    fireEvent.click(transferRequestBtn)
+    await wait()
+
+    const confirmBtn = getByTestId(/confirm-transfer-request/i)
+    const cancelBtn = getByTestId(/cancel-transfer-request/i)
+
+    blk.transferRelayer = jest.fn().mockResolvedValue({ status: true })
+    http.updateRelayer = jest.fn().mockResolvedValue({
+      ...DummyRelayerOne,
+      coinbase: testChangeCoinbase,
     })
+
+    fireEvent.click(confirmBtn)
+    await wait()
+
+    const expectedPayload = {
+      currentCoinbase: DummyRelayerOne.coinbase,
+      owner: DummyRelayerOne.owner,
+      coinbase: testChangeCoinbase
+    }
+
+    expect(blk.transferRelayer).toHaveBeenCalledWith(expectedPayload)
+    expect(http.updateRelayer).toHaveBeenCalledWith({
+      coinbase: testChangeCoinbase,
+      owner: DummyRelayerOne.owner,
+      id: DummyRelayerOne.id,
+    })
+
+    getByText(/relayer transfered successfuly/i)
+    // NOTE: because relayer coinbase changed, current route can no longer show valid relayer data
+    // we prompt a notification about this
+    getByText(/relayer doesnt exist/i)
 
   })
 

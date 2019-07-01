@@ -8,31 +8,12 @@ const isFunction = t => typeof t === 'function'
  */
 export const noop = () => undefined
 
-// Resolve 2nd/3rd arguments when first argument is truthy
-export const when = arg1 => ({
-  do: arg2 => {
-    if (!arg1 && isFunction(arg2)) return noop
-    if (!arg1 && !isFunction(arg2)) return undefined
-    if (arg1) return arg2
-  }
-})
-
-export const assign = (src, dest) => Object.assign(src, dest)
-
 export const notEqualTo = value1 => value2 => value1 !== value2
 
 // Compose from left-most to right-most
 export const compose = (...functions) => lastArg => functions
   .filter(isFunction)
   .reduce((returned, currentFunc) => currentFunc(returned), lastArg)
-
-export const extract = (...keys) => ({
-  from: obj => {
-    const result = {}
-    keys.forEach(k => result[k] = obj[k])
-    return result
-  }
-})
 
 export const isEmpty = something => {
   if (something === '') return true
@@ -63,12 +44,6 @@ export const last = someArray => {
 export const first = someArray => {
   if (!someArray || !someArray.length) return undefined
   return someArray[0]
-}
-
-export const pick = keys => obj => {
-  let result = {}
-  keys.forEach(k => when(obj[k]).do(() => result[k] = obj[k]))
-  return result
 }
 
 export const ThrowOn = (shit, message) => {

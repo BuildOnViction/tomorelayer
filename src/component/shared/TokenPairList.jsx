@@ -89,6 +89,13 @@ class TokenPairList extends React.Component {
     const mappingKeys = value.from_tokens.map((from, idx) => `${from}${value.to_tokens[idx]}`)
     mappingKeys.forEach(key => {
       const pairIndex = pairMapping[key]
+
+      if (pairIndex === undefined) {
+        // TODO: check and save this token to Database then return it as normal
+        console.warn(`This token ${key} is not found in Database`)
+        return
+      }
+
       result[pairIndex].checked = true
     })
     return result
