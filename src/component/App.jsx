@@ -10,7 +10,6 @@ import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
-import Logout from 'component/route/Logout'
 import { FetchPublic } from './shared/actions'
 import 'style/app.scss'
 
@@ -88,7 +87,6 @@ class App extends React.Component {
                   condition={userLoggedIn}
                   redirect={SITE_MAP.Authentication}
                 />
-                <Route path={SITE_MAP.Logout} component={Logout} />
               </Switch>
             </div>
           )} />

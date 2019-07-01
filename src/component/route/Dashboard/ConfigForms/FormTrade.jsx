@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Grid,
-  InputAdornment,
   TextField,
   Typography,
 } from '@material-ui/core'
@@ -23,20 +22,11 @@ const FormTrade = ({
   relayer,
 }) => {
 
-  const handleFeeChange = e => {
-    e.target.value = _.round(e.target.value * 10, 0)
-    return handleChange(e)
-  }
-
-  const formatValue = v => _.round(v / 10, 2)
-  const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
-
   const setPairsValues = pairs => {
     setFieldValue('from_tokens', pairs.map(p => p.from.address))
     setFieldValue('to_tokens', pairs.map(p => p.to.address))
   }
 
-  const feeNotChanged = ['maker_fee', 'taker_fee'].every(k => values[k] === relayer[k])
   const tokenNotChanged = ['from_tokens', 'to_tokens'].every(k => {
     const addrSet = new Set(relayer[k])
     const equalLength = values[k].length === relayer[k].length
@@ -44,7 +34,7 @@ const FormTrade = ({
     return equalLength && hasItem
   })
 
-  const disableSubmit = feeNotChanged && tokenNotChanged
+  const disableSubmit = false
   const disableForm = relayer.resigning || isSubmitting
 
   return (
@@ -62,11 +52,16 @@ const FormTrade = ({
                 <TextField
                   label="Maker Fee (min: 0.1%, max: 99.9%)"
                   name="maker_fee"
-                  value={formatValue(values.maker_fee)}
-                  onChange={handleFeeChange}
+                  id="maker_fee-input"
+                  value={values.maker_fee}
+                  onChange={handleChange}
                   error={errors.maker_fee}
                   type="number"
-                  InputProps={{ endAdornment }}
+                  inputProps={{
+                    step: 0.01,
+                    max: 99.99,
+                    min: 0.01,
+                  }}
                   fullWidth
                   disabled={disableForm}
                 />
@@ -75,11 +70,16 @@ const FormTrade = ({
                 <TextField
                   label="Taker Fee (min: 0.1%, max: 99.9%)"
                   name="taker_fee"
-                  value={formatValue(values.taker_fee)}
-                  onChange={handleFeeChange}
+                  id="taker_fee-input"
+                  value={values.taker_fee}
+                  onChange={handleChange}
                   error={errors.taker_fee}
                   type="number"
-                  InputProps={{ endAdornment }}
+                  inputProps={{
+                    step: 0.01,
+                    max: 99.99,
+                    min: 0.01,
+                  }}
                   fullWidth
                   disabled={disableForm}
                 />

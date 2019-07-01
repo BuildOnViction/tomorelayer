@@ -12,6 +12,7 @@ import { bindActions } from '@vutr/redux-zero/utils'
 import createStore from '@vutr/redux-zero'
 
 import * as http from 'service/backend'
+import * as blk from 'service/blockchain'
 import { initialState } from 'service/store'
 import App from 'component/App'
 
@@ -54,6 +55,7 @@ const testWalletAddress = '0x21022a96AA9c06B0e2B021FC7D92E8Cab94BF390'
 
 
 const DummyRelayerOne = {
+  id: 1,
   name: 'RelayerOne',
   owner: testWalletAddress,
   coinbase: 'xxx',
@@ -64,6 +66,7 @@ const DummyRelayerOne = {
 }
 
 const DummyRelayerTwo = {
+  id: 2,
   name: 'RelayerTwo',
   owner: testWalletAddress,
   coinbase: 'yyy',
@@ -73,6 +76,18 @@ const DummyRelayerTwo = {
   to_tokens: [],
 }
 
+
+const fs = require('fs')
+const path = require('path')
+const rawtokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_token.dummy.json')))
+const quoteTokens = ['TOMO', 'ETH', 'BTC']
+const Tokens = rawtokens.map((t, idx) => {
+  if (quoteTokens.includes(t.symbol)) {
+    t['is_major'] = true
+  }
+  t.id = idx
+  return t
+})
 
 afterAll(cleanup)
 
@@ -102,7 +117,7 @@ describe('Test Main App', () => {
   const spyBackend = jest.spyOn(http, 'getPublicResource')
   spyBackend.mockReturnValue({
     Relayers: [DummyRelayerOne, DummyRelayerTwo],
-    Tokens: [],
+    Tokens: Tokens,
     Contracts: [],
   })
 
@@ -137,7 +152,7 @@ describe('Test Main App', () => {
   })
 
 
-  it('LoggedInn user can view their relayers', async () => {
+  it('Logged-in user can view their relayers', async () => {
     mockLogin(mockedWalletSigner)
     const relayerMenu = await findByText(/your relayers/i)
 
@@ -148,7 +163,83 @@ describe('Test Main App', () => {
     getByText(/create new relayer/i)
 
     fireEvent.click(firstRelayer)
-    await findByText(/Dashboard of Relayer/i)
+    await findByText(new RegExp(`Dashboard of Relayer ${DummyRelayerOne.name}`), 'i')
+  })
+
+
+  it('Test Relayer-Info Config', async () => {
+    const configTab = getByText(/Configuration/i)
+    fireEvent.click(configTab)
+
+    await findByText(/info/i)
+    getByText(/trade/i)
+    getByText(/transfer/i)
+    getByText(/resign/i)
+
+    // NOTE: default is Info Form
+    const relayerNameInput = getByDisplayValue(DummyRelayerOne.name)
+    getByLabelText(/name/i)
+    getByLabelText(/link/i)
+    getByLabelText(/logo/i)
+    const saveBtn = container.querySelector('button[type="submit"]')
+
+
+    const testChangeName = 'TestNameOne'
+    http.updateRelayer = jest.fn().mockResolvedValue({
+      ...DummyRelayerOne,
+      name: testChangeName,
+    })
+
+    fireEvent.change(relayerNameInput, { target: { value: testChangeName }})
+    fireEvent.click(saveBtn)
+
+    await wait(() => {
+      expect(http.updateRelayer).toHaveBeenCalledWith({ id: 1, name: testChangeName })
+    })
+
+  })
+
+
+  it('Test Relayer-Trade Config', async () => {
+    const tradeOption = getByText(/trade options/i)
+    fireEvent.click(tradeOption)
+
+    await findByLabelText(/maker fee/i)
+    const makerFeeInput = getByDisplayValue(new RegExp(((DummyRelayerOne.maker_fee / 100).toString())), 'i')
+
+    getByText(/taker fee/i)
+    getByDisplayValue(new RegExp(((DummyRelayerOne.taker_fee / 100).toString())), 'i')
+
+    const saveBtn = container.querySelector('button[type="submit"]')
+    const sampleTokenPair = getByText(/tomo\/btc/i)
+
+    const TomoAddr = Tokens.find(t => t.symbol === 'TOMO').address
+    const BtcAddr = Tokens.find(t => t.symbol === 'BTC').address
+
+    fireEvent.change(makerFeeInput, { target: { value: 0.08 }})
+    await wait()
+
+    fireEvent.click(sampleTokenPair)
+    await wait()
+
+    http.updateRelayer = jest.fn()
+    blk.updateRelayer = jest.fn().mockResolvedValue({ status: true })
+
+    fireEvent.click(saveBtn)
+
+    await wait(() => {
+      const expectedPayload = {
+        ...DummyRelayerOne,
+        maker_fee: 8,
+        from_tokens: [TomoAddr],
+        to_tokens: [BtcAddr],
+      }
+
+      expect(blk.updateRelayer).toHaveBeenCalledWith(expectedPayload)
+      expect(http.updateRelayer).toHaveBeenCalledWith(expectedPayload)
+
+    })
+
   })
 
 })

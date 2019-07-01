@@ -28,7 +28,7 @@ export const wrappers = {
 
     handleSubmit: async (values, meta) => {
       await http.updateRelayer({ ...values, id: meta.props.relayer.id })
-      StatePushAlert(AlertVariant.success, 'Relayer Info Updated')
+      StatePushAlert(AlertVariant.success, 'updated relayer')
       meta.setSubmitting(false)
     },
   }),
@@ -38,8 +38,8 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      maker_fee: props.relayer.maker_fee,
-      taker_fee: props.relayer.taker_fee,
+      maker_fee: props.relayer.maker_fee / 100,
+      taker_fee: props.relayer.taker_fee / 100,
       from_tokens: props.relayer.from_tokens,
       to_tokens: props.relayer.to_tokens,
     }),
@@ -49,15 +49,22 @@ export const wrappers = {
       const fees = ['maker_fee', 'taker_fee']
 
       fees.forEach(k => {
-        if (values[k] < 1 || values[k] > 999) errors[k] = true
+        if (values[k] < 0.01 || values[k] > 99.99) errors[k] = true
       })
 
       return errors
     },
 
     handleSubmit: async (values, meta) => {
-      await blk.updateRelayer(meta.props.relayer)
-      await http.updateRelayer({ ...values, id: meta.props.relayer.id })
+      const payload = {
+        ...meta.props.relayer,
+        ...values,
+        maker_fee: values.maker_fee * 100,
+        taker_fee: values.taker_fee * 100,
+      }
+
+      await blk.updateRelayer(payload)
+      await http.updateRelayer(payload)
       StatePushAlert(AlertVariant.success, 'Relayer Trade Options Updated')
       meta.setSubmitting(false)
     }

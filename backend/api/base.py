@@ -16,8 +16,9 @@ class BaseHandler(RequestHandler):
         if not is_production:
             # FIXME: for production, cant allow CORS
             self.set_header("Access-Control-Allow-Origin", "*")
-            self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,x-requested-with")
-            self.set_header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, DELETE, OPTIONS')
+
+        self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, DELETE, OPTIONS')
 
     def get_current_user(self):
         return self.get_secure_cookie('user_id')

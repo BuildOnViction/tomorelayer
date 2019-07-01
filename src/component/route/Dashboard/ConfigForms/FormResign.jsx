@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@material-ui/core'
 import { compose } from 'service/helper'
-import { CountdownClock } from 'component/shared/CountdownClock'
 import { ResignNotice } from './PresentComponents'
 import { wrappers } from './forms'
 import { SubmitConfigFormPayload, RefundRelayer } from '../actions'
@@ -56,7 +55,7 @@ const FormResign = props => {
             </Typography>
           </Box>
           <Box m={8}>
-            <CountdownClock date={date} />
+            ....counting down
           </Box>
           <Box display="flex" justifyContent="center" m={2}>
             <Button onClick={props.RefundRelayer} disabled={elapsed} color="primary" variant="contained">

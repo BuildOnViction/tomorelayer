@@ -14,7 +14,7 @@ import FormTrade from './ConfigForms/FormTrade'
 
 const ListItems = [
   'Information',
-  'Trading Options',
+  'Trade Options',
   'Transfer',
   'Resign'
 ]

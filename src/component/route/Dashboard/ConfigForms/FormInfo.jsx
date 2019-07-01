@@ -34,6 +34,7 @@ class FormInfo extends React.Component {
                 value={values.name || ''}
                 onChange={handleChange}
                 error={errors.name}
+                id="relayer-name"
                 name="name"
                 helperText={errors.name && <i className="text-alert">Name must not be either empty or too long!</i>}
                 disabled={inputDisabled}
@@ -43,6 +44,7 @@ class FormInfo extends React.Component {
               <TextField
                 label="Link"
                 value={values.link || ''}
+                id="relayer-link"
                 name="link"
                 onChange={handleChange}
                 error={errors.link}
@@ -56,6 +58,7 @@ class FormInfo extends React.Component {
                 value={values.logo || ''}
                 onChange={handleChange}
                 error={errors.logo}
+                id="relayer-logo"
                 name="logo"
                 helperText={errors.logo && <i className="text-alert">Invalid URL!</i>}
                 disabled={inputDisabled}
