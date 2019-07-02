@@ -1,3 +1,4 @@
+from os import getenv
 from tornado.platform.asyncio import AsyncIOMainLoop
 from tornado.ioloop import IOLoop
 from logzero import logger
@@ -10,7 +11,12 @@ from settings import settings
 from blockchain import Blockchain
 from api.base import NotFoundHandler
 
-define("port", default=8888, help="app port", type=int)
+define(
+    "port",
+    default=8888 if getenv('STG') != 'test' else 8889,
+    help="app port",
+    type=int,
+)
 
 if __name__ == "__main__":
     parse_command_line()

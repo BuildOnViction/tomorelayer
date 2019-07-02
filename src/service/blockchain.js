@@ -72,18 +72,18 @@ export const register = async (relayerContract, walletSigner, payload, config) =
 }
 
 export const updateRelayer = async (data, state) => {
-
+  return { status: true }
 }
 
 
-export const transferRelayer = async(data, state) => {
-
+export const transferRelayer = async (payload) => {
+  return { status: true }
 }
 
 export const resignRelayer = async (data, state) => {
-
+  return { status: true }
 }
 
 export const refundRelayer = async state => {
-
+  return { status: true }
 }

@@ -80,10 +80,7 @@ export const wrappers = {
     }),
 
     handleSubmit: async (values, meta) => {
-      await blk.transferRelayer({
-        ...values,
-        currentCoinbase: meta.props.relayer.coinbase,
-      })
+      await blk.transferRelayer(values)
       const relayer = await http.updateRelayer({
         owner: values.owner,
         coinbase: values.coinbase,

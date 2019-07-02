@@ -3,8 +3,9 @@ import {
   render,
   fireEvent,
   cleanup,
-  waitForElement,
   wait,
+  waitForElement,
+  waitForElementToBeRemoved,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
 import { Provider } from '@vutr/redux-zero/react'
@@ -101,9 +102,18 @@ afterAll(cleanup)
 describe('Test Main App', () => {
 
   /**
-   * @test {TomoWallet}
-   * proper render, with Header, Logo and TomoWallet as default methodBar
-   * After unlock with TomoWallet, a new instance of Wallet & Balance shown properly
+   * @test {App}
+   * Here we test the almost-full-flow of the Main app, except some separated functional feature eg Authenticatino or Register
+   * The test flow will go from:
+   *
+   * render -> fetch data -> user login -> view personal relayer -> making configuration changes ->
+   * - info change: change name
+   * - trade options change: add token pairs, change fee
+   * - transfer coinbase: change coinbase, notify about such change
+   * - transfer ownership: change owner completely, notify about such change
+   * - go to another relayer, resign it
+   * - withdraw money
+   *
    */
 
   // NOTE: we create some bindAction and call them to manually change state-store for testing
@@ -269,10 +279,11 @@ describe('Test Main App', () => {
     getByDisplayValue(DummyRelayerOne.owner)
     const newCoinbaseInput = getByTestId(/new-coinbase-input/i)
 
-    const transferRequestBtn = getByTestId(/proceed-transfer-request/i)
+    let transferRequestBtn = getByTestId(/proceed-transfer-request/i)
     // At least one of the two values must be channged to request transfer
     expect(transferRequestBtn).toBeDisabled()
 
+    // Change coinbase should enable ProceedButton
     fireEvent.change(newCoinbaseInput, { target: { value: testChangeCoinbase }})
     await wait()
 
@@ -281,23 +292,34 @@ describe('Test Main App', () => {
     fireEvent.click(transferRequestBtn)
     await wait()
 
-    const confirmBtn = getByTestId(/confirm-transfer-request/i)
-    const cancelBtn = getByTestId(/cancel-transfer-request/i)
+    // Confirm-Dialog should appear
+    let confirmBtn = getByTestId(/confirm-transfer-request/i)
+    let cancelBtn = getByTestId(/cancel-transfer-request/i)
 
-    blk.transferRelayer = jest.fn().mockResolvedValue({ status: true })
-    http.updateRelayer = jest.fn().mockResolvedValue({
-      ...DummyRelayerOne,
-      coinbase: testChangeCoinbase,
-    })
+    // Click Cancel, the dialog should disappear
+    fireEvent.click(cancelBtn)
+    await waitForElementToBeRemoved(() => getByTestId(/confirm-transfer-request/i))
 
-    fireEvent.click(confirmBtn)
+    // Proceed, dialog should appears again...
+    transferRequestBtn = getByTestId(/proceed-transfer-request/i)
+    expect(transferRequestBtn).not.toBeDisabled()
+    fireEvent.click(transferRequestBtn)
     await wait()
 
+    // NOTE: we have to mock the result before firing button event
     const expectedPayload = {
       currentCoinbase: DummyRelayerOne.coinbase,
       owner: DummyRelayerOne.owner,
       coinbase: testChangeCoinbase
     }
+
+    blk.transferRelayer = jest.fn().mockResolvedValue({ status: true })
+    http.updateRelayer = jest.fn().mockResolvedValue({ ...DummyRelayerOne, coinbase: testChangeCoinbase })
+
+    // Confirm request: change coinbase of the current relayer
+    confirmBtn = getByTestId(/confirm-transfer-request/i)
+    fireEvent.click(confirmBtn)
+    await wait()
 
     expect(blk.transferRelayer).toHaveBeenCalledWith(expectedPayload)
     expect(http.updateRelayer).toHaveBeenCalledWith({

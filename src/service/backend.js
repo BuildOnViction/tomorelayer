@@ -1,6 +1,16 @@
-import { IS_DEV } from 'service/constant'
+export const BACKEND_URI = (env => {
+  switch (env) {
+    case 'test':
+      return 'http://localhost:8889'
+    case 'development':
+      return 'http://localhost:8888'
+    case 'production':
+      return ''
+    default:
+      return ''
+  }
+})(process.env.NODE_ENV)
 
-export const BACKEND_URI = IS_DEV ? 'http://localhost:8888' : ''
 export const SOCKET_URI = BACKEND_URI.replace('http', 'ws') + '/socket'
 
 const genericHandler = response => {
