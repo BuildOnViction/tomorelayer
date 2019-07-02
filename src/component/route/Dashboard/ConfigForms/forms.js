@@ -1,7 +1,8 @@
 import * as validUrl from 'valid-url'
 import { withFormik } from 'formik'
+import { SITE_MAP } from 'service/constant'
 import * as http from 'service/backend'
-import * as blk from 'service/blockchain'
+import { validateCoinbase } from 'service/blockchain'
 
 export const wrappers = {
   infoForm: withFormik({
@@ -16,12 +17,12 @@ export const wrappers = {
 
     validate: values => {
       const errors = {}
-      const check = (key, func) => {
-        if (!func(values[key])) errors[key] = true
+      const check = (key, func, message) => {
+        if (!func(values[key])) errors[key] = message
       }
-      check('name', name => name && name.length < 200)
-      check('link', url => !url || validUrl.isUri(url))
-      check('logo', url => !url || validUrl.isUri(url))
+      check('name', name => name && name.length < 200, 'invalid name')
+      check('link', url => !url || validUrl.isUri(url), 'invalid relayer link url')
+      check('logo', url => !url || validUrl.isUri(url), 'invalid relayer logo url')
       return errors
     },
 
@@ -43,17 +44,6 @@ export const wrappers = {
       to_tokens: props.relayer.to_tokens,
     }),
 
-    validate: values => {
-      const errors = {}
-      const fees = ['maker_fee', 'taker_fee']
-
-      fees.forEach(k => {
-        if (values[k] < 0.01 || values[k] > 99.99) errors[k] = true
-      })
-
-      return errors
-    },
-
     handleSubmit: async (values, meta) => {
       const payload = {
         ...meta.props.relayer,
@@ -62,7 +52,7 @@ export const wrappers = {
         taker_fee: values.taker_fee * 100,
       }
 
-      await blk.updateRelayer(payload)
+      await meta.props.RelayerContract.update(payload)
       const relayer = await http.updateRelayer(payload)
       meta.props.alert({ relayer, message: 'relayer trade options updated' })
       meta.setSubmitting(false)
@@ -79,15 +69,39 @@ export const wrappers = {
       coinbase: props.relayer.coinbase,
     }),
 
+    validate: (values, props) => {
+      const errors = {}
+
+      ;['owner', 'coinbase'].forEach(address => validateCoinbase(values[address], isValid => {
+        if (!isValid) {
+          errors[address] = 'invalid addresss'
+        }
+      }))
+
+      if (values.owner === props.relayer.owner) {
+        errors.owner = 'New owner address must be different than current owner address'
+      }
+      return errors
+    },
+
     handleSubmit: async (values, meta) => {
-      await blk.transferRelayer(values)
+      const { status, details } = await meta.props.RelayerContract.transfer(values)
+
+      if (!status) {
+        console.error(details)
+        meta.props.alert({ message: 'Transfer Error: unable to transfer relayer' })
+        meta.setSubmitting(false)
+        return undefined
+      }
+
       const relayer = await http.updateRelayer({
         owner: values.owner,
         coinbase: values.coinbase,
         id: meta.props.relayer.id,
       })
-      meta.props.alert({ relayer, message: 'relayer transfered successfuly' })
       meta.setSubmitting(false)
+      meta.props.alert({ relayer, message: 'relayer transfered successfuly' })
+      setTimeout(() => meta.props.history.push(SITE_MAP.Dashboard), 200)
     }
   }),
 

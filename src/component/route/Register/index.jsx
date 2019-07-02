@@ -58,22 +58,10 @@ export class Register extends React.Component {
       maker_fee: this.state.payload.maker_fee * 100,
     }
 
-    const { wallet, relayerContract } = this.props
+    const config = { value: blk.toWei(payload.deposit) }
 
-    const { status, details } = await blk.register(
-      relayerContract,
-      wallet,
-      [
-        payload.coinbase,
-        payload.taker_fee,
-        payload.maker_fee,
-        payload.from_tokens,
-        payload.to_tokens,
-      ],
-      {
-        value: blk.toWei(payload.deposit),
-      }
-    )
+    const { RelayerContract } = this.props
+    const { status, details } = await RelayerContract.register(payload, config)
 
     if (!status) {
       return this.props.pushAlert({
@@ -151,7 +139,7 @@ export class Register extends React.Component {
 }
 
 const mapProps = state => ({
-  relayerContract: state.Contracts.find(c => c.name === 'RelayerRegistration' && !c.obsolete),
+  RelayerContract: state.blk.RelayerContract,
   wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase),
 })

@@ -39,7 +39,7 @@ class FormInfo extends React.Component {
                 error={errors.name}
                 id="relayer-name"
                 name="name"
-                helperText={errors.name && <i className="text-alert">Name must not be either empty or too long!</i>}
+                helperText={errors.name && <i className="text-alert">{errors.name}</i>}
                 disabled={inputDisabled}
               />
             </Grid>
@@ -51,7 +51,7 @@ class FormInfo extends React.Component {
                 name="link"
                 onChange={handleChange}
                 error={errors.link}
-                helperText={errors.link && <i className="text-alert">Invalid URL!</i>}
+                helperText={errors.link && <i className="text-alert">{errors.link}</i>}
                 disabled={inputDisabled}
               />
             </Grid>
@@ -63,7 +63,7 @@ class FormInfo extends React.Component {
                 error={errors.logo}
                 id="relayer-logo"
                 name="logo"
-                helperText={errors.logo && <i className="text-alert">Invalid URL!</i>}
+                helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
                 disabled={inputDisabled}
               />
             </Grid>

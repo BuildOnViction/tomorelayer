@@ -15,12 +15,12 @@ class Dashboard extends React.Component {
       relayers,
     } = this.props
 
-    const firstRelayer = Object.values(relayers)[0]
+    const firstRelayer = Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name))[0]
 
     const ExactPathRender = () => firstRelayer ? (
-      <Redirect path={`${baseUrl}/${firstRelayer.coinbase}`} />
+      <Redirect to={`${baseUrl}/${firstRelayer.coinbase}`} />
     ) : (
-      <Redirect path={SITE_MAP.Register} />
+      <Redirect to={SITE_MAP.Home} />
     )
 
     return (

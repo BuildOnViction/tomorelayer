@@ -12,12 +12,6 @@ export const getBalance = async address => {
   return ethBalance
 }
 
-export const validateAddress = (address, balance) => {
-  const validAddressLength = typeof address === 'string' && address.length > 0
-  const validBalance = typeof balance === 'string' && balance.length > 0
-  return validAddressLength && validBalance
-}
-
 export const bigNumberify = num => {
   return ethers.utils.bigNumberify(num)
 }
@@ -54,36 +48,4 @@ export const validateCoinbase = (address, callback) => {
 export const toWei = number => {
   const stringified = number.toString()
   return ethers.utils.parseEther(stringified)
-}
-
-export const register = async (relayerContract, walletSigner, payload, config) => {
-
-  const contractWithSigner = new ethers.Contract(relayerContract.address, relayerContract.abi, walletSigner)
-
-  try {
-    const tx = await contractWithSigner.register(...payload, config)
-    const details = await tx.wait()
-    return { status: true, details }
-  } catch(e) {
-    console.error(e)
-    return { status: false, details: 'Unable to carry transaction' }
-  }
-
-}
-
-export const updateRelayer = async (data, state) => {
-  return { status: true }
-}
-
-
-export const transferRelayer = async (payload) => {
-  return { status: true }
-}
-
-export const resignRelayer = async (data, state) => {
-  return { status: true }
-}
-
-export const refundRelayer = async state => {
-  return { status: true }
 }

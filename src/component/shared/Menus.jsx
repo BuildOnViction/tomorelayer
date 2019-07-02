@@ -88,7 +88,7 @@ export const RelayerMenu = ({ relayers }) => {
             <Paper id="menu-list-grow">
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList>
-                  {Object.values(relayers).map(r => (
+                  {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
                     <MenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
                       {r.name}
                     </MenuItem>

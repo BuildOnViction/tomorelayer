@@ -11,6 +11,7 @@ import { HashRouter } from 'react-router-dom'
 
 import { Provider } from '@vutr/redux-zero/react'
 import createStore from '@vutr/redux-zero'
+import { bindActions } from '@vutr/redux-zero/utils'
 
 import setup from './_database.setup.js'
 
@@ -18,7 +19,6 @@ import { MISC } from 'service/constant'
 import Register from 'component/route/Register'
 import Alert from 'component/shared/Alert'
 
-import * as blk from 'service/blockchain'
 import { initialState } from 'service/store'
 
 /**
@@ -51,6 +51,8 @@ let getByText,
     // eslint-disable-next-line
     debug;
 
+let mockedRelayerContract
+
 beforeAll(() => {
   const fs = require('fs')
   const path = require('path')
@@ -68,6 +70,11 @@ beforeAll(() => {
     getAddress: async () => Promise.resolve(userAddress),
   }
 
+  mockedRelayerContract = Object.create({
+    wallet: mockedWalletSigner,
+    async register() { return { status: true } },
+  })
+
   const store = createStore({
     ...initialState,
     user: {
@@ -78,6 +85,9 @@ beforeAll(() => {
     Relayers: [
       {coinbase: usedCoinbases}
     ],
+    blk: {
+      RelayerContract: mockedRelayerContract
+    }
   })
 
 
@@ -251,15 +261,14 @@ describe('Test RegisterForm No Break', () => {
     getByText(/TOMO\/BTC/)
     getByText(/ETH\/TOMO/)
 
-    const spyBlockchainService = jest.spyOn(blk, 'register')
-    spyBlockchainService.mockReturnValue({ status: false, details: { error: 'fake error' } })
+    mockedRelayerContract.register = jest.fn().mockResolvedValue({ status: false, details: { error: 'fake error' } })
 
     const submitButton = getByText(/confirm/i)
     fireEvent.click(submitButton)
 
     await findByText(/fake error/i)
 
-    spyBlockchainService.mockReturnValue({ status: true, details: '' })
+    mockedRelayerContract.register = jest.fn().mockResolvedValue({ status: true  })
     fireEvent.click(submitButton)
 
     await wait()

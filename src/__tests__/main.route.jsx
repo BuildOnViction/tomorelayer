@@ -13,7 +13,6 @@ import { bindActions } from '@vutr/redux-zero/utils'
 import createStore from '@vutr/redux-zero'
 
 import * as http from 'service/backend'
-import * as blk from 'service/blockchain'
 import { initialState } from 'service/store'
 import App from 'component/App'
 
@@ -127,6 +126,22 @@ describe('Test Main App', () => {
     })
   }, store).saveWallet(wallet)
 
+  const mockedRelayerContract = {
+    wallet: mockedWalletSigner,
+    async register() { return { status: true } },
+    async update() { return { status: true } },
+    async transfer() { return { status: true } },
+    async resign() { return { status: true } },
+  }
+
+  // NOTE: since bindActions is not running in test (really dont know why !?)
+  // we directly create a mock contract-instance
+  const mockInitContract = contract => bindActions({
+    saveContract: (state, RelayerContract) => ({
+      blk: { ...state.blk, RelayerContract }
+    })
+  }, store).saveContract(contract)
+
   http.getPublicResource = jest.fn().mockResolvedValue({
     Relayers: [DummyRelayerOne, DummyRelayerTwo],
     Tokens: Tokens,
@@ -135,7 +150,6 @@ describe('Test Main App', () => {
 
   const testChangeName = 'TestNameOne'
   const testChangeCoinbase = '0x0000000000000001'
-
 
 
   it('Render without crash', async () => {
@@ -174,6 +188,7 @@ describe('Test Main App', () => {
 
   it('Logged-in user can view their relayers', async () => {
     mockLogin(mockedWalletSigner)
+    mockInitContract(mockedRelayerContract)
     const relayerMenu = await findByText(/your relayers/i)
 
     fireEvent.click(relayerMenu)
@@ -188,8 +203,6 @@ describe('Test Main App', () => {
 
 
   it('Test Relayer-Info Config', async () => {
-    // NOTE: not testing error input yet
-
     const configTab = getByText(/Configuration/i)
     fireEvent.click(configTab)
 
@@ -200,23 +213,30 @@ describe('Test Main App', () => {
 
     // NOTE: default is Info Form
     const relayerNameInput = getByDisplayValue(DummyRelayerOne.name)
-    getByLabelText(/name/i)
-    getByLabelText(/link/i)
-    getByLabelText(/logo/i)
+    const relayerLinkInput = getByLabelText(/link/i)
+    const relayerLogoInput = getByLabelText(/logo/i)
     const saveBtn = container.querySelector('button[type="submit"]')
 
+    // Make invalid urls, should raise error texts
+    http.updateRelayer = jest.fn()
+    fireEvent.change(relayerLinkInput, { target: { value: 'abc' }})
+    fireEvent.change(relayerLogoInput, { target: { value: 'def' }})
+    fireEvent.click(saveBtn)
+    await wait()
 
-    http.updateRelayer = jest.fn().mockResolvedValue({
-      ...DummyRelayerOne,
-      name: testChangeName,
-    })
+    getByText(/invalid relayer link url/i)
+    getByText(/invalid relayer logo url/i)
+    expect(http.updateRelayer).not.toHaveBeenCalled()
 
+    // Remove invalid urls, should consider '' to be valid
+    http.updateRelayer = jest.fn().mockResolvedValue({ ...DummyRelayerOne, name: testChangeName })
+    fireEvent.change(relayerLinkInput, { target: { value: '' }})
+    fireEvent.change(relayerLogoInput, { target: { value: '' }})
     fireEvent.change(relayerNameInput, { target: { value: testChangeName }})
     fireEvent.click(saveBtn)
     await wait()
 
-    expect(http.updateRelayer).toHaveBeenCalledWith({ id: 1, name: testChangeName })
-
+    expect(http.updateRelayer).toHaveBeenCalledWith({ id: 1, name: testChangeName, link: '', logo: '' })
   })
 
 
@@ -253,12 +273,10 @@ describe('Test Main App', () => {
     }
 
     http.updateRelayer = jest.fn().mockResolvedValue(expectedPayload)
-    blk.updateRelayer = jest.fn().mockResolvedValue({ status: true })
 
     fireEvent.click(saveBtn)
     await wait()
 
-    expect(blk.updateRelayer).toHaveBeenCalledWith(expectedPayload)
     expect(http.updateRelayer).toHaveBeenCalledWith(expectedPayload)
   })
 
@@ -313,7 +331,6 @@ describe('Test Main App', () => {
       coinbase: testChangeCoinbase
     }
 
-    blk.transferRelayer = jest.fn().mockResolvedValue({ status: true })
     http.updateRelayer = jest.fn().mockResolvedValue({ ...DummyRelayerOne, coinbase: testChangeCoinbase })
 
     // Confirm request: change coinbase of the current relayer
@@ -321,7 +338,6 @@ describe('Test Main App', () => {
     fireEvent.click(confirmBtn)
     await wait()
 
-    expect(blk.transferRelayer).toHaveBeenCalledWith(expectedPayload)
     expect(http.updateRelayer).toHaveBeenCalledWith({
       coinbase: testChangeCoinbase,
       owner: DummyRelayerOne.owner,

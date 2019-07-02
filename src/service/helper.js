@@ -3,13 +3,6 @@
  */
 const isFunction = t => typeof t === 'function'
 
-/*
- * Noop!
- */
-export const noop = () => undefined
-
-export const notEqualTo = value1 => value2 => value1 !== value2
-
 // Compose from left-most to right-most
 export const compose = (...functions) => lastArg => functions
   .filter(isFunction)
@@ -33,17 +26,6 @@ export const compareString = (stra, strb, caseSensitive = false) => {
   }
 
   return stra === strb
-}
-
-export const last = someArray => {
-  if (!someArray || !someArray.length) return undefined
-  const length = someArray.length
-  return someArray[length - 1]
-}
-
-export const first = someArray => {
-  if (!someArray || !someArray.length) return undefined
-  return someArray[0]
 }
 
 export const ThrowOn = (shit, message) => {

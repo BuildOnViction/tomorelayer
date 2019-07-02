@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -81,9 +82,12 @@ const FormTransfer = props => {
                 label="New Owner"
                 value={values.owner}
                 onChange={handleChange}
-                error={errors.owner}
+                error={Boolean(errors.owner)}
                 name="owner"
-                helperText={errors.owner && <i className="text-alert">Invalid address!</i>}
+                inputProps={{
+                  'data-testid': 'new-owner-input'
+                }}
+                helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
                 fullWidth
               />
             </Grid>
@@ -92,12 +96,12 @@ const FormTransfer = props => {
                 label="New Coinbase"
                 value={values.coinbase}
                 onChange={handleChange}
-                error={errors.coinbase}
+                error={Boolean(errors.coinbase)}
                 name="coinbase"
                 inputProps={{
                   'data-testid': 'new-coinbase-input'
                 }}
-                helperText={errors.coinbase && <i className="text-alert">Invalid coinbase!</i>}
+                helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
                 fullWidth
               />
             </Grid>
@@ -153,7 +157,9 @@ const FormTransfer = props => {
   )
 }
 
-
-const storeConnect = connect(undefined, { alert: UpdateRelayer })
+const mapProps = state => ({
+  RelayerContract: state.blk.RelayerContract
+})
+const storeConnect = connect(mapProps, { alert: UpdateRelayer })
 const formConnect = wrappers.transferForm
-export default compose(formConnect, storeConnect)(FormTransfer)
+export default compose(formConnect, storeConnect, withRouter)(FormTransfer)

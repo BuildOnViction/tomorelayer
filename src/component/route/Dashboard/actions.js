@@ -2,6 +2,20 @@ import { AlertVariant } from 'service/frontend'
 
 export const UpdateRelayer = (state, { relayer, message }) => {
   const Relayers = Array.from(state.Relayers)
+
+  if (!relayer) {
+    return {
+      notifications: [
+        ...state.notifications,
+        {
+          variant: AlertVariant.error,
+          message,
+          open: true,
+        }
+      ]
+    }
+  }
+
   const index = Relayers.findIndex(r => r.id === relayer.id)
   Relayers[index] = relayer
   return {

@@ -69,8 +69,8 @@ const Alert = props => {
   const anchor = {vertical: 'bottom', horizontal: 'right'}
 
   const alertDuration = {
-    success: 1000,
-    info: 500,
+    success: 2000,
+    info: 1500,
     error: 4000,
     warning: 2000,
   }

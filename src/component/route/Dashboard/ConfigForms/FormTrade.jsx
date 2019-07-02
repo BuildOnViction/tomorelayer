@@ -105,6 +105,9 @@ const FormTrade = ({
   )
 }
 
-const storeConnect = connect(undefined, { alert: UpdateRelayer })
+const mapProps = state => ({
+  RelayerContract: state.blk.RelayerContract
+})
+const storeConnect = connect(mapProps, { alert: UpdateRelayer })
 const formConnect = wrappers.tradeForm
 export default compose(formConnect, storeConnect)(FormTrade)

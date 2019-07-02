@@ -28,8 +28,9 @@ class App extends React.Component {
     try {
       await this.props.FetchPublic()
     } catch (error) {
+      console.erro(error)
       this.props.PushAlert({
-        message: error.toString(),
+        message: 'Cannot fetch public resources',
         variant: AlertVariant.error,
       })
     }
@@ -103,7 +104,7 @@ const mapProps = state => ({
 const actions = {
   FetchPublic,
   PushAlert,
-  finishUpdateUserRelayers: () => ({ shouldUpdateUserRelayers: false })
+  finishUpdateUserRelayers: () => ({ shouldUpdateUserRelayers: false }),
 }
 
 export default connect(mapProps, actions)(App)
