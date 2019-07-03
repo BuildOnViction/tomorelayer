@@ -84,12 +84,13 @@ contract RelayerRegistration {
 
     /// @dev State-Alter Methods
     function register(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public payable {
-        require(msg.sender != coinbase);
         require(msg.sender != CONTRACT_OWNER, "Contract Owner is forbidden to create a Relayer");
+        require(msg.sender != coinbase, "Coinbase and RelayerOwner address must not be the same");
+        require(coinbase != CONTRACT_OWNER, "Coinbase must not be same as CONTRACT_OWNER");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
         /// @dev valid relayer configuration
-        require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
-        require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
+        require(makerFee >= 1 && makerFee < 10000, "Invalid Maker Fee");
+        require(takerFee >= 1 && takerFee < 10000, "Invalid Taker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
@@ -110,8 +111,8 @@ contract RelayerRegistration {
 
 
     function update(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
-        require(makerFee >= 1 && makerFee < 1000, "Invalid Maker Fee");
-        require(takerFee >= 1 && takerFee < 1000, "Invalid Taker Fee");
+        require(makerFee >= 1 && makerFee < 10000, "Invalid Maker Fee");
+        require(takerFee >= 1 && takerFee < 10000, "Invalid Taker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
@@ -126,7 +127,14 @@ contract RelayerRegistration {
 
     function transfer(address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
+        require(RELAYER_LIST[new_owner]._makerFee == 0, "Owner address must not be currently used as relayer-coinbase");
         require(new_coinbase != address(0));
+        require(new_coinbase != CONTRACT_OWNER);
+
+        if (new_coinbase != coinbase) {
+            require(RELAYER_LIST[new_coinbase]._makerFee == 0, "The new coinbase is already in used");
+            require(COINBASE_LIST[new_coinbase].length == 0, "The new coinbase is used as a Relayer-owner");
+        }
 
         for (uint i = 0; i < COINBASE_LIST[msg.sender].length; i++) {
             if (COINBASE_LIST[msg.sender][i] == coinbase) {

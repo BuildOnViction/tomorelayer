@@ -1,162 +1,220 @@
 import React from 'react'
 import { connect } from '@vutr/redux-zero/react'
 import {
-  Badge,
+  Button,
   Box,
   Checkbox,
-  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   TextField,
 } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
-import MajorTokenFilter, { MajorTokenSelect } from './MajorTokenFilter'
+import LoadSpinner from 'component/utility/LoadSpinner'
 
 
 class TokenPairList extends React.Component {
-  static defaultProps = {
-    // If we need to extract an array of whole Token-Object, change this prop to false
-    addressOnly: true,
-  }
 
-  state = {
-    selected: [],
-    filters: [],
-  }
-
-  componentDidMount() {
-    const { fromTokens, toTokens, pairs } = this.props
-    if (!fromTokens || !fromTokens.length) return
-    const selected = fromTokens.map((addr, idx) => pairs.find(p => p.from.address === addr && p.to.address === toTokens[idx]))
-    this.setState({ selected })
-  }
-
-  applyFilters = pairs => {
-    const filters = this.state.filters
-    const filterKeys = Object.keys(filters)
-    if (filterKeys.length === 0) return pairs
-    const reduceFunc = (filteredPairs, key) => filteredPairs.filter(filters[key])
-    return filterKeys.reduce(reduceFunc, pairs)
-  }
-
-  pickPair = (pair, selected) => () => {
-    if (this.props.disabled) return
-    const index = selected.indexOf(pair)
-    index >= 0 ? selected.splice(index, 1) : selected.push(pair)
-    this.setState({ selected }, this.dispatchChange)
-  }
-
-  selectAll = (pairs, selected, checked) => () => {
-    pairs.forEach(p => {
-      const index = selected.indexOf(p)
-      checked && index >= 0 && selected.splice(index, 1)
-      !checked && index < 0 && selected.push(p)
-    })
-    this.setState({ selected }, this.dispatchChange)
-  }
-
-  isAllChecked = (pairs, selected) => pairs.reduce((acc, p) => acc && selected.includes(p), true)
-
-  setFilters = {
-    tokens: tokens => {
-      const filters = { ...this.state.filters }
-      const filterByMajorTokens = pair => tokens.includes(pair.from.address) || tokens.includes(pair.to.address)
-      const fallbackFilter = pair => pair
-      filters.filterByMajorTokens = tokens.length > 0 ? filterByMajorTokens : fallbackFilter
-      this.setState({ filters })
+  FILTER_CONTROLS = {
+    ALL: pair => pair,
+    SEARCH: str => pair => {
+      if (!str || !str.length) return true
+      const regex = new RegExp(str, 'i')
+      const searchField = `${pair.toString()}${pair.from.name}${pair.to.name}`
+      return regex.exec(searchField)
     }
   }
 
-  dispatchChange = () => {
-    const { addressOnly, onChange } = this.props
-    const selected = this.state.selected
-    onChange('from_tokens', selected.map(p => addressOnly ? p.from.address : p.from))
-    onChange('to_tokens', selected.map(p => addressOnly ? p.to.address : p.to))
+  state = {
+    activeFilter: 'ALL',
+    searchText: undefined,
+    debounceText: '',
+    isSearching: false,
+  }
+
+  componentDidMount() {
+    this.props.quoteTokens.forEach(t => {
+      const symbol = t.symbol
+      this.FILTER_CONTROLS[symbol] = pair => pair.from.symbol === symbol || pair.to.symbol === symbol
+    })
+  }
+
+  componentDidUpdate(prevProps, prevStates) {
+    const {
+      debounceText,
+      activeFilter,
+    } = this.state
+
+    const searchActive = debounceText.length > 0 && debounceText !== prevStates.debounceText
+
+    if (searchActive && activeFilter !== 'SEARCH') {
+      this.setState({ activeFilter: 'SEARCH' })
+    }
+
+    if (searchActive) {
+      this.setState({ isSearching: true })
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.debounce = undefined
+        this.setState({ searchText: this.state.debounceText, isSearching: false })
+      }, 1000)
+    }
+
+    if (activeFilter !== 'SEARCH' && prevStates.activeFilter === 'SEARCH') {
+      clearTimeout(this.debounce)
+      this.debounce = undefined
+      this.setState({ searchText: undefined, debounceText: '' })
+    }
+
+  }
+
+  debounce = undefined
+
+  setFilter = activeFilter => () => {
+    this.setState({ activeFilter })
+  }
+
+  searchInputChange = e => this.setState({ debounceText: e.target.value })
+
+  handleItemClick = pair => () => {
+    if (this.props.disabled) return undefined
+    const index = this.props.pairs.indexOf(pair)
+    const newList = Array.from(this.props.pairs)
+    newList[index].checked = !newList[index].checked
+    const checkedList = newList.filter(p => p.checked)
+    return this.props.onChange(checkedList)
+  }
+
+  makeCheckList = (pairs, pairMapping, value) => {
+    const result = Array.from(pairs)
+    const mappingKeys = value.from_tokens.map((from, idx) => `${from}${value.to_tokens[idx]}`)
+    mappingKeys.forEach(key => {
+      const pairIndex = pairMapping[key]
+
+      if (pairIndex === undefined) {
+        // TODO: check and save this token to Database then return it as normal
+        console.warn(`This token ${key} is not found in Database`)
+        return
+      }
+
+      result[pairIndex].checked = true
+    })
+    return result
   }
 
   render() {
-    const { pairs, majorTokens, disabled } = this.props
-    const { selected: selectedPairs } = this.state
-    const filteredPairs = this.applyFilters(pairs)
-    const isAllChecked = this.isAllChecked(filteredPairs, selectedPairs)
-    const selectAllBtnText = `${isAllChecked ? 'Unselect' : 'Select'} ${filteredPairs.length} pairs`
+    const {
+      quoteTokens,
+      pairs,
+      pairMapping,
+      value,
+      disabled,
+    } = this.props
+
+    const checkList = this.makeCheckList(pairs, pairMapping, value)
+    const {
+      searchText,
+      activeFilter,
+      isSearching,
+    } = this.state
+
+    const filterFunction = activeFilter !== 'SEARCH' ? this.FILTER_CONTROLS[activeFilter] : this.FILTER_CONTROLS[activeFilter](searchText)
 
     return (
       <Box border={1}>
-        <Box display="flex" justifyContent="space-between" className="p-1 pr-2 pl-2" alignItems="center" borderBottom={1}>
-          {!disabled && (
-            <Badge color="primary" badgeContent={`${selectedPairs.length}`}>
-              <MajorTokenSelect
-                name={selectAllBtnText}
-                onClick={this.selectAll(filteredPairs, selectedPairs, isAllChecked)}
-                selected={isAllChecked}
-              />
-            </Badge>
-          )}
-          <MajorTokenFilter
-            majorTokens={majorTokens}
-            setFilter={this.setFilters.tokens}
-          />
+        <Box display="flex" justifyContent="space-around" alignItems="center" borderBottom={1}>
+          <Button onClick={this.setFilter('ALL')} type="button" size="small" className="m-1">
+            ALL
+          </Button>
+          {quoteTokens.map(token => (
+            <Button key={token.address} onClick={this.setFilter(token.symbol)} type="button" size="small" className="m-1">
+              {token.symbol}
+            </Button>
+          ))}
           <TextField
-            label="Search"
+            name="search-input"
             type="text"
+            value={this.state.debounceText}
+            placeholder="Search"
+            onChange={this.searchInputChange}
+            fullWidth
+            className="m-1"
             variant="outlined"
             margin="dense"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
           />
         </Box>
-        <Box>
-
+        <Box style={{ position: 'relative' }}>
+          {isSearching && (
+            <div className="search-overlay">
+              <LoadSpinner />
+            </div>
+          )}
+          <List dense className="bg-filled token-list token-list__limited-height" style={{ maxHeight: 300, overflow: 'scroll' }}>
+            {checkList.filter(filterFunction).map(p => (
+              <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.handleItemClick(p)}>
+                <ListItemIcon>
+                  <Checkbox
+                    color="default"
+                    checked={p.checked}
+                    disabled={disabled}
+                    inputProps={{
+                      'aria-label': p.toString(),
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary={p.toString()}/>
+              </ListItem>
+            ))}
+          </List>
         </Box>
-        <List dense className="bg-filled token-list token-list__limited-height">
-          {filteredPairs.map((p, idx) => (
-            <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.pickPair(p, selectedPairs)}>
-              <ListItemIcon>
-                <Checkbox color="default" checked={selectedPairs.includes(p)} disabled={disabled} />
-              </ListItemIcon>
-              <ListItemText primary={p.toString()} />
-            </ListItem>
-          ))}
-        </List>
       </Box>
     )
   }
 }
 
-const mapProps = state => {
-  const tradeTokens = state.tradableTokens
+export const mapProps = state => {
+  // NOTE: this paring funcion will be quite expensive if the number of tokens is big enough
+  // Must consider memoization by then
+  const Tokens = state.Tokens
 
   const pairs = []
-  const tokenSorting = (a, b) => {
-    // NOTE: this may be adjusted in the future depending on each token's liquidity
-    if (a.is_major && b.is_major) return a.symbol.localeCompare(b.symbol)
-    if (!a.is_major && !b.is_major) return a.symbol.localeCompare(b.symbol)
-    if (a.is_major && !b.is_major) return -1
-    if (!a.is_major && b.is_major) return 1
-  }
 
-  const makePairs = fromToken => {
-    const toTokens = tradeTokens.filter(toToken => toToken.address !== fromToken.address)
-    toTokens.forEach(toToken => pairs.push({
+  // NOTE: due to concern over the excessive size of token-pairs array each relayer may has,
+  // we keep a special Object called `pairMapping` utilizing `fromAddress/toAddress` as key
+  // and `index` of the pair in array pair - for faster query/retrieve data
+  // the object, being memoized as well, should be saved in the store for referrence
+  const pairMapping = {}
+
+  Tokens.forEach((fromToken, fromIdx) => {
+    Tokens.filter((toToken, toIdx) => {
+      if (fromIdx === toIdx) return false
+      if (toToken.is_major) return true
+      if (!fromToken.is_major) return true
+      return false
+    }).forEach((toToken, toIdx) => pairs.push({
       from: fromToken,
       to: toToken,
-      toString: () => `${fromToken.symbol}/${toToken.symbol}`
+      toString: () => `${fromToken.symbol}/${toToken.symbol}`,
+      checked: false,
     }))
-  }
-  // NOTE: make pairs of Quote-only-Tokens
-  tradeTokens.filter(t => t.is_major).forEach(makePairs)
-  // NOTE: make pairs of Base/Quote-Tokens
-  tradeTokens.sort(tokenSorting).filter(t => !t.is_major).forEach(makePairs)
+  })
 
-  return { pairs, majorTokens: state.MajorTokens }
+  pairs.sort((a, b) => {
+    if (a.from.symbol === b.from.symbol) return 1 * a.to.symbol.localeCompare(b.to.symbol)
+    if (a.from.symbol === 'TOMO') return -1
+    if (a.from.is_major && b.from.is_major) return 1 * a.from.symbol.localeCompare(b.from.symbol)
+    return 1 * a.from.symbol.localeCompare(b.from.symbol)
+  })
+
+  pairs.forEach((p, idx) => {
+    pairMapping[`${p.from.address}${p.to.address}`] = idx
+  })
+
+  return {
+    pairs,
+    pairMapping,
+    quoteTokens: Tokens.filter(t => t.is_major),
+  }
 }
 
 const storeConnect = connect(mapProps)

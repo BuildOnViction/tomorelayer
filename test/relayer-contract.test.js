@@ -1,7 +1,7 @@
 /* global web3, assert, config, contract */
 /* eslint no-unused-expressions: 0 */
 const path = require('path')
-const envpath = path.resolve(__dirname, '../.env.development')
+const envpath = path.resolve(__dirname, '../.env.local')
 require('dotenv').config({ path: envpath })
 
 const expect = require('chai').expect
@@ -32,26 +32,20 @@ config({
       args: [2, 4, 22000],
     },
     Token: { deploy: false, },
-    ERC20: { deploy: false },
-    ERC20Capped: { deploy: false, },
-    ERC20Mintable: { deploy: false, },
-    ERC20Detailed: { deploy: false, },
-    SafeMath: { deploy: false, },
-    Roles: { deploy: false, },
     TokenOne: {
       fromIndex: 1,
       instanceOf: 'Token',
-      args: ["TOKEN1", "TOK1", 1000, 0],
+      args: ["TOKENONE", "TOK1", 1, 100000],
     },
     TokenTwo: {
       fromIndex: 2,
       instanceOf: 'Token',
-      args: ["TOKEN2", "TOK2", 2000, 0],
+      args: ["TOKENTWO", "TOK2", 1, 200000],
     },
     TokenThree: {
       fromIndex: 3,
       instanceOf: 'Token',
-      args: ["TOKEN3", "TOK3", 5000, 0],
+      args: ["TOKENTHREE", "TOK3", 1, 3000000],
     },
   }
 }, (err, acc) => {
@@ -130,7 +124,7 @@ contract('RelayerRegistration', async () => {
     .methods.transfer(coinbase, newowner, newcoinbase)
     .send({ from: owner }).then(success => ({
       status: true,
-      details: success.events.ChangeOwnershipEvent.returnValues,
+      details: success.events.TransferEvent.returnValues,
     })).catch(err => ({
       status: false,
       details: err,
@@ -200,7 +194,7 @@ contract('RelayerRegistration', async () => {
     // Fee must be valid (1 ~ 999)
     response = await register(minDeposit, applicant, { takerFee: 0 })
     expect(response.status).to.be.false
-    response = await register(minDeposit, applicant, { makerFee: 1000 })
+    response = await register(minDeposit, applicant, { makerFee: 10000 })
     expect(response.status).to.be.false
 
     // Token pairs must match in length, not exceeding maxTokenList

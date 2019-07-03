@@ -26,10 +26,18 @@
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "docker": "docker-compose -f docker-compose.dev.yaml up -d",
-    "backend": "node custom-script.js",
+    "backend": "NODE_ENV=local node custom-script.js",
+    "backend:notunnel": "ENV_PATH=.env.test pipenv run python ./backend/app.py",
+    "backend:test": "NODE_ENV=test node custom-script.js",
+    "test": "react-scripts test --testPathIgnorePatterns .*\\.setup\\.js",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache --testPathIgnorePatterns .*\\.setup\\.js",
+    "contract-test": "embark test test/relayer-contract.test.js",
+    "embark": "embark run",
     "build": "react-scripts build",
     "lint": "eslint --ext .jsx,.js src/",
-    "pylint": "pipenv run pylint backend/*"
+    "pylint": "pipenv run pylint backend/*",
+    "prettify": "prettier --write \"src/**/*.js\"",
+    "prettify:check": "prettier --check \"src/**/*.js\""
   },
   "proxy": "http://localhost:8888",
   "eslintConfig": {
@@ -42,14 +50,35 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@testing-library/react": "^8.0.1",
+    "@testing-library/user-event": "^4.1.0",
     "chai": "^4.2.0",
     "dotenv": "^7.0.0",
+    "embark": "^4.0.2",
+    "embarkjs-connector-web3": "^4.0.0",
+    "esdoc": "^1.1.0",
+    "esdoc-coverage-plugin": "^1.1.0",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-jsx-plugin": "^1.0.0",
+    "esdoc-lint-plugin": "^1.0.2",
+    "esdoc-standard-plugin": "^1.0.0",
     "exec-sh": "^0.3.2",
+    "husky": "^3.0.0",
+    "jest-dom": "^3.5.0",
     "kill-port": "^1.4.0",
+    "lint-staged": "^9.0.2",
     "localtunnel": "^1.9.1",
     "node-sass": "^4.12.0",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
+    "prettier": "1.18.2",
+    "request": "^2.88.0",
     "sequelize": "^5.8.10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint -- --max-warnings 0 --fix && npm run prettify",
+      "pre-push": "npm run prettify:check && npm run lint -- --max-warnings 0 && npm run test -- --bail --watchAll=false"
+    }
   }
 }

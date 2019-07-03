@@ -3,6 +3,7 @@ from api.auth import AuthHandler
 from api.token import TokenHandler
 from api.relayer import RelayerHandler
 from api.contract import ContractHandler
+from api.public import PublicHandler
 
 route = [
     (r"/socket", MainHandler),
@@ -10,4 +11,5 @@ route = [
     (r"/api/contract", ContractHandler),
     (r"/api/relayer", RelayerHandler),
     (r"/api/token", TokenHandler),
+    (r"/api/public", PublicHandler),
 ]

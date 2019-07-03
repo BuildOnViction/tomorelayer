@@ -21,5 +21,5 @@
       "optimize-runs": 200
     }
   },
-  "generationDir": "src/artifacts"
+  "generationDir": "embarkArtifacts"
 }

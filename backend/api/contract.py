@@ -10,12 +10,7 @@ class ContractHandler(BaseHandler):
     def get(self):
         """Return all Contracts"""
         contracts = []
-        try:
-            contracts = [model_to_dict(c or {}) for c in Contract.select()]
-        except Exception:
-            # No Contracts in DB yet
-            pass
-
+        contracts = [model_to_dict(c or {}) for c in Contract.select()]
         self.json_response(contracts)
 
     @admin_required

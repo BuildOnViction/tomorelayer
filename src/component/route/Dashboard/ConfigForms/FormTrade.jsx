@@ -1,18 +1,18 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
   Button,
   Container,
   Grid,
-  InputAdornment,
   TextField,
   Typography,
 } from '@material-ui/core'
-import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload } from '../actions'
+import { connect } from '@vutr/redux-zero/react'
+import { compose } from 'service/helper'
+import { PushAlert } from 'service/frontend'
+import { UpdateRelayer } from '../actions'
+import { wrappers } from './forms'
 import TokenPairList from 'component/shared/TokenPairList'
-import * as _ from 'service/helper'
 
 
 const FormTrade = ({
@@ -25,23 +25,11 @@ const FormTrade = ({
   relayer,
 }) => {
 
-  const handleFeeChange = e => {
-    e.target.value = _.round(e.target.value * 10, 0)
-    return handleChange(e)
+  const setPairsValues = pairs => {
+    setFieldValue('from_tokens', pairs.map(p => p.from.address))
+    setFieldValue('to_tokens', pairs.map(p => p.to.address))
   }
 
-  const formatValue = v => _.round(v / 10, 1)
-  const endAdornment = (<InputAdornment position="start">%</InputAdornment>)
-
-  const feeNotChanged = ['maker_fee', 'taker_fee'].every(k => values[k] === relayer[k])
-  const tokenNotChanged = ['from_tokens', 'to_tokens'].every(k => {
-    const addrSet = new Set(relayer[k])
-    const equalLength = values[k].length === relayer[k].length
-    const hasItem = values[k].every(addr => addrSet.has(addr))
-    return equalLength && hasItem
-  })
-
-  const disableSubmit = feeNotChanged && tokenNotChanged
   const disableForm = relayer.resigning || isSubmitting
 
   return (
@@ -59,11 +47,16 @@ const FormTrade = ({
                 <TextField
                   label="Maker Fee (min: 0.1%, max: 99.9%)"
                   name="maker_fee"
-                  value={formatValue(values.maker_fee)}
-                  onChange={handleFeeChange}
+                  id="maker_fee-input"
+                  value={values.maker_fee}
+                  onChange={handleChange}
                   error={errors.maker_fee}
                   type="number"
-                  InputProps={{ endAdornment }}
+                  inputProps={{
+                    step: 0.01,
+                    max: 99.99,
+                    min: 0.01,
+                  }}
                   fullWidth
                   disabled={disableForm}
                 />
@@ -72,11 +65,16 @@ const FormTrade = ({
                 <TextField
                   label="Taker Fee (min: 0.1%, max: 99.9%)"
                   name="taker_fee"
-                  value={formatValue(values.taker_fee)}
-                  onChange={handleFeeChange}
+                  id="taker_fee-input"
+                  value={values.taker_fee}
+                  onChange={handleChange}
                   error={errors.taker_fee}
                   type="number"
-                  InputProps={{ endAdornment }}
+                  inputProps={{
+                    step: 0.01,
+                    max: 99.99,
+                    min: 0.01,
+                  }}
                   fullWidth
                   disabled={disableForm}
                 />
@@ -90,15 +88,14 @@ const FormTrade = ({
           </Grid>
           <Grid item>
             <TokenPairList
-              fromTokens={values.from_tokens}
-              toTokens={values.to_tokens}
-              onChange={setFieldValue}
+              value={values}
+              onChange={setPairsValues}
               disabled={disableForm}
             />
           </Grid>
           <Grid item className="mt-2">
             <Box display="flex" justifyContent="flex-end">
-              <Button color="primary" variant="contained" type="submit" disabled={disableSubmit || disableForm}>
+              <Button color="primary" variant="contained" type="submit" disabled={disableForm} data-testid="save-button">
                 Save
               </Button>
             </Box>
@@ -110,9 +107,14 @@ const FormTrade = ({
 }
 
 const mapProps = state => ({
-  relayer: state.User.activeRelayer
+  RelayerContract: state.blk.RelayerContract
 })
-const storeConnect = connect(mapProps, { $submitConfigFormPayload })
-const formConnect = wrappers.tradeForm(FormTrade)
 
-export default storeConnect(formConnect)
+const actions = {
+  UpdateRelayer,
+  PushAlert,
+}
+
+const storeConnect = connect(mapProps, actions)
+const formConnect = wrappers.tradeForm
+export default compose(formConnect, storeConnect)(FormTrade)

@@ -1,16 +1,4 @@
-import Card from './Card'
-import Container from './Container'
-import Grid from './Grid'
 import LoadSpinner from './LoadSpinner'
-import Modal from './Modal'
-import Private from './Private'
-export * from './FormGroup'
+import Protected from './ProtectedRoute'
 
-export {
-  Card,
-  Container,
-  Grid,
-  LoadSpinner,
-  Modal,
-  Private,
-}
+export { LoadSpinner, Protected }

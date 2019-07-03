@@ -1,37 +1,49 @@
-import { Signer } from 'ethers'
+import { Signer, utils } from 'ethers'
 import { bigNumber } from '@vutr/purser-core/utils'
 
 export default class WalletSigner extends Signer {
-  _w = undefined
-  provider = undefined
+  _wallet = undefined
+  _provider = undefined
 
-  constructor(_wallet, _provider) {
+  constructor(wallet, provider) {
     super()
-    this._w = _wallet
-    this.provider = _provider
+    this._wallet = wallet
+    this._provider = provider
+  }
+
+  get provider() {
+    return this._provider
   }
 
   getAddress() {
-    return Promise.resolve(this._w.address);
+    return Promise.resolve(this._wallet.address)
   }
 
-  signMessage(msg) {
-    return this._w.signMessage(msg)
+  async signMessage(message) {
+    const str = await this._wallet.signMessage(message)
+    return str
   }
 
-  async sendTransaction(tx) {
-    tx.gasLimit = bigNumber(tx.gasLimit || 1000000).toWei()
-    tx.gasPrice = bigNumber(tx.gasPrice || 10000).toGwei()
+  async sendTransaction(originaltx) {
+    const tx = { ...originaltx }
+    tx.gasLimit = bigNumber(tx.gasLimit || 1000000)
+    tx.gasPrice = bigNumber(tx.gasPrice ? tx.gasPrice.toNumber() : '10000').toGwei()
 
     const to = await tx.to
     tx.to = to
     tx.inputData = tx.data
-    tx.chainId = this._w.chainId
+    tx.chainId = this._wallet.chainId
     delete tx.data
 
-    tx.value = bigNumber(tx.value || 1)
-    const hexString = await this._w.sign(tx)
-    const resp = await this.provider.sendTransaction(hexString)
-    return resp
+    const nonce = await this._provider.getTransactionCount(this._wallet.address)
+    tx.nonce = nonce
+
+    tx.value = bigNumber(tx.value ? tx.value.toString() : '0')
+    const resp = await this._wallet.sign(tx)
+    const rawTx = utils.parseTransaction(resp)
+    return this._provider.getTransaction(rawTx.hash).then((tx) => {
+      if (tx === null) return undefined
+      return this._provider._wrapTransaction(tx, rawTx.hash)
+    })
   }
 }

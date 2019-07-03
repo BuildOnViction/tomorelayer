@@ -1,16 +1,28 @@
 import React from 'react'
+import { Box, Typography } from '@material-ui/core'
 import logo from 'asset/relayer-logo.png'
 
 const Header = () => (
-  <div>
-    <img
-      alt="logo"
-      src={logo}
-      className="relayer-logo block mb-3"
-      height="80"
-    />
-    <h1>Welcome to TomoChain Relayer Management</h1>
-  </div>
+  <Box  flexDirection="column">
+    <Box justifyContent="center" display="flex">
+      <img
+        alt="logo"
+        src={logo}
+        className="relayer-logo"
+        height="80"
+      />
+    </Box>
+    <Box justifyContent="center" display="flex">
+      <Typography component="h1">
+        Unlock your wallet
+      </Typography>
+    </Box>
+    <Box justifyContent="center" display="flex">
+      <Typography component="h4">
+        Start by choosing the wallet you want to unlock
+      </Typography>
+    </Box>
+  </Box>
 )
 
 export default Header

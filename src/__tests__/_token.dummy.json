@@ -1,0 +1,37 @@
+[
+  {
+    "name": "TOMO",
+    "address": "0x504812e482877a37b1998df30f78d5e79c836f51",
+    "logo": "",
+    "total_supply": "10000000000000000000000000",
+    "symbol": "TOMO"
+  },
+  {
+    "name": "USD-Tether",
+    "address": "0x9e9d3d79e9f73806999e0ca601f23b701b97bc46",
+    "logo": "",
+    "total_supply": "2000000",
+    "symbol": "USDT"
+  },
+  {
+    "name": "TriipProtocol",
+    "address": "0x330f02cd0ae9fd8c2d4e33e9c1d6e047b8a56f58",
+    "logo": "",
+    "total_supply": "2000000",
+    "symbol": "TRIIP"
+  },
+  {
+    "name": "Ethereum",
+    "address": "0x606fc6ccf4979df479a7fa0a00e8a809728f18ed",
+    "logo": "",
+    "total_supply": "2000000",
+    "symbol": "ETH"
+  },
+  {
+    "name": "Bitcoin",
+    "address": "0x579798b0bf809e9b4a5e554d16011db04a6af340",
+    "logo": "",
+    "total_supply": "2000000",
+    "symbol": "BTC"
+  }
+]

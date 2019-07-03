@@ -11,7 +11,7 @@ export const TransferNotice = ({ confirm }) => (
     <Grid item sm={12} className="mb-2">
       <Box justifyContent="center" display="flex">
         <Typography component="h1">
-          What you need to know about Transfer
+          What you need to know about Relayer-Transfer
         </Typography>
       </Box>
     </Grid>

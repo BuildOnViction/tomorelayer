@@ -1,6 +1,5 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { connect } from '@vutr/redux-zero/react'
 import {
   Box,
   Button,
@@ -13,10 +12,12 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
+import { connect } from '@vutr/redux-zero/react'
 import { compose } from 'service/helper'
+import { PushAlert } from 'service/frontend'
+import { UpdateRelayer } from '../actions'
+import { wrappers } from './forms'
 import { TransferNotice } from './PresentComponents'
-import { wrappers } from '../form_logics'
-import { $submitConfigFormPayload } from '../actions'
 
 
 const FormTransfer = props => {
@@ -40,10 +41,8 @@ const FormTransfer = props => {
     submitForm()
   }
 
-  const transferBtnDisabled = (
-    isSubmitting ||
-    (relayer.coinbase === values.coinbase && relayer.owner === values.owner)
-  )
+  const transferDisabled = isSubmitting || values.owner === relayer.owner
+
   const nextStep = () => setStep(1)
 
   if (relayer.resigning) {
@@ -52,7 +51,7 @@ const FormTransfer = props => {
         <Typography component="h5">
           <Box>
             <Typography component="h4">
-              This relayer has been requested to deactivated. Transferring relayer is no longer allowed.
+              This relayer has been requested to deactivated. Transferring relayer is not allowed.
             </Typography>
           </Box>
         </Typography>
@@ -65,11 +64,10 @@ const FormTransfer = props => {
       {step === 0 && <TransferNotice confirm={nextStep} />}
       {step === 1 && (
         <form onSubmit={handleSubmit}>
-          <input name="currentCoinbase" value={values.currentCoinbase} hidden readOnly />
           <Grid container direction="column" spacing={3}>
             <Grid item className="mb-2">
               <Typography component="h1">
-                Transfer Ownership
+                Transfer Relayer
               </Typography>
             </Grid>
             <Grid item>
@@ -82,9 +80,12 @@ const FormTransfer = props => {
                 label="New Owner"
                 value={values.owner}
                 onChange={handleChange}
-                error={errors.owner}
+                error={Boolean(errors.owner)}
                 name="owner"
-                helperText={errors.owner && <i className="text-alert">Invalid address!</i>}
+                inputProps={{
+                  'data-testid': 'new-owner-input'
+                }}
+                helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
                 fullWidth
               />
             </Grid>
@@ -93,15 +94,24 @@ const FormTransfer = props => {
                 label="New Coinbase"
                 value={values.coinbase}
                 onChange={handleChange}
-                error={errors.coinbase}
+                error={Boolean(errors.coinbase)}
                 name="coinbase"
-                helperText={errors.coinbase && <i className="text-alert">Invalid coinbase!</i>}
+                inputProps={{
+                  'data-testid': 'new-coinbase-input'
+                }}
+                helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
                 fullWidth
               />
             </Grid>
             <Grid item className="mt-4">
               <Box display="flex" justifyContent="flex-end">
-                <Button color="primary" variant="contained" onClick={handleClickOpen} disabled={transferBtnDisabled}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleClickOpen}
+                  disabled={transferDisabled}
+                  data-testid="transfer-button"
+                >
                   Transfer
                 </Button>
               </Box>
@@ -120,11 +130,22 @@ const FormTransfer = props => {
               </DialogContentText>
             </DialogContent>
             <Box display="flex" justifyContent="space-between" className="p-1">
-              <Button onClick={handleClose} color="primary">
+              <Button
+                onClick={handleClose}
+                color="primary"
+                data-testid="cancel-transfer-request"
+              >
                 Cancel
               </Button>
-              <Button onClick={confirmAndClose} color="secondary" variant="contained" autoFocus disabled={transferBtnDisabled}>
-                Proceed
+              <Button
+                onClick={confirmAndClose}
+                color="secondary"
+                variant="contained"
+                autoFocus
+                disabled={transferDisabled}
+                data-testid="accept-button"
+              >
+                Accept
               </Button>
             </Box>
           </Dialog>
@@ -135,17 +156,16 @@ const FormTransfer = props => {
 }
 
 const mapProps = state => ({
-  relayer: state.User.activeRelayer,
+  RelayerContract: state.blk.RelayerContract,
+  invalidCoinbases: state.Relayers.map(t => t.owner).concat(state.Relayers.map(t => t.coinbase)),
+  invalidOwnerAddresses: state.Relayers.map(t => t.coinbase),
 })
 
 const actions = {
-  $submitConfigFormPayload,
+  UpdateRelayer,
+  PushAlert,
 }
 
 const storeConnect = connect(mapProps, actions)
-
-export default compose(
-  withRouter,
-  wrappers.transferForm,
-  storeConnect,
-)(FormTransfer)
+const formConnect = wrappers.transferForm
+export default compose(formConnect, storeConnect, withRouter)(FormTransfer)

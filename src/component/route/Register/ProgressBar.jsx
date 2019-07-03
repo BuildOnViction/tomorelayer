@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
 import cx from 'classnames'
-import { Grid } from 'component/utility'
+import { Container, Box } from '@material-ui/core'
 
 
 const ProgressBar = ({ step }) => {
@@ -15,8 +14,8 @@ const ProgressBar = ({ step }) => {
   )
 
   return (
-    <Grid className="justify-center row">
-      <div className="register-progress--container">
+    <Container maxWidth="sm">
+      <Box display="flex">
         {[1,2,3,4].map(_step => (
           <div className="col-md-3 text-center" key={_step}>
             <div className={cls(_step)}>
@@ -24,12 +23,9 @@ const ProgressBar = ({ step }) => {
             </div>
           </div>
         ))}
-      </div>
-    </Grid>
+      </Box>
+    </Container>
   )
 }
 
-const mapProps = store => ({
-  step: store.RelayerForm.step
-})
-export default connect(mapProps)(ProgressBar)
+export default ProgressBar
