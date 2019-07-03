@@ -28,7 +28,7 @@ export const UserMenu = props => {
       <Button
         size="small"
         ref={anchorRef}
-        aria-controls="menu-list-grow"
+        aria-controls="menu-user-list-grow"
         aria-haspopup="true"
         onClick={handleToggle}
       >
@@ -40,7 +40,7 @@ export const UserMenu = props => {
             {...TransitionProps}
             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
           >
-            <Paper id="menu-list-grow">
+            <Paper id="menu-user-list-grow">
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList>
                   <MenuItem component={AdapterLink} to="/logout">
@@ -73,7 +73,7 @@ export const RelayerMenu = ({ relayers }) => {
       <Button
         size="small"
         ref={anchorRef}
-        aria-controls="menu-list-grow"
+        aria-controls="menu-relayer-list-grow"
         aria-haspopup="true"
         onClick={handleToggle}
       >
@@ -85,7 +85,7 @@ export const RelayerMenu = ({ relayers }) => {
             {...TransitionProps}
             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
           >
-            <Paper id="menu-list-grow">
+            <Paper id="menu-relayer-list-grow">
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList>
                   {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (

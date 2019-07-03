@@ -4,15 +4,18 @@ import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
 import { SITE_MAP, IS_DEV } from 'service/constant'
 import { PushAlert, AlertVariant } from 'service/frontend'
 import * as _ from 'service/helper'
+import RelayerContractClass from 'service/relayer_contract'
+import { FetchPublic } from './shared/actions'
 import { Protected } from 'component/utility'
+
 import PageHeader from 'component/shared/PageHeader'
 import Alert from 'component/shared/Alert'
 import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
-import { FetchPublic } from './shared/actions'
-import RelayerContractClass from 'service/relayer_contract'
+import Logout from 'component/route/Logout'
+
 import 'style/app.scss'
 
 
@@ -101,6 +104,12 @@ class App extends React.Component {
                   render={() => <Dashboard relayers={userRelayers} /> }
                   condition={userLoggedIn}
                   redirect={SITE_MAP.Authentication}
+                />
+                <Protected
+                  path={SITE_MAP.Logout}
+                  condition={userLoggedIn}
+                  redirect={SITE_MAP.Home}
+                  component={Logout}
                 />
               </Switch>
             </div>
