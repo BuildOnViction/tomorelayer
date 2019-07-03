@@ -2,7 +2,8 @@ import React from 'react'
 import { Avatar, Box, Container, Grid, TextField, Button, Typography } from '@material-ui/core'
 import { connect } from '@vutr/redux-zero/react'
 import { compose } from 'service/helper'
-import { UpdateRelayer } from '../actions'
+import { PushAlert } from 'service/frontend'
+import { UpdateRelayerInfo } from '../actions'
 import { wrappers } from './forms'
 
 
@@ -36,7 +37,7 @@ class FormInfo extends React.Component {
                 label="Relayer Name"
                 value={values.name || ''}
                 onChange={handleChange}
-                error={errors.name}
+                error={Boolean(errors.name)}
                 id="relayer-name"
                 name="name"
                 helperText={errors.name && <i className="text-alert">{errors.name}</i>}
@@ -50,7 +51,7 @@ class FormInfo extends React.Component {
                 id="relayer-link"
                 name="link"
                 onChange={handleChange}
-                error={errors.link}
+                error={Boolean(errors.link)}
                 helperText={errors.link && <i className="text-alert">{errors.link}</i>}
                 disabled={inputDisabled}
               />
@@ -60,7 +61,7 @@ class FormInfo extends React.Component {
                 label="Logo"
                 value={values.logo || ''}
                 onChange={handleChange}
-                error={errors.logo}
+                error={Boolean(errors.logo)}
                 id="relayer-logo"
                 name="logo"
                 helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
@@ -79,7 +80,7 @@ class FormInfo extends React.Component {
             </Grid>
             <Grid item>
               <Box display="flex" justifyContent="flex-end">
-                <Button color="primary" variant="contained" type="submit" disabled={inputDisabled}>
+                <Button color="primary" variant="contained" type="submit" data-testid="save-button" disabled={inputDisabled}>
                   Save
                 </Button>
               </Box>
@@ -91,6 +92,12 @@ class FormInfo extends React.Component {
   }
 }
 
-const storeConnect = connect(undefined, { alert: UpdateRelayer })
+const mapProps = undefined
+const actions = {
+  UpdateRelayerInfo,
+  PushAlert,
+}
+
+const storeConnect = connect(mapProps, actions)
 const formConnect = wrappers.infoForm
 export default compose(formConnect, storeConnect)(FormInfo)

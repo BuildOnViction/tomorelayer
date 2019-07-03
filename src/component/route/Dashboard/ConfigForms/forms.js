@@ -1,6 +1,7 @@
 import * as validUrl from 'valid-url'
 import { withFormik } from 'formik'
 import { SITE_MAP } from 'service/constant'
+import { AlertVariant } from 'service/frontend'
 import * as http from 'service/backend'
 import { validateCoinbase } from 'service/blockchain'
 
@@ -20,15 +21,22 @@ export const wrappers = {
       const check = (key, func, message) => {
         if (!func(values[key])) errors[key] = message
       }
-      check('name', name => name && name.length < 200, 'invalid name')
-      check('link', url => !url || validUrl.isUri(url), 'invalid relayer link url')
-      check('logo', url => !url || validUrl.isUri(url), 'invalid relayer logo url')
+      check('name', name => name && name.length < 200 && name.length >= 3, 'invalid name length')
+      check('link', url => !url || validUrl.isUri(url), 'invalid link url')
+      check('logo', url => !url || validUrl.isUri(url), 'invalid logo url')
       return errors
     },
 
     handleSubmit: async (values, meta) => {
       const relayer = await http.updateRelayer({ ...values, id: meta.props.relayer.id })
-      meta.props.alert({ relayer, message: 'relayer info updated' })
+
+      if (relayer.error) {
+        meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error})
+      } else {
+        meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer info updated' })
+        meta.props.UpdateRelayerInfo(relayer)
+      }
+
       meta.setSubmitting(false)
     },
   }),
