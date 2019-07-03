@@ -16,7 +16,8 @@ CLOSED: [2019-06-14 Fri 15:34]
 *** CANCELLED Lazy load main route component
 Reason: Stat-Component is used in both Home route and Dashboard Home Route
 CLOSED: [2019-06-14 Fri 15:34]
-*** [ ] Resigning [4/4]:
+*** DONE Resigning [4/4]:
+CLOSED: [2019-07-03 Wed 23:21]
 **** DONE Finish resign request
 CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Countdown Clock
@@ -25,14 +26,14 @@ CLOSED: [2019-06-17 Mon 17:56]
 CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Withdraw money UI
 CLOSED: [2019-06-19 Wed 11:05]
-*** [ ] Refactoring
+*** DONE Refactoring
+CLOSED: [2019-07-03 Wed 23:21]
 **** DONE Fix proxying host & port
 CLOSED: [2019-06-19 Wed 19:40]
 **** DONE Migrating script for testing
 CLOSED: [2019-06-20 Thu 15:12]
 **** DONE Make Backend-Service & Test it
 CLOSED: [2019-06-20 Thu 15:12]
-**** [ ] Fix responsiveness (Container & Grid & Box issues)
 **** DONE Change rate from 1000 to 10,000
 CLOSED: [2019-06-26 Wed 17:42]
 *** [ ] Go back to login page when change wallet
@@ -41,7 +42,6 @@ CLOSED: [2019-06-26 Wed 17:42]
 **** [ ] Backend api endpoint to present error & Slack integration
 **** [ ] Frontend setup
 *** [ ] Quality Control
-**** ACTIVE Frontend test
 **** DONE Setup husky
 CLOSED: [2019-07-03 Wed 23:18]
 **** DONE Backend test
@@ -62,11 +62,3 @@ CLOSED: [2019-06-18 Tue 17:31]
      3. Cold-Wallet (trezor, ledger)
         - Change address
         - Unable to register Relayer yet
-2. Registration
-   - Form (deposit: 25k TOMO, Rate, Pick Token-Matches)
-   - DEX Build Guide
-3. Protocol & Smart Contract
-   - Entrance fee: 25.000 = fee(5000) + locked(20,000)
-   - No withdraw, only resign
-4. Responsiveness apply
-   - Make app responsive & mobile-first
