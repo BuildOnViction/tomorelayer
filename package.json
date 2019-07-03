@@ -65,6 +65,7 @@
     "husky": "^3.0.0",
     "jest-dom": "^3.5.0",
     "kill-port": "^1.4.0",
+    "lint-staged": "^9.0.2",
     "localtunnel": "^1.9.1",
     "node-sass": "^4.12.0",
     "pg": "^7.11.0",
@@ -72,9 +73,14 @@
     "request": "^2.88.0",
     "sequelize": "^5.8.10"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "npm run --silent lint:js:fix", "git add"
+    ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   }
 }
