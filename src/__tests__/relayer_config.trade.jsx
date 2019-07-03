@@ -36,6 +36,9 @@ const Tokens = rawtokens.map((t, idx) => {
   return t
 })
 
+const TomoAddress = Tokens.find(r => r.symbol === 'TOMO').address
+const BtcAddress = Tokens.find(r => r.symbol === 'BTC').address
+
 const Owner = '0x21022a96AA9c06B0e2B021FC7D92E8Cab94BF390'
 
 describe('Test Relayer-Config Trade Form', () => {
@@ -60,6 +63,7 @@ describe('Test Relayer-Config Trade Form', () => {
     const store = createStore({
       ...initialState,
       Relayers: [ActiveRelayer],
+      Tokens: Tokens,
       blk: {
         RelayerContract: {
           update: mockUpdateFunction
@@ -84,8 +88,8 @@ describe('Test Relayer-Config Trade Form', () => {
 
     R.getByDisplayValue(/0.01/)
     const takerFeeInput = R.getByDisplayValue(/0.02/)
+    const someTokenPair = R.getByLabelText(/tomo\/btc/i)
     const saveBtn = R.getByTestId(/save-button/i)
-
 
     http.updateRelayer = jest.fn().mockResolvedValue({
       ...ActiveRelayer,
@@ -93,10 +97,18 @@ describe('Test Relayer-Config Trade Form', () => {
     })
 
     fireEvent.change(takerFeeInput, { target: { value: 0.5 }})
+    fireEvent.click(someTokenPair)
     fireEvent.click(saveBtn)
     await wait()
 
-    expect(mockUpdateFunction).toHaveBeenCalledWith({ ...ActiveRelayer, taker_fee: 50 })
+    const expectedUpdatePayload = {
+      ...ActiveRelayer,
+      taker_fee: 50,
+      from_tokens: [TomoAddress],
+      to_tokens: [BtcAddress],
+    }
+
+    expect(mockUpdateFunction).toHaveBeenCalledWith(expectedUpdatePayload)
     expect(http.updateRelayer).not.toHaveBeenCalled()
     R.getByText(/fake error/i)
 
@@ -104,7 +116,7 @@ describe('Test Relayer-Config Trade Form', () => {
     fireEvent.click(saveBtn)
     await wait()
 
-    expect(http.updateRelayer).toHaveBeenCalledWith({ ...ActiveRelayer, taker_fee: 50 })
+    expect(http.updateRelayer).toHaveBeenCalledWith(expectedUpdatePayload)
     R.getByText(/relayer trade options updated/i)
   })
 

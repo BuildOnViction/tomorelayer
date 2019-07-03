@@ -49,7 +49,9 @@ describe('Test Relayer-Config Resign Form', () => {
 
     const simulatedLockTime = timeFormat(addDays(Date.now(), 28), 'X')
 
-    const mockResignFunction = jest.fn().mockResolvedValue({ status: true })
+    const mockResignFunction = jest.fn()
+                                   .mockResolvedValueOnce({ status: false, details: 'fake error' })
+                                   .mockResolvedValueOnce({ status: true })
 
     http.updateRelayer = jest.fn().mockResolvedValue({
       ...ActiveRelayer,
@@ -106,6 +108,19 @@ describe('Test Relayer-Config Resign Form', () => {
     fireEvent.click(acceptButton)
     await wait()
 
+    // ResignRequest called, blockchain error, alert
+    expect(mockResignFunction).toHaveBeenCalledWith({ coinbase: ActiveRelayer.coinbase })
+    R.getByText(/fake error/i)
+
+    // Retry and success
+    fireEvent.click(resignButton)
+    await wait()
+
+    // Confirm-dialog pops up!
+    R.getByText(/warning/i)
+    fireEvent.click(acceptButton)
+    await wait()
+
     // ResignRequest called
     expect(mockResignFunction).toHaveBeenCalledWith({ coinbase: ActiveRelayer.coinbase })
     expect(http.updateRelayer).toHaveBeenCalledWith({
@@ -133,7 +148,9 @@ describe('Test Relayer-Config Resign Form', () => {
       lock_time: timeFormat(subMinutes(Date.now(), 10), 'X'),
     }
 
-    const mockResignFunction = jest.fn().mockResolvedValue({ status: true })
+    const mockResignFunction = jest.fn()
+                                   .mockResolvedValueOnce({ status: false, details: 'fake error' })
+                                   .mockResolvedValueOnce({ status: true })
 
     http.deleteRelayer = jest.fn().mockResolvedValue({})
 
@@ -169,6 +186,13 @@ describe('Test Relayer-Config Resign Form', () => {
     await wait()
 
     expect(mockResignFunction).toHaveBeenCalledWith({ coinbase: ResigningRelayer.coinbase })
+    expect(http.deleteRelayer).not.toHaveBeenCalled()
+    R.getByText(/fake error/i)
+
+    // Retry and success
+    fireEvent.click(refundButton)
+    await wait()
+
     expect(http.deleteRelayer).toHaveBeenCalledWith(ResigningRelayer.id)
 
   })

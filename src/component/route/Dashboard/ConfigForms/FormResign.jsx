@@ -36,10 +36,10 @@ const FormResign = props => {
 
   const confirmAndClose = async () => {
     handleClose()
-    const { status } = await RelayerContract.resign({ coinbase: relayer.coinbase })
+    const { status, details } = await RelayerContract.resign({ coinbase: relayer.coinbase })
 
     if (!status) {
-      const alert = { variant: AlertVariant.error, message: 'Transaction rejected' }
+      const alert = { variant: AlertVariant.error, message: details }
       return PushAlert(alert)
     }
 
@@ -54,10 +54,10 @@ const FormResign = props => {
 
 
   const requestRefund = async () => {
-    const { status } = await RelayerContract.refund({ coinbase: relayer.coinbase })
+    const { status, details } = await RelayerContract.refund({ coinbase: relayer.coinbase })
 
     if (!status) {
-      const alert = { variant: AlertVariant.error, message: 'Transaction rejected' }
+      const alert = { variant: AlertVariant.error, message: details }
       return PushAlert(alert)
     }
 

@@ -80,7 +80,6 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: props => ({
-      currentCoinbase: props.relayer.coinbase,
       owner: props.relayer.owner,
       coinbase: props.relayer.coinbase,
     }),
@@ -94,44 +93,29 @@ export const wrappers = {
         }
       }))
 
-      if (values.owner === props.relayer.owner) {
-        errors.owner = 'New owner address must be different than current owner address'
-      }
       return errors
     },
 
     handleSubmit: async (values, meta) => {
-      const { status, details } = await meta.props.RelayerContract.transfer(values)
+      const { status, details } = await meta.props.RelayerContract.transfer({
+        ...values,
+        currentCoinbase: meta.props.relayer.coinbase,
+      })
 
       if (!status) {
-        console.error(details)
-        meta.props.alert({ message: 'Transfer Error: unable to transfer relayer' })
-        meta.setSubmitting(false)
-        return undefined
+        meta.props.PushAlert({ variant: AlertVariant.error, message: details })
+      } else {
+        const relayer = await http.updateRelayer({
+          owner: values.owner,
+          coinbase: values.coinbase,
+          id: meta.props.relayer.id,
+        })
+        meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer transfered successfuly' })
+        meta.props.UpdateRelayer(relayer)
       }
 
-      const relayer = await http.updateRelayer({
-        owner: values.owner,
-        coinbase: values.coinbase,
-        id: meta.props.relayer.id,
-      })
       meta.setSubmitting(false)
-      meta.props.alert({ relayer, message: 'relayer transfered successfuly' })
       setTimeout(() => meta.props.history.push(SITE_MAP.Dashboard), 200)
-    }
-  }),
-
-  resignForm: withFormik({
-    displayName: 'RelayerResignForm',
-    enableReinitialize: false,
-    validateOnChange: false,
-    mapPropsToValues: props => ({
-      coinbase: props.relayer.coinbase
-    }),
-
-    handleSubmit: async (values, meta) => {
-      await meta.props.SubmitConfigFormPayload(values)
-      meta.setSubmitting(false)
     }
   }),
 

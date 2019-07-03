@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core'
 import { connect } from '@vutr/redux-zero/react'
 import { compose } from 'service/helper'
+import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 import { TransferNotice } from './PresentComponents'
@@ -40,10 +41,8 @@ const FormTransfer = props => {
     submitForm()
   }
 
-  const transferBtnDisabled = (
-    isSubmitting ||
-    (relayer.coinbase === values.coinbase && relayer.owner === values.owner)
-  )
+  const transferDisabled = isSubmitting || values.owner === relayer.owner
+
   const nextStep = () => setStep(1)
 
   if (relayer.resigning) {
@@ -52,7 +51,7 @@ const FormTransfer = props => {
         <Typography component="h5">
           <Box>
             <Typography component="h4">
-              This relayer has been requested to deactivated. Transferring relayer is no longer allowed.
+              This relayer has been requested to deactivated. Transferring relayer is not allowed.
             </Typography>
           </Box>
         </Typography>
@@ -65,7 +64,6 @@ const FormTransfer = props => {
       {step === 0 && <TransferNotice confirm={nextStep} />}
       {step === 1 && (
         <form onSubmit={handleSubmit}>
-          <input name="currentCoinbase" value={values.currentCoinbase} hidden readOnly data-testid="current-coinbase-input" />
           <Grid container direction="column" spacing={3}>
             <Grid item className="mb-2">
               <Typography component="h1">
@@ -111,8 +109,8 @@ const FormTransfer = props => {
                   color="primary"
                   variant="contained"
                   onClick={handleClickOpen}
-                  disabled={transferBtnDisabled}
-                  data-testid="proceed-transfer-request"
+                  disabled={transferDisabled}
+                  data-testid="transfer-button"
                 >
                   Transfer
                 </Button>
@@ -144,10 +142,10 @@ const FormTransfer = props => {
                 color="secondary"
                 variant="contained"
                 autoFocus
-                disabled={transferBtnDisabled}
-                data-testid="confirm-transfer-request"
+                disabled={transferDisabled}
+                data-testid="accept-button"
               >
-                Confirm
+                Accept
               </Button>
             </Box>
           </Dialog>
@@ -160,6 +158,11 @@ const FormTransfer = props => {
 const mapProps = state => ({
   RelayerContract: state.blk.RelayerContract
 })
-const storeConnect = connect(mapProps, { alert: UpdateRelayer })
+const actions = {
+  UpdateRelayer,
+  PushAlert,
+}
+
+const storeConnect = connect(mapProps, actions)
 const formConnect = wrappers.transferForm
 export default compose(formConnect, storeConnect, withRouter)(FormTransfer)
