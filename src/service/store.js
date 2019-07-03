@@ -1,5 +1,6 @@
 import createStore from '@vutr/redux-zero'
 import { applyMiddleware } from '@vutr/redux-zero/middleware'
+import { connect } from '@vutr/redux-zero/devtools'
 import { SOCKET_URI } from 'service/backend'
 
 const socket = new WebSocket(SOCKET_URI)
@@ -19,14 +20,8 @@ export const initialState = {
   blk: {},
 }
 
-const logger = store => next => action => {
-  const state  = store.getState()
-  console.log('notifications', state.notifications)
-  return next(action)
-}
+const middlewares = connect ? applyMiddleware(connect(initialState)) : []
 
-const middleware = applyMiddleware(logger)
-
-const store = createStore(initialState, middleware)
+const store = createStore(initialState, middlewares)
 
 export default store
