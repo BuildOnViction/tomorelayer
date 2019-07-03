@@ -73,8 +73,6 @@ class App extends React.Component {
 
   render() {
 
-    const x= 'shit'
-
     const {
       userRelayers,
     } = this.state

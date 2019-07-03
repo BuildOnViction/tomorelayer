@@ -74,7 +74,7 @@
     "sequelize": "^5.8.10"
   },
   "lint-staged": {
-    "*.{js,jsx}": ["eslint --fix", "git add"]
+    "src/**/*.{js,jsx}": ["eslint --fix", "git add"]
   },
   "husky": {
     "hooks": {
