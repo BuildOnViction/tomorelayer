@@ -142,7 +142,7 @@ export class Register extends React.Component {
 const mapProps = state => ({
   RelayerContract: state.blk.RelayerContract,
   wallet: state.user.wallet,
-  usedCoinbases: state.Relayers.map(t => t.coinbase),
+  usedCoinbases: state.Relayers.map(t => t.coinbase).concat(state.Relayers.map(t => t.owner)),
 })
 
 const actions = store => ({

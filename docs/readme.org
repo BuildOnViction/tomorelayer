@@ -41,9 +41,10 @@ CLOSED: [2019-06-26 Wed 17:42]
 **** [ ] Backend api endpoint to present error & Slack integration
 **** [ ] Frontend setup
 *** [ ] Quality Control
+**** ACTIVE Frontend test
 **** [ ] Setup husky
 **** DONE Backend test
-CLOSED: [2019-06-26 Wed 17:42]
+CLOSED: [2019-07-03 Wed 22:13]
 **** ACTIVE Frontend test with Jest
 **** LATER Integrate ESDoc
 *** DONE Deploy to Test Server

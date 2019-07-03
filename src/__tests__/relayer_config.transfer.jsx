@@ -42,13 +42,19 @@ describe('Test Relayer-Config Transfer Form', () => {
       coinbase: testCoinbase
     }
 
+    const DummyRelayer = {
+      id: 2,
+      owner: '0x070aA7AD03B89B3278f19d34F119DD3C2a244675',
+      coinbase: '0x9e9d3d79e9f73806999e0ca601f23b701b97bc46',
+    }
+
     const mockTransferFunction = jest.fn()
                                    .mockResolvedValueOnce({ status: false, details: 'fake error' })
                                    .mockResolvedValueOnce({ status: true })
 
     const store = createStore({
       ...initialState,
-      Relayers: [ActiveRelayer],
+      Relayers: [ActiveRelayer, DummyRelayer],
       blk: {
         RelayerContract: {
           transfer: mockTransferFunction
@@ -82,7 +88,7 @@ describe('Test Relayer-Config Transfer Form', () => {
 
     // Show the current owner and coinbase for the sake of clarity
     const transferButton = R.getByTestId(/transfer-button/i)
-    R.getByDisplayValue(new RegExp(ActiveRelayer.coinbase), 'i')
+    const coinbaseInput = R.getByDisplayValue(new RegExp(ActiveRelayer.coinbase), 'i')
     const ownerInput = R.getByDisplayValue(new RegExp(ActiveRelayer.owner), 'i')
     // Transfer-Button will be disabled until
     // new owner address got input and different from current owner
@@ -90,20 +96,57 @@ describe('Test Relayer-Config Transfer Form', () => {
     // Accept-Button should not be presented yet!
     expect(R.queryByTestId(/accept-button/i)).toBeNull()
 
-    // Test input an invalid address
-    fireEvent.change(ownerInput, { target: { value: 'invalid-coinbase' }})
+
+    // NOTE: testing different scenarios of foul values
+    // Owner/Coinbase not a valid address
+    fireEvent.change(ownerInput, { target: { value: 'invalid-owner' }})
+    fireEvent.change(coinbaseInput, { target: { value: 'invalid-coinbase' }})
     expect(transferButton).not.toBeDisabled()
     fireEvent.click(transferButton)
     await wait()
 
-    // Confirm-dialog pops up!
     R.getByText(/warning/i)
     const acceptButton = R.getByTestId(/accept-button/i)
     fireEvent.click(acceptButton)
     await wait()
-    R.getByText(/invalid address/i)
+    R.getAllByText(/invalid address/i)
+    // Coinbase === Owner
+    let foulTestValue = '0x579798b0bf809e9b4a5e554d16011db04a6af340'
+    fireEvent.change(ownerInput, { target: { value: foulTestValue }})
+    fireEvent.change(coinbaseInput, { target: { value: foulTestValue }})
+    fireEvent.click(transferButton)
+    await wait()
+    fireEvent.click(R.getByTestId(/accept-button/i))
+    await wait()
+    R.getAllByText(/coinbase cannot be the same as owner address/i)
+    // New Coinbase is already used for another relayer
+    foulTestValue = DummyRelayer.coinbase
+    fireEvent.change(coinbaseInput, { target: { value: foulTestValue }})
+    fireEvent.click(transferButton)
+    await wait()
+    fireEvent.click(R.getByTestId(/accept-button/i))
+    await wait()
+    R.getByText(/invalid coinbase/i)
+    // New coinbase is already a Relayer-owner address
+    foulTestValue = DummyRelayer.owner
+    fireEvent.change(coinbaseInput, { target: { value: foulTestValue }})
+    fireEvent.click(transferButton)
+    await wait()
+    fireEvent.click(R.getByTestId(/accept-button/i))
+    await wait()
+    R.getByText(/invalid coinbase/i)
+    // New owner is a coinbase of another relayer
+    foulTestValue = DummyRelayer.coinbase
+    fireEvent.change(ownerInput, { target: { value: foulTestValue }})
+    fireEvent.click(transferButton)
+    await wait()
+    fireEvent.click(R.getByTestId(/accept-button/i))
+    await wait()
+    R.getByText(/invalid owner address/i)
+    // End scenario test
 
 
+    fireEvent.change(coinbaseInput, { target: { value: ActiveRelayer.coinbase }})
     fireEvent.change(ownerInput, { target: { value: NewOwner }})
     expect(transferButton).not.toBeDisabled()
 

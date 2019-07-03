@@ -127,6 +127,7 @@ contract RelayerRegistration {
 
     function transfer(address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
+        require(RELAYER_LIST[new_owner]._makerFee == 0, "Owner address must not be currently used as relayer-coinbase");
         require(new_coinbase != address(0));
         require(new_coinbase != CONTRACT_OWNER);
 

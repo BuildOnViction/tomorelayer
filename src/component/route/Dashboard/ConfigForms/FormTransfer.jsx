@@ -156,8 +156,11 @@ const FormTransfer = props => {
 }
 
 const mapProps = state => ({
-  RelayerContract: state.blk.RelayerContract
+  RelayerContract: state.blk.RelayerContract,
+  invalidCoinbases: state.Relayers.map(t => t.owner).concat(state.Relayers.map(t => t.coinbase)),
+  invalidOwnerAddresses: state.Relayers.map(t => t.coinbase),
 })
+
 const actions = {
   UpdateRelayer,
   PushAlert,
