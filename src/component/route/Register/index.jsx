@@ -148,7 +148,7 @@ const actions = store => ({
   pushAlert: PushAlert,
   saveNewRelayer: (state, relayer) => {
     const Relayers = [ ...state.Relayers, relayer ]
-    return { Relayers }
+    return { Relayers, shouldUpdateUserRelayers: true }
   },
 })
 

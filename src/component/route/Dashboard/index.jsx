@@ -23,6 +23,15 @@ class Dashboard extends React.Component {
       <Redirect to={SITE_MAP.Home} />
     )
 
+    const SafePath = (Component) => props => Object.keys(relayers).includes(props.match.params.coinbase) ? (
+      <Component
+        relayers={relayers}
+        {...props}
+      />
+    ) : (
+      <Redirect to={SITE_MAP.Dashboard} />
+    )
+
     return (
       <Container maxWidth="lg">
         <TabMenu />
@@ -32,11 +41,11 @@ class Dashboard extends React.Component {
             <Route
               path={`${baseUrl}/:coinbase`}
               exact
-              render={props => <RelayerStat relayers={relayers} {...props} />}
+              render={SafePath(RelayerStat)}
             />
             <Route
               path={`${baseUrl}/:coinbase/config`}
-              render={props => <RelayerConfig relayers={relayers} {...props} />}
+              render={SafePath(RelayerConfig)}
             />
           </Switch>
         </Box>
