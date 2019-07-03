@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { connect } from '@vutr/redux-zero/react'
 import { compose } from 'service/helper'
+import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 import TokenPairList from 'component/shared/TokenPairList'
@@ -29,7 +30,6 @@ const FormTrade = ({
     setFieldValue('to_tokens', pairs.map(p => p.to.address))
   }
 
-  const disableSubmit = false
   const disableForm = relayer.resigning || isSubmitting
 
   return (
@@ -90,11 +90,12 @@ const FormTrade = ({
             <TokenPairList
               value={values}
               onChange={setPairsValues}
+              disabled={disableForm}
             />
           </Grid>
           <Grid item className="mt-2">
             <Box display="flex" justifyContent="flex-end">
-              <Button color="primary" variant="contained" type="submit" disabled={disableSubmit || disableForm}>
+              <Button color="primary" variant="contained" type="submit" disabled={disableForm} data-testid="save-button">
                 Save
               </Button>
             </Box>
@@ -108,6 +109,12 @@ const FormTrade = ({
 const mapProps = state => ({
   RelayerContract: state.blk.RelayerContract
 })
-const storeConnect = connect(mapProps, { alert: UpdateRelayer })
+
+const actions = {
+  UpdateRelayer,
+  PushAlert,
+}
+
+const storeConnect = connect(mapProps, actions)
 const formConnect = wrappers.tradeForm
 export default compose(formConnect, storeConnect)(FormTrade)

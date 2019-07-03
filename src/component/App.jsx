@@ -12,6 +12,7 @@ import Main from 'component/route/Main'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
 import { FetchPublic } from './shared/actions'
+import RelayerContractClass from 'service/relayer_contract'
 import 'style/app.scss'
 
 
@@ -37,18 +38,33 @@ class App extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const relayersJustFetched = this.props.relayers.length && !prevProps.relayers.length
-    const userJustLoggedIn = this.props.user.wallet && !prevProps.user.wallet
+    const {
+      RelayerContract,
+      contract,
+      user,
+      relayers,
+      shouldUpdateUserRelayers,
+      finishUpdateUserRelayers,
+      initRelayerContract,
+    } = this.props
 
-    const shouldFilterUserRelayer = (relayersJustFetched && this.props.user.wallet) || (userJustLoggedIn && this.props.relayers.length)
+    const relayersJustFetched = relayers.length && !prevProps.relayers.length
+    const userJustLoggedIn = user.wallet && !prevProps.user.wallet
 
-    if (shouldFilterUserRelayer || this.props.shouldUpdateUserRelayers) {
-      const userAddress = await this.props.user.wallet.getAddress()
+    const shouldFilterUserRelayer = (relayersJustFetched && user.wallet) || (userJustLoggedIn && relayers.length > 0)
+
+    if (shouldFilterUserRelayer || shouldUpdateUserRelayers) {
+      const userAddress = await user.wallet.getAddress()
       const userRelayers = {}
-      this.props.relayers.filter(r => _.compareString(r.owner, userAddress)).forEach(r => {
+      relayers.filter(r => _.compareString(r.owner, userAddress)).forEach(r => {
         userRelayers[r.coinbase] = r
       })
-      this.setState({ userRelayers }, () => this.props.finishUpdateUserRelayers())
+      this.setState({ userRelayers }, () => finishUpdateUserRelayers())
+    }
+
+    if (!RelayerContract && user.wallet && contract) {
+      const contractInstance = new RelayerContractClass(user.wallet, contract)
+      initRelayerContract(contractInstance)
     }
   }
 
@@ -98,13 +114,21 @@ class App extends React.Component {
 const mapProps = state => ({
   relayers: state.Relayers,
   user: state.user,
+  contract: state.Contracts.find(r => r.name === 'RelayerRegistration' && !r.obsolete),
   shouldUpdateUserRelayers: state.shouldUpdateUserRelayers,
+  RelayerContract: state.blk.RelayerContract,
 })
 
 const actions = {
   FetchPublic,
   PushAlert,
   finishUpdateUserRelayers: () => ({ shouldUpdateUserRelayers: false }),
+  initRelayerContract: (state, RelayerContract) => ({
+    blk: {
+      ...state.blk,
+      RelayerContract,
+    }
+  })
 }
 
 export default connect(mapProps, actions)(App)

@@ -9,9 +9,8 @@ import {
 import FormInfo from './ConfigForms/FormInfo'
 import FormTrade from './ConfigForms/FormTrade'
 import FormTransfer from './ConfigForms/FormTransfer'
-/*
- *
- * import FormResign from './ConfigForms/FormResign' */
+import FormResign from './ConfigForms/FormResign'
+
 
 const ListItems = [
   'Information',
@@ -59,9 +58,7 @@ const ConfigBoard = ({ match, relayers }) => {
             {formstep === 0 && <FormInfo relayer={relayer} />}
             {formstep === 1 && <FormTrade relayer={relayer} />}
             {formstep === 2 && <FormTransfer relayer={relayer} />}
-            {/*
-
-                {formstep === 3 && <FormResign relayer={relayer} />} */}
+            {formstep === 3 && <FormResign relayer={relayer} />}
           </div>
         )}
       </Grid>

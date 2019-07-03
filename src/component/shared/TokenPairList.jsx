@@ -77,6 +77,7 @@ class TokenPairList extends React.Component {
   searchInputChange = e => this.setState({ debounceText: e.target.value })
 
   handleItemClick = pair => () => {
+    if (this.props.disabled) return undefined
     const index = this.props.pairs.indexOf(pair)
     const newList = Array.from(this.props.pairs)
     newList[index].checked = !newList[index].checked
@@ -107,6 +108,7 @@ class TokenPairList extends React.Component {
       pairs,
       pairMapping,
       value,
+      disabled,
     } = this.props
 
     const checkList = this.makeCheckList(pairs, pairMapping, value)
@@ -154,6 +156,7 @@ class TokenPairList extends React.Component {
                   <Checkbox
                     color="default"
                     checked={p.checked}
+                    disabled={disabled}
                     inputProps={{
                       'aria-label': p.toString(),
                     }}

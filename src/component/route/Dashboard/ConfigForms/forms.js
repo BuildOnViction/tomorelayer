@@ -34,7 +34,7 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error})
       } else {
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer info updated' })
-        meta.props.UpdateRelayerInfo(relayer)
+        meta.props.UpdateRelayer(relayer)
       }
 
       meta.setSubmitting(false)
@@ -60,10 +60,18 @@ export const wrappers = {
         taker_fee: values.taker_fee * 100,
       }
 
-      await meta.props.RelayerContract.update(payload)
-      const relayer = await http.updateRelayer(payload)
-      meta.props.alert({ relayer, message: 'relayer trade options updated' })
+      const { status, details } = await meta.props.RelayerContract.update(payload)
+
+      if (!status) {
+        meta.props.PushAlert({ variant: AlertVariant.error, message: details })
+      } else {
+        const relayer = await http.updateRelayer(payload)
+        meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer trade options updated' })
+        meta.props.UpdateRelayer(relayer)
+      }
+
       meta.setSubmitting(false)
+
     }
   }),
 

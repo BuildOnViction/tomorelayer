@@ -3,7 +3,7 @@ import { Avatar, Box, Container, Grid, TextField, Button, Typography } from '@ma
 import { connect } from '@vutr/redux-zero/react'
 import { compose } from 'service/helper'
 import { PushAlert } from 'service/frontend'
-import { UpdateRelayerInfo } from '../actions'
+import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 
 
@@ -94,7 +94,7 @@ class FormInfo extends React.Component {
 
 const mapProps = undefined
 const actions = {
-  UpdateRelayerInfo,
+  UpdateRelayer,
   PushAlert,
 }
 
