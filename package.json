@@ -36,7 +36,8 @@
     "build": "react-scripts build",
     "lint": "eslint --ext .jsx,.js src/",
     "pylint": "pipenv run pylint backend/*",
-    "doc": "esdoc -c .esdoc.json"
+    "prettify": "prettier --write \"src/**/*.js\"",
+    "prettify:check": "prettier --check \"src/**/*.js\""
   },
   "proxy": "http://localhost:8888",
   "eslintConfig": {
@@ -70,12 +71,14 @@
     "node-sass": "^4.12.0",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
+    "prettier": "1.18.2",
     "request": "^2.88.0",
     "sequelize": "^5.8.10"
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint"
+      "pre-commit": "npm run lint -- --max-warnings 0 --fix && npm run prettify",
+      "pre-push": "npm run prettify:check && npm run lint -- --max-warnings 0 && npm run test -- --bail --watchAll=false"
     }
   }
 }

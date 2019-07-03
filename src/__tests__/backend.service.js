@@ -4,11 +4,7 @@ import * as http from 'service/backend'
 const fs = require('fs')
 const path = require('path')
 
-let db,
-    conn,
-    Contract,
-    Relayer,
-    Token
+let db, conn, Contract, Relayer, Token
 
 beforeAll(async () => {
   db = await setup()
@@ -24,8 +20,7 @@ afterAll(async () => {
 })
 
 describe('Testing Contract API', () => {
-
-  it('#1. manually save a contract to Database', async done => {
+  it('#1. manually save a contract to Database', async (done) => {
     let count = await Contract.count()
     expect(count).toEqual(0)
 
@@ -69,14 +64,12 @@ describe('Testing Contract API', () => {
      * expect(updatedContract.id).toBe(contractId)
      * expect(updatedContract.obsolete).toBe(true) */
   })
-
 })
 
 describe('Testing Relayer API', () => {
-
   let relayerId
 
-  it('#1. create a relayers', async done => {
+  it('#1. create a relayers', async (done) => {
     const count = await Relayer.count()
     expect(count).toEqual(0)
 
@@ -101,7 +94,6 @@ describe('Testing Relayer API', () => {
     // NOTE: testing Failure API (logging, resopnse)
   })
 
-
   it('#2. update a relayer', async () => {
     const updatedRelayer = await http.updateRelayer({
       id: relayerId,
@@ -122,7 +114,6 @@ describe('Testing Relayer API', () => {
     expect(invalidIdRequest.error.code).toBe(500)
   })
 
-
   it('#3. delete a relayer(after a successful refundEvent)', async () => {
     let request = await http.deleteRelayer(null)
     expect(request.error.code).toBe(500)
@@ -136,22 +127,17 @@ describe('Testing Relayer API', () => {
     const count = await Relayer.count()
     expect(count).toEqual(0)
   })
-
 })
 
-
 describe('Testing Token API', () => {
-
   let request
 
   it('#1. get tokens', async () => {
     request = await http.getTokens()
     expect(request.length).toEqual(0)
-
   })
 
   it('#2. create new token', async () => {
-
     const tokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_token.dummy.json')))
     request = await http.createToken(tokens[0])
     expect(Boolean(request.id)).toBe(true)
@@ -160,16 +146,14 @@ describe('Testing Token API', () => {
     expect(request.length).toEqual(1)
 
     // 4 more dummy tokens to be created
-    await Promise.all(tokens.slice(1).map(async t => Token.create(t)))
+    await Promise.all(tokens.slice(1).map(async (t) => Token.create(t)))
 
     request = await http.getTokens()
     expect(request.length).toEqual(5)
   })
 })
 
-
 describe('Testing public API', () => {
-
   let request
 
   it('Get all public resources', async () => {

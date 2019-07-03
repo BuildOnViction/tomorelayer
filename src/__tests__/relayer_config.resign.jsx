@@ -5,8 +5,6 @@ import {
   fireEvent,
   cleanup,
   wait,
-  waitForElement,
-  waitForElementToBeRemoved,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
 import { Provider, connect } from '@vutr/redux-zero/react'
@@ -28,8 +26,6 @@ global.document.createRange = () => ({
 
 const Owner = '0x21022a96AA9c06B0e2B021FC7D92E8Cab94BF390'
 const activeRelayerCoinbase = '0x747681f8C8828bbec0FE8ec960827d846C6e7346'
-const resigningRelayerCoinbase = '0xdD596FfB7f7A6123C36ecEf2F8a48AfEc6D7B889'
-const resignedRelayerCoinbase = '0xf808a19BC35f292341C512dE43db92A6826f4Cb3'
 
 
 describe('Test Relayer-Config Resign Form', () => {

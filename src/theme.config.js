@@ -42,7 +42,7 @@ const theme = createMuiTheme({
         '&$marginDense': {
           transform: 'translate(12px, 11px) scale(1)',
         },
-      }
+      },
     },
     MuiAvatar: {
       root: {
@@ -50,9 +50,9 @@ const theme = createMuiTheme({
         height: 100,
         margin: 0,
         borderRadius: 4,
-      }
-    }
-  }
+      },
+    },
+  },
 })
 
 export default theme

@@ -10,20 +10,20 @@ export const wrappers = {
     displayName: 'RelayerInfoForm',
     enableReinitialize: true,
     validateOnChange: false,
-    mapPropsToValues: props => ({
+    mapPropsToValues: (props) => ({
       name: props.relayer.name,
       link: props.relayer.link,
       logo: props.relayer.logo,
     }),
 
-    validate: values => {
+    validate: (values) => {
       const errors = {}
       const check = (key, func, message) => {
         if (!func(values[key])) errors[key] = message
       }
-      check('name', name => name && name.length < 200 && name.length >= 3, 'invalid name length')
-      check('link', url => !url || validUrl.isUri(url), 'invalid link url')
-      check('logo', url => !url || validUrl.isUri(url), 'invalid logo url')
+      check('name', (name) => name && name.length < 200 && name.length >= 3, 'invalid name length')
+      check('link', (url) => !url || validUrl.isUri(url), 'invalid link url')
+      check('logo', (url) => !url || validUrl.isUri(url), 'invalid logo url')
       return errors
     },
 
@@ -31,7 +31,7 @@ export const wrappers = {
       const relayer = await http.updateRelayer({ ...values, id: meta.props.relayer.id })
 
       if (relayer.error) {
-        meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error})
+        meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error })
       } else {
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer info updated' })
         meta.props.UpdateRelayer(relayer)
@@ -45,7 +45,7 @@ export const wrappers = {
     displayName: 'RelayerTradeOptionForm',
     enableReinitialize: true,
     validateOnChange: false,
-    mapPropsToValues: props => ({
+    mapPropsToValues: (props) => ({
       maker_fee: props.relayer.maker_fee / 100,
       taker_fee: props.relayer.taker_fee / 100,
       from_tokens: props.relayer.from_tokens,
@@ -71,15 +71,14 @@ export const wrappers = {
       }
 
       meta.setSubmitting(false)
-
-    }
+    },
   }),
 
   transferForm: withFormik({
     displayName: 'RelayerTransferForm',
     enableReinitialize: true,
     validateOnChange: false,
-    mapPropsToValues: props => ({
+    mapPropsToValues: (props) => ({
       owner: props.relayer.owner,
       coinbase: props.relayer.coinbase,
     }),
@@ -87,13 +86,13 @@ export const wrappers = {
     validate: (values, props) => {
       const errors = {}
 
-      validateCoinbase(values.coinbase, isValid => {
+      validateCoinbase(values.coinbase, (isValid) => {
         if (!isValid) {
           errors.coinbase = 'invalid addresss'
         }
       })
 
-      validateCoinbase(values.owner, isValid => {
+      validateCoinbase(values.owner, (isValid) => {
         if (!isValid) {
           errors.owner = 'invalid addresss'
         }
@@ -134,7 +133,6 @@ export const wrappers = {
 
       meta.setSubmitting(false)
       setTimeout(() => meta.props.history.push(SITE_MAP.Dashboard), 200)
-    }
+    },
   }),
-
 }

@@ -11,7 +11,6 @@ import { HashRouter } from 'react-router-dom'
 
 import { Provider } from '@vutr/redux-zero/react'
 import createStore from '@vutr/redux-zero'
-import { bindActions } from '@vutr/redux-zero/utils'
 
 import setup from './_database.setup.js'
 

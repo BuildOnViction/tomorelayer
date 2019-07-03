@@ -1,12 +1,9 @@
 import React from 'react'
-import { addDays, format as timeFormat, subMinutes } from 'date-fns'
 import {
   render,
   fireEvent,
   cleanup,
   wait,
-  waitForElement,
-  waitForElementToBeRemoved,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
 import { Provider, connect } from '@vutr/redux-zero/react'

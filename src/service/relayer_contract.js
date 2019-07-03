@@ -1,7 +1,6 @@
 import { ethers } from 'ethers'
 
 export default class RelayerContract {
-
   contractWithSigner = undefined
   wallet = undefined
 
@@ -14,7 +13,6 @@ export default class RelayerContract {
 
   async register(payload, config = {}) {
     try {
-
       const parsedPayload = [
         payload.coinbase,
         payload.maker_fee,
@@ -26,7 +24,7 @@ export default class RelayerContract {
       const tx = await this.contractWithSigner.register(...parsedPayload, config)
       const details = await tx.wait()
       return { status: true, details }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return { status: false, details: 'Unable to register' }
     }
@@ -34,7 +32,6 @@ export default class RelayerContract {
 
   async update(payload, config = {}) {
     try {
-
       const parsedPayload = [
         payload.coinbase,
         payload.maker_fee,
@@ -46,7 +43,7 @@ export default class RelayerContract {
       const tx = await this.contractWithSigner.update(...parsedPayload, config)
       const details = await tx.wait()
       return { status: true, details }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return { status: false, details: 'Unable to update' }
     }
@@ -54,17 +51,12 @@ export default class RelayerContract {
 
   async transfer(payload, config = {}) {
     try {
-
-      const parsedPayload = [
-        payload.currentCoinbase,
-        payload.owner,
-        payload.coinbase,
-      ]
+      const parsedPayload = [payload.currentCoinbase, payload.owner, payload.coinbase]
 
       const tx = await this.contractWithSigner.transfer(...parsedPayload, config)
       const details = await tx.wait()
       return { status: true, details }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return { status: false, details: 'Unable to transfer' }
     }
@@ -75,7 +67,7 @@ export default class RelayerContract {
       const tx = await this.contractWithSigner.resign(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return { status: false, details: 'Unable to resign' }
     }
@@ -86,7 +78,7 @@ export default class RelayerContract {
       const tx = await this.contractWithSigner.depositMore(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return { status: false, details: 'Unable to deposit' }
     }
@@ -97,7 +89,7 @@ export default class RelayerContract {
       const tx = await this.contractWithSigner.refund(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return { status: false, details: 'Unable to refund' }
     }

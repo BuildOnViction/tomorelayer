@@ -24,67 +24,63 @@ export const MISC = {
   MinimumDeposit: 25000,
 }
 
-export const I18N_LANGS = [
-  { value: 'en', label: 'EN' },
-  { value: 'vn', label: 'VN' },
-  { value: 'jp', label: 'JP' }
-]
+export const I18N_LANGS = [{ value: 'en', label: 'EN' }, { value: 'vn', label: 'VN' }, { value: 'jp', label: 'JP' }]
 
 export const STORAGE_ITEMS = {
-  user: '__tomorelayer__user__'
+  user: '__tomorelayer__user__',
 }
 
 export const STANDARD_ERC20_ABI = [
   {
-    "constant": true,
-    "inputs": [],
-    "name": "name",
-    "outputs": [
+    constant: true,
+    inputs: [],
+    name: 'name',
+    outputs: [
       {
-        "name": "",
-        "type": "string"
-      }
+        name: '',
+        type: 'string',
+      },
     ],
-    "payable": false,
-    "type": "function"
+    payable: false,
+    type: 'function',
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "totalSupply",
-    "outputs": [
+    constant: true,
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [
       {
-        "name": "",
-        "type": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+      },
     ],
-    "payable": false,
-    "type": "function"
+    payable: false,
+    type: 'function',
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "decimals",
-    "outputs": [
+    constant: true,
+    inputs: [],
+    name: 'decimals',
+    outputs: [
       {
-        "name": "",
-        "type": "uint8"
-      }
+        name: '',
+        type: 'uint8',
+      },
     ],
-    "payable": false,
-    "type": "function"
+    payable: false,
+    type: 'function',
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
+    constant: true,
+    inputs: [],
+    name: 'symbol',
+    outputs: [
       {
-        "name": "",
-        "type": "string"
-      }
+        name: '',
+        type: 'string',
+      },
     ],
-    "payable": false,
-    "type": "function"
-  }
+    payable: false,
+    type: 'function',
+  },
 ]

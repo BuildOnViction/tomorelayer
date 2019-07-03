@@ -12,7 +12,7 @@ export const FetchPublic = async (state) => {
       open: true,
       message: 'fetched all resources',
       variant: AlertVariant.success,
-    }
+    },
   ]
   return { Contracts, Relayers, Tokens, notifications }
 }
