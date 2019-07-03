@@ -72,7 +72,7 @@ export default class RelayerContract {
 
   async resign(payload, config = {}) {
     try {
-      const tx = await this.contractWithSigner.transfer(payload.coinbase, config)
+      const tx = await this.contractWithSigner.resign(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
     } catch(e) {
