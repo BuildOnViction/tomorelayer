@@ -4,6 +4,7 @@ import { Container, Box, Paper } from '@material-ui/core'
 import { MISC, SITE_MAP } from 'service/constant'
 import * as blk from 'service/blockchain'
 import * as http from 'service/backend'
+import * as _ from 'service/helper'
 import { PushAlert, AlertVariant } from 'service/frontend'
 import ProgressBar from './ProgressBar'
 import FormStepOne from './FormStepOne'
@@ -54,8 +55,8 @@ export class Register extends React.Component {
   confirmRegister = async () => {
     const payload = {
       ...this.state.payload,
-      taker_fee: this.state.payload.taker_fee * 100,
-      maker_fee: this.state.payload.maker_fee * 100,
+      taker_fee: _.round(this.state.payload.taker_fee * 100, 0),
+      maker_fee: _.round(this.state.payload.maker_fee * 100, 0),
     }
 
     const config = { value: blk.toWei(payload.deposit) }
