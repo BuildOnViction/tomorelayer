@@ -19,7 +19,9 @@ export const wrappers = {
     validate: (values) => {
       const errors = {}
       const check = (key, func, message) => {
-        if (!func(values[key])) {errors[key] = message}
+        if (!func(values[key])) {
+          errors[key] = message
+        }
       }
       check('name', (name) => name && name.length < 200 && name.length >= 3, 'invalid name length')
       check('link', (url) => !url || validUrl.isUri(url), 'invalid link url')

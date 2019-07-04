@@ -48,8 +48,12 @@ export const wrappers = {
     }),
     validate: (values) => {
       const errors = {}
-      if (values.name.length < 3) {errors.name = 'Relayer name is too short.'}
-      if (values.name.length > 200) {errors.name = 'Relayer name is too long.'}
+      if (values.name.length < 3) {
+        errors.name = 'Relayer name is too short.'
+      }
+      if (values.name.length > 200) {
+        errors.name = 'Relayer name is too long.'
+      }
       return errors
     },
     handleSubmit: (values, { props }) => props.submitPayload(values),
@@ -62,7 +66,9 @@ export const wrappers = {
       const errors = {}
       Object.keys(values).forEach((feeType) => {
         const fee = parseFloat(values[feeType])
-        if (fee > 99.99 || fee < 0.01) {errors[feeType] = true}
+        if (fee > 99.99 || fee < 0.01) {
+          errors[feeType] = true
+        }
       })
       return errors
     },
