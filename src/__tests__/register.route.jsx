@@ -3,8 +3,6 @@ import {
   render,
   fireEvent,
   cleanup,
-  waitForElement,
-  wait,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
 import { HashRouter } from 'react-router-dom'
@@ -44,12 +42,9 @@ const finalPayload = {
 }
 
 let getByText,
-    getByLabelText,
     getByTestId,
     findByText,
-    findByTestId,
     findByLabelText,
-    findAllByLabelText,
     // eslint-disable-next-line
     debug;
 
@@ -106,12 +101,9 @@ beforeAll(() => {
 
   container = renderUtils.container
   getByText = renderUtils.getByText
-  getByLabelText = renderUtils.getByLabelText
   getByTestId = renderUtils.getByTestId
   findByText = renderUtils.findByText
-  findByTestId = renderUtils.findByTestId
   findByLabelText = renderUtils.findByLabelText
-  findAllByLabelText = renderUtils.findAllByLabelText
   debug = renderUtils.debug
 
   countInputs = () => Array.from(container.querySelectorAll('input')).length
@@ -145,7 +137,7 @@ describe('Test RegisterForm No Break', () => {
 
     const depositInput = getByTestId('deposit-input')
     const coinbaseInput = getByTestId('coinbase-input')
-    expect(parseInt(depositInput.value)).toEqual(MISC.MinimumDeposit)
+    expect(parseInt(depositInput.value, 10)).toEqual(MISC.MinimumDeposit)
 
     expect(getByText(/confirm/i)).toBeInTheDocument()
     // NOTE: cannot use getByText('Confirm') to find button,

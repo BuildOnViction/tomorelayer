@@ -5,7 +5,7 @@ export default class RelayerContract {
   wallet = undefined
 
   constructor(walletSigner, contractMeta) {
-    if (!walletSigner || !contractMeta) return undefined
+    if (!walletSigner || !contractMeta) {return undefined}
     this.contractWithSigner = new ethers.Contract(contractMeta.address, contractMeta.abi, walletSigner)
     this.wallet = walletSigner
     return this

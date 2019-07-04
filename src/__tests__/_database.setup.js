@@ -5,7 +5,7 @@ export const TEST_CONTRACT_ADDRESS = '0x6214de5b30c872e09db48e88798476ecce8c8da2
 
 const setup = async () => {
   const sequelize = new Sequelize(TEST_DB_URI, {
-    logging: void 0,
+    logging: undefined,
   })
 
   const Contract = sequelize.define(

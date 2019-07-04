@@ -42,7 +42,7 @@ export default class WalletSigner extends Signer {
     const resp = await this._wallet.sign(tx)
     const rawTx = utils.parseTransaction(resp)
     return this._provider.getTransaction(rawTx.hash).then((tx) => {
-      if (tx === null) return undefined
+      if (tx === null) {return undefined}
       return this._provider._wrapTransaction(tx, rawTx.hash)
     })
   }

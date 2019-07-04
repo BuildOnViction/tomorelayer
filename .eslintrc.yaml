@@ -1,3 +1,26 @@
 extends: react-app
 rules:
-  semi: 0
+  semi: ["error", "never"]
+  eqeqeq: ["error", "always"]
+  curly: ["error", "all"]
+  no-empty: "error"
+  no-irregular-whitespace: ["error", { "skipComments": true }]
+  no-sparse-arrays: "error"
+  no-obj-calls: "error"
+  no-misleading-character-class: "error"
+  no-multi-spaces: "error"
+  no-unsafe-negation: "error"
+  no-template-curly-in-string: "error"
+  no-prototype-builtins: "error"
+  no-dupe-keys: "error"
+  no-dupe-args: "error"
+  no-func-assign: "error"
+  no-new-func: "error"
+  no-return-assign: ["error", "always"]
+  no-redeclare: "error"
+  no-self-assign: "error"
+  no-void: "error"
+  no-useless-concat: "error"
+  no-with: "error"
+  radix: "error"
+  use-isnan: "error"

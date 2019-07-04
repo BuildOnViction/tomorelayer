@@ -109,7 +109,7 @@ const actions = store => ({
     let notifications = Array.from(state.notifications)
     notifications[index].open = false
     const anyOpenAlert = notifications.find(n => n.open)
-    if (!anyOpenAlert) notifications = []
+    if (!anyOpenAlert) {notifications = []}
     return { notifications }
   }
 })

@@ -19,7 +19,7 @@ export const UserMenu = props => {
 
   const handleClose = (event) => {
     const alreadyOpen = anchorRef.current && anchorRef.current.contains(event.target)
-    if (alreadyOpen) return undefined
+    if (alreadyOpen) {return undefined}
     return setOpen(false)
   }
 
@@ -64,7 +64,7 @@ export const RelayerMenu = ({ relayers }) => {
 
   const handleClose = (event) => {
     const alreadyOpen = anchorRef.current && anchorRef.current.contains(event.target)
-    if (alreadyOpen) return undefined
+    if (alreadyOpen) {return undefined}
     return setOpen(false)
   }
 

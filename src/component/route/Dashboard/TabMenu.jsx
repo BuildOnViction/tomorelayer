@@ -33,7 +33,7 @@ const styles = {
 }
 
 const mapRouteToValue = path => {
-  if (path.includes('config')) return 1
+  if (path.includes('config')) {return 1}
   return 0
 }
 

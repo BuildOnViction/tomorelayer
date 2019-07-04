@@ -18,7 +18,7 @@ class TokenPairList extends React.Component {
   FILTER_CONTROLS = {
     ALL: pair => pair,
     SEARCH: str => pair => {
-      if (!str || !str.length) return true
+      if (!str || !str.length) {return true}
       const regex = new RegExp(str, 'i')
       const searchField = `${pair.toString()}${pair.from.name}${pair.to.name}`
       return regex.exec(searchField)
@@ -77,7 +77,7 @@ class TokenPairList extends React.Component {
   searchInputChange = e => this.setState({ debounceText: e.target.value })
 
   handleItemClick = pair => () => {
-    if (this.props.disabled) return undefined
+    if (this.props.disabled) {return undefined}
     const index = this.props.pairs.indexOf(pair)
     const newList = Array.from(this.props.pairs)
     newList[index].checked = !newList[index].checked
@@ -187,9 +187,9 @@ export const mapProps = state => {
 
   Tokens.forEach((fromToken, fromIdx) => {
     Tokens.filter((toToken, toIdx) => {
-      if (fromIdx === toIdx) return false
-      if (toToken.is_major) return true
-      if (!fromToken.is_major) return true
+      if (fromIdx === toIdx) {return false}
+      if (toToken.is_major) {return true}
+      if (!fromToken.is_major) {return true}
       return false
     }).forEach((toToken, toIdx) => pairs.push({
       from: fromToken,
@@ -200,9 +200,9 @@ export const mapProps = state => {
   })
 
   pairs.sort((a, b) => {
-    if (a.from.symbol === b.from.symbol) return 1 * a.to.symbol.localeCompare(b.to.symbol)
-    if (a.from.symbol === 'TOMO') return -1
-    if (a.from.is_major && b.from.is_major) return 1 * a.from.symbol.localeCompare(b.from.symbol)
+    if (a.from.symbol === b.from.symbol) {return 1 * a.to.symbol.localeCompare(b.to.symbol)}
+    if (a.from.symbol === 'TOMO') {return -1}
+    if (a.from.is_major && b.from.is_major) {return 1 * a.from.symbol.localeCompare(b.from.symbol)}
     return 1 * a.from.symbol.localeCompare(b.from.symbol)
   })
 

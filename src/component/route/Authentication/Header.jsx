@@ -3,7 +3,7 @@ import { Box, Typography } from '@material-ui/core'
 import logo from 'asset/relayer-logo.png'
 
 const Header = () => (
-  <Box  flexDirection="column">
+  <Box flexDirection="column">
     <Box justifyContent="center" display="flex">
       <img
         alt="logo"
