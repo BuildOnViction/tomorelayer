@@ -14,7 +14,9 @@ export const BACKEND_URI = ((env) => {
 export const SOCKET_URI = BACKEND_URI.replace('http', 'ws') + '/socket'
 
 const genericHandler = (response) => {
-  if (response.ok) return response.json()
+  if (response.ok) {
+    return response.json()
+  }
   throw response
 }
 

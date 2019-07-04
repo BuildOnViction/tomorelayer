@@ -32,7 +32,7 @@ class App extends React.Component {
     try {
       await this.props.FetchPublic()
     } catch (error) {
-      console.erro(error)
+      console.error(error)
       this.props.PushAlert({
         message: 'Cannot fetch public resources',
         variant: AlertVariant.error,
