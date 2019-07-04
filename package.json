@@ -77,7 +77,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint -- --max-warnings 0 --fix && npm run prettify",
+      "pre-commit": "npm run prettify && npm run lint -- --max-warnings 0 --fix",
       "pre-push": "npm run prettify:check && npm run lint -- --max-warnings 0 && npm run test -- --bail --watchAll=false"
     }
   }
