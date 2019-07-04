@@ -6,8 +6,8 @@ import {
   wait,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
-import { Provider } from '@vutr/redux-zero/react'
-import createStore from '@vutr/redux-zero'
+import { Provider } from 'redux-zero/react'
+import createStore from 'redux-zero'
 import { initialState } from 'service/store'
 import TokenPairList, {
   mapProps as MapStateToProps,

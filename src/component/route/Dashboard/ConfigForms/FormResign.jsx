@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
+import { connect } from 'redux-zero/react'
 import { addDays, format as timeFormat, distanceInWordsToNow, isPast, parse as dateParse } from 'date-fns'
 import {
   Box,

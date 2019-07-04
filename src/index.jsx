@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { MuiThemeProvider } from '@material-ui/core/styles'
-import { Provider } from '@vutr/redux-zero/react'
+import { Provider } from 'redux-zero/react'
 import App from './component/App'
 import store from './service/store'
 import theme from './theme.config'

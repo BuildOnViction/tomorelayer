@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { connect } from '@vutr/redux-zero/react'
+import { connect } from 'redux-zero/react'
 import {
   Box,
   Container,

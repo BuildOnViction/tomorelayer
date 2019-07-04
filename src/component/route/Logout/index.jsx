@@ -6,7 +6,7 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core'
-import { connect } from '@vutr/redux-zero/react'
+import { connect } from 'redux-zero/react'
 
 
 class Logout extends React.Component {

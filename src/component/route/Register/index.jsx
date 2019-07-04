@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
+import { connect } from 'redux-zero/react'
 import { Container, Box, Paper } from '@material-ui/core'
 import { MISC, SITE_MAP } from 'service/constant'
 import * as blk from 'service/blockchain'

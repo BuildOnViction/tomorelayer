@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from '@vutr/redux-zero/react'
+import { connect } from 'redux-zero/react'
 import cx from 'classnames'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ErrorIcon from '@material-ui/icons/Error'

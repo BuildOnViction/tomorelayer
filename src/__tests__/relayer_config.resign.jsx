@@ -7,8 +7,8 @@ import {
   wait,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
-import { Provider, connect } from '@vutr/redux-zero/react'
-import createStore from '@vutr/redux-zero'
+import { Provider, connect } from 'redux-zero/react'
+import createStore from 'redux-zero'
 import { initialState } from 'service/store'
 import FormResign from 'component/route/Dashboard/ConfigForms/FormResign'
 import Alert from 'component/shared/Alert'

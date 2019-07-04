@@ -7,8 +7,8 @@ import {
 import 'jest-dom/extend-expect'
 import { HashRouter } from 'react-router-dom'
 
-import { Provider } from '@vutr/redux-zero/react'
-import createStore from '@vutr/redux-zero'
+import { Provider } from 'redux-zero/react'
+import createStore from 'redux-zero'
 
 import setup from './_database.setup.js'
 

@@ -19,7 +19,9 @@ killPort(port).then(() => {
 
     if (status <400) {
       localtunnel(port, (err, tunnel) => {
-        if (err) return console.error(err)
+        if (err) {
+          return console.error(err)
+        }
         const baseUrl = tunnel.url
         console.info(baseUrl)
         execSh(`TUNNEL_URL=${baseUrl} ENV_PATH=${envfile} pipenv run python ./backend/app.py`)

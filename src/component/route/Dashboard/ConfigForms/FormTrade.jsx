@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { connect } from '@vutr/redux-zero/react'
+import { connect } from 'redux-zero/react'
 import { compose } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
