@@ -1,17 +1,27 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { ethers } from 'ethers'
 import { Box, Button, Typography } from '@material-ui/core'
 import metamask from '@vutr/purser-metamask'
 import * as blk from 'service/blockchain'
 import WalletSigner from 'service/wallet'
+import { bindLogout } from 'component/shared/actions'
 
 
-export default class BrowserWallet extends React.Component {
+class BrowserWallet extends React.Component {
   wallet = undefined
 
   state = {
     address: undefined,
     balance: undefined,
+    noMetamaskError: false,
+  }
+
+  async componentDidMount() {
+    const isMetamaskAvailable = await metamask.detect().then(() => true).catch(() => false)
+    if (!isMetamaskAvailable) {
+      this.setState({ noMetamaskError: true })
+    }
   }
 
   requestMetamask = async () => {
@@ -21,17 +31,33 @@ export default class BrowserWallet extends React.Component {
     this.setState({ address, balance })
   }
 
-  confirm = () => {
+  confirm = async () => {
     const provider = new ethers.providers.Web3Provider(window.web3.currentProvider)
     const signer = new WalletSigner(this.wallet, provider)
     this.props.onConfirm(signer)
+    await metamask.accountChangeHook((wallet) => {
+      if (wallet.selectedAddress !== this.state.address) {
+        bindLogout()
+      }
+    })
   }
 
   render() {
     const {
       address,
       balance,
+      noMetamaskError,
     } = this.state
+
+    if (noMetamaskError) {
+      return (
+        <Box display="flex" justifyContent="center">
+          <Typography component="h3">
+            Please install MetaMask and set network to <span className="text-alert">{process.env.REACT_APP_RPC}</span>
+          </Typography>
+        </Box>
+      )
+    }
 
     return (
       <Box display="flex" justifyContent="center">
@@ -63,3 +89,5 @@ export default class BrowserWallet extends React.Component {
     )
   }
 }
+
+export default withRouter(BrowserWallet)

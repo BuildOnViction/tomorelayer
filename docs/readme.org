@@ -36,8 +36,6 @@ CLOSED: [2019-06-20 Thu 15:12]
 CLOSED: [2019-06-20 Thu 15:12]
 **** DONE Change rate from 1000 to 10,000
 CLOSED: [2019-06-26 Wed 17:42]
-*** [ ] Go back to login page when change wallet
-**** [ ] MetaMask
 *** [ ] Error catch boundary
 **** [ ] Backend api endpoint to present error & Slack integration
 **** [ ] Frontend setup
@@ -47,7 +45,6 @@ CLOSED: [2019-07-03 Wed 23:18]
 **** DONE Backend test
 CLOSED: [2019-07-03 Wed 22:13]
 **** ACTIVE Frontend test with Jest
-**** LATER Integrate ESDoc
 *** DONE Deploy to Test Server
 CLOSED: [2019-06-18 Tue 17:31]
 
@@ -57,8 +54,5 @@ CLOSED: [2019-06-18 Tue 17:31]
      1. TomoWallet QR Code
         - Make a wallet instance
         - Unable to register Relayer yet
-     2. MetaMask
-        - Proper action on Wallet/Account change
-     3. Cold-Wallet (trezor, ledger)
-        - Change address
+     2. Cold-Wallet (trezor, ledger)
         - Unable to register Relayer yet

@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
+import { Logout as confirmLogout } from 'component/shared/actions'
 
 
 class Logout extends React.Component {
@@ -38,13 +39,10 @@ class Logout extends React.Component {
   }
 }
 
+const mapProps = undefined
+
 const actions = {
-  confirmLogout: (state) => ({
-    user: {
-      ...state.user,
-      wallet: undefined
-    }
-  })
+  confirmLogout,
 }
 
-export default connect(undefined, actions)(Logout)
+export default connect(mapProps, actions)(Logout)
