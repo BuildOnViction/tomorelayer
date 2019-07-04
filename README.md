@@ -25,6 +25,9 @@ A Relayer Manager Application, built with Python, Tornado, and React's Create-Re
 <a id="org168090e"></a>
 
 ### Setup
+
+##### Prerequisite
+
 The following must be included in the development toolbelt:
 
 -   pyenv
@@ -35,35 +38,56 @@ The following must be included in the development toolbelt:
 -   node 10+ && npm 6+
 -   Docker
 
-Now, install dependencies and get the app started.
+You can test if any tool above work as expected using the *which* command below
 
-Note that generally, you should be prepared to have 3 terminals running in parallel:
+``` shell
+$ which <library>
+```
+If the installing is correct, you should see some path or text got printed out in the terminal.
 
-- Install frontend & node scripts dependencies
-``` sh
+As usual, clone the repository to your local machine and cd into it.
+
+``` shell
+$ git clone <tomorelayer-repository>
+$ cd <tomorelayer-repository>
+```
+
+After that, install the specified application dependencies with **npm** and **pipenv**
+
+``` shell
+# Install frontend & node scripts dependencies
 $ npm install
-```
 
-- Install backend dependencies
-``` sh
+# Install backend dependencies
 $ pipenv install
+
 ```
 
-- Fire up database with Docker
-``` sh
+Next, setup local databases with **Docker**
+
+*For development environment, we are going to have 2 PosgreSQL database docker-containers, one for developing & the other for testing - each get exposed on its own local port*
+
+``` shell
 $ npm run docker
 ```
 
-- The frontend - since CREATE-REACT-APP takes quite some time to start - in another terminal
-``` sh
-$ npm start
+
+You will need a local **.env.local** file. Copy the existing **.env.development** to make your own. Then you can make
+changes to your local env file if needed.
+
+``` shell
+$ mv .env.development .env.local
 ```
 
-- Finally, Backend - certainly in another different terminal as well
-``` sh
+
+Start backend & frontend on 2 different terminal
+``` shell
+# The frontend - since CREATE-REACT-APP takes quite some time to start - in another terminal
+$ npm start
+
+# Finally, Backend - certainly in another different terminal as well
 $ npm run backend
 ```
-
 
 For any installation/running problem, check out [Troubleshooting](#trouble) guide
 
@@ -109,15 +133,17 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
    - [x] Refactor UI/UX
    - [x] Login
    - [x] RelayerRegistration
-   - [ ] Complete Registration & Configuration Flow for Relayer User
-3. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
+   - [x] Complete Registration & Configuration Flow for Relayer User
+3. Polishing Frontend
+   - [ ] Customizing Material-UI
+4. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
    - [ ] List all filled orders
    - [ ] Showing Fill Order Details
-4. Showing & Updating all supported token available for trading
-5. Listing signed & verified Relayers
+5. Showing & Updating all supported token available for trading
+6. Listing signed & verified Relayers
    - [ ] Counting filled orders
    - [ ] Network volume details
-6. Make Portable/Reusable API Kit
+7. Make Portable/Reusable API Kit
 
 
 
