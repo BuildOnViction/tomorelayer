@@ -34,6 +34,10 @@ const FormStepOne = props => {
           helperText={errors.deposit && <i className="text-alert">* Minimum deposit is 25,000 TOMO</i>}
           type="number"
           className="mb-2"
+          inputProps= {{
+            'data-testid': 'deposit-input'
+          }}
+          required
           fullWidth
         />
         <TextField
@@ -42,8 +46,12 @@ const FormStepOne = props => {
           id="coinbase-input"
           value={values.coinbase}
           onChange={handleChange}
-          error={errors.coinbase}
-          helperText={errors.coinbase && <i className="text-alert">* Invalid coinbase address!</i>}
+          error={Boolean(errors.coinbase)}
+          helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
+          inputProps= {{
+            'data-testid': 'coinbase-input'
+          }}
+          required
           fullWidth
         />
         <Box display="flex" justifyContent="flex-end" className="mt-2">

@@ -1,6 +1,7 @@
 import { withFormik } from 'formik'
 import { validateCoinbase, bigNumberify } from 'service/blockchain'
 import { MISC } from 'service/constant'
+import * as _ from 'service/helper'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
 
@@ -15,13 +16,25 @@ export const wrappers = {
     validate: (values, props) => {
       const errors = {}
       validateCoinbase(values.coinbase, (isValid) => {
-        const isSameAsOwner = values.coinbase.toLowerCase() === props.userAddress.toLowerCase()
-        const isAlreadyUsed = props.usedCoinbases.includes(values.coinbase.toLowerCase())
-        if (!isValid || isSameAsOwner || isAlreadyUsed) errors.coinbase = true
+        if (!isValid) {
+          errors.coinbase = 'invalid coinbase address'
+        }
       })
+
+      if (_.compareString(values.coinbase, props.userAddress)) {
+        errors.coinbase = 'coinbase cannot be the same as owner address'
+      }
+
+      if (props.usedCoinbases.find(r => _.compareString(r, values.coinbase))) {
+        errors.coinbase = 'coinbase is already used'
+      }
+
       const currentDeposit = bigNumberify(values.deposit)
       const invalidDeposit = currentDeposit.lt(MINIMUM_DEPOSIT)
-      if (invalidDeposit) errors.deposit = true
+      if (invalidDeposit) {
+        errors.deposit = true
+      }
+
       return errors
     },
     handleSubmit: (values, { props }) => props.submitPayload(values),

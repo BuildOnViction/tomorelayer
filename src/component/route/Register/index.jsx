@@ -94,7 +94,7 @@ export class Register extends React.Component {
           <Box display="flex" justifyContent="center" flexDirection="column">
             {step < 5 && (<ProgressBar step={step} />)}
             <div className="mt-2">
-              {step === 1 && (
+              {step === 1 && userAddress && (
                 <FormStepOne
                   {...payload}
                   userAddress={userAddress}
