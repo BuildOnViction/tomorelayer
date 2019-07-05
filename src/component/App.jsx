@@ -9,6 +9,7 @@ import { FetchPublic } from './shared/actions'
 import { Protected } from 'component/utility'
 
 import PageHeader from 'component/shared/PageHeader'
+import PageFooter from 'component/shared/PageFooter'
 import Alert from 'component/shared/Alert'
 import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
@@ -117,6 +118,7 @@ class App extends React.Component {
               component={Logout}
             />
           </Switch>
+          <PageFooter className="mt-2" />
         </div>
       </Router>
     )
