@@ -16,14 +16,22 @@ const theme = createMuiTheme({
   overrides: {
     MuiButton: {
       root: {
-        borderRadius: '2px',
       },
       sizeSmall: {
         padding: '4px 12px',
       },
       contained: {
+        borderRadius: '8px',
+        color: '#fff',
+        backgroundImage: 'linear-gradient(to right, #703db5, #5b1da3)',
         boxShadow: 'none',
       },
+      special: {
+        borderRadius: '8px',
+        color: '#ddd',
+        backgroundImage: 'linear-gradient(to right, #FFF, #5b1da3)',
+        boxShadow: 'none',
+      }
     },
     MuiOutlinedInput: {
       root: {
