@@ -74,12 +74,14 @@ export default class TrezorWallet extends React.Component {
     return (
       <Container maxWidth="md">
         {!trezorWallet && (
-          <Grid container alignItems="flex-end" justify="center">
+          <Grid container alignItems="center" justify="center">
             <Grid item sm={10} md={5} lg={4} className="pr-3 pl-3">
               <TextField
                 label="HD path"
                 value={hdpath}
                 onChange={this.changePath}
+                variant="outlined"
+                margin="dense"
                 fullWidth
                 disabled
               />

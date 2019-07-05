@@ -14,7 +14,8 @@ import TomoWallet from './Methods/TomoWallet'
 import BrowserWallet from './Methods/BrowserWallet'
 import LedgerWallet from './Methods/LedgerWallet'
 import TrezorWallet from './Methods/TrezorWallet'
-import SoftwareWallet from './Methods/SoftwareWallet'
+import PrivatekeyWallet from './Methods/PrivatekeyWallet'
+import MnemonicWallet from './Methods/MnemonicWallet'
 
 
 const MethodOptions = [
@@ -103,7 +104,8 @@ class Authentication extends React.Component {
             {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
             {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
             {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}
-            {unlockingMethod === 4 && <SoftwareWallet onConfirm={this.confirmWallet} />}
+            {unlockingMethod === 4 && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
+            {unlockingMethod === 5 && <MnemonicWallet onConfirm={this.confirmWallet} />}
           </Container>
         </Box>
       </div>
