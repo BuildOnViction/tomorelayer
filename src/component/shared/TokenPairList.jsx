@@ -4,12 +4,14 @@ import {
   Button,
   Box,
   Checkbox,
+  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   TextField,
 } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
 import LoadSpinner from 'component/utility/LoadSpinner'
 
 
@@ -141,6 +143,13 @@ class TokenPairList extends React.Component {
             className="m-1"
             variant="outlined"
             margin="dense"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
           />
         </Box>
         <Box style={{ position: 'relative' }}>

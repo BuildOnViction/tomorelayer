@@ -4,8 +4,10 @@ import {
   Container,
   Grid,
   Link,
+  InputAdornment,
   TextField,
 } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
 import * as _ from 'service/helper'
 import { AdapterLink } from './Adapters'
 import { UserMenu, RelayerMenu } from './Menus'
@@ -33,7 +35,19 @@ class PageHeader extends React.Component {
               </Link>
             </Grid>
             <Grid item sm={false} md={6}>
-              <TextField placeholder="Search..." fullWidth variant="outlined" margin="dense" />
+              <TextField
+                placeholder="Search..."
+                fullWidth
+                variant="outlined"
+                margin="dense"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  )
+                }}
+              />
             </Grid>
             <Grid item sm={6} md={4} container justify="space-around" direction="row" spacing={4}>
               {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
