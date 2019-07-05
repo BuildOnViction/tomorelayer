@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   Container,
+  InputAdornment,
   TextField,
   Typography,
 } from '@material-ui/core'
+import KeyIcon from '@material-ui/icons/VpnKey'
 import { ethers, Wallet as WalletSigner } from 'ethers'
 import * as blk from 'service/blockchain'
 
@@ -60,6 +62,10 @@ export default class SoftwareWallet extends React.Component {
       wallet,
     } = this.state
 
+    const HDPathHelpText = (
+      <small>To unlock the wallet, try paths m/44'/60'/0' or m/44'/60'/0'/0</small>
+    )
+
     return (
       <Container maxWidth="sm">
         <Box display="flex" justifyContent="center" alignItems="center">
@@ -78,7 +84,16 @@ export default class SoftwareWallet extends React.Component {
                 type="password"
                 className="mb-1"
                 error={Boolean(errorAlert)}
+                variant="outlined"
+                margin="dense"
                 fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <KeyIcon />
+                    </InputAdornment>
+                  )
+                }}
               />
               <TextField
                 label="Change derivationPath"
@@ -87,7 +102,9 @@ export default class SoftwareWallet extends React.Component {
                 type="text"
                 className="mb-1"
                 error={Boolean(errorAlert)}
-                helperText={errorAlert && <i className="text-alert">{errorAlert}</i>}
+                helperText={errorAlert ? <i className="text-alert">{errorAlert}</i> : HDPathHelpText}
+                variant="outlined"
+                margin="dense"
                 fullWidth
               />
             </Box>

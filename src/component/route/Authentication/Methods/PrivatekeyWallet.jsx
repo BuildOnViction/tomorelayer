@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   Container,
+  InputAdornment,
   TextField,
   Typography,
 } from '@material-ui/core'
+import KeyIcon from '@material-ui/icons/VpnKey'
 import { ethers, Wallet as WalletSigner } from 'ethers'
 import * as blk from 'service/blockchain'
 
@@ -71,8 +73,17 @@ export default class SoftwareWallet extends React.Component {
                 type="password"
                 error={Boolean(errorAlert)}
                 helperText={errorAlert && <i className="text-alert">{errorAlert}</i>}
+                variant="outlined"
+                margin="dense"
                 className="mb-1"
                 fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <KeyIcon />
+                    </InputAdornment>
+                  )
+                }}
               />
             </Box>
             <Box justifyContent="flex-end" display="flex" className="mt-2">

@@ -30,7 +30,7 @@ class PageHeader extends React.Component {
         <Container maxWidth="md" className="p-1 mb-1">
           <Grid container direction="row" justify="space-between" alignItems="center" spacing={4}>
             <Grid item sm={3} md={2}>
-              <Link to="/">
+              <Link component={AdapterLink} to="/">
                 <img alt="logo" src={logo} height="40" />
               </Link>
             </Grid>
@@ -49,7 +49,7 @@ class PageHeader extends React.Component {
                 }}
               />
             </Grid>
-            <Grid item sm={6} md={4} container justify="space-around" direction="row" spacing={4}>
+            <Grid item sm={6} md={4} container justify="space-around" direction="row" spacing={4} alignItems="center">
               {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
               {auth && !userOwnRelayer && <Button component={AdapterLink} to="/register">Start a Relayer</Button>}
               {auth && <UserMenu />}
