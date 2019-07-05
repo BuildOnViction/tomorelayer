@@ -8,38 +8,60 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    useNextVariants: true,
+    fontFamily: [
+      'Nunito Sans',
+      'sans-serif',
+    ].join(','),
   },
   palette: {
     primary: blue,
   },
   overrides: {
+    MuiTab: {
+      root: {}
+    },
+    MuiLink: {
+      root: {
+        color: '#fff',
+        '&:hover': {
+          textDecoration: 'none !important',
+        }
+      }
+    },
     MuiButton: {
       root: {
+        padding: '8px 15px',
       },
       sizeSmall: {
-        padding: '4px 12px',
+      },
+      sizeLarge: {
       },
       contained: {
         borderRadius: '8px',
         color: '#fff',
-        backgroundImage: 'linear-gradient(to right, #703db5, #5b1da3)',
+        background: 'linear-gradient(to right, #703db5, #5b1da3)',
         boxShadow: 'none',
+        textTransform: 'none',
+        lineHeight: '1',
+        minWidth: '170px',
       },
-      special: {
-        borderRadius: '8px',
-        color: '#ddd',
-        backgroundImage: 'linear-gradient(to right, #FFF, #5b1da3)',
-        boxShadow: 'none',
+      containedSecondary: {
+        background: '#323252!important',
       }
     },
     MuiOutlinedInput: {
       root: {
         fontSize: '14px',
+        background: '#272741',
+        borderRadius: '8px',
+        borderColor: '#fff',
+        color: '#CFCDE1',
+        '&:placeholder': {
+          color: '#52527B',
+        }
       },
-      inputMarginDense: {
-        paddingTop: 10,
-        paddingBottom: 10,
+      notchedOutline: {
+        border: '0',
       },
     },
     MuiInputLabel: {

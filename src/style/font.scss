@@ -1,17 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Assistant');
-
-// Custom font
-@font-face {
-  font-family: Monad;
-  src: url("./font/Monad.otf");
-}
-
-@font-face {
-  font-family: Myste;
-  src: url("./font/Myste.otf");
-}
-
-@font-face {
-  font-family: Quantify;
-  src: url("./font/Quantify.ttf");
-}
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,600,700,800&display=swap');
+//
+$fontGlobal: 'Nunito Sans', sans-serif;
