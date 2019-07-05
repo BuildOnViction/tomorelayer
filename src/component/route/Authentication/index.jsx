@@ -91,7 +91,7 @@ class Authentication extends React.Component {
     return (
       <div className="login-page">
         <Box display="flex" flexDirection="column">
-          <Container maxWidth="md" className="pt-4">
+          <Container maxWidth="lg" className="pt-4">
             <Header />
             <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
               <Typography component="small" className="text-alert">
