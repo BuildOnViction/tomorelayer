@@ -43,6 +43,9 @@ export const UserMenu = props => {
             <Paper id="menu-user-list-grow">
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList>
+                  <MenuItem component={AdapterLink} to="/profile">
+                    Profile
+                  </MenuItem>
                   <MenuItem component={AdapterLink} to="/logout">
                     Logout
                   </MenuItem>

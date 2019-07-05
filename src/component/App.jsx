@@ -12,6 +12,7 @@ import PageHeader from 'component/shared/PageHeader'
 import Alert from 'component/shared/Alert'
 import Authentication from 'component/route/Authentication'
 import Main from 'component/route/Main'
+import Profile from 'component/route/Profile'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
 import Logout from 'component/route/Logout'
@@ -93,6 +94,12 @@ class App extends React.Component {
               <Alert />
               <Switch>
                 <Route path={SITE_MAP.Home} exact component={Main} />
+                <Protected
+                  path={SITE_MAP.Profile}
+                  component={Profile}
+                  condition={userLoggedIn}
+                  redirect={SITE_MAP.Authentication}
+                />
                 <Protected
                   path={SITE_MAP.Register}
                   component={Register}

@@ -5,6 +5,7 @@ export const TOMO_COIN_TYPE = 889
 export const SITE_MAP = {
   Authentication: '/login',
   Home: '/',
+  Profile: '/profile',
   Orders: '/orders',
   Relayers: '/relayers',
   Register: '/register',
