@@ -22,7 +22,8 @@ const MethodOptions = [
   UNLOCK_WALLET_METHODS.BrowserWallet,
   UNLOCK_WALLET_METHODS.LedgerWallet,
   UNLOCK_WALLET_METHODS.TrezorWallet,
-  UNLOCK_WALLET_METHODS.SoftwareWallet,
+  UNLOCK_WALLET_METHODS.SoftwareWalletPrivate,
+  UNLOCK_WALLET_METHODS.SoftwareWalletMnemonic,
 ]
 
 /**

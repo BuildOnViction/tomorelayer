@@ -18,7 +18,8 @@ export const UNLOCK_WALLET_METHODS = {
   LedgerWallet: 'Ledger Wallet',
   TrezorWallet: 'Trezor Wallet',
   BrowserWallet: 'MetaMask',
-  SoftwareWallet: 'Private Key/Mnemonnic',
+  SoftwareWalletPrivate: 'Private Key',
+  SoftwareWalletMnemonic: 'Mnemonnic',
 }
 
 export const MISC = {
