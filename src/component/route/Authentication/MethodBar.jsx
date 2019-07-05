@@ -2,21 +2,17 @@ import React from 'react'
 import { AppBar, Box, Tabs, Tab } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
-const mainColor = '#00a99d'
-
 const BoxWrap = withStyles({
   root: {
     margin: '50px auto',
-    maxWidth: '700px',
-    overflow: 'break',
+    overflow: 'scroll',
   }
 })(props => <Box {...props} />)
 
 const StyledAppBar = withStyles({
   root: {
     backgroundColor: 'transparent',
-    border: `solid 1px ${mainColor}`,
-    boxShadow: 'inset 1px 1px 3px 0px rgba(0,0,0,.2)',
+    border: 'transparent',
     borderRadius: 8,
     marginBottom: 10,
   }
@@ -30,7 +26,7 @@ const StyledTabs = withStyles({
     '& > div': {
       width: '100%',
       height: '100px',
-      backgroundColor: mainColor,
+      backgroundColor: '#272741',
       transform: 'translateY(-98px)',
       borderRadius: 5,
       zIndex: 0,
@@ -61,7 +57,7 @@ const MethodBar = ({
   children,
 }) => (
   <BoxWrap>
-    <StyledAppBar position="static" color="default">
+    <StyledAppBar position="static" color="default" elevation={0}>
       <StyledTabs
         value={value}
         onChange={(_, value) => onChange(value)}

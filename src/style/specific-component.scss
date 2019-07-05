@@ -1,38 +1,3 @@
-.login-page {
-  width: 100vw;
-  min-height: 100vh;
-  background: white;
-}
-
-.lang-select {
-  width: 30px;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  text-align: left;
-  appearance: none;
-  cursor: pointer;
-  color: $light-blue;
-  &:hover {
-    color: $text-base-dark;
-  }
-}
-
-.lang-flag {
-  width: 25px;
-  border: solid 1px #ddd;
-  height: 20px;
-  margin-right: 8px;
-}
-
-.help-badge {
-  font-size: 16px;
-  color: $light-blue;
-  &:hover {
-    color: $text-base-dark;
-  }
-}
-
 .relayer-logo {
   margin: 0 auto;
 }
@@ -85,25 +50,6 @@
   height: 4px !important;
 }
 
-.countdown-col {
-
-  &-element {
-    text-align: center;
-    color: #555;
-    border-radius: 5px;
-    padding: 0px;
-  }
-
-  &-element-number {
-    font-size: 20px;
-    border-bottom: solid 1px #ddd;
-  }
-
-  &-element-text {
-    font-size: 14px;
-  }
-
-}
 
 .search-overlay {
   position: absolute;
