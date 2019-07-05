@@ -91,24 +91,22 @@ class Authentication extends React.Component {
     } = this.state
 
     return (
-      <div className="login-page">
-        <Box display="flex" flexDirection="column">
-          <Container maxWidth="lg" className="pt-4">
-            <Header />
-            <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
-              <Typography component="small" className="text-alert">
-                using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
-              </Typography>
-            </MethodBar>
-            {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}
-            {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
-            {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
-            {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}
-            {unlockingMethod === 4 && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
-            {unlockingMethod === 5 && <MnemonicWallet onConfirm={this.confirmWallet} />}
-          </Container>
-        </Box>
-      </div>
+      <Box>
+        <Container maxWidth="lg" className="pt-4">
+          <Header />
+          <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
+            <Typography component="small" className="text-alert">
+              using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
+            </Typography>
+          </MethodBar>
+          {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}
+          {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
+          {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
+          {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}
+          {unlockingMethod === 4 && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
+          {unlockingMethod === 5 && <MnemonicWallet onConfirm={this.confirmWallet} />}
+        </Container>
+      </Box>
     )
   }
 }

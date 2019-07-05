@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   Button,
+  Box,
   Container,
   Grid,
   Link,
@@ -11,7 +12,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import * as _ from 'service/helper'
 import { AdapterLink } from './Adapters'
 import { UserMenu, RelayerMenu } from './Menus'
-import logo from 'asset/app-logo.png'
+import logo from 'asset/logo-tomorelayer.svg'
 
 class PageHeader extends React.Component {
 
@@ -26,12 +27,12 @@ class PageHeader extends React.Component {
     const userOwnRelayer = !_.isEmpty(relayers)
 
     return (
-      <div style={{ background: 'white' }}>
+      <Box className="tomo-header">
         <Container maxWidth="md" className="p-1 mb-1">
           <Grid container direction="row" justify="space-between" alignItems="center" spacing={4}>
             <Grid item sm={3} md={2}>
-              <Link component={AdapterLink} to="/">
-                <img alt="logo" src={logo} height="40" />
+              <Link display="block" component={AdapterLink} to="/">
+                <img alt="logo" src={logo} />
               </Link>
             </Grid>
             <Grid item sm={false} md={6}>
@@ -58,7 +59,7 @@ class PageHeader extends React.Component {
             </Grid>
           </Grid>
         </Container>
-      </div>
+      </Box>
     )
   }
 }

@@ -2,8 +2,8 @@
 @import './mixin.scss';
 
 // Compose all the remaining styles
+@import './font.scss';
 @import './utility-class.scss';
 @import './base-component.scss';
 @import './specific-component.scss';
-@import './font.scss';
 @import './fontello.scss';
