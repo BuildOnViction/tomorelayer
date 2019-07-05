@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import {
   Button,
   Container,
   Grid,
+  Link,
   TextField,
 } from '@material-ui/core'
 import * as _ from 'service/helper'
@@ -37,9 +37,10 @@ class PageHeader extends React.Component {
             </Grid>
             <Grid item sm={6} md={4} container justify="space-around" direction="row" spacing={4}>
               {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
-              {(!auth || !userOwnRelayer) && <Button component={AdapterLink} to="/register">Start a Relayer</Button>}
+              {auth && !userOwnRelayer && <Button component={AdapterLink} to="/register">Start a Relayer</Button>}
               {auth && <UserMenu />}
-              {!auth && <Button component={AdapterLink} to="/login">Login</Button>}
+              {!auth && <Button variant="contained" component={AdapterLink} to="/login">Login</Button>}
+              {!auth && <Link component={AdapterLink} to="/login">Help</Link>}
             </Grid>
           </Grid>
         </Container>
