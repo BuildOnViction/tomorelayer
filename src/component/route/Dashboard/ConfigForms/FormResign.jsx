@@ -70,7 +70,7 @@ const FormResign = props => {
     const remainingTime = distanceInWordsToNow(dateParse(relayer.lock_time * 1000))
     const withdrawalable = isPast(dateParse(relayer.lock_time * 1000))
     return (
-      <Container className="border-all border-rounded p-5" maxWidth="xl">
+      <Container maxWidth="xl">
         <Box display="flex" flexDirection="column">
           <Box m={2}>
             <Typography component="h1">
@@ -96,27 +96,45 @@ const FormResign = props => {
   }
 
   return (
-    <Container className="border-all border-rounded p-5" maxWidth="xl">
+    <Container maxWidth="xl">
       {step === 0 && <ResignNotice confirm={nextStep} />}
       {step === 1 && (
-        <div>
-          <Grid container direction="column" spacing={3}>
-            <Grid item className="mb-1">
+        <Box>
+          <Grid item container sm={12} md={8} direction="column" spacing={6}>
+            <Grid item sm={12}>
               <Typography component="h1">
                 Resign
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item sm={12}>
               <Typography component="div">
                 If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
               </Typography>
-              <TextField name="coinbase" value={relayer.coinbase} readOnly fullWidth label="Relayer Coinbase" />
-              <TextField name="name" value={relayer.name} readOnly fullWidth label="Relayer name" />
-              <Box display="flex" justifyContent="flex-end">
-                <Button color="primary" onClick={handleClickOpen} data-testid="resign-button">
-                  Resign
-                </Button>
-              </Box>
+            </Grid>
+            <Grid item sm={12}>
+              <TextField
+                name="name"
+                value={relayer.name}
+                readOnly
+                fullWidth
+                label="Relayer name"
+                variant="outlined"
+                margin="dense"
+              />
+              <TextField
+                name="coinbase"
+                value={relayer.coinbase}
+                readOnly
+                fullWidth
+                label="Relayer Coinbase"
+                variant="outlined"
+                margin="dense"
+              />
+            </Grid>
+            <Grid item container justify="center">
+              <Button onClick={handleClickOpen} data-testid="resign-button" color="primary" variant="contained">
+                Resign
+              </Button>
             </Grid>
           </Grid>
           <Dialog
@@ -141,7 +159,7 @@ const FormResign = props => {
               </Button>
             </Box>
           </Dialog>
-        </div>
+        </Box>
       )}
     </Container>
   )

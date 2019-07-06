@@ -123,8 +123,8 @@ class TokenPairList extends React.Component {
     const filterFunction = activeFilter !== 'SEARCH' ? this.FILTER_CONTROLS[activeFilter] : this.FILTER_CONTROLS[activeFilter](searchText)
 
     return (
-      <Box border={1}>
-        <Box display="flex" justifyContent="space-around" alignItems="center" borderBottom={1}>
+      <Box className="token-select-list">
+        <Box display="flex" justifyContent="space-around" alignItems="center">
           <Button onClick={this.setFilter('ALL')} type="button" size="small" className="m-1">
             ALL
           </Button>

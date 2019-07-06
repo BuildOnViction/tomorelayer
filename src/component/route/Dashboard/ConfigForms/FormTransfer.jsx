@@ -47,55 +47,61 @@ const FormTransfer = props => {
 
   if (relayer.resigning) {
     return (
-      <Container className="border-all border-rounded p-5" maxWidth="xl">
-        <Typography component="h5">
-          <Box>
-            <Typography component="h4">
-              This relayer has been requested to deactivated. Transferring relayer is not allowed.
+      <Container maxWidth="xl">
+        <Grid container>
+          <Grid item sm={12} md={8}>
+            <Typography component="h5">
+              <Box>
+                <Typography component="h4">
+                  This relayer has been requested to deactivated. Transferring relayer is not allowed.
+                </Typography>
+              </Box>
             </Typography>
-          </Box>
-        </Typography>
+          </Grid>
+        </Grid>
       </Container>
     )
   }
 
   return (
-    <Container className="border-all border-rounded p-5" maxWidth="xl">
+    <Container>
       {step === 0 && <TransferNotice confirm={nextStep} />}
       {step === 1 && (
         <form onSubmit={handleSubmit}>
-          <Grid container direction="column" spacing={3}>
-            <Grid item className="mb-2">
+          <Grid item sm={12} md={8} container direction="column" spacing={6}>
+            <Grid item sm={12}>
               <Typography component="h1">
                 Transfer Relayer
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item sm={12}>
               <Typography component="h5">
                 Which address and coinbase would you like to transfer to?
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item sm={12} container direction="column">
               <TextField
                 label="New Owner"
                 value={values.owner}
                 onChange={handleChange}
                 error={Boolean(errors.owner)}
                 name="owner"
+                margin="dense"
+                variant="outlined"
                 inputProps={{
                   'data-testid': 'new-owner-input'
                 }}
                 helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
                 fullWidth
               />
-            </Grid>
-            <Grid item>
               <TextField
                 label="New Coinbase"
                 value={values.coinbase}
                 onChange={handleChange}
                 error={Boolean(errors.coinbase)}
                 name="coinbase"
+                margin="dense"
+                variant="outlined"
                 inputProps={{
                   'data-testid': 'new-coinbase-input'
                 }}
@@ -103,18 +109,16 @@ const FormTransfer = props => {
                 fullWidth
               />
             </Grid>
-            <Grid item className="mt-4">
-              <Box display="flex" justifyContent="flex-end">
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={handleClickOpen}
-                  disabled={transferDisabled}
-                  data-testid="transfer-button"
-                >
-                  Transfer
-                </Button>
-              </Box>
+            <Grid item container justify="center" sm={12}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleClickOpen}
+                disabled={transferDisabled}
+                data-testid="transfer-button"
+              >
+                Transfer
+              </Button>
             </Grid>
           </Grid>
           <Dialog

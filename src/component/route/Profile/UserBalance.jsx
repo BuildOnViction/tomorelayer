@@ -85,7 +85,7 @@ export default class UserBalance extends React.Component {
             <Typography component="div">
               Wallet Balance (TOMO)
             </Typography>
-            <TextField value={formattedBalance} fullWidth variant="outlined" margin="dense" />
+            <TextField value={formattedBalance} fullWidth disabled variant="outlined" margin="dense" />
           </Box>
           <Box>
             {isEmpty(relayers) ? (
