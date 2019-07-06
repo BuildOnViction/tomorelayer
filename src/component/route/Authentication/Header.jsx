@@ -3,12 +3,10 @@ import { Box, Typography } from '@material-ui/core'
 
 const Header = () => (
   <Box justifyContent="start" display="flex" flexDirection="column">
-    <Typography component="h1">
+    <Typography variant="subtitle1" component="h1">
       Unlock your wallet
     </Typography>
-    <Typography component="h4">
-      Start by choosing the wallet you want to unlock
-    </Typography>
+    <div className="txt-undertitle">Start by choosing the wallet you want to unlock</div>
   </Box>
 )
 

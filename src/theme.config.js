@@ -1,6 +1,8 @@
+import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
 import { createMuiTheme } from '@material-ui/core/styles'
 import blue from '@material-ui/core/colors/blue'
 
+const breakpoints = createBreakpoints({})
 const theme = createMuiTheme({
   props: {
     MuiButtonBase: {
@@ -17,12 +19,36 @@ const theme = createMuiTheme({
     primary: blue,
   },
   overrides: {
+    MuiContainer: {
+      root: {
+        [breakpoints.up('xs')]: {
+          paddingLeft: '15px',
+          paddingRight: '15px',
+        },
+      }
+    },
+    MuiTypography: {
+      root: {
+        color: '#cfcde1',
+        marginBottom: '15px',
+        lineHeight: '1',
+      },
+      subtitle1: {
+        fontSize: '24px',
+        lineHeight: '1',
+      },
+      subtitle2: {
+        fontSize: '30px',
+        lineHeight: '1',
+      }
+    },
     MuiTab: {
       root: {}
     },
     MuiLink: {
       root: {
         color: '#fff',
+        margin: '0',
         '&:hover': {
           textDecoration: 'none !important',
         }
@@ -58,7 +84,11 @@ const theme = createMuiTheme({
         color: '#CFCDE1',
         '&:placeholder': {
           color: '#52527B',
-        }
+        },
+      },
+      input: {
+        padding: '.5em 2em',
+        [breakpoints.down('md')]: {}
       },
       notchedOutline: {
         border: '0',
