@@ -43,7 +43,7 @@ You can test if any tool above work as expected using the *which* command below
 ``` shell
 $ which <library>
 ```
-If the installing is correct, you should see some path or text got printed out in the terminal.
+*If the installing is correct, you should see some path or text got printed out in the terminal.*
 
 As usual, clone the repository to your local machine and cd into it.
 
@@ -65,7 +65,7 @@ $ pipenv install
 
 Next, setup local databases with **Docker**
 
-*For development environment, we are going to have 2 PosgreSQL database docker-containers, one for developing & the other for testing - each get exposed on its own local port*
+*For development purpose, we are going to have 2 PosgreSQL docker-containers, one for developing & the other for testing - each get exposed on its own local port*
 
 ``` shell
 $ npm run docker
@@ -73,14 +73,16 @@ $ npm run docker
 
 
 You will need a local **.env.local** file. Copy the existing **.env.development** to make your own. Then you can make
-changes to your local env file if needed.
+changes to your local env file if needed. *(actually in most case, you wont need to make any change, unless you have
+some docker-exposing-port-conflict problem)*
+
 
 ``` shell
-$ mv .env.development .env.local
+$ cp .env.development .env.local
 ```
 
 
-Start backend & frontend on 2 different terminal
+Start backend & frontend on 2 different terminal tabs
 ``` shell
 # The frontend - since CREATE-REACT-APP takes quite some time to start - in another terminal
 $ npm start
@@ -105,7 +107,8 @@ Those are where you get started.
 #### Frontend Development
 
 -   Made with *Create-React-App*
--   State Management with *My own customized version of Redux-Zero* in effort to 100% isolate the LOGICS from the UI
+-   State Management with *Redux-Zero* (not the well-known, original *Redux* - since it introduces way too much
+    boilerplate codes)
 -   UI/UX Development with [Material-UI](https://material-ui.com/)
 
 
