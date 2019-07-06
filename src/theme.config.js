@@ -10,10 +10,7 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: [
-      'Nunito Sans',
-      'sans-serif',
-    ].join(','),
+    fontFamily: ['Nunito Sans', 'sans-serif'].join(','),
   },
   palette: {
     primary: blue,
@@ -25,7 +22,7 @@ const theme = createMuiTheme({
           paddingLeft: '15px',
           paddingRight: '15px',
         },
-      }
+      },
     },
     MuiTypography: {
       root: {
@@ -40,28 +37,26 @@ const theme = createMuiTheme({
       subtitle2: {
         fontSize: '30px',
         lineHeight: '1',
-      }
+      },
     },
     MuiTab: {
-      root: {}
+      root: {},
     },
     MuiLink: {
       root: {
-        color: '#fff',
-        margin: '0',
+        'color': '#fff',
+        'margin': '0',
         '&:hover': {
           textDecoration: 'none !important',
-        }
-      }
+        },
+      },
     },
     MuiButton: {
       root: {
         padding: '8px 15px',
       },
-      sizeSmall: {
-      },
-      sizeLarge: {
-      },
+      sizeSmall: {},
+      sizeLarge: {},
       contained: {
         borderRadius: '8px',
         color: '#fff',
@@ -73,22 +68,22 @@ const theme = createMuiTheme({
       },
       containedSecondary: {
         background: '#323252!important',
-      }
+      },
     },
     MuiOutlinedInput: {
       root: {
-        fontSize: '14px',
-        background: '#272741',
-        borderRadius: '8px',
-        borderColor: '#fff',
-        color: '#CFCDE1',
+        'fontSize': '14px',
+        'background': '#272741',
+        'borderRadius': '8px',
+        'borderColor': '#fff',
+        'color': '#CFCDE1',
         '&:placeholder': {
           color: '#52527B',
         },
       },
       input: {
         padding: '.5em 2em',
-        [breakpoints.down('md')]: {}
+        [breakpoints.down('md')]: {},
       },
       notchedOutline: {
         border: '0',

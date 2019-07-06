@@ -19,7 +19,7 @@ import Register from 'component/route/Register'
 import Logout from 'component/route/Logout'
 
 import 'style/app.scss'
-import { Box } from '@material-ui/core';
+import { Box } from '@material-ui/core'
 
 
 const Router = IS_DEV ? HashRouter : BrowserRouter
