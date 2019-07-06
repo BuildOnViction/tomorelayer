@@ -1,4 +1,5 @@
 import React from 'react'
+import { hot } from 'react-hot-loader/root'
 import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
 import { SITE_MAP, IS_DEV } from 'service/constant'
@@ -144,5 +145,6 @@ const actions = {
     }
   })
 }
+const ConnectedApp = connect(mapProps, actions)(App)
 
-export default connect(mapProps, actions)(App)
+export default process.env.NODE_ENV === "development" ? hot(ConnectedApp) : ConnectedApp
