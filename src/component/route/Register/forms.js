@@ -46,13 +46,16 @@ export const wrappers = {
     mapPropsToValues: (props) => ({
       name: props.name,
     }),
-    validate: (values) => {
+    validate: (values, props) => {
       const errors = {}
       if (values.name.length < 3) {
-        errors.name = 'Relayer name is too short.'
+        errors.name = 'relayer name is too short.'
       }
       if (values.name.length > 200) {
-        errors.name = 'Relayer name is too long.'
+        errors.name = 'relayer name is too long.'
+      }
+      if (props.usedNames.find((name) => _.compareString(name, values.name))) {
+        errors.name = 'relayer name is already used.'
       }
       return errors
     },
