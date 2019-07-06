@@ -77,6 +77,7 @@ describe('Testing Relayer API', () => {
       owner: '0x070aa7ad03b89b3278f19d34f119dd3c2a244675',
       name: 'DummyRelayer',
       coinbase: '0xdD596FfB7f7A6123C36ecEf2F8a48AfEc6D7B889',
+      deposit: 25000,
       maker_fee: 2,
       taker_fee: 5,
       from_tokens: [],

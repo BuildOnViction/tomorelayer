@@ -8,7 +8,7 @@ const request = require('request')
 
 require('dotenv').config({ path: envpath })
 
-const port = 8888
+const port = process.env.NODE_ENV === 'test' ? 8889 : 8888
 
 
 
