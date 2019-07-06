@@ -28,27 +28,27 @@ class PageHeader extends React.Component {
 
     return (
       <Box className="tomo-header">
-        <Container maxWidth="md" className="p-1 mb-1">
+        <Container maxWidth="lg" className="p-1 mb-1">
           <Grid container direction="row" justify="space-between" alignItems="center" spacing={4}>
-            <Grid item sm={3} md={2}>
-              <Link display="block" component={AdapterLink} to="/">
-                <img alt="logo" src={logo} />
-              </Link>
-            </Grid>
-            <Grid item sm={false} md={6}>
-              <TextField
-                placeholder="Search..."
-                fullWidth
-                variant="outlined"
-                margin="dense"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon />
-                    </InputAdornment>
-                  )
-                }}
-              />
+            <Grid item sm={12} md={6}>
+              <Box display="flex" justifyContent="start" alignItems="center">
+                <Link display="block" component={AdapterLink} to="/" className="mr-2">
+                  <img alt="logo" src={logo} />
+                </Link>
+                <TextField
+                  placeholder="Search..."
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <SearchIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Box>
             </Grid>
             <Grid item sm={6} md={4} container justify="space-around" direction="row" spacing={4} alignItems="center">
               {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
