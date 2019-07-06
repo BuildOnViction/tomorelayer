@@ -3,6 +3,8 @@ import {
   render,
   fireEvent,
   cleanup,
+  wait,
+  waitForElement,
 } from '@testing-library/react'
 import 'jest-dom/extend-expect'
 import { HashRouter } from 'react-router-dom'
@@ -12,11 +14,12 @@ import createStore from 'redux-zero'
 
 import setup from './_database.setup.js'
 
+import * as http from 'service/backend'
+import { initialState } from 'service/store'
 import { MISC } from 'service/constant'
 import Register from 'component/route/Register'
 import Alert from 'component/shared/Alert'
 
-import { initialState } from 'service/store'
 
 /**
  * Testing Actions for Register Flow
@@ -29,7 +32,6 @@ import { initialState } from 'service/store'
 
 
 let countInputs
-let container
 
 const userAddress = '0x070aA7AD03B89B3278f19d34F119DD3C2a244675'
 const usedCoinbase = '0x504812e482877a37b1998df30f78d5e79c836f51'
@@ -41,14 +43,8 @@ const finalPayload = {
   name: 'abcxyz',
 }
 
-let getByText,
-    getByTestId,
-    findByText,
-    findByLabelText,
-    // eslint-disable-next-line
-    debug;
-
 let mockedRelayerContract
+let R
 
 beforeAll(() => {
   const fs = require('fs')
@@ -69,7 +65,9 @@ beforeAll(() => {
 
   mockedRelayerContract = Object.create({
     wallet: mockedWalletSigner,
-    async register() { return { status: true } },
+    register: jest.fn()
+                  .mockResolvedValueOnce({ status: false, details: { error: 'fake error' } })
+                  .mockResolvedValueOnce({ status: true })
   })
 
   const store = createStore({
@@ -80,7 +78,11 @@ beforeAll(() => {
     },
     Tokens: Tokens,
     Relayers: [
-      {coinbase: usedCoinbase, owner: otherOnwer}
+      {
+        coinbase: usedCoinbase,
+        owner: otherOnwer,
+        name: 'testname',
+      }
     ],
     blk: {
       RelayerContract: mockedRelayerContract
@@ -88,7 +90,7 @@ beforeAll(() => {
   })
 
 
-  const renderUtils = render((
+  R = render((
     <Provider store={store}>
       <HashRouter>
         <div>
@@ -99,14 +101,7 @@ beforeAll(() => {
     </Provider>
   ))
 
-  container = renderUtils.container
-  getByText = renderUtils.getByText
-  getByTestId = renderUtils.getByTestId
-  findByText = renderUtils.findByText
-  findByLabelText = renderUtils.findByLabelText
-  debug = renderUtils.debug
-
-  countInputs = () => Array.from(container.querySelectorAll('input')).length
+  countInputs = () => Array.from(R.container.querySelectorAll('input')).length
 })
 
 afterAll(cleanup)
@@ -135,14 +130,14 @@ describe('Test RegisterForm No Break', () => {
     const validCoinbase = finalPayload.coinbase
     expect(countInputs()).toBe(2)
 
-    const depositInput = getByTestId('deposit-input')
-    const coinbaseInput = getByTestId('coinbase-input')
+    const depositInput = R.getByTestId('deposit-input')
+    const coinbaseInput = R.getByTestId('coinbase-input')
     expect(parseInt(depositInput.value, 10)).toEqual(MISC.MinimumDeposit)
 
-    expect(getByText(/confirm/i)).toBeInTheDocument()
-    // NOTE: cannot use getByText('Confirm') to find button,
+    expect(R.getByText(/confirm/i)).toBeInTheDocument()
+    // NOTE: cannot use R.getByText('Confirm') to find button,
     // because MUI wraps the content within a SPAN element inside button
-    const submitButton = container.querySelector('button[type="submit"]')
+    const submitButton = R.container.querySelector('button[type="submit"]')
 
     expect(depositInput).toBeInTheDocument()
     expect(coinbaseInput).toBeInTheDocument()
@@ -151,19 +146,137 @@ describe('Test RegisterForm No Break', () => {
     fireEvent.change(coinbaseInput, { target: { value: userAddress } })
     expect(coinbaseInput).toHaveValue(userAddress)
     fireEvent.click(submitButton)
-    await findByText(/coinbase cannot be the same as owner address/i)
+    await R.findByText(/coinbase cannot be the same as owner address/i)
 
     fireEvent.change(depositInput, { target: { value: '22000' } })
     fireEvent.click(submitButton)
-    await findByText(/minimum deposit is 25,000 TOMO/i)
+    await R.findByText(/minimum deposit is 25,000 TOMO/i)
 
     // Valid submit, unmount Step 1, successfully move to step 2
     fireEvent.change(coinbaseInput, { target: { value: validCoinbase } })
     fireEvent.change(depositInput, { target: { value: '25000' } })
     fireEvent.click(submitButton)
-    await findByLabelText('Relayer Name')
+    await R.findByLabelText('Relayer Name')
     expect(countInputs()).toBe(1)
   })
 
+
+  it('#Step 2: relayer name', async () => {
+    expect(countInputs()).toBe(1)
+    let nameInput = R.getByLabelText('Relayer Name')
+    let submitButton = R.container.querySelector('button[type="submit"]')
+    const backButton = R.container.querySelector('button[type="button"]')
+
+    // NOTE: name-length within 3~200
+    const shortName = 'ab'
+    const longName = Array.from({ length: 201 }).fill('a').join('')
+    const duplicateName = 'testname'
+
+    fireEvent.change(nameInput, { target: { value: shortName } })
+    fireEvent.click(submitButton)
+    await R.findByText(/name is too short/i)
+
+    fireEvent.change(nameInput, { target: { value: longName } })
+    fireEvent.click(submitButton)
+    await R.findByText(/name is too long/i)
+
+    fireEvent.change(nameInput, { target: { value: duplicateName } })
+    fireEvent.click(submitButton)
+    await R.findByText(/name is already used/i)
+
+    // Going back and forth between steps
+    fireEvent.click(backButton)
+    const coinbaseInput = await R.getByTestId('coinbase-input')
+    expect(coinbaseInput.value).toBe(finalPayload.coinbase)
+    expect(countInputs()).toBe(2)
+    submitButton = R.container.querySelector('button[type="submit"]')
+    fireEvent.click(submitButton)
+    nameInput = await waitForElement(() => R.getByLabelText('Relayer Name'))
+
+    // Submit FormStepTwo
+    // Valid submit, unmount Step 1, successfully move to step 2
+    submitButton = R.container.querySelector('button[type="submit"]')
+    fireEvent.change(nameInput, { target: { value: finalPayload.name } })
+    fireEvent.click(submitButton)
+
+    await R.findByLabelText(/maker fee/i)
+  })
+
+  it('#Step 3: market fee form', async () => {
+    expect(countInputs()).toBe(2)
+
+    const makerFeeInput = R.getByLabelText(/maker fee/i)
+    expect(parseFloat(makerFeeInput.value)).toEqual(0.01)
+    expect(makerFeeInput.attributes['type'].value).toBe('number')
+    expect(makerFeeInput.attributes['step'].value).toBe('0.01')
+    expect(makerFeeInput.attributes['max'].value).toBe('99.99')
+    expect(makerFeeInput.attributes['min'].value).toBe('0.01')
+
+    const takerFeeInput = R.getByLabelText(/taker fee/i)
+    expect(parseFloat(takerFeeInput.value)).toEqual(0.01)
+    expect(takerFeeInput.attributes['type'].value).toBe('number')
+    expect(takerFeeInput.attributes['step'].value).toBe('0.01')
+    expect(takerFeeInput.attributes['max'].value).toBe('99.99')
+    expect(takerFeeInput.attributes['min'].value).toBe('0.01')
+
+    const submitButton = R.container.querySelector('button[type="submit"]')
+    const invalidFee = 10000000 // not within 0.01 ~ 99.99
+    fireEvent.change(makerFeeInput, { target: { value: invalidFee } })
+    fireEvent.change(takerFeeInput, { target: { value: invalidFee } })
+    fireEvent.click(submitButton)
+
+    // NOTE: no alert, just using error-highlight from MUI's built-ins
+    const updatedInputs = await R.findAllByLabelText(/maker fee/i)
+    Array.from(updatedInputs).forEach(input => {
+      expect(input.attributes['aria-invalid'].value).toBe('true')
+    })
+
+    fireEvent.change(makerFeeInput, { target: { value: 10 } })
+    fireEvent.change(takerFeeInput, { target: { value: 0.12 } })
+    fireEvent.click(submitButton)
+    await R.findByText('Choose Trading Pairs of Token')
+  })
+
+  it('#Step 4: choose trading pair', async () => {
+
+    const TOMO_BTC = R.getByText('TOMO/BTC')
+    const ETH_TOMO = R.getByText('ETH/TOMO')
+
+    fireEvent.click(TOMO_BTC)
+    fireEvent.click(ETH_TOMO)
+
+    const submitButton = R.container.querySelector('button[type="submit"]')
+    fireEvent.click(submitButton)
+
+    await R.findByText(/review/i)
+  })
+
+  it('#Step 5: review & register', async () => {
+    R.getByText('10.00%')
+    R.getByText('0.12%')
+    R.getByText(finalPayload.coinbase)
+    R.getByText(finalPayload.name)
+    R.getByText(/TOMO\/BTC/)
+    R.getByText(/ETH\/TOMO/)
+
+    const spied = jest.spyOn(http, 'createRelayer')
+    spied.mockResolvedValue({
+      ...finalPayload,
+      id: 2,
+    })
+
+    const submitButton = R.getByText(/confirm/i)
+    fireEvent.click(submitButton)
+
+    await R.findByText(/fake error/i)
+
+    fireEvent.click(submitButton)
+
+    await wait()
+  })
+
+  it('#Step 6: success notify', async () => {
+    await R.findByText(/success/i)
+  })
 
 })

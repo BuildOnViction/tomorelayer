@@ -22,7 +22,7 @@ class FormInfo extends React.Component {
 
 
     return (
-      <Container className="border-all border-rounded p-4" maxWidth="xl">
+      <Container>
         {relayer.resigning && (
           <Box>
             <Typography component="h4">
@@ -31,8 +31,34 @@ class FormInfo extends React.Component {
           </Box>
         )}
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={5} direction="column">
-            <Grid item>
+          <Grid item container sm={12} md={8} spacing={6}>
+            <Grid item sm={12} container>
+              <Grid item sm={6} md={4} className="pr-2">
+                <Avatar alt={values.name} src={values.logo} className="mr-1" style={{ width: '100%', height: '100%' }} />
+              </Grid>
+              <Grid item sm={6} md={8}>
+                <Typography component="h4">
+                  Relayer Avatar
+                </Typography>
+                <TextField
+                  label="Logo"
+                  value={values.logo || ''}
+                  onChange={handleChange}
+                  error={Boolean(errors.logo)}
+                  id="relayer-logo"
+                  name="logo"
+                  variant="outlined"
+                  margin="dense"
+                  helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
+                  disabled={inputDisabled}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+            <Grid item sm={12}>
+              <Typography component="div">
+                Relayer Name
+              </Typography>
               <TextField
                 label="Relayer Name"
                 value={values.name || ''}
@@ -40,11 +66,17 @@ class FormInfo extends React.Component {
                 error={Boolean(errors.name)}
                 id="relayer-name"
                 name="name"
+                variant="outlined"
+                margin="dense"
                 helperText={errors.name && <i className="text-alert">{errors.name}</i>}
                 disabled={inputDisabled}
+                fullWidth
               />
             </Grid>
-            <Grid item>
+            <Grid item sm={12}>
+              <Typography component="div">
+                Link
+              </Typography>
               <TextField
                 label="Link"
                 value={values.link || ''}
@@ -52,38 +84,17 @@ class FormInfo extends React.Component {
                 name="link"
                 onChange={handleChange}
                 error={Boolean(errors.link)}
+                variant="outlined"
+                margin="dense"
                 helperText={errors.link && <i className="text-alert">{errors.link}</i>}
                 disabled={inputDisabled}
+                fullWidth
               />
             </Grid>
-            <Grid item>
-              <TextField
-                label="Logo"
-                value={values.logo || ''}
-                onChange={handleChange}
-                error={Boolean(errors.logo)}
-                id="relayer-logo"
-                name="logo"
-                helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
-                disabled={inputDisabled}
-              />
-            </Grid>
-            <Grid item>
-              <Box display="flex" flexDirection="row">
-                <Avatar alt={values.name} src={values.logo} className="mr-1"/>
-                <div>
-                  <div>instruction 1</div>
-                  <div>instruction 2</div>
-                  <div>instruction 3</div>
-                </div>
-              </Box>
-            </Grid>
-            <Grid item>
-              <Box display="flex" justifyContent="flex-end">
-                <Button color="primary" variant="contained" type="submit" data-testid="save-button" disabled={inputDisabled}>
-                  Save
-                </Button>
-              </Box>
+            <Grid item sm={12} container justify="center">
+              <Button color="primary" variant="contained" type="submit" data-testid="save-button" disabled={inputDisabled}>
+                Save
+              </Button>
             </Grid>
           </Grid>
         </form>

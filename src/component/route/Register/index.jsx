@@ -86,6 +86,7 @@ export class Register extends React.Component {
 
     const {
       usedCoinbases,
+      usedNames,
     } = this.props
 
     return (
@@ -105,6 +106,7 @@ export class Register extends React.Component {
               {step === 2 && (
                 <FormStepTwo
                   {...payload}
+                  usedNames={usedNames}
                   goBack={this.goBack}
                   submitPayload={this.handleSubmit}
                 />
@@ -143,6 +145,7 @@ const mapProps = state => ({
   RelayerContract: state.blk.RelayerContract,
   wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase).concat(state.Relayers.map(t => t.owner)),
+  usedNames: state.Relayers.map(t => t.name),
 })
 
 const actions = store => ({
