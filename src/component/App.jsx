@@ -62,7 +62,7 @@ class App extends React.Component {
     if (shouldFilterUserRelayer || shouldUpdateUserRelayers) {
       const userAddress = await user.wallet.getAddress()
       const userRelayers = {}
-      relayers.filter(r => _.compareString(r.owner, userAddress)).forEach(r => {
+      relayers.filter(_.strEqual(userAddress)).forEach(r => {
         userRelayers[r.coinbase] = r
       })
       this.setState({ userRelayers }, () => finishUpdateUserRelayers())
