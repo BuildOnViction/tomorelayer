@@ -1,4 +1,5 @@
 import React from 'react'
+import { hot } from 'react-hot-loader/root'
 import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
 import { SITE_MAP, IS_DEV } from 'service/constant'
@@ -62,7 +63,7 @@ class App extends React.Component {
     if (shouldFilterUserRelayer || shouldUpdateUserRelayers) {
       const userAddress = await user.wallet.getAddress()
       const userRelayers = {}
-      relayers.filter(r => _.compareString(r.owner, userAddress)).forEach(r => {
+      relayers.filter(r => _.strEqual(r.owner, userAddress)).forEach(r => {
         userRelayers[r.coinbase] = r
       })
       this.setState({ userRelayers }, () => finishUpdateUserRelayers())
@@ -147,5 +148,6 @@ const actions = {
     }
   })
 }
+const ConnectedApp = connect(mapProps, actions)(App)
 
-export default connect(mapProps, actions)(App)
+export default process.env.NODE_ENV === "development" ? hot(ConnectedApp) : ConnectedApp

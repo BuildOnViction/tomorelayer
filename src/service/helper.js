@@ -25,12 +25,18 @@ export const round = (value, precision) => {
   return (Math.round(value * multiplier) / multiplier).toFixed(precision)
 }
 
-export const compareString = (stra, strb, caseSensitive = false) => {
-  if (!caseSensitive) {
-    return stra.toLowerCase() === strb.toLowerCase()
+export const strEqual = (...args) => {
+  if (args.length >= 2) {
+    const stringA = args[0]
+    const stringB = args[1]
+    return stringA.toLowerCase() === stringB.toLowerCase()
   }
 
-  return stra === strb
+  if (args.length === 1) {
+    const stringA = args[0]
+    const compare = (stringB) => stringA.toLowerCase() === stringB.toLowerCase()
+    return compare
+  }
 }
 
 export const ThrowOn = (shit, message) => {

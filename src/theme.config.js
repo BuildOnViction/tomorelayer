@@ -96,6 +96,7 @@ const theme = createMuiTheme({
       outlined: {
         '&$marginDense': {
           transform: 'translate(12px, 11px) scale(1)',
+          display: 'none',
         },
       },
     },

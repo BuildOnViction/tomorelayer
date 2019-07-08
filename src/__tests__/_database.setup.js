@@ -48,6 +48,11 @@ const setup = async () => {
         allowNull: false,
         unique: true,
       },
+      deposit: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: false,
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
