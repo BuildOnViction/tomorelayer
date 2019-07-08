@@ -95,7 +95,7 @@ class Authentication extends React.Component {
         <Container maxWidth="lg" className="pt-4 login-container">
           <Header />
           <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
-            <Typography variant="smallTitle1">
+            <Typography>
               Using node at <span className="network-node-info">{process.env.REACT_APP_RPC}</span>
             </Typography>
           </MethodBar>

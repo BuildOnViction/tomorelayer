@@ -24,29 +24,25 @@ const FormStepFour = ({
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Box textAlign="center" className="mb-3">
-          <Typography component="h1">
-            Choose Trading Pairs of Token
-          </Typography>
+    <form onSubmit={handleSubmit}>
+      <Typography variant="h5" className="text-center mb-2">
+        Choose Trading Pairs of Token
+      </Typography>
+      <Container maxWidth="sm">
+        <TokenPairList
+          value={values}
+          onChange={setPairsValues}
+        />
+        <Box display="flex" justifyContent="space-between" className="mt-2">
+          <Button color="secondary" variant="contained" className="mr-1" onClick={goBack} type="button">
+            Back
+          </Button>
+          <Button color="primary" variant="contained" type="submit">
+            Confirm
+          </Button>
         </Box>
-        <Container maxWidth="md">
-          <TokenPairList
-            value={values}
-            onChange={setPairsValues}
-          />
-          <Box display="flex" justifyContent="space-between" className="mt-2">
-            <Button variant="outlined" className="mr-1" onClick={goBack} type="button">
-              Back
-            </Button>
-            <Button color="primary" variant="contained" type="submit">
-              Confirm
-            </Button>
-          </Box>
-        </Container>
-      </form>
-    </div>
+      </Container>
+    </form>
   )
 }
 

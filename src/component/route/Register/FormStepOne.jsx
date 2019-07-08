@@ -13,11 +13,9 @@ const FormStepOne = props => {
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
-      <Box textAlign="center" className="mb-3">
-        <Typography component="h1">
-          Relayer Registration
-        </Typography>
-      </Box>
+      <Typography variant="h5" className="text-center mb-2">
+        Relayer Registration
+      </Typography>
       <Container maxWidth="sm">
         <Box display="flex" flexDirection="column" className="mb-2">
           <div>You are required to deposit a minimum {MISC.MinimumDeposit} TOMO.</div>
@@ -33,6 +31,8 @@ const FormStepOne = props => {
           error={errors.deposit}
           helperText={errors.deposit && <i className="text-alert">* Minimum deposit is 25,000 TOMO</i>}
           type="number"
+          margin="dense"
+          variant="outlined"
           className="mb-2"
           inputProps= {{
             'data-testid': 'deposit-input'
@@ -51,6 +51,8 @@ const FormStepOne = props => {
           inputProps= {{
             'data-testid': 'coinbase-input'
           }}
+          margin="dense"
+          variant="outlined"
           required
           fullWidth
         />

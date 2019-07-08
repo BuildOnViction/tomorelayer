@@ -16,6 +16,12 @@ const theme = createMuiTheme({
     primary: blue,
   },
   overrides: {
+    MuiPaper: {
+      root: {
+        backgroundColor: '#272741',
+        color: '#CFCDE1',
+      },
+    },
     MuiContainer: {
       root: {
         [breakpoints.up('xs')]: {
@@ -38,12 +44,12 @@ const theme = createMuiTheme({
         fontSize: '30px',
         lineHeight: '1',
       },
-      smallTitle1: {
-        fontSize: '12px',
+      body1: {
+        fontSize: '14px',
         lineHeight: '1',
       },
-      smallTitle2: {
-        fontSize: '12px',
+      body2: {
+        fontSize: '14px',
         lineHeight: '1',
         color: '#7473A6',
       },
