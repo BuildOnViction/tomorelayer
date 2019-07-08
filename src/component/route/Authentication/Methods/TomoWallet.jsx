@@ -61,7 +61,7 @@ const PendingLogin = ({ qrcode }) => (
           bgColor="#FFFFFF"
           fgColor="#000000"
           level="Q"
-          style={{ width: 200 }}
+          style={{ width: 250, padding: 10, background: 'white' }}
           value={qrcode}
         />
       </Grid>

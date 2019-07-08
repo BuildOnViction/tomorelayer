@@ -33,7 +33,6 @@ const FormResign = props => {
   const handleClose = () => setOpen(false)
   const nextStep = () => setStep(1)
 
-
   const confirmAndClose = async () => {
     handleClose()
     const { status, details } = await RelayerContract.resign({ coinbase: relayer.coinbase })

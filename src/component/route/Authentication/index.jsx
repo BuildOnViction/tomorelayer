@@ -95,8 +95,8 @@ class Authentication extends React.Component {
         <Container maxWidth="lg" className="pt-4 login-container">
           <Header />
           <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
-            <Typography component="small" className="text-alert">
-              using node at <i className="text-alert">{process.env.REACT_APP_RPC}</i>
+            <Typography variant="smallTitle1">
+              Using node at <span className="network-node-info">{process.env.REACT_APP_RPC}</span>
             </Typography>
           </MethodBar>
           {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}

@@ -38,6 +38,15 @@ const theme = createMuiTheme({
         fontSize: '30px',
         lineHeight: '1',
       },
+      smallTitle1: {
+        fontSize: '12px',
+        lineHeight: '1',
+      },
+      smallTitle2: {
+        fontSize: '12px',
+        lineHeight: '1',
+        color: '#7473A6',
+      },
     },
     MuiTab: {
       root: {},

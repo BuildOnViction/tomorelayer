@@ -66,13 +66,14 @@ const MethodBar = ({
   options,
   children,
 }) => (
-  <BoxWrap>
+  <BoxWrap className="mb-5">
     <StyledAppBar position="static" color="default" elevation={0}>
       <StyledTabs
         value={value}
         onChange={(_, value) => onChange(value)}
         variant="fullWidth"
         scrollButtons="auto"
+        className="mb-2"
       >
         {options.map(op => (
           <StyledTab
@@ -82,7 +83,7 @@ const MethodBar = ({
               <span className="txt-tab">
                 {op}
               </span>
-            )} 
+            )}
             key={op} />
         ))}
       </StyledTabs>

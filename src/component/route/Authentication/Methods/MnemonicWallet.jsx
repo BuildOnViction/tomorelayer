@@ -63,7 +63,9 @@ export default class SoftwareWallet extends React.Component {
     } = this.state
 
     const HDPathHelpText = (
-      <small>To unlock the wallet, try paths m/44'/60'/0' or m/44'/60'/0'/0</small>
+      <Typography variant="smallTitle2">
+        To unlock the wallet, try paths <span className="text-alert">m/44'/60'/0'</span> or <span className="text-alert">m/44'/60'/0'/0</span>
+      </Typography>
     )
 
     return (
