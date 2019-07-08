@@ -1,9 +1,9 @@
 import React from 'react'
 import {
+  Box,
   Container,
   Grid,
   Link,
-  Box,
 } from '@material-ui/core'
 import { AdapterLink } from 'component/shared/Adapters'
 
@@ -70,9 +70,9 @@ const PageFooter = props => (
       <Grid item sm={12} md={6}>
         <ul className="footer-buttons">
           {FooterButtons.map(item => (
-            <li>
-              <Link to={item.link} key={item.link} component={AdapterLink}>
-                <i class={item.class}></i>
+            <li key={item.link}>
+              <Link to={item.link} component={AdapterLink}>
+                <i className={item.class}/>
               </Link>
             </li>
           ))}
