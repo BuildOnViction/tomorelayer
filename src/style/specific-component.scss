@@ -57,7 +57,7 @@
   height: 100%;
   text-align: center;
   z-index: 1;
-  background: #f7f7f7d6;
+  background: #f7f7f7;
   animation: .5s linear fadeIn;
   img {
     position: absolute;
@@ -70,20 +70,62 @@
   from {opacity: 0;}
   to {opacity: 1;}
 }
-.footer-links a {
-  border-right: solid 1px white;
-  &:last-child {
-    border-right: none;
-  }
+
+//maincontent
+.maincontent {
+  min-height: calc(100vh - 62px - 65px);
+  overflow: hidden;
 }
 
 //Style Footer
+.footer-links {
+  display: flex;
+  margin: 0 -15px;
+  align-content: center;
+  a {
+    color: #7473a6;
+    position: relative;
+    padding: 15px;
+    &:before {
+      background: #7473a6;
+      content: '';
+      width: 1px;
+      height: 15px;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    &:last-child {
+      &:before {
+        display: none;
+      }
+    }
+  }
+}
 .footer-buttons {
+  padding-top: 15px;
   list-style-type: none;
   margin: 0;
   padding: 0;
+  text-align: right;
   li {
-    float: right;
-    margin: 0 0 0 20px;
+    display: inline-block;
+    padding: 5px;
+    a {
+      background: #323252;
+      border-radius: 8px;
+      color: #525275;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      &:hover {
+        i {
+          color: #fff;
+        }
+      }
+    }
   }
-}
+}//tomo-social

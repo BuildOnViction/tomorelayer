@@ -1,6 +1,22 @@
 import React from 'react'
 import { AppBar, Box, Tabs, Tab } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+import ledgerwallet_icon from 'asset/logo-ledgerwallet.png'
+import metamask_icon from 'asset/logo-metamask.png'
+import mnemonic_icon from 'asset/logo-mnemonic.png'
+import privatekey_icon from 'asset/logo-privatekey.png'
+import tomowallet_icon from 'asset/logo-tomowallet.png'
+import trezorwallet_icon from 'asset/logo-trezorwallet.png'
+
+
+const MethodIcons = {
+  'Tomo Wallet': tomowallet_icon,
+  'Ledger Wallet': ledgerwallet_icon,
+  'MetaMask': metamask_icon,
+  'Mnemonic': mnemonic_icon,
+  'Private Key': privatekey_icon,
+  'Trezor Wallet': trezorwallet_icon,
+}
 
 const BoxWrap = withStyles({
   root: {
@@ -20,19 +36,12 @@ const StyledAppBar = withStyles({
 
 const StyledTabs = withStyles({
   indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > div': {
-      width: '100%',
-      height: '100px',
-      backgroundColor: '#272741',
-      transform: 'translateY(-98px)',
-      borderRadius: 5,
-      zIndex: 0,
-    },
+    height: '100%',
+    backgroundColor: '#272741',
+    borderRadius: 10,
+    zIndex: 0,
   },
-})(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />)
+})(props => <Tabs {...props} />)
 
 const StyledTab = withStyles(theme => ({
   root: {
@@ -41,14 +50,15 @@ const StyledTab = withStyles(theme => ({
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: 14,
     padding: 20,
-    height: 100,
-    minWidth: 100,
+    minHeight: 170,
     zIndex: 1,
   },
   selected: {
     color: 'white',
   },
 }))(props => <Tab disableRipple {...props} />)
+
+
 
 const MethodBar = ({
   value,
@@ -64,7 +74,17 @@ const MethodBar = ({
         variant="fullWidth"
         scrollButtons="auto"
       >
-        {options.map(op => <StyledTab label={op} key={op} />)}
+        {options.map(op => (
+          <StyledTab
+            className="icon-logo"
+            icon={<img alt="logo" src={MethodIcons[op]}/>}
+            label={(
+              <span className="txt-tab">
+                {op}
+              </span>
+            )} 
+            key={op} />
+        ))}
       </StyledTabs>
     </StyledAppBar>
     {children}

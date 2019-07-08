@@ -20,6 +20,7 @@ import Register from 'component/route/Register'
 import Logout from 'component/route/Logout'
 
 import 'style/app.scss'
+import { Box } from '@material-ui/core'
 
 
 const Router = IS_DEV ? HashRouter : BrowserRouter
@@ -91,34 +92,36 @@ class App extends React.Component {
         <div>
           <PageHeader relayers={userRelayers} user={user} />
           <Alert />
-          <Switch>
-            <Route path={SITE_MAP.Home} exact component={Main} />
-            <Route path={SITE_MAP.Authentication} component={Authentication} />
-            <Protected
-              path={SITE_MAP.Profile}
-              component={props => <Profile user={user} relayers={userRelayers} {...props} />}
-              condition={userLoggedIn}
-              redirect={SITE_MAP.Authentication}
-            />
-            <Protected
-              path={SITE_MAP.Register}
-              component={Register}
-              condition={userLoggedIn}
-              redirect={SITE_MAP.Authentication}
-            />
-            <Protected
-              path={SITE_MAP.Dashboard}
-              render={() => <Dashboard relayers={userRelayers} /> }
-              condition={userLoggedIn}
-              redirect={SITE_MAP.Authentication}
-            />
-            <Protected
-              path={SITE_MAP.Logout}
-              condition={userLoggedIn}
-              redirect={SITE_MAP.Home}
-              component={Logout}
-            />
-          </Switch>
+          <Box className="maincontent">
+            <Switch>
+              <Route path={SITE_MAP.Home} exact component={Main} />
+              <Route path={SITE_MAP.Authentication} component={Authentication} />
+              <Protected
+                path={SITE_MAP.Profile}
+                component={Profile}
+                condition={userLoggedIn}
+                redirect={SITE_MAP.Authentication}
+              />
+              <Protected
+                path={SITE_MAP.Register}
+                component={Register}
+                condition={userLoggedIn}
+                redirect={SITE_MAP.Authentication}
+              />
+              <Protected
+                path={SITE_MAP.Dashboard}
+                render={() => <Dashboard relayers={userRelayers} /> }
+                condition={userLoggedIn}
+                redirect={SITE_MAP.Authentication}
+              />
+              <Protected
+                path={SITE_MAP.Logout}
+                condition={userLoggedIn}
+                redirect={SITE_MAP.Home}
+                component={Logout}
+              />
+            </Switch>
+          </Box>
           <PageFooter className="mt-2" />
         </div>
       </Router>

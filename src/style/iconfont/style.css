@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'tomorelayer';
+  src:  url('fonts/tomorelayer.eot?n095s7');
+  src:  url('fonts/tomorelayer.eot?n095s7#iefix') format('embedded-opentype'),
+    url('fonts/tomorelayer.ttf?n095s7') format('truetype'),
+    url('fonts/tomorelayer.woff?n095s7') format('woff'),
+    url('fonts/tomorelayer.svg?n095s7#tomorelayer') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'tomorelayer' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tomorelayer-icon-edit-pencil:before {
+  content: "\e913";
+}
+.tomorelayer-icon-checkmark-outline:before {
+  content: "\e912";
+}
+.tomorelayer-icon-startup:before {
+  content: "\e911";
+}
+.tomorelayer-icon-next-right:before {
+  content: "\e910";
+}
+.tomorelayer-icon-reddit:before {
+  content: "\e90f";
+}
+.tomorelayer-icon-angle-double-left:before {
+  content: "\e900";
+}
+.tomorelayer-icon-angle-double-right:before {
+  content: "\e901";
+}
+.tomorelayer-icon-angle-down:before {
+  content: "\e902";
+}
+.tomorelayer-icon-angle-left:before {
+  content: "\e903";
+}
+.tomorelayer-icon-angle-right:before {
+  content: "\e904";
+}
+.tomorelayer-icon-angle-up:before {
+  content: "\e905";
+}
+.tomorelayer-icon-email:before {
+  content: "\e906";
+}
+.tomorelayer-icon-facebook:before {
+  content: "\e907";
+}
+.tomorelayer-icon-github:before {
+  content: "\e908";
+}
+.tomorelayer-icon-linkedin:before {
+  content: "\e909";
+}
+.tomorelayer-icon-telegram:before {
+  content: "\e90b";
+}
+.tomorelayer-icon-tomoz:before {
+  content: "\e90c";
+}
+.tomorelayer-icon-twitter:before {
+  content: "\e90d";
+}
+.tomorelayer-icon-wallet:before {
+  content: "\e90e";
+}
