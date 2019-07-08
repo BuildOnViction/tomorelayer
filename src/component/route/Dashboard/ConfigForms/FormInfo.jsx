@@ -31,7 +31,7 @@ class FormInfo extends React.Component {
           </Box>
         )}
         <form onSubmit={handleSubmit}>
-          <Grid item container sm={12} md={8} spacing={6}>
+          <Grid item container sm={12} md={10} spacing={6}>
             <Grid item sm={12} container>
               <Grid item sm={6} md={4} className="pr-2">
                 <Avatar alt={values.name} src={values.logo} className="mr-1" style={{ width: '100%', height: '100%' }} />

@@ -4,15 +4,62 @@ import {
   Button,
   Box,
   Checkbox,
+  Grid,
   InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   TextField,
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import LoadSpinner from 'component/utility/LoadSpinner'
+
+
+
+const FilterButton = withStyles({
+  root: {
+    color: '#7473A6',
+    borderRadius: '10px',
+    lineHeight: '1rem',
+    width: '100%',
+    padding: '11px',
+    background: '#222239',
+    minWidth: 0,
+  },
+  contained: {
+    color: '#CFCDE1',
+    padding: '10px',
+    minWidth: 0,
+    borderRadius: '10px',
+    background: '#577EEF',
+    '&:hover': {
+      background: '#3656B4',
+    }
+  }
+})(props => <Button size="small" type="button" {...props} />)
+
+
+const SearchBar = withStyles({
+  root: {
+    '& .MuiOutlinedInput-root': {
+      'background': '#222239',
+      'transform': 'translateY(-2px)'
+    }
+  },
+})(props => <TextField margin="dense" variant="outlined" fullWidth {...props} />)
+
+
+const StyledCheckbox = withStyles({
+  root: {
+    'color': '#7473A6',
+  },
+})(props => (
+  <Checkbox {...props} />
+))
+
 
 
 class TokenPairList extends React.Component {
@@ -72,8 +119,8 @@ class TokenPairList extends React.Component {
 
   debounce = undefined
 
-  setFilter = activeFilter => () => {
-    this.setState({ activeFilter })
+  setFilter = filter => () => {
+    this.setState({ activeFilter: filter === this.state.activeFilter ? 'ALL' : filter })
   }
 
   searchInputChange = e => this.setState({ debounceText: e.target.value })
@@ -123,47 +170,53 @@ class TokenPairList extends React.Component {
     const filterFunction = activeFilter !== 'SEARCH' ? this.FILTER_CONTROLS[activeFilter] : this.FILTER_CONTROLS[activeFilter](searchText)
 
     return (
-      <Box className="token-select-list">
-        <Box display="flex" justifyContent="space-around" alignItems="center">
-          <Button onClick={this.setFilter('ALL')} type="button" size="small" className="m-1">
-            ALL
-          </Button>
+      <Grid container className="token-select-list" direction="column">
+        <Grid item container justify="space-evenly" alignItems="center" spacing={3} className="pt-1 pl-1 pr-1">
           {quoteTokens.map(token => (
-            <Button key={token.address} onClick={this.setFilter(token.symbol)} type="button" size="small" className="m-1">
-              {token.symbol}
-            </Button>
+            <Grid item key={token.address} md={2}>
+              <FilterButton
+                onClick={this.setFilter(token.symbol)}
+                variant={activeFilter === token.symbol ? 'contained' : 'text'}
+              >
+                {token.symbol}
+              </FilterButton>
+            </Grid>
           ))}
-          <TextField
-            name="search-input"
-            type="text"
-            value={this.state.debounceText}
-            placeholder="Search"
-            onChange={this.searchInputChange}
-            fullWidth
-            className="m-1"
-            variant="outlined"
-            margin="dense"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              )
-            }}
-          />
-        </Box>
-        <Box style={{ position: 'relative' }}>
+          <Grid item xs={12} sm={12} md>
+            <SearchBar
+              name="search-input"
+              type="text"
+              value={this.state.debounceText}
+              placeholder="Search"
+              onChange={this.searchInputChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Box style={{ position: 'relative' }} className="token-list">
           {isSearching && (
             <div className="search-overlay">
               <LoadSpinner />
             </div>
           )}
-          <List dense className="bg-filled token-list token-list__limited-height" style={{ maxHeight: 300, overflow: 'scroll' }}>
+          <List dense>
+            <ListSubheader className="token-list__subheader pr-2 pl-2">
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box>Pair</Box>
+                <Box>Volume 7 days ($)</Box>
+              </Box>
+            </ListSubheader>
             {checkList.filter(filterFunction).map(p => (
-              <ListItem key={p.toString()} className="pr-1 pl-1 pointer pair-item" onClick={this.handleItemClick(p)}>
+              <ListItem key={p.toString()} className="pr-1 pl-1 pointer token-list__item" onClick={this.handleItemClick(p)}>
                 <ListItemIcon>
-                  <Checkbox
-                    color="default"
+                  <StyledCheckbox
+                    color={p.checked ? 'primary' : 'default'}
                     checked={p.checked}
                     disabled={disabled}
                     inputProps={{
@@ -176,7 +229,7 @@ class TokenPairList extends React.Component {
             ))}
           </List>
         </Box>
-      </Box>
+      </Grid>
     )
   }
 }

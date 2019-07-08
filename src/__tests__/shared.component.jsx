@@ -158,7 +158,6 @@ describe('Testing TokenPairList', () => {
       container,
     } = testRender
 
-    const ALLButton = getByText('ALL')
     const TOMOButton = getByText('TOMO')
     const ETHButton = getByText('ETH')
     const BTCButton = getByText('BTC')
@@ -178,7 +177,8 @@ describe('Testing TokenPairList', () => {
     Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
     expect(Checkboxes.length).toEqual(ETH_RelatedPairs.length)
 
-    fireEvent.click(ALLButton)
+    // Act like a Toggle
+    fireEvent.click(ETHButton)
     Checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'))
     expect(Checkboxes.length).toEqual(pairs.length)
 

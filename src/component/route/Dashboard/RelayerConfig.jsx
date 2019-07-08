@@ -41,7 +41,7 @@ const ConfigBoard = ({ match, relayers }) => {
   const relayer = relayers[match.params.coinbase] || nullRelayer
 
   return (
-    <Grid container>
+    <Grid container className="relayer-config-container">
       <Grid item md={3} className="pr-2">
         <List component="nav">
           {ListItems.map((item, idx) => (

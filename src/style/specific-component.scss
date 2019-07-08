@@ -57,7 +57,7 @@
   height: 100%;
   text-align: center;
   z-index: 1;
-  background: #f7f7f7;
+  background: #272741;
   animation: .5s linear fadeIn;
   img {
     position: absolute;
@@ -128,9 +128,27 @@
       }
     }
   }
-}//tomo-social
+}
 
-.tomo-qrcode {
-  padding: 10px;
-  background: white;
+.token-select-list {
+  background: #272741;
+  border-radius: 8px;
+}
+
+.token-list {
+  height: 400px;
+  overflow: scroll;
+  ul {
+    padding-top: 0;
+  }
+}
+
+.token-list__subheader {
+  color: #7473A6 !important;
+  font-size: 12px !important;
+  background-color: #272741 !important;
+}
+
+.relayer-config-container {
+  margin-bottom: 150px;
 }

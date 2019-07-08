@@ -34,7 +34,7 @@ const FormTrade = ({
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <Grid item container direction="column" spacing={8} sm={12} md={8}>
+        <Grid item container direction="column" spacing={8} sm={12} md={10}>
           <Grid item container alignItems="center" justify="space-between" sm={12}>
             <Grid item sm={12}>
               <Typography component="h2">
