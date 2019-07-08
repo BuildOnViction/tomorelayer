@@ -98,7 +98,7 @@ class App extends React.Component {
               <Route path={SITE_MAP.Authentication} component={Authentication} />
               <Protected
                 path={SITE_MAP.Profile}
-                component={Profile}
+                component={props => <Profile relayers={userRelayers} user={user} {...props} />}
                 condition={userLoggedIn}
                 redirect={SITE_MAP.Authentication}
               />
