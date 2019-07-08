@@ -37,11 +37,8 @@ class FormInfo extends React.Component {
                 <Avatar alt={values.name} src={values.logo} className="mr-1" style={{ width: '100%', height: '100%' }} />
               </Grid>
               <Grid item sm={6} md={8}>
-                <Typography component="h4">
-                  Relayer Avatar
-                </Typography>
                 <TextField
-                  label="Logo"
+                  label="Relayer Logo"
                   value={values.logo || ''}
                   onChange={handleChange}
                   error={Boolean(errors.logo)}
@@ -56,9 +53,6 @@ class FormInfo extends React.Component {
               </Grid>
             </Grid>
             <Grid item sm={12}>
-              <Typography component="div">
-                Relayer Name
-              </Typography>
               <TextField
                 label="Relayer Name"
                 value={values.name || ''}
@@ -74,11 +68,8 @@ class FormInfo extends React.Component {
               />
             </Grid>
             <Grid item sm={12}>
-              <Typography component="div">
-                Link
-              </Typography>
               <TextField
-                label="Link"
+                label="Website"
                 value={values.link || ''}
                 id="relayer-link"
                 name="link"

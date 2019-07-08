@@ -57,11 +57,6 @@ export default class SoftwareWallet extends React.Component {
 
     return (
       <Container maxWidth="sm">
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <Typography component="h2">
-            Unlock your wallet using your private key
-          </Typography>
-        </Box>
 
         {!wallet && (
           <React.Fragment>
@@ -86,7 +81,7 @@ export default class SoftwareWallet extends React.Component {
                 }}
               />
             </Box>
-            <Box justifyContent="flex-end" display="flex" className="mt-2">
+            <Box justifyContent="center" display="flex" className="mt-2">
               <Button onClick={this.importWallet} variant="contained">
                 Import
               </Button>

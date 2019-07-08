@@ -79,35 +79,39 @@ const FormTransfer = props => {
                 Which address and coinbase would you like to transfer to?
               </Typography>
             </Grid>
-            <Grid item sm={12} container direction="column">
-              <TextField
-                label="New Owner"
-                value={values.owner}
-                onChange={handleChange}
-                error={Boolean(errors.owner)}
-                name="owner"
-                margin="dense"
-                variant="outlined"
-                inputProps={{
-                  'data-testid': 'new-owner-input'
-                }}
-                helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
-                fullWidth
-              />
-              <TextField
-                label="New Coinbase"
-                value={values.coinbase}
-                onChange={handleChange}
-                error={Boolean(errors.coinbase)}
-                name="coinbase"
-                margin="dense"
-                variant="outlined"
-                inputProps={{
-                  'data-testid': 'new-coinbase-input'
-                }}
-                helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
-                fullWidth
-              />
+            <Grid item sm={12} container direction="column" spacing={2}>
+              <Grid item>
+                <TextField
+                  label="New Owner"
+                  value={values.owner}
+                  onChange={handleChange}
+                  error={Boolean(errors.owner)}
+                  name="owner"
+                  margin="dense"
+                  variant="outlined"
+                  inputProps={{
+                    'data-testid': 'new-owner-input'
+                  }}
+                  helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  label="New Coinbase"
+                  value={values.coinbase}
+                  onChange={handleChange}
+                  error={Boolean(errors.coinbase)}
+                  name="coinbase"
+                  margin="dense"
+                  variant="outlined"
+                  inputProps={{
+                    'data-testid': 'new-coinbase-input'
+                  }}
+                  helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
+                  fullWidth
+                />
+              </Grid>
             </Grid>
             <Grid item container justify="center" sm={12}>
               <Button

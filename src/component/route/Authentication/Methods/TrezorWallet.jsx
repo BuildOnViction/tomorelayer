@@ -74,17 +74,19 @@ export default class TrezorWallet extends React.Component {
     return (
       <Container maxWidth="md">
         {!trezorWallet && (
-          <Grid container alignItems="center" justify="center">
-            <Grid item sm={10} md={5} lg={4} className="pr-3 pl-3">
-              <TextField
-                label="HD path"
-                value={hdpath}
-                onChange={this.changePath}
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                disabled
-              />
+          <Grid container alignItems="center" justify="center" direction="column" spacing={4}>
+            <Grid item container justify="center">
+              <Grid item sm={10} md={6}>
+                <TextField
+                  label="Select HD path to unlock your wallet"
+                  value={hdpath}
+                  onChange={this.changePath}
+                  margin="dense"
+                  variant="outlined"
+                  disabled
+                  fullWidth
+                />
+              </Grid>
             </Grid>
             <Grid item>
               <Button onClick={this.unlock} variant="contained">

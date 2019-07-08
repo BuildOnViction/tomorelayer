@@ -111,25 +111,29 @@ const FormResign = props => {
                 If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
               </Typography>
             </Grid>
-            <Grid item sm={12}>
-              <TextField
-                name="name"
-                value={relayer.name}
-                readOnly
-                fullWidth
-                label="Relayer name"
-                variant="outlined"
-                margin="dense"
-              />
-              <TextField
-                name="coinbase"
-                value={relayer.coinbase}
-                readOnly
-                fullWidth
-                label="Relayer Coinbase"
-                variant="outlined"
-                margin="dense"
-              />
+            <Grid item sm={12} container direction="column" spacing={2}>
+              <Grid item>
+                <TextField
+                  name="name"
+                  value={relayer.name}
+                  readOnly
+                  fullWidth
+                  label="Relayer name"
+                  variant="outlined"
+                  margin="dense"
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  name="coinbase"
+                  value={relayer.coinbase}
+                  readOnly
+                  fullWidth
+                  label="Relayer Coinbase"
+                  variant="outlined"
+                  margin="dense"
+                />
+              </Grid>
             </Grid>
             <Grid item container justify="center">
               <Button onClick={handleClickOpen} data-testid="resign-button" color="primary" variant="contained">

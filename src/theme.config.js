@@ -95,8 +95,11 @@ const theme = createMuiTheme({
       },
       outlined: {
         '&$marginDense': {
-          transform: 'translate(12px, 11px) scale(1)',
-          display: 'none',
+          transform: 'none !important',
+          display: 'initial',
+          color: '#CFCDE1',
+          position: 'relative',
+          marginBottom: '15px',
         },
       },
     },
