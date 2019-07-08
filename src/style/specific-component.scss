@@ -7,34 +7,7 @@
 .relayer-logo {
   margin: 0 auto;
 }
-.register-progress--step {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 50%;
-  border: solid 1px #aaa;
-  color: #aaa;
-  line-height: 40px;
-  font-size: 16px;
-  padding: 0 15px;
 
-}
-.register-progress--step__current {
-  border-color: #1e93e8;
-  background: #1e93e8;
-  color: white;
-}
-.register-progress--step__completed {
-  border-color: #1e93e8;
-  background: #1e93e8;
-  opacity: .75;
-  i {
-    transform: translate(-7px, 5px);
-    font-weight: 900;
-    color: white;
-  }
-}
 .success-icon {
   font-size: 40px !important;
   color: green;
@@ -150,5 +123,49 @@
 }
 
 .relayer-config-container {
+  margin-bottom: 150px;
+}
+
+.register-progress--step {
+
+}
+
+.step_circle {
+  padding: 10px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+
+  &__unfulfilled {
+    background-color: #25263E;
+    width: 50px;
+    height: 50px;
+    line-height: 30px;
+  }
+
+  &__0 {
+    color: white !important;
+    background-color: #703DB5;
+    width: 50px;
+    height: 50px;
+    line-height: 30px;
+  }
+
+  &__1 {
+    background-color: #3B2962;
+    width: 70px;
+    height: 70px;
+  }
+
+  &__2 {
+    background-color: #201F39;
+    width: 90px;
+    height: 90px;
+  }
+
+}
+
+.register-container {
+  margin-top: 50px;
   margin-bottom: 150px;
 }

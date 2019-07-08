@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Box,
   Button,
-  Container,
   Paper,
   Table,
   TableBody,
@@ -48,8 +47,8 @@ const Review = ({
 }) => {
   const pairs = document.__memoizedUserSelectedPairs__ || []
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h5" className="text-center">
+    <Box>
+      <Typography variant="h5">
         Review
       </Typography>
       <Paper className="mt-1 p-1" elevation={0}>
@@ -76,7 +75,7 @@ const Review = ({
           Confirm
         </Button>
       </Box>
-    </Container>
+    </Box>
   )
 }
 

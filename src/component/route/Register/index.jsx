@@ -90,7 +90,7 @@ export class Register extends React.Component {
     } = this.props
 
     return (
-      <Container maxWidth="sm" className="mb-5 mt-5">
+      <Container maxWidth="sm" className="register-container">
         <Box display="flex" justifyContent="center" flexDirection="column">
           {step < 5 && (<ProgressBar step={step} />)}
           <div className="mt-2">
