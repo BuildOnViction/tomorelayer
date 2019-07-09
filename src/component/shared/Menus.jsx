@@ -1,110 +1,72 @@
 import React from 'react'
 import {
   Button,
-  ClickAwayListener,
-  Grow,
+  Menu,
   MenuItem,
-  MenuList,
-  Paper,
-  Popper,
 } from '@material-ui/core'
 import { AdapterLink } from 'component/shared/Adapters'
 
 
-export const UserMenu = props => {
-  const [open, setOpen] = React.useState(false)
-  const anchorRef = React.useRef(null)
+export const UserMenu = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null)
 
-  const handleToggle = () => setOpen(prevOpen => !prevOpen)
+  const handleClick = (event) => setAnchorEl(event.currentTarget)
 
-  const handleClose = (event) => {
-    const alreadyOpen = anchorRef.current && anchorRef.current.contains(event.target)
-    if (alreadyOpen) {return undefined}
-    return setOpen(false)
-  }
+  const handleClose = () => setAnchorEl(null)
 
   return (
     <div>
-      <Button
-        size="small"
-        ref={anchorRef}
-        aria-controls="menu-user-list-grow"
-        aria-haspopup="true"
-        onClick={handleToggle}
-      >
-        USER PROFILE
+      <Button size="small" aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick}>
+        User
       </Button>
-      <Popper open={open} anchorEl={anchorRef.current} transition disablePortal>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-          >
-            <Paper id="menu-user-list-grow">
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList>
-                  <MenuItem component={AdapterLink} to="/profile">
-                    Profile
-                  </MenuItem>
-                  <MenuItem component={AdapterLink} to="/logout">
-                    Logout
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
+      <Menu
+        id="relayer-list-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        style={{ transform: 'translateY(30px)' }}
+      >
+        <MenuItem component={AdapterLink} to="/profile">
+          Profile
+        </MenuItem>
+        <MenuItem component={AdapterLink} to="/logout">
+          Logout
+        </MenuItem>
+      </Menu>
     </div>
   )
 }
 
 export const RelayerMenu = ({ relayers }) => {
-  const [open, setOpen] = React.useState(false)
-  const anchorRef = React.useRef(null)
+  const [anchorEl, setAnchorEl] = React.useState(null)
 
-  const handleToggle = () => setOpen(prevOpen => !prevOpen)
+  const handleClick = (event) => setAnchorEl(event.currentTarget)
 
-  const handleClose = (event) => {
-    const alreadyOpen = anchorRef.current && anchorRef.current.contains(event.target)
-    if (alreadyOpen) {return undefined}
-    return setOpen(false)
-  }
+  const handleClose = () => setAnchorEl(null)
 
   return (
     <div>
-      <Button
-        size="small"
-        ref={anchorRef}
-        aria-controls="menu-relayer-list-grow"
-        aria-haspopup="true"
-        onClick={handleToggle}
-      >
-        YOUR RELAYERS
+      <Button size="small" aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick}>
+        Your Relayers
       </Button>
-      <Popper open={open} anchorEl={anchorRef.current} transition disablePortal>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-          >
-            <Paper id="menu-relayer-list-grow">
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList>
-                  {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
-                    <MenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
-                      {r.name}
-                    </MenuItem>
-                  ))}
-                  <MenuItem component={AdapterLink} to="/register">
-                    Create new relayer
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
+      <Menu
+        id="relayer-list-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        style={{ transform: 'translateY(30px)' }}
+      >
+        {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
+          <MenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
+            {r.name}
+          </MenuItem>
+        ))}
+        <MenuItem component={AdapterLink} to="/register">
+          Create new relayer
+        </MenuItem>
+      </Menu>
     </div>
   )
 }

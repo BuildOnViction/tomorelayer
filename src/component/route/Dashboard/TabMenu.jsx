@@ -12,7 +12,7 @@ const useStyles = withStyles(theme => ({
     margin: '2em auto',
   },
   appMenu: {
-    borderBottom: 'solid 1px #ddd',
+    borderBottom: 'solid 1px #323252',
   },
   appTab: {},
   appLabel: {
