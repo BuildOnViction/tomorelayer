@@ -4,8 +4,18 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core'
+import PersonIcon from '@material-ui/icons/Person'
+import MenuIcon from '@material-ui/icons/Menu'
+import { withStyles } from '@material-ui/core/styles'
 import { AdapterLink } from 'component/shared/Adapters'
 
+const MenuButton = withStyles(theme => ({
+  root: {
+    color: '#CFCDE1',
+    textTransform: 'none',
+    margin: '0 1rem',
+  },
+}))(Button)
 
 export const UserMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -16,9 +26,15 @@ export const UserMenu = () => {
 
   return (
     <div>
-      <Button size="small" aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick}>
-        User
-      </Button>
+      <MenuButton
+        aria-label="User"
+        aria-controls="relayer-list-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        size="small"
+      >
+        User<PersonIcon style={{ marginLeft: 5 }} />
+      </MenuButton>
       <Menu
         id="relayer-list-menu"
         anchorEl={anchorEl}
@@ -47,9 +63,9 @@ export const RelayerMenu = ({ relayers }) => {
 
   return (
     <div>
-      <Button size="small" aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick}>
-        Your Relayers
-      </Button>
+      <MenuButton aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick} size="small">
+        My Relayers <MenuIcon style={{ marginLeft: 5 }} />
+      </MenuButton>
       <Menu
         id="relayer-list-menu"
         anchorEl={anchorEl}

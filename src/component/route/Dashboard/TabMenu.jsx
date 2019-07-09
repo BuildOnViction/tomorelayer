@@ -9,7 +9,6 @@ const useStyles = withStyles(theme => ({
     backgroundColor: 'transparent',
     color: 'inherit',
     boxShadow: 'none',
-    margin: '2em auto',
   },
   appMenu: {
     borderBottom: 'solid 1px #323252',

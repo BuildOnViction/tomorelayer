@@ -95,6 +95,9 @@ const theme = createMuiTheme({
         '&:placeholder': {
           color: '#52527B',
         },
+        '&$disabled': {
+          color: '#56527b',
+        },
       },
       input: {
         padding: '.5em 2em',

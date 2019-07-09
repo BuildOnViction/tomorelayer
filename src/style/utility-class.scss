@@ -17,7 +17,7 @@ $space-mod-map: (
 @for $i from 0 through 5 {
   @each $mod, $val in $space-mod-map {
     .#{$mod}-#{$i} {
-      #{$val}: #{$i}em !important;
+      #{$val}: #{$i}rem !important;
     }
   }
 }
