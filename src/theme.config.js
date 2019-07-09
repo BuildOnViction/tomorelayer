@@ -129,6 +129,23 @@ const theme = createMuiTheme({
         borderRadius: 4,
       },
     },
+    MuiListItem: {
+      root: {
+        'borderRadius': 20,
+        'marginBottom': '1rem',
+        '&$selected': {
+          'backgroundColor': '#323252',
+          '&:hover': {
+            backgroundColor: '#323252',
+          },
+        },
+      },
+      button: {
+        '&:hover': {
+          backgroundColor: '#323252',
+        },
+      },
+    },
   },
 })
 

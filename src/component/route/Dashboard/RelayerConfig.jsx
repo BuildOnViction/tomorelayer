@@ -42,7 +42,7 @@ const ConfigBoard = ({ match, relayers }) => {
 
   return (
     <Grid container className="relayer-config-container">
-      <Grid item md={3} className="pr-2">
+      <Grid item sm={4} md={3} className="pr-5">
         <List component="nav">
           {ListItems.map((item, idx) => (
             <ListItem key={item} button selected={formstep === idx} onClick={changeForm(idx)}>
@@ -52,7 +52,7 @@ const ConfigBoard = ({ match, relayers }) => {
         </List>
       </Grid>
       {!relayer.coinbase ? <NotExistRelayer /> : (
-        <Grid item md={9}>
+        <Grid item md={9} className="mt-1">
           {formstep === 0 && <FormInfo relayer={relayer} />}
           {formstep === 1 && <FormTrade relayer={relayer} />}
           {formstep === 2 && <FormTransfer relayer={relayer} />}

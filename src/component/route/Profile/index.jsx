@@ -44,14 +44,14 @@ export default class Profile extends React.Component {
 
     return (
       <Container maxWidth="lg">
-        <Typography component="h1" className="mb-2">
+        <Typography variant="h5">
           Owner Profile
         </Typography>
-        <Typography component="h4" className="mb-2">
+        <Typography variant="body2">
           {address}
         </Typography>
-        <Grid container>
-          <Grid item md={3} className="pr-2">
+        <Grid container className="mt-4">
+          <Grid item md={3} className="pr-5">
             <List component="nav">
               {ListItems.map((item, idx) => (
                 <ListItem key={item} button className="mb-1" onClick={this.changeInfoBoard(idx)} selected={idx === selectedInfo}>
@@ -60,7 +60,7 @@ export default class Profile extends React.Component {
               ))}
             </List>
           </Grid>
-          <Grid item md={9}>
+          <Grid item md={7} sm={12}>
             {selectedInfo === 0 && <UserBalance relayers={relayers} user={user} balance={balance} />}
           </Grid>
         </Grid>

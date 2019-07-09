@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Avatar,
   Box,
-  Container,
   Link,
   Table,
   TableBody,
@@ -79,28 +78,26 @@ export default class UserBalance extends React.Component {
     const formattedBalance = `${round(balance, 3)}...`
 
     return (
-      <Container maxWidth="sm">
-        <Box display="flex" flexDirection="column">
-          <Box className="mb-4">
-            <Typography component="div">
-              Wallet Balance (TOMO)
-            </Typography>
-            <TextField value={formattedBalance} fullWidth disabled variant="outlined" margin="dense" />
-          </Box>
-          <Box>
-            {isEmpty(relayers) ? (
-              <NoRelayer />
-            ) : (
-              <React.Fragment>
-                <Typography component="div">
-                  Relayer Contract Balance
-                </Typography>
-                <RelayerTable relayers={relayers} />
-              </React.Fragment>
-            )}
-          </Box>
+      <Box display="flex" flexDirection="column">
+        <Box className="mb-4">
+          <Typography component="div">
+            Wallet Balance (TOMO)
+          </Typography>
+          <TextField value={formattedBalance} fullWidth disabled variant="outlined" margin="dense" />
         </Box>
-      </Container>
+        <Box>
+          {isEmpty(relayers) ? (
+            <NoRelayer />
+          ) : (
+            <React.Fragment>
+              <Typography component="div">
+                Relayer Contract Balance
+              </Typography>
+              <RelayerTable relayers={relayers} />
+            </React.Fragment>
+          )}
+        </Box>
+      </Box>
     )
   }
 }
