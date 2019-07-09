@@ -17,6 +17,20 @@ const MenuButton = withStyles(theme => ({
   },
 }))(Button)
 
+const DropDownMenu = withStyles(theme => ({
+  paper: {
+    width: 170,
+  }
+}))(Menu)
+
+const StyledMenuItem = withStyles(theme => ({
+  root: {
+    borderRadius: 0,
+    margin: 0,
+    color: '#7473A6',
+  }
+}))(MenuItem)
+
 export const UserMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -35,21 +49,21 @@ export const UserMenu = () => {
       >
         User<PersonIcon style={{ marginLeft: 5 }} />
       </MenuButton>
-      <Menu
+      <DropDownMenu
         id="relayer-list-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        style={{ transform: 'translateY(30px)' }}
+        style={{ transform: 'translateY(40px)' }}
       >
-        <MenuItem component={AdapterLink} to="/profile">
+        <StyledMenuItem component={AdapterLink} to="/profile">
           Profile
-        </MenuItem>
-        <MenuItem component={AdapterLink} to="/logout">
+        </StyledMenuItem>
+        <StyledMenuItem component={AdapterLink} to="/logout">
           Logout
-        </MenuItem>
-      </Menu>
+        </StyledMenuItem>
+      </DropDownMenu>
     </div>
   )
 }
@@ -66,23 +80,23 @@ export const RelayerMenu = ({ relayers }) => {
       <MenuButton aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick} size="small">
         My Relayers <MenuIcon style={{ marginLeft: 5 }} />
       </MenuButton>
-      <Menu
+      <DropDownMenu
         id="relayer-list-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        style={{ transform: 'translateY(30px)' }}
+        style={{ transform: 'translateY(40px)' }}
       >
         {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
-          <MenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
+          <StyledMenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
             {r.name}
-          </MenuItem>
+          </StyledMenuItem>
         ))}
-        <MenuItem component={AdapterLink} to="/register">
+        <StyledMenuItem component={AdapterLink} to="/register">
           Create new relayer
-        </MenuItem>
-      </Menu>
+        </StyledMenuItem>
+      </DropDownMenu>
     </div>
   )
 }
