@@ -21,6 +21,9 @@ const theme = createMuiTheme({
         backgroundColor: '#272741',
         color: '#CFCDE1',
       },
+      rounded: {
+        borderRadius: '8px',
+      },
     },
     MuiContainer: {
       root: {
