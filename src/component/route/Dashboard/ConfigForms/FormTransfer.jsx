@@ -50,9 +50,9 @@ const FormTransfer = props => {
       <Container maxWidth="xl">
         <Grid container>
           <Grid item sm={12} md={8}>
-            <Typography component="h5">
+            <Typography variant="h5">
               <Box>
-                <Typography component="h4">
+                <Typography variant="h4">
                   This relayer has been requested to deactivated. Transferring relayer is not allowed.
                 </Typography>
               </Box>
@@ -70,14 +70,12 @@ const FormTransfer = props => {
         <form onSubmit={handleSubmit}>
           <Grid item sm={12} md={8} container direction="column" spacing={6}>
             <Grid item sm={12}>
-              <Typography component="h1">
+              <Typography variant="h5">
                 Transfer Relayer
               </Typography>
             </Grid>
             <Grid item sm={12}>
-              <Typography component="h5">
-                Which address and coinbase would you like to transfer to?
-              </Typography>
+              Which address and coinbase would you like to transfer to?
             </Grid>
             <Grid item sm={12} container direction="column" spacing={2}>
               <Grid item>

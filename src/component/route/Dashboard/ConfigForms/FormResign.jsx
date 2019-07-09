@@ -72,14 +72,12 @@ const FormResign = props => {
       <Container maxWidth="xl">
         <Box display="flex" flexDirection="column">
           <Box m={2}>
-            <Typography component="h1">
+            <Typography variant="h4">
               The relayer is resigning
             </Typography>
           </Box>
           <Box m={3}>
-            <Typography component="div">
-              You can ask for withdrawal after the deposit lock-time has elapsed
-            </Typography>
+            You can ask for withdrawal after the deposit lock-time has elapsed
           </Box>
           <Box m={8}>
             {withdrawalable ? `Lock time has elapsed for ${remainingTime}, you can withdraw now` : `${remainingTime} remaining`}
@@ -101,14 +99,12 @@ const FormResign = props => {
         <Box>
           <Grid item container sm={12} md={8} direction="column" spacing={6}>
             <Grid item sm={12}>
-              <Typography component="h1">
+              <Typography variant="h5">
                 Resign
               </Typography>
             </Grid>
             <Grid item sm={12}>
-              <Typography component="div">
-                If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
-              </Typography>
+              If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
             </Grid>
             <Grid item sm={12} container direction="column" spacing={2}>
               <Grid item>

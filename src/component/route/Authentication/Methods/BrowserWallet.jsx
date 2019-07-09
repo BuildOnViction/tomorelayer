@@ -69,16 +69,14 @@ class BrowserWallet extends React.Component {
           </Box>
         )}
         {address && balance && (
-          <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">
-            <Box display="flex" flexDirection="column" className="p-1">
-              <Typography component="div">
-                Address: {address}
-              </Typography>
-              <Typography component="div">
-                Balance: {balance} TOMO
-              </Typography>
-            </Box>
-            <Box className="p-1" alignItems="center">
+          <Box display="flex" flexDirection="column" justifyContent="center">
+            <Typography component="div">
+              Address: {address}
+            </Typography>
+            <Typography component="div">
+              Balance: {balance} TOMO
+            </Typography>
+            <Box display="flex" justifyContent="center" className="mt-2">
               <Button onClick={this.confirm} variant="contained">
                 Use this wallet
               </Button>
