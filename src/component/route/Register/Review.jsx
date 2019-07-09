@@ -68,7 +68,7 @@ const Review = ({
         </Table>
       </Paper>
       <Box display="flex" justifyContent="space-between" className="mt-2">
-        <Button color="secondary" variant="contained" className="mr-1" type="button" onClick={goBack}>
+        <Button color="secondary" variant="contained" type="button" onClick={goBack}>
           Back
         </Button>
         <Button color="primary" variant="contained" type="button" onClick={registerRelayer}>

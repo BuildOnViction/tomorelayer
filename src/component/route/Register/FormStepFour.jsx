@@ -32,7 +32,7 @@ const FormStepFour = ({
         onChange={setPairsValues}
       />
       <Box display="flex" justifyContent="space-between" className="mt-2">
-        <Button color="secondary" variant="contained" className="mr-1" onClick={goBack} type="button">
+        <Button color="secondary" variant="contained" onClick={goBack} type="button">
           Back
         </Button>
         <Button color="primary" variant="contained" type="submit">

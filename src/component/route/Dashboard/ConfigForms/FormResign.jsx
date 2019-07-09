@@ -69,35 +69,35 @@ const FormResign = props => {
     const remainingTime = distanceInWordsToNow(dateParse(relayer.lock_time * 1000))
     const withdrawalable = isPast(dateParse(relayer.lock_time * 1000))
     return (
-      <Container maxWidth="xl">
-        <Box display="flex" flexDirection="column">
-          <Box m={2}>
-            <Typography variant="h4">
+      <Grid container>
+        <Grid container direction="column" item md={8} sm={12} spacing={4}>
+          <Grid item>
+            <Typography variant="h6">
               The relayer is resigning
             </Typography>
-          </Box>
-          <Box m={3}>
+          </Grid>
+          <Grid item>
             You can ask for withdrawal after the deposit lock-time has elapsed
-          </Box>
-          <Box m={8}>
+          </Grid>
+          <Grid item>
             {withdrawalable ? `Lock time has elapsed for ${remainingTime}, you can withdraw now` : `${remainingTime} remaining`}
-          </Box>
-          <Box display="flex" justifyContent="center" m={2}>
+          </Grid>
+          <Grid item container justify="start">
             <Button onClick={requestRefund} disabled={!withdrawalable} color="primary" variant="contained" data-testid="refund-button">
               Refund
             </Button>
-          </Box>
-        </Box>
-      </Container>
+          </Grid>
+        </Grid>
+      </Grid>
     )
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container>
       {step === 0 && <ResignNotice confirm={nextStep} />}
       {step === 1 && (
         <Box>
-          <Grid item container sm={12} md={8} direction="column" spacing={6}>
+          <Grid item container sm={12} md={8} direction="column" spacing={4}>
             <Grid item sm={12}>
               <Typography variant="h5">
                 Resign

@@ -36,11 +36,13 @@ const FormTrade = ({
       <form onSubmit={handleSubmit}>
         <Grid item container direction="column" spacing={8} sm={12} md={10}>
           <Grid item container alignItems="center" justify="space-between" sm={12}>
-            <Grid item sm={12}>
-              <Typography variant="h6">
-                Choose trading Fee
-              </Typography>
-            </Grid>
+            {!relayer.resigning && (
+              <Grid item sm={12}>
+                <Typography variant="h6">
+                  Choose trading Fee
+                </Typography>
+              </Grid>
+            )}
             <Grid item sm={6}>
               <TextField
                 label="Maker Fee (min: 0.1%, max: 99.9%)"
@@ -85,7 +87,7 @@ const FormTrade = ({
           <Grid item container direction="column">
             <Grid item>
               <Typography variant="h6">
-                Listed Tokens
+                Trade Tokens
               </Typography>
             </Grid>
             <Grid item>
