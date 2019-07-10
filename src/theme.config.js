@@ -135,6 +135,8 @@ const theme = createMuiTheme({
     MuiListItem: {
       root: {
         'borderRadius': 20,
+        'paddingTop': 4,
+        'paddingBottom': 4,
         'marginBottom': '1rem',
         '&$selected': {
           'backgroundColor': '#323252',
@@ -142,6 +144,9 @@ const theme = createMuiTheme({
             backgroundColor: '#323252',
           },
         },
+      },
+      gutters: {
+        paddingLeft: '15%',
       },
       button: {
         '&:hover': {

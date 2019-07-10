@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Box,
   Button,
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -56,12 +57,18 @@ const Review = ({
           <TableBody>
             {tableData(meta, pairs).map(row => (
               <TableRow key={row.key}>
-                <StyledTableCell>
-                  {row.key}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {row.value}
-                </StyledTableCell>
+                <Grid container justify="space-between" alignItems="start">
+                  <Grid item sm={4} md={3}>
+                    <StyledTableCell>
+                      {row.key}
+                    </StyledTableCell>
+                  </Grid>
+                  <Grid item sm={8} md={9}>
+                    <StyledTableCell align="left">
+                      {row.value}
+                    </StyledTableCell>
+                  </Grid>
+                </Grid>
               </TableRow>
             ))}
           </TableBody>
