@@ -10,9 +10,11 @@ import {
   DialogContentText,
   DialogTitle,
   Grid,
-  TextField,
+  Paper,
   Typography,
 } from '@material-ui/core'
+import TextIcon from '@material-ui/icons/AccountCircle'
+import WalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { PushAlert, AlertVariant } from 'service/frontend'
 import * as http from 'service/backend'
 import { ResignNotice } from './PresentComponents'
@@ -69,24 +71,22 @@ const FormResign = props => {
     const remainingTime = distanceInWordsToNow(dateParse(relayer.lock_time * 1000))
     const withdrawalable = isPast(dateParse(relayer.lock_time * 1000))
     return (
-      <Grid container>
-        <Grid container direction="column" item md={8} sm={12} spacing={4}>
-          <Grid item>
-            <Typography variant="h6">
-              The relayer is resigning
-            </Typography>
-          </Grid>
-          <Grid item>
-            You can ask for withdrawal after the deposit lock-time has elapsed
-          </Grid>
-          <Grid item>
-            {withdrawalable ? `Lock time has elapsed for ${remainingTime}, you can withdraw now` : `${remainingTime} remaining`}
-          </Grid>
-          <Grid item container justify="start">
-            <Button onClick={requestRefund} disabled={!withdrawalable} color="primary" variant="contained" data-testid="refund-button">
-              Refund
-            </Button>
-          </Grid>
+      <Grid container direction="column" item spacing={4}>
+        <Grid item>
+          <Typography variant="h6">
+            The relayer is resigning
+          </Typography>
+        </Grid>
+        <Grid item>
+          You can ask for withdrawal after the deposit lock-time has elapsed
+        </Grid>
+        <Grid item>
+          {withdrawalable ? `Lock time has elapsed for ${remainingTime}, you can withdraw now` : `${remainingTime} remaining`}
+        </Grid>
+        <Grid item container justify="flex-start">
+          <Button onClick={requestRefund} disabled={!withdrawalable} color="primary" variant="contained" data-testid="refund-button">
+            Refund
+          </Button>
         </Grid>
       </Grid>
     )
@@ -97,38 +97,28 @@ const FormResign = props => {
       {step === 0 && <ResignNotice confirm={nextStep} />}
       {step === 1 && (
         <Box>
-          <Grid item container sm={12} md={8} direction="column" spacing={4}>
-            <Grid item sm={12}>
+          <Grid item container direction="column" spacing={6}>
+            <Grid item>
               <Typography variant="h5">
-                Resign
+                Resign your relayer
               </Typography>
             </Grid>
-            <Grid item sm={12}>
-              If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
+            <Grid item>
+              Please take some time to understand some important things for your own safety.
+              We cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).
+              Please review all the below information one more time before proceeding to official resignation.
             </Grid>
-            <Grid item sm={12} container direction="column" spacing={2}>
-              <Grid item>
-                <TextField
-                  name="name"
-                  value={relayer.name}
-                  readOnly
-                  fullWidth
-                  label="Relayer name"
-                  variant="outlined"
-                  margin="dense"
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  name="coinbase"
-                  value={relayer.coinbase}
-                  readOnly
-                  fullWidth
-                  label="Relayer Coinbase"
-                  variant="outlined"
-                  margin="dense"
-                />
-              </Grid>
+            <Grid item>
+              <Paper elevation={0} className="p-1">
+                <Grid container direction="column" spacing={2}>
+                  <Grid item container alignItems="center">
+                    <TextIcon className="text-hint mr-1" /> {relayer.name}
+                  </Grid>
+                  <Grid item container alignItems="center">
+                    <WalletIcon className="text-hint mr-1" /> {relayer.coinbase}
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
             <Grid item container justify="center">
               <Button onClick={handleClickOpen} data-testid="resign-button" color="primary" variant="contained">

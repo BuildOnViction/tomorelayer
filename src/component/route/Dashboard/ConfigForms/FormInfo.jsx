@@ -31,8 +31,8 @@ class FormInfo extends React.Component {
           </Box>
         )}
         <form onSubmit={handleSubmit}>
-          <Grid item container sm={12} md={10} spacing={6}>
-            <Grid item sm={12} container>
+          <Grid item container spacing={6} direction="column">
+            <Grid item container>
               <Grid item sm={6} md={4} className="pr-2">
                 <Avatar alt={values.name} src={values.logo} className="mr-1" style={{ width: '100%', height: '100%' }} />
               </Grid>
@@ -58,7 +58,7 @@ class FormInfo extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item sm={12}>
+            <Grid item>
               <TextField
                 label="Relayer Name"
                 value={values.name || ''}
@@ -73,7 +73,7 @@ class FormInfo extends React.Component {
                 fullWidth
               />
             </Grid>
-            <Grid item sm={12}>
+            <Grid item>
               <TextField
                 label="Website"
                 value={values.link || ''}
@@ -88,7 +88,7 @@ class FormInfo extends React.Component {
                 fullWidth
               />
             </Grid>
-            <Grid item sm={12} container justify="center">
+            <Grid item container justify="center">
               <Button color="primary" variant="contained" type="submit" data-testid="save-button" disabled={inputDisabled}>
                 Save
               </Button>

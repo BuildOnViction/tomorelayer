@@ -76,6 +76,24 @@ export const wrappers = {
     },
   }),
 
+  depositForm: withFormik({
+    displayName: 'RelayerDepositForm',
+    validateOnChange: true,
+    mapPropsToValues: (props) => ({
+      deposit: props.relayer.deposit,
+    }),
+
+    validate: (values) => {
+      const errors = {}
+      if (values.deposit <= 0) {
+        errors.deposit = 'New deposit must be larger than 0'
+      }
+      return errors
+    },
+
+    handleSubmit: (values, meta) => {},
+  }),
+
   transferForm: withFormik({
     displayName: 'RelayerTransferForm',
     enableReinitialize: true,

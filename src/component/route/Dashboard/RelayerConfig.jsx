@@ -6,6 +6,7 @@ import {
   ListItemText,
 } from '@material-ui/core'
 import FormInfo from './ConfigForms/FormInfo'
+import FormDeposit from './ConfigForms/FormDeposit'
 import FormTrade from './ConfigForms/FormTrade'
 import FormTransfer from './ConfigForms/FormTransfer'
 import FormResign from './ConfigForms/FormResign'
@@ -53,9 +54,10 @@ const ConfigBoard = ({ match, relayers }) => {
         </List>
       </Grid>
       {!relayer.coinbase ? <NotExistRelayer /> : (
-        <Grid item md={9} className="mt-1">
+        <Grid item xs={12} sm={8} md={6} className="mt-1">
           {formstep === SIDE_MENU_ITEMS.info && <FormInfo relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.trade && <FormTrade relayer={relayer} />}
+          {formstep === SIDE_MENU_ITEMS.deposit && <FormDeposit relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.transfer && <FormTransfer relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.resign && <FormResign relayer={relayer} />}
         </Grid>

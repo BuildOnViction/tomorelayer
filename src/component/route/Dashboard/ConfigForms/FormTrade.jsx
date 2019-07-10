@@ -34,8 +34,8 @@ const FormTrade = ({
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <Grid item container direction="column" spacing={8} sm={12} md={10}>
-          <Grid item container alignItems="center" justify="space-between" sm={12}>
+        <Grid item container direction="column" spacing={8}>
+          <Grid item container alignItems="center" justify="space-between">
             {!relayer.resigning && (
               <Grid item sm={12}>
                 <Typography variant="h6">
@@ -98,7 +98,7 @@ const FormTrade = ({
               />
             </Grid>
           </Grid>
-          <Grid item container justify="center" sm={12}>
+          <Grid item container justify="center">
             <Button color="primary" variant="contained" type="submit" disabled={disableForm} data-testid="save-button">
               Save
             </Button>

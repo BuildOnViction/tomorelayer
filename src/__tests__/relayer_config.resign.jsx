@@ -89,8 +89,8 @@ describe('Test Relayer-Config Resign Form', () => {
 
     // Show the current name and coinbase for the sake of clarity
     const resignButton = R.getByTestId(/resign-button/i)
-    R.getByDisplayValue(new RegExp(ActiveRelayer.coinbase), 'i')
-    R.getByDisplayValue(new RegExp(ActiveRelayer.name), 'i')
+    R.getByText(new RegExp(ActiveRelayer.coinbase), 'i')
+    R.getByText(new RegExp(ActiveRelayer.name), 'i')
     // Accept-Button should not be presented yet!
     expect(R.queryByTestId(/accept-button/i)).toBeNull()
 

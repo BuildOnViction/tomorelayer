@@ -67,16 +67,16 @@ const FormTransfer = props => {
       {step === 0 && <TransferNotice confirm={nextStep} />}
       {step === 1 && (
         <form onSubmit={handleSubmit}>
-          <Grid item sm={12} md={8} container direction="column" spacing={4}>
-            <Grid item sm={12}>
+          <Grid item container direction="column" spacing={4}>
+            <Grid item>
               <Typography variant="h5">
                 Transfer Relayer
               </Typography>
             </Grid>
-            <Grid item sm={12}>
+            <Grid item>
               Which address and coinbase would you like to transfer to?
             </Grid>
-            <Grid item sm={12} container direction="column" spacing={2}>
+            <Grid item container direction="column" spacing={2}>
               <Grid item>
                 <TextField
                   label="New Owner"
@@ -110,7 +110,7 @@ const FormTransfer = props => {
                 />
               </Grid>
             </Grid>
-            <Grid item container justify="center" sm={12}>
+            <Grid item container justify="center">
               <Button
                 color="primary"
                 variant="contained"
