@@ -3,6 +3,7 @@ import { withFormik } from 'formik'
 import { SITE_MAP } from 'service/constant'
 import { AlertVariant } from 'service/frontend'
 import * as http from 'service/backend'
+import * as blk from 'service/blockchain'
 import { validateCoinbase } from 'service/blockchain'
 
 export const wrappers = {
@@ -78,9 +79,9 @@ export const wrappers = {
 
   depositForm: withFormik({
     displayName: 'RelayerDepositForm',
-    validateOnChange: true,
-    mapPropsToValues: (props) => ({
-      deposit: props.relayer.deposit,
+    validateOnChange: false,
+    mapPropsToValues: () => ({
+      deposit: 0,
     }),
 
     validate: (values) => {
@@ -91,7 +92,24 @@ export const wrappers = {
       return errors
     },
 
-    handleSubmit: (values, meta) => {},
+    handleSubmit: async (values, meta) => {
+      const config = { value: blk.toWei(values.deposit) }
+      const payload = { coinbase: meta.props.relayer.coinbase }
+      const { status, details } = await meta.props.RelayerContract.depositMore(payload, config)
+
+      if (!status) {
+        meta.props.PushAlert({ variant: AlertVariant.error, message: details })
+      } else {
+        const relayer = await http.updateRelayer({
+          deposit: meta.props.relayer.deposit + values.deposit,
+          id: meta.props.relayer.id,
+        })
+        meta.props.PushAlert({ variant: AlertVariant.success, message: 'new deposit has been made' })
+        meta.props.UpdateRelayer(relayer)
+      }
+
+      meta.setSubmitting(false)
+    },
   }),
 
   transferForm: withFormik({

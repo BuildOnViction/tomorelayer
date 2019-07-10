@@ -25,7 +25,7 @@ class FormDeposit extends React.Component {
       relayer,
     } = this.props
 
-    const inputDisabled = isSubmitting || relayer.resigning
+    const inputDisabled = isSubmitting || relayer.resigning || values.deposit < 1
 
     if (relayer.resigning) {
       return (
@@ -62,19 +62,25 @@ class FormDeposit extends React.Component {
                   value={values.deposit}
                   onChange={handleChange}
                   error={Boolean(errors.deposit)}
-                  name="owner"
+                  type="number"
+                  name="deposit"
                   margin="dense"
                   variant="outlined"
+                  InputProps={{
+                    endAdornment: 'TOMO'
+                  }}
+                // eslint-disable-next-line
                   inputProps={{
                     'data-testid': 'deposit-input'
                   }}
                   fullWidth
-                  disabled={inputDisabled}
+                  helperText={<span className="text-hint">Minimum deposit 1 TOMO</span>}
+                  disabled={isSubmitting || relayer.resigning}
                 />
               </Grid>
             </Grid>
             <Grid item container justify="center">
-              <Button variant="contained" type="submit">
+              <Button variant="contained" type="submit" data-testid="confirm-button" disabled={inputDisabled}>
                 Confirm
               </Button>
             </Grid>
@@ -85,7 +91,10 @@ class FormDeposit extends React.Component {
   }
 }
 
-const mapProps = undefined
+const mapProps = state => ({
+  RelayerContract: state.blk.RelayerContract
+})
+
 const actions = {
   UpdateRelayer,
   PushAlert,

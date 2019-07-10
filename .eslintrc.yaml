@@ -24,3 +24,4 @@ rules:
   no-with: "error"
   radix: "error"
   use-isnan: "error"
+  react/jsx-no-duplicate-props: "never"
