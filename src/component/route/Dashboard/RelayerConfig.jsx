@@ -27,7 +27,7 @@ const NotExistRelayer = () => (
 )
 
 const ConfigBoard = ({ match, relayers }) => {
-  const [formstep, setFormstep] = React.useState(0)
+  const [formstep, setFormstep] = React.useState(SIDE_MENU_ITEMS.info)
   const changeForm = step => () => setFormstep(step)
   const nullRelayer = {
     coinbase: undefined,
@@ -47,7 +47,7 @@ const ConfigBoard = ({ match, relayers }) => {
       <Grid item sm={4} md={3} className="pr-5">
         <List component="nav">
           {Object.values(SIDE_MENU_ITEMS).map((item, idx) => (
-            <ListItem key={item} button selected={formstep === idx} onClick={changeForm(item)}>
+            <ListItem key={item} button selected={formstep === item} onClick={changeForm(item)}>
               <ListItemText primary={item} />
             </ListItem>
           ))}
