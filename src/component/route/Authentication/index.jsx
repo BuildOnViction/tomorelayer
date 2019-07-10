@@ -4,7 +4,6 @@ import { connect } from 'redux-zero/react'
 import {
   Box,
   Container,
-  Typography,
 } from '@material-ui/core'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
@@ -95,9 +94,6 @@ class Authentication extends React.Component {
         <Container maxWidth="lg" className="pt-4 login-container">
           <Header />
           <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
-            <Typography>
-              Using node at <span className="network-node-info">{process.env.REACT_APP_RPC}</span>
-            </Typography>
           </MethodBar>
           {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}
           {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
