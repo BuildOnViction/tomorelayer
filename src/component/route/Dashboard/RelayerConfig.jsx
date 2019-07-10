@@ -11,12 +11,13 @@ import FormTransfer from './ConfigForms/FormTransfer'
 import FormResign from './ConfigForms/FormResign'
 
 
-const ListItems = [
-  'Information',
-  'Trade Options',
-  'Transfer',
-  'Resign'
-]
+const SIDE_MENU_ITEMS = {
+  info: 'Information',
+  trade: 'Trade Options',
+  deposit: 'Deposit',
+  transfer: 'Transfer',
+  resign: 'Resign',
+}
 
 const NotExistRelayer = () => (
   <div className="col-9">
@@ -44,8 +45,8 @@ const ConfigBoard = ({ match, relayers }) => {
     <Grid container className="relayer-config-container">
       <Grid item sm={4} md={3} className="pr-5">
         <List component="nav">
-          {ListItems.map((item, idx) => (
-            <ListItem key={item} button selected={formstep === idx} onClick={changeForm(idx)}>
+          {Object.values(SIDE_MENU_ITEMS).map((item, idx) => (
+            <ListItem key={item} button selected={formstep === idx} onClick={changeForm(item)}>
               <ListItemText primary={item} />
             </ListItem>
           ))}
@@ -53,10 +54,10 @@ const ConfigBoard = ({ match, relayers }) => {
       </Grid>
       {!relayer.coinbase ? <NotExistRelayer /> : (
         <Grid item md={9} className="mt-1">
-          {formstep === 0 && <FormInfo relayer={relayer} />}
-          {formstep === 1 && <FormTrade relayer={relayer} />}
-          {formstep === 2 && <FormTransfer relayer={relayer} />}
-          {formstep === 3 && <FormResign relayer={relayer} />}
+          {formstep === SIDE_MENU_ITEMS.info && <FormInfo relayer={relayer} />}
+          {formstep === SIDE_MENU_ITEMS.trade && <FormTrade relayer={relayer} />}
+          {formstep === SIDE_MENU_ITEMS.transfer && <FormTransfer relayer={relayer} />}
+          {formstep === SIDE_MENU_ITEMS.resign && <FormResign relayer={relayer} />}
         </Grid>
       )}
     </Grid>
