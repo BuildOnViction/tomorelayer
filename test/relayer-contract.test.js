@@ -98,11 +98,10 @@ contract('RelayerRegistration', async () => {
   const update = async (
     owner = accounts[1],
     coinbase = accounts[8],
-    makerFee = registrationPayload.makerFee,
-    takerFee = registrationPayload.takerFee,
+    tradeFee = registrationPayload.tradeFee,
     fromTokens = registrationPayload.fromTokens,
     toTokens = registrationPayload.toTokens,
-  ) => RelayerRegistration.methods.update(coinbase, makerFee, takerFee, fromTokens, toTokens).send({ from: owner }).then(r => ({
+  ) => RelayerRegistration.methods.update(coinbase, tradeFee, fromTokens, toTokens).send({ from: owner }).then(r => ({
     status: true,
     details: r.events.UpdateEvent.returnValues,
   })).catch(r => ({
@@ -160,8 +159,7 @@ contract('RelayerRegistration', async () => {
 
     registrationPayload = {
       coinbase: accounts[8],
-      makerFee: 1,
-      takerFee: 2,
+      tradeFee: 1,
       fromTokens: [
         TokenOne.options.address,
         TokenTwo.options.address,
@@ -192,9 +190,7 @@ contract('RelayerRegistration', async () => {
     expect(response.status).to.be.false
 
     // Fee must be valid (1 ~ 999)
-    response = await register(minDeposit, applicant, { takerFee: 0 })
-    expect(response.status).to.be.false
-    response = await register(minDeposit, applicant, { makerFee: 10000 })
+    response = await register(minDeposit, applicant, { tradeFee: 10000 })
     expect(response.status).to.be.false
 
     // Token pairs must match in length, not exceeding maxTokenList
@@ -225,16 +221,13 @@ contract('RelayerRegistration', async () => {
     response = await update(undefined, undefined, 0)
     expect(response.status).to.be.false
 
-    response = await update(undefined, undefined, undefined, undefined, [ TokenTwo.options.address ])
+    response = await update(undefined, undefined, undefined, [ TokenTwo.options.address ])
     expect(response.status).to.be.false
 
     response = await update(undefined, undefined, 2)
     expect(response.status).to.be.true
 
-    response = await update(undefined, undefined, undefined, 3)
-    expect(response.status).to.be.true
-
-    response = await update(undefined, undefined, undefined, undefined, [ TokenTwo.options.address ], [ TokenThree.options.address ])
+    response = await update(undefined, undefined, undefined, [ TokenTwo.options.address ], [ TokenThree.options.address ])
     expect(response.status).to.be.true
   })
 
@@ -348,7 +341,7 @@ contract('RelayerRegistration', async () => {
     // Unlock
     const waitingTimeInSeconds = 4
     response = await refund(owner1.address, owner1.coinbase[0])
-    const remaining_time = parseInt(response.details.remaining_time)
+    const remaining_time = parseInt(response.details.remaining_time, 10)
     expect(remaining_time <= waitingTimeInSeconds).to.be.true
 
     const unlock = new Promise(resolve => {

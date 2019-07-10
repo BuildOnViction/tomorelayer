@@ -10,8 +10,7 @@ contract RelayerRegistration {
     /// @dev Data types
     struct Relayer {
         uint256 _deposit;
-        uint16 _makerFee;
-        uint16 _takerFee;
+        uint16 _tradeFee;
         address[] _fromTokens;
         address[] _toTokens;
     }
@@ -31,9 +30,9 @@ contract RelayerRegistration {
     /// @dev Events
     /// struct-mapping -> values
     event ConfigEvent(uint max_relayer, uint max_token, uint256 min_deposit);
-    event RegisterEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
-    event UpdateEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
-    event TransferEvent(uint256 deposit, uint16 makerFee, uint16 takerFee, address[] fromTokens, address[] toTokens);
+    event RegisterEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
+    event UpdateEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
+    event TransferEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
     event ResignEvent(uint deposit_release_time, uint256 deposit_amount);
     event RefundEvent(bool success, uint remaining_time, uint256 deposit_amount);
 
@@ -83,14 +82,13 @@ contract RelayerRegistration {
 
 
     /// @dev State-Alter Methods
-    function register(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public payable {
+    function register(address coinbase, uint16 tradeFee, address[] memory fromTokens, address[] memory toTokens) public payable {
         require(msg.sender != CONTRACT_OWNER, "Contract Owner is forbidden to create a Relayer");
         require(msg.sender != coinbase, "Coinbase and RelayerOwner address must not be the same");
         require(coinbase != CONTRACT_OWNER, "Coinbase must not be same as CONTRACT_OWNER");
         require(msg.value >= MinimumDeposit, "Minimum deposit not satisfied.");
         /// @dev valid relayer configuration
-        require(makerFee >= 1 && makerFee < 10000, "Invalid Maker Fee");
-        require(takerFee >= 1 && takerFee < 10000, "Invalid Taker Fee");
+        require(tradeFee >= 1 && tradeFee < 10000, "Invalid Maker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
@@ -99,40 +97,38 @@ contract RelayerRegistration {
         require(RelayerCount < MaximumRelayers, "Maximum relayers registered");
 
         /// @notice Do we need to check the duplication of Token trade-pairs?
-        Relayer memory relayer = Relayer(msg.value, makerFee, takerFee, fromTokens, toTokens);
+        Relayer memory relayer = Relayer(msg.value, tradeFee, fromTokens, toTokens);
         RELAYER_LIST[coinbase] = relayer;
         OWNER_LIST[coinbase] = msg.sender;
         COINBASE_LIST[msg.sender].push(coinbase);
 
         RelayerCount++;
 
-        emit RegisterEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._makerFee, RELAYER_LIST[coinbase]._takerFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
+        emit RegisterEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._tradeFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
     }
 
 
-    function update(address coinbase, uint16 makerFee, uint16 takerFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
-        require(makerFee >= 1 && makerFee < 10000, "Invalid Maker Fee");
-        require(takerFee >= 1 && takerFee < 10000, "Invalid Taker Fee");
+    function update(address coinbase, uint16 tradeFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+        require(tradeFee >= 1 && tradeFee < 10000, "Invalid Maker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
 
-        RELAYER_LIST[coinbase]._makerFee = makerFee;
-        RELAYER_LIST[coinbase]._takerFee = takerFee;
+        RELAYER_LIST[coinbase]._tradeFee = tradeFee;
         RELAYER_LIST[coinbase]._fromTokens = fromTokens;
         RELAYER_LIST[coinbase]._toTokens = toTokens;
 
-        emit UpdateEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._makerFee, RELAYER_LIST[coinbase]._takerFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
+        emit UpdateEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._tradeFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
     }
 
 
     function transfer(address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
-        require(RELAYER_LIST[new_owner]._makerFee == 0, "Owner address must not be currently used as relayer-coinbase");
+        require(RELAYER_LIST[new_owner]._tradeFee == 0, "Owner address must not be currently used as relayer-coinbase");
         require(new_coinbase != address(0));
         require(new_coinbase != CONTRACT_OWNER);
 
         if (new_coinbase != coinbase) {
-            require(RELAYER_LIST[new_coinbase]._makerFee == 0, "The new coinbase is already in used");
+            require(RELAYER_LIST[new_coinbase]._tradeFee == 0, "The new coinbase is already in used");
             require(COINBASE_LIST[new_coinbase].length == 0, "The new coinbase is used as a Relayer-owner");
         }
 
@@ -149,7 +145,7 @@ contract RelayerRegistration {
                 OWNER_LIST[new_coinbase] = new_owner;
                 COINBASE_LIST[new_owner].push(new_coinbase);
 
-                emit TransferEvent(RELAYER_LIST[new_coinbase]._deposit, RELAYER_LIST[new_coinbase]._makerFee, RELAYER_LIST[new_coinbase]._takerFee, RELAYER_LIST[new_coinbase]._fromTokens, RELAYER_LIST[new_coinbase]._toTokens);
+                emit TransferEvent(RELAYER_LIST[new_coinbase]._deposit, RELAYER_LIST[new_coinbase]._tradeFee, RELAYER_LIST[new_coinbase]._fromTokens, RELAYER_LIST[new_coinbase]._toTokens);
             }
         }
 
@@ -161,8 +157,7 @@ contract RelayerRegistration {
         RELAYER_LIST[coinbase]._deposit += msg.value;
         emit UpdateEvent(
                          RELAYER_LIST[coinbase]._deposit,
-                         RELAYER_LIST[coinbase]._makerFee,
-                         RELAYER_LIST[coinbase]._takerFee,
+                         RELAYER_LIST[coinbase]._tradeFee,
                          RELAYER_LIST[coinbase]._fromTokens,
                          RELAYER_LIST[coinbase]._toTokens);
     }
@@ -203,11 +198,10 @@ contract RelayerRegistration {
     }
 
 
-    function getRelayerByCoinbase(address coinbase) public view returns (address, uint256, uint16, uint16, address[] memory, address[] memory) {
+    function getRelayerByCoinbase(address coinbase) public view returns (address, uint256, uint16, address[] memory, address[] memory) {
         return (OWNER_LIST[coinbase],
                 RELAYER_LIST[coinbase]._deposit,
-                RELAYER_LIST[coinbase]._makerFee,
-                RELAYER_LIST[coinbase]._takerFee,
+                RELAYER_LIST[coinbase]._tradeFee,
                 RELAYER_LIST[coinbase]._fromTokens,
                 RELAYER_LIST[coinbase]._toTokens);
     }
