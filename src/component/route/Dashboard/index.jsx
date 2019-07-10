@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
     return (
       <Container maxWidth="lg">
         <TabMenu />
-        <Box>
+        <Box className="mt-2">
           <Switch>
             <Route path={baseUrl} exact render={ExactPathRender} />
             <Route

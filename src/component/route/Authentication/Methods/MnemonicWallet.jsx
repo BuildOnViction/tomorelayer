@@ -12,7 +12,7 @@ import { ethers, Wallet as WalletSigner } from 'ethers'
 import * as blk from 'service/blockchain'
 
 
-const DEFAULT_HD_PATH = "m/44'/889'/0'/0"
+const DEFAULT_HD_PATH = "m/44'/60'/0'/0/0"
 
 export default class SoftwareWallet extends React.Component {
 
@@ -24,9 +24,9 @@ export default class SoftwareWallet extends React.Component {
     errorAlert: undefined,
   }
 
-  changeSecret = e => this.setState({ secret: e.target.value })
+  changeSecret = e => this.setState({ secret: e.target.value, errorAlert: undefined })
 
-  changeDerivationPath = e => this.setState({ derivationPath: e.target.value })
+  changeDerivationPath = e => this.setState({ derivationPath: e.target.value, errorAlert: undefined })
 
   changeAddress = () => this.setState({
     wallet: undefined,
@@ -63,16 +63,13 @@ export default class SoftwareWallet extends React.Component {
     } = this.state
 
     const HDPathHelpText = (
-      <small>To unlock the wallet, try paths m/44'/60'/0' or m/44'/60'/0'/0</small>
+      <span className="text-hint">
+        To unlock the wallet, try paths <span className="text-alert">{DEFAULT_HD_PATH}</span> or <span className="text-alert">m/44'/889'/0'/0/0</span>
+      </span>
     )
 
     return (
       <Container maxWidth="sm">
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <Typography component="h2">
-            Unlock your wallet using your Mnemonic
-          </Typography>
-        </Box>
 
         {!wallet && (
           <React.Fragment>
@@ -108,7 +105,7 @@ export default class SoftwareWallet extends React.Component {
                 fullWidth
               />
             </Box>
-            <Box justifyContent="flex-end" display="flex" className="mt-2">
+            <Box justifyContent="center" display="flex" className="mt-2">
               <Button onClick={this.importWallet} variant="contained">
                 Import
               </Button>
@@ -127,10 +124,10 @@ export default class SoftwareWallet extends React.Component {
               </Typography>
             </Box>
             <Box display="flex" justifyContent="center">
-              <Button onClick={this.changeAddress} variant="contained" size="small" className="m-1">
+              <Button onClick={this.changeAddress} variant="contained" className="m-1">
                 Change Address
               </Button>
-              <Button onClick={this.confirm} variant="contained" size="small" className="m-1">
+              <Button onClick={this.confirm} variant="contained" className="m-1">
                 Confirm
               </Button>
             </Box>

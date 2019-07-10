@@ -16,6 +16,15 @@ const theme = createMuiTheme({
     primary: blue,
   },
   overrides: {
+    MuiPaper: {
+      root: {
+        backgroundColor: '#272741',
+        color: '#CFCDE1',
+      },
+      rounded: {
+        borderRadius: '8px',
+      },
+    },
     MuiContainer: {
       root: {
         [breakpoints.up('xs')]: {
@@ -37,6 +46,15 @@ const theme = createMuiTheme({
       subtitle2: {
         fontSize: '30px',
         lineHeight: '1',
+      },
+      body1: {
+        fontSize: '14px',
+        lineHeight: '1',
+      },
+      body2: {
+        fontSize: '14px',
+        lineHeight: '1',
+        color: '#7473A6',
       },
     },
     MuiTab: {
@@ -80,6 +98,9 @@ const theme = createMuiTheme({
         '&:placeholder': {
           color: '#52527B',
         },
+        '&$disabled': {
+          color: '#56527b',
+        },
       },
       input: {
         padding: '.5em 2em',
@@ -95,8 +116,11 @@ const theme = createMuiTheme({
       },
       outlined: {
         '&$marginDense': {
-          transform: 'translate(12px, 11px) scale(1)',
-          display: 'none',
+          transform: 'none !important',
+          display: 'initial',
+          color: '#CFCDE1',
+          position: 'relative',
+          marginBottom: '15px',
         },
       },
     },
@@ -106,6 +130,23 @@ const theme = createMuiTheme({
         height: 100,
         margin: 0,
         borderRadius: 4,
+      },
+    },
+    MuiListItem: {
+      root: {
+        'borderRadius': 20,
+        'marginBottom': '1rem',
+        '&$selected': {
+          'backgroundColor': '#323252',
+          '&:hover': {
+            backgroundColor: '#323252',
+          },
+        },
+      },
+      button: {
+        '&:hover': {
+          backgroundColor: '#323252',
+        },
       },
     },
   },

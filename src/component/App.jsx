@@ -92,13 +92,13 @@ class App extends React.Component {
         <div>
           <PageHeader relayers={userRelayers} user={user} />
           <Alert />
-          <Box className="maincontent">
+          <Box className="maincontent mt-2">
             <Switch>
               <Route path={SITE_MAP.Home} exact component={Main} />
               <Route path={SITE_MAP.Authentication} component={Authentication} />
               <Protected
                 path={SITE_MAP.Profile}
-                component={Profile}
+                component={props => <Profile relayers={userRelayers} user={user} {...props} />}
                 condition={userLoggedIn}
                 redirect={SITE_MAP.Authentication}
               />

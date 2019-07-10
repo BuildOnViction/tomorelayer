@@ -1,30 +1,36 @@
 import React from 'react'
 import cx from 'classnames'
-import { Container, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
-
-const ProgressBar = ({ step }) => {
-  const cls = currentStep => cx(
-    'register-progress--step',
+const ProgressStep = ({ step, unfulfilled }) => {
+  const classes = (level, bol) => cx(
+    'step_circle',
+    `step_circle__${level}`,
     {
-      'register-progress--step__completed': currentStep < step,
-      'register-progress--step__next': currentStep > step,
-      'register-progress--step__current': currentStep === step,
+      unfulfilled: bol,
     }
   )
-
   return (
-    <Container maxWidth="sm">
-      <Box display="flex">
-        {[1,2,3,4].map(_step => (
-          <div className="col-md-3 text-center" key={_step}>
-            <div className={cls(_step)}>
-              {_step < step ? (<i className="material-icons">check</i>) : _step}
-            </div>
-          </div>
-        ))}
+    <Box className={classes(2, unfulfilled)}>
+      <Box className={classes(1, unfulfilled)}>
+        <Box className={classes(0, unfulfilled)}>
+          {step}
+        </Box>
       </Box>
-    </Container>
+    </Box>
+  )
+}
+
+const ProgressBar = ({ step }) => {
+  return (
+    <Box display="flex" justifyContent="space-between" alignItems="center" className="mb-3">
+      {[1,2,3,4].map(_step => (
+        <React.Fragment key={_step} >
+          {step >= _step ? <ProgressStep step={_step} /> : <ProgressStep step={_step} unfulfilled />}
+          {_step < 4 && <div className="progress-trailing" />}
+        </React.Fragment>
+      ))}
+    </Box>
   )
 }
 

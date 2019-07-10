@@ -4,6 +4,7 @@ import {
   Container,
   Grid,
   TextField,
+  Typography,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
 import { compose } from 'service/helper'
@@ -33,11 +34,15 @@ const FormTrade = ({
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <Grid item container direction="column" spacing={8} sm={12} md={8}>
+        <Grid item container direction="column" spacing={8} sm={12} md={10}>
           <Grid item container alignItems="center" justify="space-between" sm={12}>
-            <Grid item sm={12}>
-              Choose trading Fee
-            </Grid>
+            {!relayer.resigning && (
+              <Grid item sm={12}>
+                <Typography variant="h6">
+                  Choose trading Fee
+                </Typography>
+              </Grid>
+            )}
             <Grid item sm={6}>
               <TextField
                 label="Maker Fee (min: 0.1%, max: 99.9%)"
@@ -81,7 +86,9 @@ const FormTrade = ({
           </Grid>
           <Grid item container direction="column">
             <Grid item>
-              Listed Tokens
+              <Typography variant="h6">
+                Trade Tokens
+              </Typography>
             </Grid>
             <Grid item>
               <TokenPairList

@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Box,
   Button,
-  Container,
   Typography,
 } from '@material-ui/core'
 import TokenPairList from 'component/shared/TokenPairList'
@@ -24,29 +23,23 @@ const FormStepFour = ({
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Box textAlign="center" className="mb-3">
-          <Typography component="h1">
-            Choose Trading Pairs of Token
-          </Typography>
-        </Box>
-        <Container maxWidth="md">
-          <TokenPairList
-            value={values}
-            onChange={setPairsValues}
-          />
-          <Box display="flex" justifyContent="space-between" className="mt-2">
-            <Button variant="outlined" className="mr-1" onClick={goBack} type="button">
-              Back
-            </Button>
-            <Button color="primary" variant="contained" type="submit">
-              Confirm
-            </Button>
-          </Box>
-        </Container>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <Typography variant="h5" className="mb-2">
+        Choose Trading Pairs of Token
+      </Typography>
+      <TokenPairList
+        value={values}
+        onChange={setPairsValues}
+      />
+      <Box display="flex" justifyContent="space-between" className="mt-2">
+        <Button color="secondary" variant="contained" onClick={goBack} type="button">
+          Back
+        </Button>
+        <Button color="primary" variant="contained" type="submit">
+          Confirm
+        </Button>
+      </Box>
+    </form>
   )
 }
 

@@ -31,34 +31,34 @@ class FormInfo extends React.Component {
           </Box>
         )}
         <form onSubmit={handleSubmit}>
-          <Grid item container sm={12} md={8} spacing={6}>
+          <Grid item container sm={12} md={10} spacing={6}>
             <Grid item sm={12} container>
               <Grid item sm={6} md={4} className="pr-2">
                 <Avatar alt={values.name} src={values.logo} className="mr-1" style={{ width: '100%', height: '100%' }} />
               </Grid>
-              <Grid item sm={6} md={8}>
-                <Typography component="h4">
-                  Relayer Avatar
-                </Typography>
-                <TextField
-                  label="Logo"
-                  value={values.logo || ''}
-                  onChange={handleChange}
-                  error={Boolean(errors.logo)}
-                  id="relayer-logo"
-                  name="logo"
-                  variant="outlined"
-                  margin="dense"
-                  helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
-                  disabled={inputDisabled}
-                  fullWidth
-                />
+              <Grid item sm={6} md={8} container direction="column" spacing={2}>
+                <Grid item>
+                  <TextField
+                    label="Relayer Logo"
+                    value={values.logo || ''}
+                    onChange={handleChange}
+                    error={Boolean(errors.logo)}
+                    id="relayer-logo"
+                    name="logo"
+                    variant="outlined"
+                    margin="dense"
+                    helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
+                    disabled={inputDisabled}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item>
+                  <div>Ratio: 1:1</div>
+                  <div>Recommended size 300x300</div>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item sm={12}>
-              <Typography component="div">
-                Relayer Name
-              </Typography>
               <TextField
                 label="Relayer Name"
                 value={values.name || ''}
@@ -74,11 +74,8 @@ class FormInfo extends React.Component {
               />
             </Grid>
             <Grid item sm={12}>
-              <Typography component="div">
-                Link
-              </Typography>
               <TextField
-                label="Link"
+                label="Website"
                 value={values.link || ''}
                 id="relayer-link"
                 name="link"

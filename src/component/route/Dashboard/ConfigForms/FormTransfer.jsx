@@ -50,12 +50,11 @@ const FormTransfer = props => {
       <Container maxWidth="xl">
         <Grid container>
           <Grid item sm={12} md={8}>
-            <Typography component="h5">
-              <Box>
-                <Typography component="h4">
-                  This relayer has been requested to deactivated. Transferring relayer is not allowed.
-                </Typography>
-              </Box>
+            <Typography variant="h6">
+              This relayer has been requested to resign.
+            </Typography>
+            <Typography variant="h6">
+              Transferring relayer is not allowed.
             </Typography>
           </Grid>
         </Grid>
@@ -68,46 +67,48 @@ const FormTransfer = props => {
       {step === 0 && <TransferNotice confirm={nextStep} />}
       {step === 1 && (
         <form onSubmit={handleSubmit}>
-          <Grid item sm={12} md={8} container direction="column" spacing={6}>
+          <Grid item sm={12} md={8} container direction="column" spacing={4}>
             <Grid item sm={12}>
-              <Typography component="h1">
+              <Typography variant="h5">
                 Transfer Relayer
               </Typography>
             </Grid>
             <Grid item sm={12}>
-              <Typography component="h5">
-                Which address and coinbase would you like to transfer to?
-              </Typography>
+              Which address and coinbase would you like to transfer to?
             </Grid>
-            <Grid item sm={12} container direction="column">
-              <TextField
-                label="New Owner"
-                value={values.owner}
-                onChange={handleChange}
-                error={Boolean(errors.owner)}
-                name="owner"
-                margin="dense"
-                variant="outlined"
-                inputProps={{
-                  'data-testid': 'new-owner-input'
-                }}
-                helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
-                fullWidth
-              />
-              <TextField
-                label="New Coinbase"
-                value={values.coinbase}
-                onChange={handleChange}
-                error={Boolean(errors.coinbase)}
-                name="coinbase"
-                margin="dense"
-                variant="outlined"
-                inputProps={{
-                  'data-testid': 'new-coinbase-input'
-                }}
-                helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
-                fullWidth
-              />
+            <Grid item sm={12} container direction="column" spacing={2}>
+              <Grid item>
+                <TextField
+                  label="New Owner"
+                  value={values.owner}
+                  onChange={handleChange}
+                  error={Boolean(errors.owner)}
+                  name="owner"
+                  margin="dense"
+                  variant="outlined"
+                  inputProps={{
+                    'data-testid': 'new-owner-input'
+                  }}
+                  helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  label="New Coinbase"
+                  value={values.coinbase}
+                  onChange={handleChange}
+                  error={Boolean(errors.coinbase)}
+                  name="coinbase"
+                  margin="dense"
+                  variant="outlined"
+                  inputProps={{
+                    'data-testid': 'new-coinbase-input'
+                  }}
+                  helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
+                  fullWidth
+                />
+              </Grid>
             </Grid>
             <Grid item container justify="center" sm={12}>
               <Button

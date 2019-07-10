@@ -72,12 +72,12 @@ export default class LedgerWallet extends React.Component {
     } = this.state
 
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="sm">
         {!ledgerWallet && (
-          <Grid container alignItems="center" justify="center">
-            <Grid item sm={10} md={5} lg={4} className="pr-3 pl-3">
+          <Grid container alignItems="center" justify="center" direction="column" spacing={4}>
+            <Grid item container justify="center">
               <TextField
-                label="HD path"
+                label="Select HD path to unlock your address"
                 value={hdpath}
                 onChange={this.changePath}
                 margin="dense"
@@ -96,7 +96,7 @@ export default class LedgerWallet extends React.Component {
 
         {ledgerWallet && (
           <Grid container alignItems="flex-end" justify="center">
-            <Grid item>
+            <Grid item container direction="column">
               <Typography component="div">
                 Address: {activeAddress}
               </Typography>
@@ -104,7 +104,7 @@ export default class LedgerWallet extends React.Component {
                 Balance: {activeBalance} TOMO
               </Typography>
             </Grid>
-            <Grid item container>
+            <Grid item container sm={12}>
               <Grid item sm={6} md={12}>
                 <Button onClick={this.changeAddress} variant="outlined">
                   Change Address

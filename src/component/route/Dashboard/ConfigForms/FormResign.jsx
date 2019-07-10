@@ -33,7 +33,6 @@ const FormResign = props => {
   const handleClose = () => setOpen(false)
   const nextStep = () => setStep(1)
 
-
   const confirmAndClose = async () => {
     handleClose()
     const { status, details } = await RelayerContract.resign({ coinbase: relayer.coinbase })
@@ -70,66 +69,66 @@ const FormResign = props => {
     const remainingTime = distanceInWordsToNow(dateParse(relayer.lock_time * 1000))
     const withdrawalable = isPast(dateParse(relayer.lock_time * 1000))
     return (
-      <Container maxWidth="xl">
-        <Box display="flex" flexDirection="column">
-          <Box m={2}>
-            <Typography component="h1">
+      <Grid container>
+        <Grid container direction="column" item md={8} sm={12} spacing={4}>
+          <Grid item>
+            <Typography variant="h6">
               The relayer is resigning
             </Typography>
-          </Box>
-          <Box m={3}>
-            <Typography component="div">
-              You can ask for withdrawal after the deposit lock-time has elapsed
-            </Typography>
-          </Box>
-          <Box m={8}>
+          </Grid>
+          <Grid item>
+            You can ask for withdrawal after the deposit lock-time has elapsed
+          </Grid>
+          <Grid item>
             {withdrawalable ? `Lock time has elapsed for ${remainingTime}, you can withdraw now` : `${remainingTime} remaining`}
-          </Box>
-          <Box display="flex" justifyContent="center" m={2}>
+          </Grid>
+          <Grid item container justify="start">
             <Button onClick={requestRefund} disabled={!withdrawalable} color="primary" variant="contained" data-testid="refund-button">
               Refund
             </Button>
-          </Box>
-        </Box>
-      </Container>
+          </Grid>
+        </Grid>
+      </Grid>
     )
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container>
       {step === 0 && <ResignNotice confirm={nextStep} />}
       {step === 1 && (
         <Box>
-          <Grid item container sm={12} md={8} direction="column" spacing={6}>
+          <Grid item container sm={12} md={8} direction="column" spacing={4}>
             <Grid item sm={12}>
-              <Typography component="h1">
+              <Typography variant="h5">
                 Resign
               </Typography>
             </Grid>
             <Grid item sm={12}>
-              <Typography component="div">
-                If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
-              </Typography>
+              If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
             </Grid>
-            <Grid item sm={12}>
-              <TextField
-                name="name"
-                value={relayer.name}
-                readOnly
-                fullWidth
-                label="Relayer name"
-                variant="outlined"
-                margin="dense"
-              />
-              <TextField
-                name="coinbase"
-                value={relayer.coinbase}
-                readOnly
-                fullWidth
-                label="Relayer Coinbase"
-                variant="outlined"
-                margin="dense"
-              />
+            <Grid item sm={12} container direction="column" spacing={2}>
+              <Grid item>
+                <TextField
+                  name="name"
+                  value={relayer.name}
+                  readOnly
+                  fullWidth
+                  label="Relayer name"
+                  variant="outlined"
+                  margin="dense"
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  name="coinbase"
+                  value={relayer.coinbase}
+                  readOnly
+                  fullWidth
+                  label="Relayer Coinbase"
+                  variant="outlined"
+                  margin="dense"
+                />
+              </Grid>
             </Grid>
             <Grid item container justify="center">
               <Button onClick={handleClickOpen} data-testid="resign-button" color="primary" variant="contained">

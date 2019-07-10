@@ -1,9 +1,17 @@
+.login-container {
+  height: 100vh;
+}
+
 .icon-logo {
-    img {
-        height: 44px;
-    }
-    .txt-tab {
-        display: block;
-        margin-top: 15px;
-    }
+  img {
+    height: 44px;
+  }
+  .txt-tab {
+    display: block;
+    margin-top: 15px;
+  }
+}
+
+.network-node-info {
+  color: #577EEF;
 }

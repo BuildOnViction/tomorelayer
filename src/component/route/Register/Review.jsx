@@ -1,6 +1,17 @@
 import React from 'react'
-import { Box, Button, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@material-ui/core'
 import { round } from 'service/helper'
+import { withStyles } from '@material-ui/core/styles'
+
 
 
 const tableData = (meta, pairs) => {
@@ -14,6 +25,20 @@ const tableData = (meta, pairs) => {
   ]
 }
 
+const StyledTableCell = withStyles(theme => ({
+  root: {
+    border: 'none',
+    paddingBottom: '10px',
+  },
+  body: {
+    color: '#CFCDE1',
+  },
+  alignLeft: {
+    color: '#7473A6',
+  }
+
+}))(TableCell)
+
 
 const Review = ({
   meta,
@@ -22,33 +47,35 @@ const Review = ({
 }) => {
   const pairs = document.__memoizedUserSelectedPairs__ || []
   return (
-    <div className="text-left">
-      <h1 className="register-form--title text-center">
+    <Box>
+      <Typography variant="h5">
         Review
-      </h1>
-      <div className="row mt-1">
+      </Typography>
+      <Paper className="mt-1 p-1" elevation={0}>
         <Table>
           <TableBody>
             {tableData(meta, pairs).map(row => (
               <TableRow key={row.key}>
-                <TableCell component="th" scope="row">
+                <StyledTableCell>
                   {row.key}
-                </TableCell>
-                <TableCell align="right">{row.value}</TableCell>
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {row.value}
+                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </div>
+      </Paper>
       <Box display="flex" justifyContent="space-between" className="mt-2">
-        <Button variant="outlined" className="mr-1" type="button" onClick={goBack}>
+        <Button color="secondary" variant="contained" type="button" onClick={goBack}>
           Back
         </Button>
         <Button color="primary" variant="contained" type="button" onClick={registerRelayer}>
           Confirm
         </Button>
       </Box>
-    </div>
+    </Box>
   )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import { Container, Box, Paper } from '@material-ui/core'
+import { Box, Container } from '@material-ui/core'
 import { MISC, SITE_MAP } from 'service/constant'
 import * as blk from 'service/blockchain'
 import * as http from 'service/backend'
@@ -90,52 +90,50 @@ export class Register extends React.Component {
     } = this.props
 
     return (
-      <Container maxWidth="md">
-        <Paper className="p-3 m-3">
-          <Box display="flex" justifyContent="center" flexDirection="column">
-            {step < 5 && (<ProgressBar step={step} />)}
-            <div className="mt-2">
-              {step === 1 && userAddress && (
-                <FormStepOne
-                  {...payload}
-                  userAddress={userAddress}
-                  usedCoinbases={usedCoinbases}
-                  submitPayload={this.handleSubmit}
-                />
-              )}
-              {step === 2 && (
-                <FormStepTwo
-                  {...payload}
-                  usedNames={usedNames}
-                  goBack={this.goBack}
-                  submitPayload={this.handleSubmit}
-                />
-              )}
-              {step === 3 && (
-                <FormStepThree
-                  {...payload}
-                  goBack={this.goBack}
-                  submitPayload={this.handleSubmit}
-                />
-              )}
-              {step === 4 && (
-                <FormStepFour
-                  {...payload}
-                  goBack={this.goBack}
-                  submitPayload={this.handleSubmit}
-                />
-              )}
-              {step === 5 && (
-                <Review
-                  meta={payload}
-                  goBack={this.goBack}
-                  registerRelayer={this.confirmRegister}
-                />
-              )}
-              {step === 6 && <SuccessRegistration navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`} />}
-            </div>
-          </Box>
-        </Paper>
+      <Container maxWidth="sm" className="register-container">
+        <Box display="flex" justifyContent="center" flexDirection="column">
+          {step < 5 && (<ProgressBar step={step} />)}
+          <div className="mt-2">
+            {step === 1 && userAddress && (
+              <FormStepOne
+                {...payload}
+                userAddress={userAddress}
+                usedCoinbases={usedCoinbases}
+                submitPayload={this.handleSubmit}
+              />
+            )}
+            {step === 2 && (
+              <FormStepTwo
+                {...payload}
+                usedNames={usedNames}
+                goBack={this.goBack}
+                submitPayload={this.handleSubmit}
+              />
+            )}
+            {step === 3 && (
+              <FormStepThree
+                {...payload}
+                goBack={this.goBack}
+                submitPayload={this.handleSubmit}
+              />
+            )}
+            {step === 4 && (
+              <FormStepFour
+                {...payload}
+                goBack={this.goBack}
+                submitPayload={this.handleSubmit}
+              />
+            )}
+            {step === 5 && (
+              <Review
+                meta={payload}
+                goBack={this.goBack}
+                registerRelayer={this.confirmRegister}
+              />
+            )}
+            {step === 6 && <SuccessRegistration navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`} />}
+          </div>
+        </Box>
       </Container>
     )
   }
