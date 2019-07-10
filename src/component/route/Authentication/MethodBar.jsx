@@ -46,7 +46,7 @@ const StyledTabs = withStyles({
 const StyledTab = withStyles(theme => ({
   root: {
     textTransform: 'none',
-    color: 'gray',
+    color: '#7473A6',
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: 14,
     padding: 20,
@@ -57,8 +57,6 @@ const StyledTab = withStyles(theme => ({
     color: 'white',
   },
 }))(props => <Tab disableRipple {...props} />)
-
-
 
 const MethodBar = ({
   value,
@@ -80,7 +78,7 @@ const MethodBar = ({
             className="icon-logo"
             icon={<img alt="logo" src={MethodIcons[op]}/>}
             label={(
-              <span className="txt-tab">
+              <span className="mt-1">
                 {op}
               </span>
             )}
