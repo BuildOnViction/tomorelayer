@@ -199,40 +199,31 @@ describe('Test RegisterForm No Break', () => {
     fireEvent.change(nameInput, { target: { value: finalPayload.name } })
     fireEvent.click(submitButton)
 
-    await R.findByLabelText(/maker fee/i)
+    await R.findByLabelText(/trade fee/i)
   })
 
   it('#Step 3: market fee form', async () => {
-    expect(countInputs()).toBe(2)
+    expect(countInputs()).toBe(1)
 
-    const makerFeeInput = R.getByLabelText(/maker fee/i)
-    expect(parseFloat(makerFeeInput.value)).toEqual(0.01)
-    expect(makerFeeInput.attributes['type'].value).toBe('number')
-    expect(makerFeeInput.attributes['step'].value).toBe('0.01')
-    expect(makerFeeInput.attributes['max'].value).toBe('99.99')
-    expect(makerFeeInput.attributes['min'].value).toBe('0.01')
-
-    const takerFeeInput = R.getByLabelText(/taker fee/i)
-    expect(parseFloat(takerFeeInput.value)).toEqual(0.01)
-    expect(takerFeeInput.attributes['type'].value).toBe('number')
-    expect(takerFeeInput.attributes['step'].value).toBe('0.01')
-    expect(takerFeeInput.attributes['max'].value).toBe('99.99')
-    expect(takerFeeInput.attributes['min'].value).toBe('0.01')
+    const tradeFeeInput = R.getByLabelText(/trade fee/i)
+    expect(parseFloat(tradeFeeInput.value)).toEqual(0.01)
+    expect(tradeFeeInput.attributes['type'].value).toBe('number')
+    expect(tradeFeeInput.attributes['step'].value).toBe('0.01')
+    expect(tradeFeeInput.attributes['max'].value).toBe('99.99')
+    expect(tradeFeeInput.attributes['min'].value).toBe('0.01')
 
     const submitButton = R.container.querySelector('button[type="submit"]')
     const invalidFee = 10000000 // not within 0.01 ~ 99.99
-    fireEvent.change(makerFeeInput, { target: { value: invalidFee } })
-    fireEvent.change(takerFeeInput, { target: { value: invalidFee } })
+    fireEvent.change(tradeFeeInput, { target: { value: invalidFee } })
     fireEvent.click(submitButton)
 
     // NOTE: no alert, just using error-highlight from MUI's built-ins
-    const updatedInputs = await R.findAllByLabelText(/maker fee/i)
+    const updatedInputs = await R.findAllByLabelText(/trade fee/i)
     Array.from(updatedInputs).forEach(input => {
       expect(input.attributes['aria-invalid'].value).toBe('true')
     })
 
-    fireEvent.change(makerFeeInput, { target: { value: 10 } })
-    fireEvent.change(takerFeeInput, { target: { value: 0.12 } })
+    fireEvent.change(tradeFeeInput, { target: { value: 10 } })
     fireEvent.click(submitButton)
     await R.findByText('Choose Trading Pairs of Token')
   })
@@ -253,7 +244,6 @@ describe('Test RegisterForm No Break', () => {
 
   it('#Step 5: review & register', async () => {
     R.getByText('10.00%')
-    R.getByText('0.12%')
     R.getByText(finalPayload.coinbase)
     R.getByText(finalPayload.name)
     R.getByText(/TOMO\/BTC/)

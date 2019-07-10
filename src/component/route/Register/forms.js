@@ -67,17 +67,13 @@ export const wrappers = {
     validateOnChange: false,
     validate: (values) => {
       const errors = {}
-      Object.keys(values).forEach((feeType) => {
-        const fee = parseFloat(values[feeType])
-        if (fee > 99.99 || fee < 0.01) {
-          errors[feeType] = true
-        }
-      })
+      if (values.trade_fee > 99.99 || values.trade_fee < 0.01) {
+        errors.trade_fee = true
+      }
       return errors
     },
     mapPropsToValues: (props) => ({
-      maker_fee: props.maker_fee,
-      taker_fee: props.taker_fee,
+      trade_fee: props.trade_fee,
     }),
     handleSubmit: (values, { props }) => props.submitPayload(values),
   }),

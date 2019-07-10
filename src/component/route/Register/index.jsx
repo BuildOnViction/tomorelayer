@@ -25,8 +25,7 @@ export class Register extends React.Component {
         deposit: MISC.MinimumDeposit,
         coinbase: '',
         name: '',
-        maker_fee: 0.01,
-        taker_fee: 0.01,
+        trade_fee: 0.01,
         from_tokens: [],
         to_tokens: [],
       }
@@ -55,8 +54,7 @@ export class Register extends React.Component {
   confirmRegister = async () => {
     const payload = {
       ...this.state.payload,
-      taker_fee: _.round(this.state.payload.taker_fee * 100, 0),
-      maker_fee: _.round(this.state.payload.maker_fee * 100, 0),
+      trade_fee: _.round(this.state.payload.trade_fee * 100, 0),
     }
 
     const config = { value: blk.toWei(payload.deposit) }
