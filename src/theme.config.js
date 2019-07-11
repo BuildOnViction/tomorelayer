@@ -130,6 +130,13 @@ const theme = createMuiTheme({
         marginBottom: '15px',
       },
     },
+    MuiFormLabel: {
+      root: {
+        '&$disabled': {
+          color: '#7473A6',
+        },
+      }
+    },
     MuiAvatar: {
       root: {
         width: 100,
