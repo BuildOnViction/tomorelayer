@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Box,
   Button,
-  Grid,
   Paper,
   Table,
   TableBody,
@@ -20,8 +19,7 @@ const tableData = (meta, pairs) => {
     { key: 'Relayer Name', value: meta.name },
     { key: 'Coinbase', value: meta.coinbase },
     { key: 'Deposit', value: meta.deposit + ' TOMO' },
-    { key: 'Maker Fee', value: round(meta.maker_fee, 2) + '%' },
-    { key: 'Taker Fee', value: round(meta.taker_fee, 2) + '%' },
+    { key: 'Trade Fee', value: round(meta.trade_fee, 2) + '%' },
     { key: 'Token Pairs', value: pairs.map(p => p.toString()).join(', ') },
   ]
 }
@@ -57,18 +55,12 @@ const Review = ({
           <TableBody>
             {tableData(meta, pairs).map(row => (
               <TableRow key={row.key}>
-                <Grid container justify="space-between" alignItems="start">
-                  <Grid item sm={4} md={3}>
-                    <StyledTableCell>
-                      {row.key}
-                    </StyledTableCell>
-                  </Grid>
-                  <Grid item sm={8} md={9}>
-                    <StyledTableCell align="left">
-                      {row.value}
-                    </StyledTableCell>
-                  </Grid>
-                </Grid>
+                <StyledTableCell>
+                  {row.key}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {row.value}
+                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

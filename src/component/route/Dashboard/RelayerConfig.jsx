@@ -32,8 +32,7 @@ const ConfigBoard = ({ match, relayers }) => {
   const nullRelayer = {
     coinbase: undefined,
     owner: undefined,
-    maker_fee: undefined,
-    taker_fee: undefined,
+    trade_fee: undefined,
     from_tokens: [],
     to_tokens: [],
     link: undefined,

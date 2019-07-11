@@ -58,12 +58,7 @@ const setup = async () => {
         allowNull: false,
         unique: true,
       },
-      maker_fee: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 1,
-      },
-      taker_fee: {
+      trade_fee: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 1,
