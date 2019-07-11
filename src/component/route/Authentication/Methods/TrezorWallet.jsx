@@ -80,7 +80,6 @@ export default class TrezorWallet extends React.Component {
                 label="Select HD path to unlock your wallet"
                 value={hdpath}
                 onChange={this.changePath}
-                margin="dense"
                 variant="outlined"
                 disabled
                 fullWidth

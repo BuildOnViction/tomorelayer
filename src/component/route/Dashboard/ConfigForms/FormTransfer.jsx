@@ -84,7 +84,6 @@ const FormTransfer = props => {
                   onChange={handleChange}
                   error={Boolean(errors.owner)}
                   name="owner"
-                  margin="dense"
                   variant="outlined"
                   inputProps={{
                     'data-testid': 'new-owner-input'
@@ -100,7 +99,6 @@ const FormTransfer = props => {
                   onChange={handleChange}
                   error={Boolean(errors.coinbase)}
                   name="coinbase"
-                  margin="dense"
                   variant="outlined"
                   inputProps={{
                     'data-testid': 'new-coinbase-input'

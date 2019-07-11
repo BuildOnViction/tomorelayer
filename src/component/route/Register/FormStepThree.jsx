@@ -30,7 +30,6 @@ const FormStepThree = props => {
           onChange={handleChange}
           error={errors.trade_fee}
           type="number"
-          margin="dense"
           variant="outlined"
           inputProps={{
             step: 0.01,

@@ -80,7 +80,6 @@ export default class LedgerWallet extends React.Component {
                 label="Select HD path to unlock your address"
                 value={hdpath}
                 onChange={this.changePath}
-                margin="dense"
                 variant="outlined"
                 disabled
                 fullWidth

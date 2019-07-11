@@ -64,7 +64,6 @@ class FormDeposit extends React.Component {
                   error={Boolean(errors.deposit)}
                   type="number"
                   name="deposit"
-                  margin="dense"
                   variant="outlined"
                   InputProps={{
                     endAdornment: 'TOMO'

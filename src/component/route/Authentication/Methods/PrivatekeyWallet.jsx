@@ -69,7 +69,6 @@ export default class SoftwareWallet extends React.Component {
                 error={Boolean(errorAlert)}
                 helperText={errorAlert && <i className="text-alert">{errorAlert}</i>}
                 variant="outlined"
-                margin="dense"
                 className="mb-1"
                 fullWidth
                 InputProps={{

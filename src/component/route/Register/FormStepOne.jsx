@@ -30,7 +30,6 @@ const FormStepOne = props => {
         error={errors.deposit}
         helperText={errors.deposit && <i className="text-alert">* Minimum deposit is 25,000 TOMO</i>}
         type="number"
-        margin="dense"
         variant="outlined"
         className="mb-2"
         inputProps= {{
@@ -50,7 +49,6 @@ const FormStepOne = props => {
         inputProps= {{
           'data-testid': 'coinbase-input'
         }}
-        margin="dense"
         variant="outlined"
         required
         fullWidth

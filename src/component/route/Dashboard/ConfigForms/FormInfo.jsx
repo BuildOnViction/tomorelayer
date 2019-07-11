@@ -46,7 +46,6 @@ class FormInfo extends React.Component {
                     id="relayer-logo"
                     name="logo"
                     variant="outlined"
-                    margin="dense"
                     helperText={errors.logo && <i className="text-alert">{errors.logo}</i>}
                     disabled={inputDisabled}
                     fullWidth
@@ -67,7 +66,6 @@ class FormInfo extends React.Component {
                 id="relayer-name"
                 name="name"
                 variant="outlined"
-                margin="dense"
                 helperText={errors.name && <i className="text-alert">{errors.name}</i>}
                 disabled={inputDisabled}
                 fullWidth
@@ -82,7 +80,6 @@ class FormInfo extends React.Component {
                 onChange={handleChange}
                 error={Boolean(errors.link)}
                 variant="outlined"
-                margin="dense"
                 helperText={errors.link && <i className="text-alert">{errors.link}</i>}
                 disabled={inputDisabled}
                 fullWidth

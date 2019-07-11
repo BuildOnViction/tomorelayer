@@ -25,7 +25,6 @@ const FormStepTwo = props => {
         error={Boolean(errors.name)}
         helperText={errors.name && <i className="text-alert">* {errors.name}</i>}
         type="text"
-        margin="dense"
         variant="outlined"
         className="mb-2"
         fullWidth

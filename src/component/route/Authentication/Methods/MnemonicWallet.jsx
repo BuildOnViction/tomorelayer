@@ -82,7 +82,6 @@ export default class SoftwareWallet extends React.Component {
                 className="mb-1"
                 error={Boolean(errorAlert)}
                 variant="outlined"
-                margin="dense"
                 fullWidth
                 InputProps={{
                   endAdornment: (
@@ -101,7 +100,6 @@ export default class SoftwareWallet extends React.Component {
                 error={Boolean(errorAlert)}
                 helperText={errorAlert ? <i className="text-alert">{errorAlert}</i> : HDPathHelpText}
                 variant="outlined"
-                margin="dense"
                 fullWidth
               />
             </Box>

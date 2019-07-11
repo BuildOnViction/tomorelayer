@@ -122,7 +122,6 @@ export default class UserBalance extends React.Component {
             fullWidth
             disabled
             variant="outlined"
-            margin="dense"
             InputProps={{ endAdornment: 'TOMO' }}
           />
         </Box>

@@ -49,7 +49,7 @@ const SearchBar = withStyles({
       'transform': 'translateY(-2px)'
     }
   },
-})(props => <TextField margin="dense" variant="outlined" fullWidth {...props} />)
+})(props => <TextField variant="outlined" fullWidth {...props} />)
 
 
 const StyledCheckbox = withStyles({
