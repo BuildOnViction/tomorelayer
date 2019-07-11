@@ -107,19 +107,19 @@ describe('Testing Relayer API', () => {
 
     const missingIdRequest = await http.updateRelayer({ trade_fee: 5 })
     expect(Boolean(missingIdRequest.error)).toBe(true)
-    expect(missingIdRequest.error.code).toBe(500)
+    expect(missingIdRequest.error.code).toBe(400)
 
     const invalidIdRequest = await http.updateRelayer({ id: 4, trade_fee: 6 })
     expect(Boolean(invalidIdRequest.error)).toBe(true)
-    expect(invalidIdRequest.error.code).toBe(500)
+    expect(invalidIdRequest.error.code).toBe(400)
   })
 
   it('#3. delete a relayer(after a successful refundEvent)', async () => {
     let request = await http.deleteRelayer(null)
-    expect(request.error.code).toBe(500)
+    expect(request.error.code).toBe(400)
 
     request = await http.deleteRelayer(2)
-    expect(request.error.code).toBe(500)
+    expect(request.error.code).toBe(400)
 
     request = await http.deleteRelayer(relayerId)
     expect(Boolean(request.error)).toBe(false)

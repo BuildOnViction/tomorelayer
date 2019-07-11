@@ -15,6 +15,19 @@ Content-Type: application/json
 :res = relayers
 GET :url/:res
 
+# Patching a relayers
+:res = relayer
+PATCH :url/:res
+Content-Type: application/json
+{
+  "id": 5
+}
+
+# Delete a relayers
+:res = relayer
+:query = id=5
+DELETE :url/:res?:query
+
 # Get Main Api
 GET :url
 

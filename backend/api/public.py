@@ -1,5 +1,3 @@
-import json
-from logzero import logger
 from playhouse.shortcuts import model_to_dict
 from model import Contract, Relayer, Token
 from .base import BaseHandler
