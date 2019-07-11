@@ -19,8 +19,7 @@ const tableData = (meta, pairs) => {
     { key: 'Relayer Name', value: meta.name },
     { key: 'Coinbase', value: meta.coinbase },
     { key: 'Deposit', value: meta.deposit + ' TOMO' },
-    { key: 'Maker Fee', value: round(meta.maker_fee, 2) + '%' },
-    { key: 'Taker Fee', value: round(meta.taker_fee, 2) + '%' },
+    { key: 'Trade Fee', value: round(meta.trade_fee, 2) + '%' },
     { key: 'Token Pairs', value: pairs.map(p => p.toString()).join(', ') },
   ]
 }

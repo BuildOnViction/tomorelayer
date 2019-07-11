@@ -78,8 +78,7 @@ describe('Testing Relayer API', () => {
       name: 'DummyRelayer',
       coinbase: '0xdD596FfB7f7A6123C36ecEf2F8a48AfEc6D7B889',
       deposit: 25000,
-      maker_fee: 2,
-      taker_fee: 5,
+      trade_fee: 2,
       from_tokens: [],
       to_tokens: [],
     }
@@ -98,19 +97,19 @@ describe('Testing Relayer API', () => {
   it('#2. update a relayer', async () => {
     const updatedRelayer = await http.updateRelayer({
       id: relayerId,
-      maker_fee: 5,
+      trade_fee: 5,
       resigning: true,
     })
 
     expect(updatedRelayer.id).toBe(1)
     expect(updatedRelayer.resigning).toBe(true)
-    expect(updatedRelayer.maker_fee).toBe(5)
+    expect(updatedRelayer.trade_fee).toBe(5)
 
-    const missingIdRequest = await http.updateRelayer({ maker_fee: 5 })
+    const missingIdRequest = await http.updateRelayer({ trade_fee: 5 })
     expect(Boolean(missingIdRequest.error)).toBe(true)
     expect(missingIdRequest.error.code).toBe(500)
 
-    const invalidIdRequest = await http.updateRelayer({ id: 4, maker_fee: 6 })
+    const invalidIdRequest = await http.updateRelayer({ id: 4, trade_fee: 6 })
     expect(Boolean(invalidIdRequest.error)).toBe(true)
     expect(invalidIdRequest.error.code).toBe(500)
   })

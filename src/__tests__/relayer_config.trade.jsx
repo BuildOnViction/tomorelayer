@@ -45,13 +45,12 @@ describe('Test Relayer-Config Trade Form', () => {
 
   afterEach(cleanup)
 
-  it('Request update trade-options for Active Relayer', async () => {
+  it('#1. Request update trade-options for Active Relayer', async () => {
 
     const ActiveRelayer = {
       id: 1,
       owner: Owner,
-      maker_fee: 1,
-      taker_fee: 2,
+      trade_fee: 2,
       from_tokens: [],
       to_tokens: [],
     }
@@ -86,24 +85,23 @@ describe('Test Relayer-Config Trade Form', () => {
       </Provider>
     )
 
-    R.getByDisplayValue(/0.01/)
-    const takerFeeInput = R.getByDisplayValue(/0.02/)
+    const tradeFeeInput = R.getByDisplayValue(/0.02/)
     const someTokenPair = R.getByLabelText(/tomo\/btc/i)
     const saveBtn = R.getByTestId(/save-button/i)
 
     http.updateRelayer = jest.fn().mockResolvedValue({
       ...ActiveRelayer,
-      taker_fee: 50,
+      trade_fee: 50,
     })
 
-    fireEvent.change(takerFeeInput, { target: { value: 0.5 }})
+    fireEvent.change(tradeFeeInput, { target: { value: 0.5 }})
     fireEvent.click(someTokenPair)
     fireEvent.click(saveBtn)
     await wait()
 
     const expectedUpdatePayload = {
       ...ActiveRelayer,
-      taker_fee: 50,
+      trade_fee: 50,
       from_tokens: [TomoAddress],
       to_tokens: [BtcAddress],
     }
@@ -121,13 +119,12 @@ describe('Test Relayer-Config Trade Form', () => {
   })
 
 
-  it('Request update trade options for ResigningRelayer', async () => {
+  it('#2. Request update trade options for ResigningRelayer', async () => {
 
     const ActiveRelayer = {
       id: 1,
       owner: Owner,
-      maker_fee: 1,
-      taker_fee: 2,
+      trade_fee: 1,
       from_tokens: [],
       to_tokens: [],
       resigning: true,
@@ -154,14 +151,12 @@ describe('Test Relayer-Config Trade Form', () => {
       </Provider>
     )
 
-    const makerFeeInput = R.getByDisplayValue(/0.01/)
-    const takerFeeInput = R.getByDisplayValue(/0.02/)
+    const tradeFeeInput = R.getByDisplayValue(/0.01/)
     const someTokenPair = R.getByLabelText(/tomo\/btc/i)
     const saveBtn = R.getByTestId(/save-button/i)
 
 
-    expect(makerFeeInput).toBeDisabled()
-    expect(takerFeeInput).toBeDisabled()
+    expect(tradeFeeInput).toBeDisabled()
     expect(someTokenPair).toBeDisabled()
     expect(saveBtn).toBeDisabled()
   })

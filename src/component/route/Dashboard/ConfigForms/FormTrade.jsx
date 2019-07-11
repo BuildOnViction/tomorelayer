@@ -35,59 +35,33 @@ const FormTrade = ({
     <Container>
       <form onSubmit={handleSubmit}>
         <Grid item container direction="column" spacing={8}>
-          <Grid item container alignItems="center" justify="space-between">
-            {!relayer.resigning && (
-              <Grid item sm={12}>
-                <Typography variant="h6">
-                  Choose trading Fee
-                </Typography>
-              </Grid>
-            )}
-            <Grid item sm={6}>
-              <TextField
-                label="Maker Fee (min: 0.1%, max: 99.9%)"
-                name="maker_fee"
-                id="maker_fee-input"
-                value={values.maker_fee}
-                onChange={handleChange}
-                error={errors.maker_fee}
-                type="number"
-                margin="dense"
-                variant="outlined"
-                inputProps={{
-                  step: 0.01,
-                  max: 99.99,
-                  min: 0.01,
-                }}
-                fullWidth
-                disabled={disableForm}
-              />
-            </Grid>
-            <Grid item sm={6}>
-              <TextField
-                label="Taker Fee (min: 0.1%, max: 99.9%)"
-                name="taker_fee"
-                id="taker_fee-input"
-                value={values.taker_fee}
-                onChange={handleChange}
-                error={errors.taker_fee}
-                type="number"
-                margin="dense"
-                variant="outlined"
-                inputProps={{
-                  step: 0.01,
-                  max: 99.99,
-                  min: 0.01,
-                }}
-                fullWidth
-                disabled={disableForm}
-              />
-            </Grid>
+          <Grid item>
+            <TextField
+              label="Choose Trade Fee (min: 0.1%, max: 99.9%)"
+              name="trade_fee"
+              id="trade_fee-input"
+              value={values.trade_fee}
+              onChange={handleChange}
+              error={errors.trade_fee}
+              type="number"
+              margin="dense"
+              variant="outlined"
+              inputProps={{
+                step: 0.01,
+                max: 99.99,
+                min: 0.01,
+              }}
+              fullWidth
+              disabled={disableForm}
+              InputProps={{
+                endAdornment: '%'
+              }}
+            />
           </Grid>
           <Grid item container direction="column">
             <Grid item>
-              <Typography variant="h6">
-                Trade Tokens
+              <Typography variant="body1">
+                Set trade Tokens
               </Typography>
             </Grid>
             <Grid item>

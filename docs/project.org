@@ -26,16 +26,20 @@ CLOSED: [2019-06-17 Mon 17:56]
 CLOSED: [2019-06-17 Mon 17:56]
 **** DONE Withdraw money UI
 CLOSED: [2019-06-19 Wed 11:05]
-*** ACTIVE Refactoring
+*** DONE Refactoring
+CLOSED: [2019-07-11 Thu 09:40]
 **** DONE Fix proxying host & port
 CLOSED: [2019-06-19 Wed 19:40]
 **** DONE Migrating script for testing
 CLOSED: [2019-06-20 Thu 15:12]
 **** DONE Make Backend-Service & Test it
 CLOSED: [2019-06-20 Thu 15:12]
+**** DONE Deposit Form
+CLOSED: [2019-07-10 Thu 15:12]
 **** DONE Change rate from 1000 to 10,000
 CLOSED: [2019-06-26 Wed 17:42]
-**** [ ] Only one kind of fee: MarketFee instead of {maker_fee,taker_fee}
+**** DONE Only one kind of fee: MarketFee instead of {maker_fee,taker_fee}
+CLOSED: [2019-07-11 Thu 09:39]
 *** [ ] Error catch boundary
 **** [ ] Backend api endpoint to present error & Slack integration
 **** [ ] Frontend setup

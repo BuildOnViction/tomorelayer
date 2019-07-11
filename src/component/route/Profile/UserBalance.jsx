@@ -125,7 +125,7 @@ export default class UserBalance extends React.Component {
             <NoRelayer />
           ) : (
             <React.Fragment>
-              <Typography component="div">
+              <Typography variant="body1" className="mb-1">
                 Relayer Contract Balance
               </Typography>
               <RelayerTable relayers={relayers} />
