@@ -25,6 +25,7 @@ const FooterLinks = [
     link: '/documents',
   },
 ]
+
 const FooterButtons = [
   {
     class: 'tomorelayer-icon-facebook',
