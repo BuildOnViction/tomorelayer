@@ -135,7 +135,7 @@ const theme = createMuiTheme({
         '&$disabled': {
           color: '#7473A6',
         },
-      }
+      },
     },
     MuiAvatar: {
       root: {
