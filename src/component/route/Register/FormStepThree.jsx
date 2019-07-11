@@ -30,7 +30,6 @@ const FormStepThree = props => {
           onChange={handleChange}
           error={errors.trade_fee}
           type="number"
-          className="mr-1"
           margin="dense"
           variant="outlined"
           inputProps={{
@@ -39,6 +38,7 @@ const FormStepThree = props => {
             min: 0.01,
           }}
           fullWidth
+          InputProps={{ endAdornment: '%' }}
         />
       </Box>
       <Typography variant="body2" className="mb-2">
