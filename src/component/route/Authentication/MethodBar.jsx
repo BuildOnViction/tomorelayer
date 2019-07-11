@@ -30,7 +30,6 @@ const StyledAppBar = withStyles({
     backgroundColor: 'transparent',
     border: 'transparent',
     borderRadius: 8,
-    marginBottom: 10,
   }
 })(props => <AppBar {...props} />)
 
@@ -64,14 +63,13 @@ const MethodBar = ({
   options,
   children,
 }) => (
-  <BoxWrap className="mb-5">
+  <BoxWrap className="mb-3">
     <StyledAppBar position="static" color="default" elevation={0}>
       <StyledTabs
         value={value}
         onChange={(_, value) => onChange(value)}
         variant="fullWidth"
         scrollButtons="auto"
-        className="mb-2"
       >
         {options.map(op => (
           <StyledTab
@@ -82,7 +80,8 @@ const MethodBar = ({
                 {op}
               </span>
             )}
-            key={op} />
+            key={op}
+          />
         ))}
       </StyledTabs>
     </StyledAppBar>
