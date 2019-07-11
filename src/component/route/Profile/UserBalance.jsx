@@ -14,8 +14,8 @@ import {
   Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { round, isEmpty } from 'service/helper'
-import { AdapterLink } from 'component/shared/Adapters'
+import { isEmpty } from 'service/helper'
+import { CustomLink } from 'component/shared/Adapters'
 
 const RelayerAvatar = withStyles(theme => ({
   root: {
@@ -96,7 +96,7 @@ const NoRelayer = () => (
       You have yet to create a relayer
     </Typography>
     <Typography component="div">
-      Register a relayer <Link component={AdapterLink} to="/register">here</Link>
+      Register a relayer <CustomLink to="/register">here</CustomLink>
     </Typography>
   </Box>
 )
@@ -110,15 +110,20 @@ export default class UserBalance extends React.Component {
       relayers,
     } = this.props
 
-    const formattedBalance = `${round(balance, 3)}...`
-
     return (
       <Box display="flex" flexDirection="column">
         <Box className="mb-4">
           <Typography component="div">
-            Wallet Balance (TOMO)
+            Wallet Balance
           </Typography>
-          <TextField value={formattedBalance} fullWidth disabled variant="outlined" margin="dense" />
+          <TextField
+            value={balance}
+            fullWidth
+            disabled
+            variant="outlined"
+            margin="dense"
+            InputProps={{ endAdornment: 'TOMO' }}
+          />
         </Box>
         <Box>
           {isEmpty(relayers) ? (

@@ -76,7 +76,7 @@ class Authentication extends React.Component {
 
     return (
       <Box>
-        <Container maxWidth="lg" className="pt-4 login-container">
+        <Container maxWidth="lg" className="login-container">
           <Header />
           <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={this.MethodOptions}>
           </MethodBar>
