@@ -9,7 +9,6 @@ import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
 import Header from './Header'
 import MethodBar from './MethodBar'
-import TomoWallet from './Methods/TomoWallet'
 import BrowserWallet from './Methods/BrowserWallet'
 import LedgerWallet from './Methods/LedgerWallet'
 import TrezorWallet from './Methods/TrezorWallet'
@@ -17,14 +16,13 @@ import PrivatekeyWallet from './Methods/PrivatekeyWallet'
 import MnemonicWallet from './Methods/MnemonicWallet'
 
 
-const MethodOptions = [
-  UNLOCK_WALLET_METHODS.TomoWallet,
-  UNLOCK_WALLET_METHODS.BrowserWallet,
-  UNLOCK_WALLET_METHODS.LedgerWallet,
-  UNLOCK_WALLET_METHODS.TrezorWallet,
-  UNLOCK_WALLET_METHODS.SoftwareWalletPrivate,
-  UNLOCK_WALLET_METHODS.SoftwareWalletMnemonic,
-]
+const {
+  BrowserWallet: _BrowserWallet_,
+  LedgerWallet: _LedgerWallet_,
+  TrezorWallet: _TrezorWallet_,
+  SoftwareWalletMnemonic: _MnemonicWallet_,
+  SoftwareWalletPrivate: _PrivateWallet_,
+} = UNLOCK_WALLET_METHODS
 
 /**
  * Enptry point for Authenticationn/Wallet unclock
@@ -39,41 +37,27 @@ class Authentication extends React.Component {
     QRCodeLink: '',
   }
 
-  componentDidMount() {
-    this.getQRCode()
-  }
+  MethodOptions = [
+    _BrowserWallet_,
+    _LedgerWallet_,
+    _TrezorWallet_,
+    _PrivateWallet_,
+    _MnemonicWallet_,
+  ]
 
-  getQRCode = () => {
+  componentDidMount() {
     const isAndroid = window.navigator.userAgent.match(/Android/i)
     const isIOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/i)
     const agentQuery = (isAndroid || isIOS) ? 'mobile' : 'desktop'
-    const socket = this.props.socket
-
-    socket.onmessage = async stringData => {
-      const data = JSON.parse(stringData.data)
-      const QRCodeLink = meta => `tomochain:sign?message=${encodeURI(meta.message)}&submitURL=${meta.url}`
-
-      if (data.type === 'QR_CODE_REQUEST') {
-        this.setState({ QRCodeLink: QRCodeLink(data.meta) })
-      }
-
-      if (data.type === 'QR_CODE_LOGIN') {
-        // NOTE: do something on logged on
-      }
+    if (agentQuery === 'mobile') {
+      this.MethodOptions = this.MethodOptions.filter(r => ![
+        UNLOCK_WALLET_METHODS.LedgerWallet,
+        UNLOCK_WALLET_METHODS.TrezorWallet,
+      ].includes(r))
     }
-
-    const getQR = () => socket.send(JSON.stringify({
-      request: 'QR_CODE_LOGIN',
-      meta: { agentQuery },
-    }))
-
-    if (socket.readyState === socket.OPEN) {
-      getQR()
-    } else {
-      socket.onopen = getQR
-    }
-
+    // this.getQRCode()
   }
+
 
   changeMethod = (unlockingMethod) => this.setState({ unlockingMethod })
 
@@ -86,21 +70,21 @@ class Authentication extends React.Component {
 
     const {
       unlockingMethod,
-      QRCodeLink,
     } = this.state
+
+    const isActiveMethod = (method) => unlockingMethod === this.MethodOptions.indexOf(method)
 
     return (
       <Box>
         <Container maxWidth="lg" className="pt-4 login-container">
           <Header />
-          <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={MethodOptions}>
+          <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={this.MethodOptions}>
           </MethodBar>
-          {unlockingMethod === 0 && <TomoWallet qrCode={QRCodeLink} />}
-          {unlockingMethod === 1 && <BrowserWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 2 && <LedgerWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 3 && <TrezorWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 4 && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
-          {unlockingMethod === 5 && <MnemonicWallet onConfirm={this.confirmWallet} />}
+          {isActiveMethod(_BrowserWallet_) && <BrowserWallet onConfirm={this.confirmWallet} />}
+          {isActiveMethod(_LedgerWallet_) && <LedgerWallet onConfirm={this.confirmWallet} />}
+          {isActiveMethod(_TrezorWallet_) && <TrezorWallet onConfirm={this.confirmWallet} />}
+          {isActiveMethod(_PrivateWallet_) && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
+          {isActiveMethod(_MnemonicWallet_) && <MnemonicWallet onConfirm={this.confirmWallet} />}
         </Container>
       </Box>
     )
