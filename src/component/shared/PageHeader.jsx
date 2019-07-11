@@ -51,7 +51,7 @@ class PageHeader extends React.Component {
             </Grid>
             <Grid item sm={6} md={4} container justify="flex-end" direction="row" spacing={4} alignItems="center">
               {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
-              {auth && !userOwnRelayer && <Button component={AdapterLink} to="/register">Start a Relayer</Button>}
+              {auth && !userOwnRelayer && <Button variant="contained" component={AdapterLink} to="/register">Start a Relayer</Button>}
               {auth && <UserMenu />}
               {!auth && <Button variant="contained" component={AdapterLink} to="/login">Login</Button>}
               {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}

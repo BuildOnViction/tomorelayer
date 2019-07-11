@@ -1,20 +1,23 @@
 import React from 'react'
-import { Box, Button, Typography } from '@material-ui/core'
-import CheckCircle from '@material-ui/icons/CheckCircle'
+import { Box, Button, Typography, Icon } from '@material-ui/core'
 import { AdapterLink } from 'component/shared/Adapters'
 
 const SuccessRegistration = ({ navigate }) => (
-  <Box>
-    <Typography component="h1">
-      <CheckCircle className="success-icon" />
-      Success
-    </Typography>
-    <Typography component="div">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutrum nisl ut ante dignissim, at tempor elit pellentesque. Donec cursus semper arcu semper vestibulum. Morbi et nibh quis nulla mollis vehicula nec luctus nulla. In eleifend rhoncus sagittis. Donec non odio vel neque laoreet aliquet vel quis dui. Duis id metus nisl. Aliquam a est in neque maximus maximus. Maecenas fringilla nibh porta libero eleifend, quis tempus leo auctor. Vestibulum non felis vel nibh laoreet semper vel eu nisi.
-    </Typography>
-    <Box className="mt-3" display="flex" justifyContent="end">
-      <Button variant="outlined" component={AdapterLink} to={navigate}>
-        Go somewhere...
+  <Box display="flex" flexDirection="column">
+    <Box display="flex" justifyContent="center" className="mb-2">
+      <Icon fontSize="large">check_circle_outline</Icon>
+    </Box>
+    <Box className="text-center">
+      <Typography component="div" variant="subtitle1">
+        Successfull!
+      </Typography>
+      <Typography component="div" variant="body1">
+        You’ve succesfully deposited 5000 TOMO to SmartContract
+      </Typography>
+    </Box>
+    <Box display="flex" justifyContent="center" className="mt-2">
+      <Button variant="contained" component={AdapterLink} to={navigate}>
+        Back to balance
       </Button>
     </Box>
   </Box>

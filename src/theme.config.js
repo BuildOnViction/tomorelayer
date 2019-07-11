@@ -57,6 +57,14 @@ const theme = createMuiTheme({
         color: '#7473A6',
       },
     },
+    MuiIcon: {
+      root: {
+        color: '#703DB5',
+      },
+      fontSizeLarge: {
+        fontSize: '5rem',
+      },
+    },
     MuiTab: {
       root: {},
     },
