@@ -115,7 +115,7 @@ const theme = createMuiTheme({
         [breakpoints.down('md')]: {},
       },
       notchedOutline: {
-        border: '0',
+        display: 'none',
       },
     },
     MuiInputLabel: {
@@ -123,13 +123,11 @@ const theme = createMuiTheme({
         fontSize: '14px',
       },
       outlined: {
-        '&$marginDense': {
-          transform: 'none !important',
-          display: 'initial',
-          color: '#CFCDE1',
-          position: 'relative',
-          marginBottom: '15px',
-        },
+        transform: 'none !important',
+        display: 'initial',
+        color: '#CFCDE1',
+        position: 'relative',
+        marginBottom: '15px',
       },
     },
     MuiAvatar: {

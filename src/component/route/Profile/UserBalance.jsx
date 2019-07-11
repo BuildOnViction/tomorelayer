@@ -46,13 +46,14 @@ const RelayerStatus = ({ resigning }) => {
     {
       'relayer-status__resigning': bol,
       'relayer-status__active': !bol,
-    }
+    },
+    'mr-1',
   )
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="flex-end">
-      <span style={{ marginRight: 10 }}>{resigning ? 'Resigning' : 'Active'}</span>
+    <Box display="flex" alignItems="center">
       <i className={statusIconClass(resigning)} />
+      <span>{resigning ? 'Resigning' : 'Active'}</span>
     </Box>
   )
 }
@@ -63,8 +64,8 @@ const RelayerTable = ({ relayers }) => (
       <TableHead>
         <TableRow>
           <HeadTableCell>Relayer</HeadTableCell>
-          <HeadTableCell align="right">Balance</HeadTableCell>
-          <HeadTableCell align="right">Status</HeadTableCell>
+          <HeadTableCell>Balance</HeadTableCell>
+          <HeadTableCell>Status</HeadTableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -76,10 +77,10 @@ const RelayerTable = ({ relayers }) => (
                 <Link href={row.link}>{row.name}</Link>
               </Box>
             </BodyTableCell>
-            <BodyTableCell align="right">
+            <BodyTableCell>
               {row.deposit} TOMO
             </BodyTableCell>
-            <BodyTableCell align="right">
+            <BodyTableCell>
               <RelayerStatus resigning={row.resigning} />
             </BodyTableCell>
           </TableRow>
