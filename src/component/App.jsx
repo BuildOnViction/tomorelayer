@@ -92,7 +92,7 @@ class App extends React.Component {
         <div>
           <PageHeader relayers={userRelayers} user={user} />
           <Alert />
-          <Box className="maincontent mt-2">
+          <Box className="maincontent">
             <Switch>
               <Route path={SITE_MAP.Home} exact component={Main} />
               <Route path={SITE_MAP.Authentication} component={Authentication} />
