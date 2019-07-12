@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 # Get all relayers
-:res = relayers
+:res = relayer
 GET :url/:res
 
 # Patching a relayers

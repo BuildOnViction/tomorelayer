@@ -18,7 +18,7 @@ class RelayerHandler(BaseHandler):
         try:
             obj = await self.application.objects.create(Relayer, **relayer)
             self.json_response(model_to_dict(obj))
-        except Exception as err:
+        except Exception:
             raise InvalidValueException('relayer payload is invalid: {param}'.format(param=str(relayer)))
 
     async def patch(self):
@@ -36,9 +36,9 @@ class RelayerHandler(BaseHandler):
             cursor = query.execute()
             obj = cursor[0]
             self.json_response(model_to_dict(obj))
-        except IndexError as err:
+        except IndexError:
             raise InvalidValueException('relayer id={param} does not exist'.format(param=str(relayer_id)))
-        except ProgrammingError as err:
+        except ProgrammingError:
             raise InvalidValueException('update payload is invalid: {param}'.format(param=str(relayer)))
 
     async def delete(self):
@@ -52,5 +52,5 @@ class RelayerHandler(BaseHandler):
             relayer = Relayer.get(Relayer.id == relayer_id)
             relayer.delete_instance()
             self.json_response({})
-        except Exception as err:
-            raise InvalidValueException('relayerId: {param} -- {error}'.format(param=relayer_id, error=err.__class__.__name__))
+        except Exception:
+            raise InvalidValueException('invalid relayer id: relayer with id={} does not exist'.format(relayer_id))

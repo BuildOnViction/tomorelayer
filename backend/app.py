@@ -1,11 +1,9 @@
 from os import getenv
+from logzero import logger
 from tornado.platform.asyncio import AsyncIOMainLoop
 from tornado.ioloop import IOLoop
-from logzero import logger
 from tornado.web import Application
-from tornado.options import options
-from tornado.options import define
-from tornado.options import parse_command_line
+from tornado.options import options, define, parse_command_line
 from route import route
 from settings import settings
 from blockchain import Blockchain

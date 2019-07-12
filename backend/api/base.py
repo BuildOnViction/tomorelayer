@@ -1,12 +1,10 @@
 import json
 import traceback
-from tornado.web import HTTPError
-from tornado.web import ErrorHandler as TorErrorHandler
-from tornado.web import RequestHandler
 from peewee import PeeweeException
 from logzero import logger
+from tornado.web import HTTPError, ErrorHandler as TorErrorHandler, RequestHandler
 from settings import settings, is_production
-from exception import *
+from exception import CustomException
 
 
 class BaseHandler(RequestHandler):
@@ -35,7 +33,7 @@ class BaseHandler(RequestHandler):
         self.set_status(204)
         self.finish()
 
-    def json_response(self, response={}, meta={}):
+    def json_response(self, response='', meta=''):
         standard_resp = {
             'payload': response,
             'meta': meta,
@@ -59,11 +57,6 @@ class BaseHandler(RequestHandler):
         elif isinstance(http_exception, PeeweeException):
             error['code'] = 500
             error['message'] = 'DatabaseError: {}'.format(http_exception)
-            error['detail'] = self.request_body
-
-        elif isinstance(http_exception, LookupError):
-            error['code'] = 500
-            error['message'] = 'LookupError: {}'.format(http_exception)
             error['detail'] = self.request_body
 
         else:
