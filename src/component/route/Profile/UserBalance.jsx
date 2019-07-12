@@ -1,7 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
 import {
-  Avatar,
   Box,
   Link,
   Paper,
@@ -17,14 +16,6 @@ import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
 import { CustomLink } from 'component/shared/Adapters'
 
-const RelayerAvatar = withStyles(theme => ({
-  root: {
-    width: 40,
-    height: 40,
-    borderRadius: '50%',
-  }
-}))(Avatar)
-
 const HeadTableCell = withStyles(theme => ({
   root: {
     border: 'none',
@@ -37,6 +28,8 @@ const BodyTableCell = withStyles(theme => ({
   root: {
     border: 'none',
     color: '#CFCDE1',
+    paddingTop: 7,
+    paddingBottom: 7,
   }
 }))(TableCell)
 
@@ -72,10 +65,7 @@ const RelayerTable = ({ relayers }) => (
         {Object.values(relayers).map(row => (
           <TableRow key={row.name}>
             <BodyTableCell component="th" scope="row">
-              <Box display="flex" alignItems="center">
-                <RelayerAvatar src={row.logo} alt={row.name} className="mr-1" />
-                <Link href={row.link}>{row.name}</Link>
-              </Box>
+              <Link href={row.link}>{row.name}</Link>
             </BodyTableCell>
             <BodyTableCell>
               {row.deposit} TOMO
