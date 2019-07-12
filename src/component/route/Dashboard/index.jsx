@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Redirect, Route } from 'react-router'
-import { Container, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { SITE_MAP } from 'service/constant'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
     )
 
     return (
-      <Container maxWidth="lg">
+      <Box>
         <TabMenu />
         <Box className="mt-2">
           <Switch>
@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
             />
           </Switch>
         </Box>
-      </Container>
+      </Box>
     )
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Container,
+  Box,
   Grid,
   List,
   ListItem,
@@ -43,7 +43,7 @@ export default class Profile extends React.Component {
     } = this.props
 
     return (
-      <Container maxWidth="lg">
+      <Box>
         <Typography variant="h5">
           Owner Profile
         </Typography>
@@ -64,7 +64,7 @@ export default class Profile extends React.Component {
             {selectedInfo === 0 && <UserBalance relayers={relayers} user={user} balance={balance} />}
           </Grid>
         </Grid>
-      </Container>
+      </Box>
     )
   }
 }

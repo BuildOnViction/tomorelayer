@@ -1,10 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
-import {
-  Box,
-  Container,
-} from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
 import Header from './Header'
@@ -76,16 +73,14 @@ class Authentication extends React.Component {
 
     return (
       <Box>
-        <Container maxWidth="lg" className="login-container">
-          <Header />
-          <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={this.MethodOptions}>
-          </MethodBar>
-          {isActiveMethod(_BrowserWallet_) && <BrowserWallet onConfirm={this.confirmWallet} />}
-          {isActiveMethod(_LedgerWallet_) && <LedgerWallet onConfirm={this.confirmWallet} />}
-          {isActiveMethod(_TrezorWallet_) && <TrezorWallet onConfirm={this.confirmWallet} />}
-          {isActiveMethod(_PrivateWallet_) && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
-          {isActiveMethod(_MnemonicWallet_) && <MnemonicWallet onConfirm={this.confirmWallet} />}
-        </Container>
+        <Header />
+        <MethodBar value={unlockingMethod} onChange={this.changeMethod} options={this.MethodOptions}>
+        </MethodBar>
+        {isActiveMethod(_BrowserWallet_) && <BrowserWallet onConfirm={this.confirmWallet} />}
+        {isActiveMethod(_LedgerWallet_) && <LedgerWallet onConfirm={this.confirmWallet} />}
+        {isActiveMethod(_TrezorWallet_) && <TrezorWallet onConfirm={this.confirmWallet} />}
+        {isActiveMethod(_PrivateWallet_) && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
+        {isActiveMethod(_MnemonicWallet_) && <MnemonicWallet onConfirm={this.confirmWallet} />}
       </Box>
     )
   }

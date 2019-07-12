@@ -2,6 +2,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
+import { Container } from '@material-ui/core'
 import { SITE_MAP, IS_DEV } from 'service/constant'
 import { PushAlert, AlertVariant } from 'service/frontend'
 import * as _ from 'service/helper'
@@ -20,7 +21,6 @@ import Register from 'component/route/Register'
 import Logout from 'component/route/Logout'
 
 import 'style/app.scss'
-import { Box } from '@material-ui/core'
 
 
 const Router = IS_DEV ? HashRouter : BrowserRouter
@@ -92,7 +92,7 @@ class App extends React.Component {
         <div>
           <PageHeader relayers={userRelayers} user={user} />
           <Alert />
-          <Box className="maincontent">
+          <Container className="maincontent" maxWidth="lg">
             <Switch>
               <Route path={SITE_MAP.Home} exact component={Main} />
               <Route path={SITE_MAP.Authentication} component={Authentication} />
@@ -121,8 +121,8 @@ class App extends React.Component {
                 component={Logout}
               />
             </Switch>
-          </Box>
-          <PageFooter className="mt-2" />
+          </Container>
+          <PageFooter />
         </div>
       </Router>
     )
