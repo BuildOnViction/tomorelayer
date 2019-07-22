@@ -40,12 +40,13 @@ const theme = createMuiTheme({
         lineHeight: '1',
       },
       subtitle1: {
-        fontSize: '24px',
+        fontSize: '16px',
         lineHeight: '1',
       },
       subtitle2: {
-        fontSize: '30px',
+        fontSize: '12px',
         lineHeight: '1',
+        color: '#7473A6',
       },
       body1: {
         fontSize: '14px',
