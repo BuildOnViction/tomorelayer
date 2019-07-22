@@ -48,6 +48,7 @@ CLOSED: [2019-07-11 Thu 09:39]
 CLOSED: [2019-07-03 Wed 23:18]
 **** DONE Backend test
 CLOSED: [2019-07-03 Wed 22:13]
+**** [ ] Setup CICD Testing for each PR
 **** ACTIVE Frontend test with Jest
 *** DONE Deploy to Test Server
 CLOSED: [2019-06-18 Tue 17:31]
