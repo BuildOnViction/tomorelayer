@@ -7,8 +7,9 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 import {
-  VOLUME_CHART as volChartCfg,
+  TOKEN_CHART as tokChartCfg,
 } from './charts.config'
 
 const StyledPaper = withStyles(theme => ({
@@ -47,28 +48,6 @@ const PeriodTab = withStyles(theme => ({
   selected: {},
 }))(props => <Tab disableRipple {...props} />)
 
-const TopicTab = withStyles(theme => ({
-  root: {
-    textTransform: 'none',
-    background: 'transparent',
-    marginRight: 40,
-    padding: 0,
-    minWidth: 32,
-    width: 'auto',
-    minHeight: 20,
-    height: 27,
-    borderRadius: 7,
-    color: theme.palette.subtitle,
-    lineHeight: '10px',
-    fontSize: 14,
-    '&$selected': {
-      color: theme.palette.maintitle,
-      background: 'transparent',
-    },
-  },
-  selected: {},
-}))(props => <Tab disableRipple {...props} />)
-
 
 const TimePeriod = {
   _24h: '24h',
@@ -76,64 +55,51 @@ const TimePeriod = {
   _1M: '1M',
 }
 
-const Topic = {
-  _volume: 'Volume',
-  _fills: 'Fills',
-}
+export default class TokenChart extends React.Component {
 
-export default class TimeVolumeStat extends React.Component {
-
-  VOLUME_CHART = undefined
-  FILLS_CHART = undefined
+  TOKEN_CHART = undefined
 
   state = {
     period: TimePeriod._24h,
-    topic: Topic._volume,
   }
 
   componentDidMount() {
     const mockdata = [
-      { label: 'abc', value: 1000 },
-      { label: 'abc', value: 400 },
-      { label: 'abc', value: 1900 },
-      { label: 'abc', value: 1200 },
-      { label: 'abc', value: 323 },
-      { label: 'abc', value: 1250 },
-      { label: 'abc', value: 2799 },
-    ]
+      { label: 'GNBA', value: 73 },
+      { label: 'BNB', value: 40 },
+      { label: 'TRIIP', value: 80 },
+      { label: 'ETH', value: 75 },
+      { label: 'BTC', value: 7 },
+    ].sort((a, b) => a.value > b.value ? -1 : 1)
 
-    const ctx = document.getElementById('volume-chart').getContext('2d')
+    const ctx = document.getElementById('token-chart').getContext('2d')
+
+    let grd
 
     // NOTE: refer to http://victorblog.com/html5-canvas-gradient-creator/
-    const grd = ctx.createLinearGradient(174.000, 300.000, 126.000, 0.200)
+    grd = ctx.createLinearGradient(0.000, 150.000, 300.000, 150.000)
 
     // Add colors
-    grd.addColorStop(0.000, 'rgba(24, 16, 58, 0.200)')
-    grd.addColorStop(1.000, 'rgba(0, 22, 135, 0.200)')
+    grd.addColorStop(0.000, 'rgba(1, 30, 173, 1.000)')
+    grd.addColorStop(1.000, 'rgba(94, 166, 255, 1.000)')
 
     // Fill with gradient
     ctx.fillStyle = grd
     ctx.fillRect(0, 0, 300.000, 300.000)
-    this.VOLUME_CHART = new Chart(ctx, volChartCfg(mockdata, grd))
+    this.TOKEN_CHART = new Chart(ctx, tokChartCfg(mockdata, grd, ChartDataLabels))
   }
 
   changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })
 
-  changeTopic = (_, topicIndex) => this.setState({ topic: Object.values(Topic)[topicIndex] })
-
   render() {
     const {
       period,
-      topic,
     } = this.state
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={4}>
           <Grid item sm={6}>
-            <PeriodTabs value={Object.values(Topic).indexOf(topic)} onChange={this.changeTopic}>
-              <TopicTab label="Volume" />
-              <TopicTab label="Fills" />
-            </PeriodTabs>
+            Top Tokens
           </Grid>
           <Grid item container justify="flex-end" sm={6}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
@@ -143,7 +109,7 @@ export default class TimeVolumeStat extends React.Component {
             </PeriodTabs>
           </Grid>
           <Grid item sm={12}>
-            <canvas id="volume-chart" style={{ height: 150, width: '100%' }} />
+            <canvas id="token-chart" style={{ height: 150, width: '100%', zIndex: 1 }} />
           </Grid>
         </Grid>
       </StyledPaper>
