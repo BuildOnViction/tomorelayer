@@ -91,7 +91,7 @@ export const TOKEN_CHART = (data, fills) => ({
           id: 'yAxis1',
           type: 'category',
           categoryPercentage: 1,
-          barPercentage: 0.3,
+          barPercentage: 0.2,
           gridLines: {
             drawBorder: false,
             drawOnChartArea: false,

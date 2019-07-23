@@ -22,6 +22,9 @@ const Main = () => (
         <TokenChart />
       </Grid>
     </Grid>
+    <Grid item sm={12}>
+      table goes here...
+    </Grid>
   </Grid>
 )
 

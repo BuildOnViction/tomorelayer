@@ -65,11 +65,11 @@ export default class TokenChart extends React.Component {
 
   componentDidMount() {
     const mockdata = [
-      { label: 'GNBA', value: 73 },
-      { label: 'BNB', value: 40 },
-      { label: 'TRIIP', value: 80 },
-      { label: 'ETH', value: 75 },
-      { label: 'BTC', value: 7 },
+      { label: 'GNBA', value: 8 },
+      { label: 'BNB', value: 22 },
+      { label: 'TRIIP', value: 61 },
+      { label: 'ETH', value: 2 },
+      { label: 'BTC', value: 1 },
     ].sort((a, b) => a.value > b.value ? -1 : 1)
 
     const ctx = document.getElementById('token-chart').getContext('2d')
@@ -97,7 +97,7 @@ export default class TokenChart extends React.Component {
     } = this.state
     return (
       <StyledPaper elevation={0} >
-        <Grid container alignItems="center" spacing={4}>
+        <Grid container alignItems="center" spacing={2}>
           <Grid item sm={6}>
             Top Tokens
           </Grid>
@@ -108,8 +108,8 @@ export default class TokenChart extends React.Component {
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12}>
-            <canvas id="token-chart" style={{ height: 150, width: '100%', zIndex: 1 }} />
+          <Grid item sm={12} style={{ height: 160 }}>
+            <canvas id="token-chart" style={{ height: '100%', width: '100%' }} />
           </Grid>
         </Grid>
       </StyledPaper>

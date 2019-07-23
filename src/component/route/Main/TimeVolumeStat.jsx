@@ -142,8 +142,8 @@ export default class TimeVolumeStat extends React.Component {
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12}>
-            <canvas id="volume-chart" style={{ height: 150, width: '100%' }} />
+          <Grid item sm={12} style={{ height: 160 }}>
+            <canvas id="volume-chart" style={{ height: '100%', width: '100%' }} />
           </Grid>
         </Grid>
       </StyledPaper>
