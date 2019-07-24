@@ -11,10 +11,7 @@ class BaseHandler(RequestHandler):
     request_body = None
 
     def set_default_headers(self):
-        if not is_production:
-            # FIXME: for production, cant allow CORS
-            self.set_header("Access-Control-Allow-Origin", "*")
-
+        self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,x-requested-with")
         self.set_header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, DELETE, OPTIONS')
 
