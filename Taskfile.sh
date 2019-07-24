@@ -66,7 +66,6 @@ function dep {
         nginx) echo ">> UPDATE NGINX"
                ssh tor "service nginx stop"
                scp ./deploy/nginx.conf tor:/etc/nginx/
-               scp ./deploy/tomorelayer.nginx.conf tor:/etc/nginx/sites-available/tomorelayer
                ssh tor "service nginx start"
                ;;
         pgpwd) echo ">> CHANGE PG PASSWORD to \"$2\""
