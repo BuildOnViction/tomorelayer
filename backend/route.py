@@ -7,7 +7,7 @@ from api.contract import ContractHandler
 from api.public import PublicHandler
 
 # HostMatches
-ALLOWED_HOSTS = HostMatches(r'.*(tomochain.com|localhost).*')
+ALLOWED_HOSTS = HostMatches(r'.*(tomochain.com|localhost)')
 
 route = [(ALLOWED_HOSTS, [
     ("/socket", MainHandler),

@@ -5,6 +5,7 @@ PATH=./node_modules/.bin:$PATH
 function backend {
     # Command to run backend side in production
     echo ">> INIT A TOR INSTANCE AT PORT $1"
+    sudo kill $(lsof -t -i:$1)
     ENV_PATH=.env.production pipenv run python ./backend/app.py --port=$1
 }
 
