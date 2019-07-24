@@ -57,10 +57,11 @@ class BaseHandler(RequestHandler):
             error['detail'] = self.request_body
 
         else:
-            if settings['stg'] == 'development':
-                logger.exception(http_exception)
-                traceback.print_tb(stack_trace)
-                breakpoint()
+            # if settings['stg'] == 'development':
+            #     logger.exception(http_exception)
+            #     traceback.print_tb(stack_trace)
+            #     breakpoint()
+            pass
 
         self.set_status(error['code'])
         self.finish(json.dumps({'error': error}))

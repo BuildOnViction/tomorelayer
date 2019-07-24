@@ -37,8 +37,7 @@ describe('Test Relayer-Config Trade Form', () => {
       id: 1,
       owner: Owner,
       deposit: 1000,
-      maker_fee: 1,
-      taker_fee: 2,
+      trade_fee: 2,
       from_tokens: [],
       to_tokens: [],
     }

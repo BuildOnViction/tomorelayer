@@ -15,13 +15,7 @@ export default class RelayerContract {
 
   async register(payload, config = {}) {
     try {
-      const parsedPayload = [
-        payload.coinbase,
-        payload.maker_fee,
-        payload.taker_fee,
-        payload.from_tokens,
-        payload.to_tokens,
-      ]
+      const parsedPayload = [payload.coinbase, payload.trade_fee, payload.from_tokens, payload.to_tokens]
 
       const tx = await this.contractWithSigner.register(...parsedPayload, config)
       const details = await tx.wait()
@@ -34,13 +28,7 @@ export default class RelayerContract {
 
   async update(payload, config = {}) {
     try {
-      const parsedPayload = [
-        payload.coinbase,
-        payload.maker_fee,
-        payload.taker_fee,
-        payload.from_tokens,
-        payload.to_tokens,
-      ]
+      const parsedPayload = [payload.coinbase, payload.trade_fee, payload.from_tokens, payload.to_tokens]
 
       const tx = await this.contractWithSigner.update(...parsedPayload, config)
       const details = await tx.wait()
