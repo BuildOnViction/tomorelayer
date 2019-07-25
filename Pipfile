@@ -17,12 +17,8 @@ python-dotenv = "*"
 peewee-async = "*"
 aiopg = "*"
 web3 = "*"
-py-solc = "*"
 logzero = "*"
-jwt = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.7"
-
-[pipenv]
-allow_prereleases = true

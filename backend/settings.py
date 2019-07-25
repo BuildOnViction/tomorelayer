@@ -17,7 +17,7 @@ db_name = getenv('DB_NAME')
 db_config = {k: getenv('DB_' + k.upper()) for k in envars}
 db_config['port'] = int(db_config['port'])
 
-database = PooledPostgresqlExtDatabase(db_name, **db_config)
+database = PooledPostgresqlExtDatabase(db_name, register_hstore=False, **db_config)
 objects = Manager(database)
 
 # APPLICATION BACKEND SETTINGS
