@@ -19,6 +19,7 @@ aiopg = "*"
 web3 = "*"
 py-solc = "*"
 logzero = "*"
+jwt = "*"
 
 [requires]
 python_version = "3.7"
