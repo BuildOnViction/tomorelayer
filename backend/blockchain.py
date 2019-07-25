@@ -1,5 +1,5 @@
 import os
-from web3 import Web3
+from web3.auto import w3
 from logzero import logger
 
 is_production = os.getenv('STG') == 'production'
@@ -12,6 +12,6 @@ class Blockchain:
     def __init__(self):
         """ Interact with Blockchain through SmartContract & WebSocket
         """
-        self.web3 = Web3()
+        self.web3 = w3
         logger.info('Connection status: %s', self.web3.isConnected())
-        logger.info('Connection name: %s', self.web3.clientVersion)
+        logger.info('Connection name: %s', self.web3.version.node)

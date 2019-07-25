@@ -1,10 +1,26 @@
-from os import getenv
 import json
+from os import getenv
+from util.jwt_encoder import encode_payload
+from exception import InvalidValueException
 from .base import BaseHandler
 from .socket import SocketClient
 
 
 class AuthHandler(BaseHandler):
+
+    def get(self):
+        user_address = self.get_argument('address', None)
+
+        if not user_address:
+            from tornado.web import HTTPError
+            raise HTTPError(status_code=404, reason="Invalid api endpoint.",)
+
+        try:
+            self.application.blockchain.web3.eth.getBalance(user_address)
+            token, expiry = encode_payload({'address': user_address})
+            return self.json_response({'token': token, 'exp': expiry })
+        except Exception as err:
+            raise InvalidValueException('address is not valid')
 
     def post(self):
         """Receiving request from TomoWallet"""
