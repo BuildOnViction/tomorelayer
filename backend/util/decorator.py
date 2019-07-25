@@ -31,8 +31,8 @@ def authenticated(handler):
         header = handler_object.request.headers
         authorization = header.get('Authorization', '')
         try:
-            decode_token(authorization)
-            return handler(handler_object)
+            decoded = decode_token(authorization)
+            return handler(handler_object, user=decoded['address'])
         except Exception as err:
             raise UserAuthorizationException('Authorization token is invalid')
 
