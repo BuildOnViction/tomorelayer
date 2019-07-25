@@ -22,4 +22,4 @@ class ContractHandler(BaseHandler):
 
         async with self.application.objects.atomic():
             contract = await self.application.objects.create(Contract, **payload)
-            self.json_response(contract)
+            self.json_response(model_to_dict(contract))

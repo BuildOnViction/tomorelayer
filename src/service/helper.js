@@ -44,3 +44,34 @@ export const ThrowOn = (shit, message) => {
     throw message
   }
 }
+
+export class TabMap {
+  constructor(obj) {
+    for (const k in obj) {
+      Object.defineProperty(this, k, {
+        value: obj[k],
+        writable: false,
+      })
+    }
+    this._length = Object.values(obj).length
+    this._values = Object.values(obj)
+    this._keys = Object.keys(obj)
+    return this
+  }
+
+  get length() {
+    return this._length
+  }
+
+  get values() {
+    return this._values
+  }
+
+  get keys() {
+    return this._keys
+  }
+
+  getByIndex(index) {
+    return this.values[index]
+  }
+}

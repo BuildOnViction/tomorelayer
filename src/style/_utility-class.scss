@@ -14,7 +14,7 @@ $space-mod-map: (
   p: padding
 );
 
-@for $i from 0 through 5 {
+@for $i from 0 through 8 {
   @each $mod, $val in $space-mod-map {
     .#{$mod}-#{$i} {
       #{$val}: #{$i}rem !important;

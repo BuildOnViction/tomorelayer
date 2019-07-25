@@ -11,10 +11,6 @@ class BaseHandler(RequestHandler):
     request_body = None
 
     def set_default_headers(self):
-        if not is_production:
-            # FIXME: for production, cant allow CORS
-            self.set_header("Access-Control-Allow-Origin", "*")
-
         self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,x-requested-with")
         self.set_header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, DELETE, OPTIONS')
 
@@ -60,10 +56,11 @@ class BaseHandler(RequestHandler):
             error['detail'] = self.request_body
 
         else:
-            if settings['stg'] == 'development':
-                logger.exception(http_exception)
-                traceback.print_tb(stack_trace)
-                breakpoint()
+            # if settings['stg'] == 'development':
+            #     logger.exception(http_exception)
+            #     traceback.print_tb(stack_trace)
+            #     breakpoint()
+            pass
 
         self.set_status(error['code'])
         self.finish(json.dumps({'error': error}))

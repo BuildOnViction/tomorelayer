@@ -14,6 +14,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: blue,
+    subtitle: '#7473A6',
+    maintitle: '#CFCDE1',
+    tabActive: '#577EEF',
+    tabInactive: '#222239',
   },
   overrides: {
     MuiPaper: {
@@ -40,12 +44,13 @@ const theme = createMuiTheme({
         lineHeight: '1',
       },
       subtitle1: {
-        fontSize: '24px',
+        fontSize: '16px',
         lineHeight: '1',
       },
       subtitle2: {
-        fontSize: '30px',
+        fontSize: '12px',
         lineHeight: '1',
+        color: '#7473A6',
       },
       body1: {
         fontSize: '14px',

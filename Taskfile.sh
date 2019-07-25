@@ -5,6 +5,7 @@ PATH=./node_modules/.bin:$PATH
 function backend {
     # Command to run backend side in production
     echo ">> INIT A TOR INSTANCE AT PORT $1"
+    sudo kill $(lsof -t -i:$1)
     ENV_PATH=.env.production pipenv run python ./backend/app.py --port=$1
 }
 
@@ -66,7 +67,6 @@ function dep {
         nginx) echo ">> UPDATE NGINX"
                ssh tor "service nginx stop"
                scp ./deploy/nginx.conf tor:/etc/nginx/
-               scp ./deploy/tomorelayer.nginx.conf tor:/etc/nginx/sites-available/tomorelayer
                ssh tor "service nginx start"
                ;;
         pgpwd) echo ">> CHANGE PG PASSWORD to \"$2\""
