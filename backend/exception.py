@@ -22,6 +22,11 @@ class NotUniqueException(CustomException):
     message = 'Field value is not unique'
 
 
-class AuthorizationException(CustomException):
+class AdminAuthorizationException(CustomException):
     status_code = 401
     message = 'Only web admin can make this request'
+
+
+class UserAuthorizationException(CustomException):
+    status_code = 401
+    detail = None
