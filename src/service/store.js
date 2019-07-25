@@ -17,6 +17,7 @@ export const initialState = {
   socket: socket,
   notifications: [],
   shouldUpdateUserRelayers: false,
+  activeTheme: 'dark',
   blk: {},
 }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'redux-zero/react'
 import {
   Button,
   Box,
@@ -6,6 +7,7 @@ import {
   Grid,
   Link,
   InputAdornment,
+  Switch,
   TextField,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
@@ -21,6 +23,8 @@ class PageHeader extends React.Component {
     const {
       user,
       relayers,
+      changeTheme,
+      activeTheme,
     } = this.props
 
     const auth = Boolean(user.wallet)
@@ -55,6 +59,7 @@ class PageHeader extends React.Component {
               {auth && <UserMenu />}
               {!auth && <Button variant="contained" component={AdapterLink} to="/login">Login</Button>}
               {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}
+              <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} />
             </Grid>
           </Grid>
         </Container>
@@ -63,4 +68,14 @@ class PageHeader extends React.Component {
   }
 }
 
-export default PageHeader
+const mapProps = state => ({
+  activeTheme: state.activeTheme
+})
+
+const actions = {
+  changeTheme: (state) => ({
+    activeTheme: state.activeTheme === 'light' ? 'dark' : 'light'
+  })
+}
+
+export default connect(mapProps, actions)(PageHeader)
