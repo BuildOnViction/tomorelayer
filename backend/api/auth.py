@@ -1,6 +1,7 @@
 import json
 from os import getenv
 from util.jwt_encoder import encode_payload
+from util.decorator import deprecated
 from exception import InvalidValueException, MissingArgumentException
 from .base import BaseHandler
 from .socket import SocketClient
@@ -22,6 +23,7 @@ class AuthHandler(BaseHandler):
         except Exception as err:
             raise InvalidValueException('address is not valid')
 
+    @deprecated
     def post(self):
         """Receiving request from TomoWallet"""
         conn_id = self.get_argument('verifyId', '')

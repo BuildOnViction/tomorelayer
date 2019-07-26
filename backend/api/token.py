@@ -1,12 +1,13 @@
 from playhouse.shortcuts import model_to_dict
 from model import Token
-from util.decorator import admin_required
+from util.decorator import admin_required, authenticated
 from .base import BaseHandler
 
 
 class TokenHandler(BaseHandler):
 
-    def get(self):
+    @authenticated
+    def get(self, user):
         """Return all available tokens for trading"""
         tokens = [model_to_dict(token or {}) for token in Token.select()]
         self.json_response(tokens)

@@ -1,4 +1,5 @@
 import os
+from tornado.web import HTTPError
 from exception import AdminAuthorizationException, UserAuthorizationException
 from .jwt_encoder import decode_token
 
@@ -35,5 +36,13 @@ def authenticated(handler):
             return handler(handler_object, user=decoded['address'])
         except Exception as err:
             raise UserAuthorizationException('Authorization token is invalid')
+
+    return wrapped_handler
+
+
+def deprecated(handler):
+
+    def wrapped_handler(handler_object):
+        raise HTTPError(status_code=404, reason="Invalid api endpoint.")
 
     return wrapped_handler
