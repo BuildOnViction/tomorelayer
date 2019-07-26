@@ -22,39 +22,44 @@ const defaultHeader = {
   Accept: 'application/json; charset=UTF-8',
 }
 
-let AUTH_TOKEN = ''
+const HttpClient = () => {
+  const headers = {
+    ...defaultHeader,
+    Authorization: window.sessionStorage.getItem('accessToken'),
+  }
 
-const HttpClient = () => ({
-  get: async (api) =>
-    fetch(api, {
-      method: 'GET',
-      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
-    }).then(genericHandler),
+  return {
+    get: async (api) =>
+      fetch(api, {
+        method: 'GET',
+        headers,
+      }).then(genericHandler),
 
-  post: async (api, value) =>
-    fetch(api, {
-      method: 'POST',
-      body: JSON.stringify(value),
-      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
-    }).then(genericHandler),
+    post: async (api, value) =>
+      fetch(api, {
+        method: 'POST',
+        body: JSON.stringify(value),
+        headers,
+      }).then(genericHandler),
 
-  patch: async (api, value) =>
-    fetch(api, {
-      method: 'PATCH',
-      body: JSON.stringify(value),
-      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
-    }).then(genericHandler),
+    patch: async (api, value) =>
+      fetch(api, {
+        method: 'PATCH',
+        body: JSON.stringify(value),
+        headers,
+      }).then(genericHandler),
 
-  delete: async (api) =>
-    fetch(api, {
-      method: 'DELETE',
-      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
-    }).then(genericHandler),
-})
+    delete: async (api) =>
+      fetch(api, {
+        method: 'DELETE',
+        headers,
+      }).then(genericHandler),
+  }
+}
 
 export const getPayload = (r) => {
   if (r.payload.token) {
-    AUTH_TOKEN = r.payload.token
+    window.sessionStorage.setItem('accessToken', r.payload.token)
   }
   return r.payload
 }
