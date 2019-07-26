@@ -45,7 +45,7 @@ class RelayerHandler(BaseHandler):
         try:
             query = (Relayer.update(**relayer).where(Relayer.id == relayer_id).returning(Relayer))
             cursor = query.execute()
-            self.json_response(model_to_dict(obj))
+            self.json_response(model_to_dict(cursor[0]))
         except IndexError:
             raise InvalidValueException('relayer id={param} does not exist'.format(param=str(relayer_id)))
         except ProgrammingError:
@@ -60,16 +60,8 @@ class RelayerHandler(BaseHandler):
             raise MissingArgumentException('missing relayer id')
 
         try:
-            relayer = Relayer.get(Relayer.id == relayer_id)
-
-            if relayer.owner != user:
-                raise InvalidValueException
-
+            relayer = Relayer.select().where(Relayer.owner == user, Relayer.id == relayer_id).get()
             relayer.delete_instance()
             self.json_response({})
-
-        except InvalidValueException:
-            raise InvalidValueException('Owner address does not match user_address')
-
         except Exception:
-            raise InvalidValueException('invalid relayer id: relayer with id={} does not exist'.format(relayer_id))
+            raise InvalidValueException('invalid relayer: relayer with id={} or owner={} does not exist'.format(relayer_id, user))

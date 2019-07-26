@@ -11,7 +11,7 @@ export const BACKEND_URI = ((env) => {
 
 export const SOCKET_URI = BACKEND_URI.replace('http', 'ws') + '/socket'
 
-const genericHandler = (response) => {
+export const genericHandler = (response) => {
   if (response.ok) {
     return response.json()
   }
@@ -22,31 +22,42 @@ const defaultHeader = {
   Accept: 'application/json; charset=UTF-8',
 }
 
-const HttpClient = {
-  get: async (api) => fetch(api).then(genericHandler),
+let AUTH_TOKEN = ''
+
+const HttpClient = () => ({
+  get: async (api) =>
+    fetch(api, {
+      method: 'GET',
+      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
+    }).then(genericHandler),
 
   post: async (api, value) =>
     fetch(api, {
       method: 'POST',
       body: JSON.stringify(value),
-      headers: defaultHeader,
+      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
     }).then(genericHandler),
 
   patch: async (api, value) =>
     fetch(api, {
       method: 'PATCH',
       body: JSON.stringify(value),
-      headers: defaultHeader,
+      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
     }).then(genericHandler),
 
   delete: async (api) =>
     fetch(api, {
       method: 'DELETE',
-      headers: defaultHeader,
+      headers: { ...defaultHeader, Authorization: AUTH_TOKEN },
     }).then(genericHandler),
-}
+})
 
-const getPayload = (r) => r.payload
+export const getPayload = (r) => {
+  if (r.payload.token) {
+    AUTH_TOKEN = r.payload.token
+  }
+  return r.payload
+}
 
 const logging = async (error) => {
   try {
@@ -79,42 +90,50 @@ const proxiedAPI = new Proxy(API, {
 })
 
 /* API ENDPOINTS THAT ACCEPT REQUESTS FROM ORIGIN */
+export const getAuthenticated = async (address) =>
+  HttpClient()
+    .get(`${proxiedAPI.auth}?address=${address}`)
+    .then(getPayload)
+    .catch(logging)
+
 export const getPublicResource = async () =>
-  HttpClient.get(proxiedAPI.public)
+  HttpClient()
+    .get(proxiedAPI.public)
     .then(getPayload)
     .catch(logging)
 
 export const getContracts = async () =>
-  HttpClient.get(proxiedAPI.contract)
+  HttpClient()
+    .get(proxiedAPI.contract)
     .then(getPayload)
     .catch(logging)
 
 export const getRelayers = async () =>
-  HttpClient.get(proxiedAPI.relayer)
+  HttpClient()
+    .get(proxiedAPI.relayer)
     .then(getPayload)
     .catch(logging)
 
 export const createRelayer = async (relayer) =>
-  HttpClient.post(proxiedAPI.relayer, relayer)
+  HttpClient()
+    .post(proxiedAPI.relayer, relayer)
     .then(getPayload)
     .catch(logging)
 
 export const updateRelayer = async (relayer) =>
-  HttpClient.patch(proxiedAPI.relayer, relayer)
+  HttpClient()
+    .patch(proxiedAPI.relayer, relayer)
     .then(getPayload)
     .catch(logging)
 
 export const deleteRelayer = async (relayerId) =>
-  HttpClient.delete(`${proxiedAPI.relayer}?id=${relayerId}`)
+  HttpClient()
+    .delete(`${proxiedAPI.relayer}?id=${relayerId}`)
     .then(getPayload)
     .catch(logging)
 
 export const getTokens = async () =>
-  HttpClient.get(proxiedAPI.token)
-    .then(getPayload)
-    .catch(logging)
-
-export const createToken = async (token) =>
-  HttpClient.post(proxiedAPI.token, token)
+  HttpClient()
+    .get(proxiedAPI.token)
     .then(getPayload)
     .catch(logging)
