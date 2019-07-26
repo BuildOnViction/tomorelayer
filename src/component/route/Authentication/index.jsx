@@ -5,6 +5,7 @@ import { Box } from '@material-ui/core'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
 import { getAuthenticated } from 'service/backend'
+import { PushAlert, AlertVariant } from 'service/frontend'
 import Header from './Header'
 import MethodBar from './MethodBar'
 import BrowserWallet from './Methods/BrowserWallet'
@@ -61,7 +62,13 @@ class Authentication extends React.Component {
 
   confirmWallet = async wallet => {
     const address = await wallet.getAddress()
-    await getAuthenticated(address)
+    const { error } = await getAuthenticated(address)
+
+    if (error) {
+      this.props.PushAlert({ variant: AlertVariant.error, message: `${error.message}: ${error.detail}` })
+      return undefined
+    }
+
     this.props.saveWallet(wallet)
     this.props.history.push('/')
   }
@@ -97,7 +104,8 @@ const actions = store => ({
   saveWallet: (state, wallet) => {
     const user = { ...state.user, wallet }
     return { user }
-  }
+  },
+  PushAlert,
 })
 
 export default compose(
