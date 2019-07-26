@@ -16,7 +16,7 @@ class AuthHandler(BaseHandler):
             raise MissingArgumentException('Missing user address')
 
         try:
-            checksum_addr = self.application.blockchain.web3.toChecksumAddress(user_address)
+            checksum_addr = self.application.blockchain.web3.toChecksumAddress(user_address.lower())
             self.application.blockchain.web3.eth.getBalance(checksum_addr)
             token, expiry = encode_payload({'address': user_address})
             return self.json_response({'token': token, 'exp': expiry })
