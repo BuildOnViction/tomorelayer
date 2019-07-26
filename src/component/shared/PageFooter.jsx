@@ -28,27 +28,27 @@ const FooterLinks = [
 
 const FooterButtons = [
   {
-    class: 'tomorelayer-icon-facebook',
+    className: 'tomorelayer-icon-facebook',
     link: 'https://www.facebook.com/tomochainofficial',
   },
   {
-    class: 'tomorelayer-icon-twitter',
+    className: 'tomorelayer-icon-twitter',
     link: 'https://twitter.com/TomoChainANN',
   },
   {
-    class: 'tomorelayer-icon-telegram',
+    className: 'tomorelayer-icon-telegram',
     link: 'https://t.me/tomochain',
   },
   {
-    class: 'tomorelayer-icon-github',
+    className: 'tomorelayer-icon-github',
     link: 'https://github.com/tomochain/',
   },
   {
-    class: 'tomorelayer-icon-linkedin',
+    className: 'tomorelayer-icon-linkedin',
     link: 'https://www.linkedin.com/company/tomochain',
   },
   {
-    class: 'tomorelayer-icon-reddit',
+    className: 'tomorelayer-icon-reddit',
     link: 'https://www.reddit.com/r/Tomochain/',
   },
 ]
@@ -72,8 +72,8 @@ const PageFooter = props => (
         <ul className="footer-buttons">
           {FooterButtons.map(item => (
             <li key={item.link}>
-              <Link to={item.link} component={AdapterLink}>
-                <i className={item.class}/>
+              <Link href={item.link} underline="none" rel="noopener noreferrer" target="_blank">
+                <i className={item.className} />
               </Link>
             </li>
           ))}
