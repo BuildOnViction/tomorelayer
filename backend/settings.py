@@ -11,6 +11,8 @@ load_dotenv(dotenv_path=env_path, override=True)
 is_production = getenv('STG') == 'production'
 logger.warning('APPLICATION-STAGE: %s', '={}='.format(env_path))
 
+JWT_SECRET = getenv('JWT_SECRET')
+
 # SETUP ASYNC ORM
 database = PooledPostgresqlExtDatabase(
     getenv('DB_NAME'),
