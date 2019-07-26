@@ -12,12 +12,16 @@ is_production = getenv('STG') == 'production'
 logger.warning('APPLICATION-STAGE: %s', '={}='.format(env_path))
 
 # SETUP ASYNC ORM
-envars = ['user', 'password', 'host', 'port']
-db_name = getenv('DB_NAME')
-db_config = {k: getenv('DB_' + k.upper()) for k in envars}
-db_config['port'] = int(db_config['port'])
+database = PooledPostgresqlExtDatabase(
+    getenv('DB_NAME'),
+    register_hstore=False,
+    max_connections=8,
+    user=getenv('DB_USER'),
+    password=getenv('DB_PASSWORD'),
+    host=getenv('DB_HOST'),
+    port=getenv('DB_PORT'),
+)
 
-database = PooledPostgresqlExtDatabase(db_name, register_hstore=False, **db_config)
 objects = Manager(database)
 
 # APPLICATION BACKEND SETTINGS
@@ -25,7 +29,6 @@ base_path = path.dirname(__file__)
 settings = {
     'autoreload': not is_production,
     'cookie_secret': getenv('SECRET_COOKIE'),
-    'db': {'name': db_name, **db_config},
     'debug': not is_production,
     'login_url': '/login',
     'objects': objects,
