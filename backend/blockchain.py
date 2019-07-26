@@ -14,4 +14,4 @@ class Blockchain:
         """
         self.web3 = w3
         logger.info('Connection status: %s', self.web3.isConnected())
-        logger.info('Connection name: %s', self.web3.clientVersion)
+        logger.info('Connection name: %s', self.web3.version.node)

@@ -46,3 +46,4 @@ def deprecated(handler):
         raise HTTPError(status_code=404, reason="Invalid api endpoint.")
 
     return wrapped_handler
+
