@@ -19,6 +19,7 @@ export const FetchPublic = async (state) => {
 }
 
 export const Logout = (state) => {
+  window.sessionStorage.removeItem('accessToken')
   const user = {
     ...state.user,
     wallet: undefined,

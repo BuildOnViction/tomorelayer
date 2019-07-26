@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 
 let db, conn, Contract, Relayer, Token
+let OWNER = '0x7BfF9cABAD18efFeC42788EFc473Dd39C90116Aa'
 
 beforeAll(async () => {
   db = await setup()
@@ -21,6 +22,8 @@ afterAll(async () => {
 
 describe('Testing Contract API', () => {
   it('#1. manually save a contract to Database', async (done) => {
+    await http.getAuthenticated(OWNER)
+
     let count = await Contract.count()
     expect(count).toEqual(0)
 
@@ -73,8 +76,10 @@ describe('Testing Relayer API', () => {
     const count = await Relayer.count()
     expect(count).toEqual(0)
 
+    const fakeOwner = '0x070aA7AD03B89B3278f19d34F119DD3C2a244675'
+
     const dummyRelayer = {
-      owner: '0x070aa7ad03b89b3278f19d34f119dd3c2a244675',
+      owner: fakeOwner,
       name: 'DummyRelayer',
       coinbase: '0xdD596FfB7f7A6123C36ecEf2F8a48AfEc6D7B889',
       deposit: 25000,
@@ -82,6 +87,12 @@ describe('Testing Relayer API', () => {
       from_tokens: [],
       to_tokens: [],
     }
+
+    // Authenticated User doesnt match Relayer Owner
+    const response = await http.createRelayer(dummyRelayer)
+    expect(response.error).toBeTruthy()
+
+    dummyRelayer.owner = OWNER
     const newRelayer = await http.createRelayer(dummyRelayer)
     expect(newRelayer.id).toBe(1)
 
@@ -95,11 +106,18 @@ describe('Testing Relayer API', () => {
   })
 
   it('#2. update a relayer', async () => {
-    const updatedRelayer = await http.updateRelayer({
+    const payload = {
       id: relayerId,
       trade_fee: 5,
       resigning: true,
-    })
+    }
+    let updatedRelayer = await http.updateRelayer(payload)
+
+    // Missing owner - required to verify relayer-ownership quickly
+    expect(updatedRelayer.error).toBeTruthy()
+
+    payload.owner = OWNER
+    updatedRelayer = await http.updateRelayer(payload)
 
     expect(updatedRelayer.id).toBe(1)
     expect(updatedRelayer.resigning).toBe(true)
@@ -139,7 +157,18 @@ describe('Testing Token API', () => {
 
   it('#2. create new token', async () => {
     const tokens = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/_token.dummy.json')))
-    request = await http.createToken(tokens[0])
+
+    request = await fetch('http://localhost:8889/api/token', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json; charset=UTF-8',
+        Authorization: process.env.SECRET_HEADER,
+      },
+      body: JSON.stringify(tokens[0]),
+    })
+      .then(http.genericHandler)
+      .then(http.getPayload)
+
     expect(Boolean(request.id)).toBe(true)
 
     request = await http.getTokens()
