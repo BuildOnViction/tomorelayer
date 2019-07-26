@@ -4,6 +4,7 @@ import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
+import { getAuthenticated } from 'service/backend'
 import Header from './Header'
 import MethodBar from './MethodBar'
 import BrowserWallet from './Methods/BrowserWallet'
@@ -58,7 +59,9 @@ class Authentication extends React.Component {
 
   changeMethod = (unlockingMethod) => this.setState({ unlockingMethod })
 
-  confirmWallet = wallet => {
+  confirmWallet = async wallet => {
+    const address = await wallet.getAddress()
+    await getAuthenticated(address)
     this.props.saveWallet(wallet)
     this.props.history.push('/')
   }
