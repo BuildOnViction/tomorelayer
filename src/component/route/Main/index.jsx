@@ -27,11 +27,13 @@ const Main = () => {
       <Grid item container justify="space-between" alignItems="center" spacing={4}>
         {statcard_mock.map(t => <StatCard key={t.helpText} {...t} />)}
       </Grid>
-      <Grid item sm={12} md={7}>
-        <TimeVolumeStat />
-      </Grid>
-      <Grid item sm={12} md={5}>
-        <TokenChart />
+      <Grid item container spacing={4}>
+        <Grid item sm={12} md={7}>
+          <TimeVolumeStat />
+        </Grid>
+        <Grid item sm={12} md={5}>
+          <TokenChart />
+        </Grid>
       </Grid>
       <Grid item sm={12} container direction="column">
         <Grid item className="mb-2">
