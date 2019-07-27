@@ -12,6 +12,7 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: (props) => ({
+      owner: props.relayer.owner,
       name: props.relayer.name,
       link: props.relayer.link,
       logo: props.relayer.logo,
@@ -49,6 +50,7 @@ export const wrappers = {
     enableReinitialize: true,
     validateOnChange: false,
     mapPropsToValues: (props) => ({
+      owner: props.relayer.owner,
       trade_fee: props.relayer.trade_fee / 100,
       from_tokens: props.relayer.from_tokens,
       to_tokens: props.relayer.to_tokens,
@@ -99,6 +101,7 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
         const relayer = await http.updateRelayer({
+          owner: meta.props.relayer.owner,
           deposit: meta.props.relayer.deposit + values.deposit,
           id: meta.props.relayer.id,
         })
@@ -159,7 +162,8 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
         const relayer = await http.updateRelayer({
-          owner: values.owner,
+          new_owner: values.owner,
+          owner: meta.props.relayer.owner,
           coinbase: values.coinbase,
           id: meta.props.relayer.id,
         })

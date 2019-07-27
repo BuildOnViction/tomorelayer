@@ -42,6 +42,10 @@ class RelayerHandler(BaseHandler):
 
         del relayer['id']
 
+        if relayer.get('new_owner', None):
+            relayer['owner'] = relayer['new_owner']
+            del relayer['new_owner']
+
         try:
             query = (Relayer.update(**relayer).where(Relayer.id == relayer_id).returning(Relayer))
             cursor = query.execute()
