@@ -8,24 +8,29 @@ import {
   Typography,
 } from '@material-ui/core'
 import * as blk from 'service/blockchain'
+import { getAccountTx } from 'service/backend'
+import { TabMap } from 'service/helper'
 import UserBalance from './UserBalance'
 
-const ListItems = [
+
+const NavMenu = new TabMap(
   'Balance',
   'Transactions',
-]
+)
 
 export default class Profile extends React.Component {
   state = {
     address: '',
     balance: '',
-    selectedInfo: 0,
+    selectedInfo: NavMenu.balance,
+    tx: {},
   }
 
   async componentDidMount() {
     const address = await this.props.user.wallet.getAddress()
     const balance = await blk.getBalance(address)
-    this.setState({ address, balance })
+    const tx = await getAccountTx({ address, type: 'in', page: 1 })
+    this.setState({ address, balance, tx })
   }
 
   changeInfoBoard = (selectedInfo) => () => this.setState({ selectedInfo })
@@ -53,15 +58,16 @@ export default class Profile extends React.Component {
         <Grid container className="mt-4">
           <Grid item md={3} className="pr-5">
             <List component="nav">
-              {ListItems.map((item, idx) => (
-                <ListItem key={item} button className="mb-1" onClick={this.changeInfoBoard(idx)} selected={idx === selectedInfo}>
+              {NavMenu.map((item, idx) => (
+                <ListItem key={item} button className="mb-1" onClick={this.changeInfoBoard(item)} selected={selectedInfo === item}>
                   <ListItemText primary={item} />
                 </ListItem>
               ))}
             </List>
           </Grid>
           <Grid item md={7} sm={12}>
-            {selectedInfo === 0 && <UserBalance relayers={relayers} user={user} balance={balance} />}
+            {selectedInfo === NavMenu.balance && <UserBalance relayers={relayers} user={user} balance={balance} />}
+            {selectedInfo === NavMenu.transactions && (<div>fuck</div>)}
           </Grid>
         </Grid>
       </Box>

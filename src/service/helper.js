@@ -46,16 +46,27 @@ export const ThrowOn = (shit, message) => {
 }
 
 export class TabMap {
-  constructor(obj) {
-    for (const k in obj) {
-      Object.defineProperty(this, k, {
-        value: obj[k],
-        writable: false,
-      })
+  constructor(...args) {
+    if (args.length < 2 || args.some((v) => typeof v !== 'string')) {
+      throw new Error('Invalid constructor params for TabMap')
     }
-    this._length = Object.values(obj).length
-    this._values = Object.values(obj)
-    this._keys = Object.keys(obj)
+
+    args.forEach((value, index) => {
+      Object.defineProperties(this, {
+        [value.toLowerCase()]: {
+          value: value,
+          writable: false,
+        },
+        [index]: {
+          value: value,
+          writable: false,
+        },
+      })
+    })
+
+    this._length = args.length
+    this._values = args
+    this._keys = args.map((v) => v.toLowerCase())
     return this
   }
 
@@ -73,5 +84,9 @@ export class TabMap {
 
   getByIndex(index) {
     return this.values[index]
+  }
+
+  map(...args) {
+    return this.values.map(...args)
   }
 }

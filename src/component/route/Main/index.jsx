@@ -12,11 +12,7 @@ import {
   statcard_mock,
 } from './mock.data'
 
-const TOPICS = new TabMap({
-  relayers: 'Relayers',
-  fills: 'Fills',
-  tokens: 'Tokens',
-})
+const TOPICS = new TabMap('Relayers', 'Fills', 'Tokens')
 
 const Main = () => {
   const [tab, setTab] = React.useState(0)
