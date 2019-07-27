@@ -11,7 +11,7 @@ import * as blk from 'service/blockchain'
 import { getAccountTx } from 'service/backend'
 import { TabMap } from 'service/helper'
 import UserBalance from './UserBalance'
-
+import AccountTx from './AccountTx'
 
 const NavMenu = new TabMap(
   'Balance',
@@ -39,6 +39,7 @@ export default class Profile extends React.Component {
     const {
       address,
       balance,
+      tx,
       selectedInfo,
     } = this.state
 
@@ -67,7 +68,7 @@ export default class Profile extends React.Component {
           </Grid>
           <Grid item md={7} sm={12}>
             {selectedInfo === NavMenu.balance && <UserBalance relayers={relayers} user={user} balance={balance} />}
-            {selectedInfo === NavMenu.transactions && (<div>fuck</div>)}
+            {selectedInfo === NavMenu.transactions && <AccountTx tx={tx} />}
           </Grid>
         </Grid>
       </Box>

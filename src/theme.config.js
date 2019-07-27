@@ -32,6 +32,7 @@ const theme = (config) =>
       maintitle: '#CFCDE1',
       tabActive: config.palette.tabActive, //'#577EEF',
       tabInactive: '#222239',
+      evenRowBackground: '#23233C',
     },
     overrides: {
       MuiPaper: {

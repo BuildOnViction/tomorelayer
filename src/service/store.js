@@ -19,6 +19,9 @@ export const initialState = {
   shouldUpdateUserRelayers: false,
   activeTheme: 'dark',
   blk: {},
+  network_info: {
+    tomousd: NaN,
+  },
 }
 
 const middlewares = connect ? applyMiddleware(connect(initialState)) : []

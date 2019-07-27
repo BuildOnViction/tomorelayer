@@ -6,6 +6,7 @@ import * as _ from 'service/helper'
 
 export const FetchPublic = async (state) => {
   const { Contracts, Relayers, Tokens, error } = await http.getPublicResource()
+  const { tomochain, error: tomoPriceError } = await http.getTomoPrice()
   _.ThrowOn(error, `Fetch Token Error: ${error}`)
   const notifications = [
     ...state.notifications,
@@ -15,11 +16,17 @@ export const FetchPublic = async (state) => {
       variant: AlertVariant.success,
     },
   ]
-  return { Contracts, Relayers, Tokens, notifications }
+
+  const network_info = {
+    ...state.network_info,
+    tomousd: tomoPriceError ? NaN : tomochain.usd,
+  }
+
+  return { Contracts, Relayers, Tokens, notifications, network_info }
 }
 
 export const Logout = (state) => {
-  window.sessionStorage.removeItem('accessToken')
+  window.sessionStorage.removeItem('tomorelayerAccessToken')
   const user = {
     ...state.user,
     wallet: undefined,
