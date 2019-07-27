@@ -1,3 +1,5 @@
+import { IS_DEV } from 'service/constant'
+
 export const BACKEND_URI = ((env) => {
   switch (env) {
     case 'test':
@@ -25,7 +27,7 @@ const defaultHeader = {
 const HttpClient = () => {
   const headers = {
     ...defaultHeader,
-    Authorization: window.sessionStorage.getItem('accessToken'),
+    Authorization: `Bearer ${window.sessionStorage.getItem('tomorelayerAccessToken')}`,
   }
 
   return {
@@ -59,7 +61,7 @@ const HttpClient = () => {
 
 export const getPayload = (r) => {
   if (r.payload.token) {
-    window.sessionStorage.setItem('accessToken', r.payload.token)
+    window.sessionStorage.setItem('tomorelayerAccessToken', r.payload.token)
   }
   return r.payload
 }
@@ -75,17 +77,27 @@ const logging = async (error) => {
   }
 }
 
+const ApiFix = (api) => (IS_DEV ? api : api.replace('.testnet', ''))
+
 const API = {
   auth: '/api/auth',
   contract: '/api/contract',
   relayer: '/api/relayer',
   token: '/api/token',
   public: '/api/public',
+  external: {
+    tomoprice: ApiFix('https://scan.testnet.tomochain.com/api/setting/usd'),
+    accountTx: (params) => {
+      const { address, page, type } = params
+      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'
+      return ApiFix(`${baseEndpoint}/${address}?page=${page}&limit=10&tx_type=${type}`)
+    },
+  },
 }
 
 const proxiedAPI = new Proxy(API, {
   get(obj, property) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' && property !== 'external') {
       // NOTE: using default development backend with .env.test
       const endpoint = BACKEND_URI + obj[property]
       return endpoint
@@ -141,4 +153,15 @@ export const getTokens = async () =>
   HttpClient()
     .get(proxiedAPI.token)
     .then(getPayload)
+    .catch(logging)
+
+// EXTERNAL API
+export const getTomoPrice = async () =>
+  fetch(proxiedAPI.external.tomoprice)
+    .then(genericHandler)
+    .catch(logging)
+
+export const getAccountTx = async (params) =>
+  fetch(proxiedAPI.external.accountTx(params))
+    .then(genericHandler)
     .catch(logging)
