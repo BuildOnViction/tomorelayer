@@ -3,10 +3,10 @@ import {
   Grid,
 } from '@material-ui/core'
 import { TabMap } from 'service/helper'
+import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
 import TokenChart from './TokenChart'
-import TableControl from './TableControl'
 import RelayerTable from './RelayerTable'
 import {
   statcard_mock,
@@ -15,8 +15,8 @@ import {
 const TOPICS = new TabMap('Relayers', 'Fills', 'Tokens')
 
 const Main = () => {
-  const [tab, setTab] = React.useState(0)
-  const onTabChange = (_, value) => setTab(value)
+  const [tab, setTab] = React.useState(TOPICS.relayers)
+  const onTabChange = (_, tab) => setTab(TOPICS[tab])
 
   return (
     <Grid container spacing={8}>
@@ -33,7 +33,7 @@ const Main = () => {
       </Grid>
       <Grid item sm={12} container direction="column">
         <Grid item className="mb-2">
-          <TableControl tabValue={tab} onTabChange={onTabChange} topics={TOPICS.values} />
+          <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={onTabChange} topics={TOPICS.values} />
         </Grid>
         <Grid item>
           {TOPICS.getByIndex(tab) === TOPICS.relayers && <RelayerTable />}

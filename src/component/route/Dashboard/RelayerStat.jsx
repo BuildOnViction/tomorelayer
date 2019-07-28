@@ -2,6 +2,8 @@ import React from 'react'
 import {
   Grid,
 } from '@material-ui/core'
+import { TabMap } from 'service/helper'
+import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
 /*
@@ -14,14 +16,24 @@ import TimeVolumeStat from './TimeVolumeStat'
  *   }
  * }))(Avatar) */
 
+const TOPICS = new TabMap('Orders', 'Tokens')
 
 export default class RelayerStat extends React.Component {
+  state = {
+    tab: TOPICS.orders,
+  }
+
+  onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
 
   render() {
     const {
       relayers: allRelayers,
       match,
     } = this.props
+
+    const {
+      tab,
+    } = this.state
 
     const coinbase = match.params.coinbase
     const relayer = allRelayers[coinbase]
@@ -62,6 +74,9 @@ export default class RelayerStat extends React.Component {
           <Grid item sm={9}>
             <TimeVolumeStat />
           </Grid>
+        </Grid>
+        <Grid item>
+          <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
         </Grid>
         <Grid item>
           {relayer.name}

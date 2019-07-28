@@ -53,7 +53,7 @@ export class TabMap {
 
     args.forEach((value, index) => {
       Object.defineProperties(this, {
-        [value.toLowerCase()]: {
+        [value.toLowerCase().replace(/\s+/g, '_')]: {
           value: value,
           writable: false,
         },
@@ -67,6 +67,7 @@ export class TabMap {
     this._length = args.length
     this._values = args
     this._keys = args.map((v) => v.toLowerCase())
+    this._valueArray = [...args]
     return this
   }
 
@@ -88,5 +89,9 @@ export class TabMap {
 
   map(...args) {
     return this.values.map(...args)
+  }
+
+  getIndex(value) {
+    return this._valueArray.indexOf(value)
   }
 }
