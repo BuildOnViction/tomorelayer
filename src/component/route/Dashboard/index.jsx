@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
     )
 
     return (
-      <Box>
+      <Box style={{ transform: 'translateY(-30px)' }}>
         <TabMenu />
         <Box className="mt-2">
           <Switch>
