@@ -33,6 +33,7 @@ const theme = (config) =>
       tabActive: config.palette.tabActive, //'#577EEF',
       tabInactive: '#222239',
       evenRowBackground: '#23233C',
+      link: '#577eef',
     },
     overrides: {
       MuiPaper: {

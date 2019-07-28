@@ -7,15 +7,15 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
-import { CustomLink } from 'component/shared/Adapters'
-
-
+import { fromWei } from 'service/blockchain'
+import { ExternalLinks } from 'service/backend'
+import { CustomLink, StyledLink } from 'component/shared/Adapters'
 
 const TableHeaders = [
   'Date',
   'From',
   'To',
-  'Amount',
+  'Amount (TOMO)',
   'TxHash',
 ]
 
@@ -35,6 +35,9 @@ const LimitedGridItem = withStyles(theme => ({
     },
     '&:last-child': {
       paddingRight: 30,
+    },
+    '&.outlink': {
+      color: theme.palette.link
     }
   }
 }))(props => <Grid item {...props} />)
@@ -57,7 +60,7 @@ const TxTable = ({ txs }) => (
         {Object.values(txs).map(row => (
           <GridRow item key={row.hash} container className="table-row">
             <LimitedGridItem>
-              {row.timestamp}
+              {row.timestamp.slice(0, 10)}
             </LimitedGridItem>
             <LimitedGridItem>
               {row.from}
@@ -66,11 +69,13 @@ const TxTable = ({ txs }) => (
               {row.to}
             </LimitedGridItem>
             <LimitedGridItem>
-              {row.value}
-            </LimitedGridItem>
-            <LimitedGridItem>
-              {row.hash}
-            </LimitedGridItem>
+              {fromWei(row.value)}
+        </LimitedGridItem>
+        <LimitedGridItem className="outlink">
+          <StyledLink href={ExternalLinks.transaction(row.hash)} underline="none" rel="noopener noreferrer" target="_blank">
+            {row.hash}
+          </StyledLink>
+        </LimitedGridItem>
           </GridRow>
         ))}
       </Grid>

@@ -165,3 +165,8 @@ export const getAccountTx = async (params) =>
   fetch(proxiedAPI.external.accountTx(params))
     .then(genericHandler)
     .catch(logging)
+
+// STATIC EXTERNAL LINK
+export const ExternalLinks = {
+  transaction: (tx) => `${ApiFix('https://scan.testnet.tomochain.com/txs')}/${tx}`,
+}
