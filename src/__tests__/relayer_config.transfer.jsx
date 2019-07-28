@@ -49,8 +49,8 @@ describe('Test Relayer-Config Transfer Form', () => {
     }
 
     const mockTransferFunction = jest.fn()
-                                   .mockResolvedValueOnce({ status: false, details: 'fake error' })
-                                   .mockResolvedValueOnce({ status: true })
+                                     .mockResolvedValueOnce({ status: false, details: 'fake error' })
+                                     .mockResolvedValueOnce({ status: true })
 
     const store = createStore({
       ...initialState,
@@ -180,7 +180,8 @@ describe('Test Relayer-Config Transfer Form', () => {
     // Transfer succeeded alert
     expect(http.updateRelayer).toHaveBeenCalledWith({
       id: ActiveRelayer.id,
-      owner: NewOwner,
+      new_owner: NewOwner,
+      owner: Owner,
       coinbase: testCoinbase,
     })
     R.getByText(/relayer transfered/i)

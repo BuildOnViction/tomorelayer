@@ -102,6 +102,7 @@ describe('Test Relayer-Config Info Form', () => {
       name: 'abc',
       link: 'http://abc.abc',
       logo: 'http://abc.abc/abc.img',
+      owner: Owner,
     })
 
     fireEvent.change(nameInput, { target: { value: 'abcd' }})

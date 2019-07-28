@@ -98,7 +98,11 @@ describe('Test Relayer-Config Trade Form', () => {
     fireEvent.click(confirmBtn)
     await wait()
 
-    expect(http.updateRelayer).toHaveBeenCalledWith({ deposit: 1500, id: ActiveRelayer.id })
+    expect(http.updateRelayer).toHaveBeenCalledWith({
+      deposit: 1500,
+      id: ActiveRelayer.id,
+      owner: Owner,
+    })
     R.getByText(/new deposit has been made/i)
   })
 

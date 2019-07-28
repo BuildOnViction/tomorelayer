@@ -44,7 +44,7 @@ const LimitedGridItem = withStyles(theme => ({
 
 const GridRow = withStyles(theme => ({
   root: {
-    '&.table-row:nth-child(even)': {
+    '&.table-row:nth-child(odd)': {
       backgroundColor: theme.palette.evenRowBackground,
     },
   }
