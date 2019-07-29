@@ -8,7 +8,7 @@ def admin_required(handler):
 
     def wrapped_handler(handler_object):
         header = handler_object.request.headers
-        authorization = header.get('Authorization', '')
+        authorization = header.get('Authorization', '').split(' ')[1]
         if authorization != os.getenv('SECRET_HEADER'):
             raise AdminAuthorizationException
         return handler(handler_object)
