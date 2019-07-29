@@ -7,7 +7,7 @@ import {
   Grid,
   Link,
   InputAdornment,
-  Switch,
+  // Switch,
   TextField,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
@@ -23,8 +23,8 @@ class PageHeader extends React.Component {
     const {
       user,
       relayers,
-      changeTheme,
-      activeTheme,
+      /* changeTheme,
+       * activeTheme, */
     } = this.props
 
     const auth = Boolean(user.wallet)
@@ -59,7 +59,7 @@ class PageHeader extends React.Component {
               {auth && <UserMenu />}
               {!auth && <Button variant="contained" component={AdapterLink} to="/login">Login</Button>}
               {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}
-              <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} />
+              {/* <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} /> */}
             </Grid>
           </Grid>
         </Container>

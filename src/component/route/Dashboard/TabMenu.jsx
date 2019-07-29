@@ -17,17 +17,22 @@ const AppBar = withStyles(theme => ({
 }))(MuiAppbar)
 
 const Tabs = withStyles(theme => ({
-  root: {
+  indicator: {
+    backgroundColor: theme.palette.buttonActive,
+    width: '60px !important',
+    borderRadius: 5,
   }
 }))(MuiTabs)
 
 const Tab = withStyles(theme => ({
   root: {
     textTransform: 'none',
-    flexDirection: 'initial',
-    marginRight: 10,
     padding: 0,
-    width: 100,
+    fontSize: 16,
+    justifyContent: 'flex-start',
+    '&>span': {
+      width: 'auto',
+    }
   }
 }))(MuiTab)
 
@@ -45,7 +50,7 @@ const TabMenu = ({
   return (
     <AppBar position="static">
       <Tabs value={mapRouteToValue(path)}>
-        <Tab label="Dashboard" component={AdapterLink} to={path.replace('/config', '')} />
+        <Tab label="Relayer Page" component={AdapterLink} to={path.replace('/config', '')} />
         <Tab label="Configurations" component={AdapterLink} to={`${path}/config`} />
       </Tabs>
     </AppBar>

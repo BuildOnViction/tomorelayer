@@ -34,6 +34,7 @@ const theme = (config) =>
       tabInactive: '#222239',
       evenRowBackground: '#23233C',
       link: '#577eef',
+      buttonActive: '#703db5',
     },
     overrides: {
       MuiPaper: {
