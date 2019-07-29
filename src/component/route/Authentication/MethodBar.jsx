@@ -1,6 +1,12 @@
 import React from 'react'
-import { AppBar, Box, Tabs, Tab } from '@material-ui/core'
+import {
+  AppBar,
+  Box,
+  Tabs,
+  Tab,
+} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+
 import ledgerwallet_icon from 'asset/logo-ledgerwallet.png'
 import metamask_icon from 'asset/logo-metamask.png'
 import mnemonic_icon from 'asset/logo-mnemonic.png'
@@ -23,7 +29,7 @@ const BoxWrap = withStyles({
     margin: '50px auto',
     overflow: 'scroll',
   }
-})(props => <Box {...props} />)
+})(Box)
 
 const StyledAppBar = withStyles({
   root: {
@@ -31,7 +37,7 @@ const StyledAppBar = withStyles({
     border: 'transparent',
     borderRadius: 8,
   }
-})(props => <AppBar {...props} />)
+})(AppBar)
 
 const StyledTabs = withStyles({
   indicator: {
@@ -40,7 +46,7 @@ const StyledTabs = withStyles({
     borderRadius: 10,
     zIndex: 0,
   },
-})(props => <Tabs {...props} />)
+})(Tabs)
 
 const StyledTab = withStyles(theme => ({
   root: {

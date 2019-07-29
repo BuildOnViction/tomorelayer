@@ -2,11 +2,11 @@ import React from 'react'
 import {
   Button,
   Container,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -27,7 +27,9 @@ export default class LedgerWallet extends React.Component {
     ledgerWallet: undefined,
   }
 
-  changePath = e => this.setState({ hdpath: e.target.value })
+  changePath = e => this.setState({
+    hdpath: e.target.value,
+  })
 
   unlock = async () => {
     const ledgerWallet = await ledger.open()
@@ -41,11 +43,17 @@ export default class LedgerWallet extends React.Component {
     })
   }
 
-  useAddress = () => this.setState({ openDialog: false })
+  useAddress = () => this.setState({
+    openDialog: false,
+  })
 
-  changeAddress = () => this.setState({ openDialog: true })
+  changeAddress = () => this.setState({
+    openDialog: true,
+  })
 
-  cancel = () => this.setState({ openDialog: false })
+  cancel = () => this.setState({
+    openDialog: false,
+  })
 
   setDefaultAddress = async e => {
     const ledgerWallet = this.state.ledgerWallet
@@ -64,11 +72,11 @@ export default class LedgerWallet extends React.Component {
   render() {
 
     const {
-      hdpath,
-      openDialog,
-      ledgerWallet,
       activeAddress,
       activeBalance,
+      hdpath,
+      ledgerWallet,
+      openDialog,
     } = this.state
 
     return (
@@ -123,7 +131,9 @@ export default class LedgerWallet extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Select address to use</DialogTitle>
+          <DialogTitle id="alert-dialog-title">
+            Select address to use
+          </DialogTitle>
           <DialogContent>
             <RadioGroup
               aria-label="wallet-addresses"

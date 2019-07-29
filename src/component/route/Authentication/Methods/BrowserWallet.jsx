@@ -1,7 +1,11 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { ethers } from 'ethers'
-import { Box, Button, Typography } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Typography,
+} from '@material-ui/core'
 import metamask from '@vutr/purser-metamask'
 import * as blk from 'service/blockchain'
 import WalletSigner from 'service/wallet'
@@ -28,7 +32,10 @@ class BrowserWallet extends React.Component {
     this.wallet = await metamask.open()
     const address = this.wallet.address
     const balance = await blk.getBalance(address)
-    this.setState({ address, balance })
+    this.setState({
+      address,
+      balance,
+    })
   }
 
   confirm = async () => {
@@ -43,6 +50,7 @@ class BrowserWallet extends React.Component {
   }
 
   render() {
+
     const {
       address,
       balance,

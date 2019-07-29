@@ -8,8 +8,13 @@ import {
   Typography,
 } from '@material-ui/core'
 import KeyIcon from '@material-ui/icons/VpnKey'
-import { ethers, Wallet as WalletSigner } from 'ethers'
-import * as blk from 'service/blockchain'
+import {
+  ethers,
+  Wallet as WalletSigner,
+} from 'ethers'
+import {
+  getBalance,
+} from 'service/blockchain'
 
 
 const DEFAULT_HD_PATH = "m/44'/60'/0'/0/0"
@@ -24,9 +29,15 @@ export default class SoftwareWallet extends React.Component {
     errorAlert: undefined,
   }
 
-  changeSecret = e => this.setState({ secret: e.target.value, errorAlert: undefined })
+  changeSecret = e => this.setState({
+    secret: e.target.value,
+    errorAlert: undefined,
+  })
 
-  changeDerivationPath = e => this.setState({ derivationPath: e.target.value, errorAlert: undefined })
+  changeDerivationPath = e => this.setState({
+    derivationPath: e.target.value,
+    errorAlert: undefined,
+  })
 
   changeAddress = () => this.setState({
     wallet: undefined,
@@ -41,18 +52,23 @@ export default class SoftwareWallet extends React.Component {
     let wallet = {}
 
     try {
-      wallet = WalletSigner.fromMnemonic(this.state.secret, this.state.derivationPath).connect(provider)
+      const {
+        secret,
+        derivationPath,
+      } = this.state
+
+      wallet = WalletSigner.fromMnemonic(secret, derivationPath).connect(provider)
+
     } catch (e) {
-      return this.setState({ errorAlert: 'invalid mnemonic / HD derivation path' })
+      const errorAlert = 'invalid mnemonic / HD derivation path'
+      return this.setState({ errorAlert })
     }
 
-    const balance = await blk.getBalance(wallet.address)
+    const balance = await getBalance(wallet.address)
     this.setState({ wallet, balance })
   }
 
-  confirm = async () => {
-    this.props.onConfirm(this.state.wallet)
-  }
+  confirm = async () => this.props.onConfirm(this.state.wallet)
 
   render() {
 
@@ -68,10 +84,9 @@ export default class SoftwareWallet extends React.Component {
       </span>
     )
 
-    return (
-      <Container maxWidth="sm">
-
-        {!wallet && (
+    if (!wallet) {
+      return (
+        <Container maxWidth="sm">
           <React.Fragment>
             <Box display="flex" flexDirection="column" justifyContent="center">
               <TextField
@@ -109,28 +124,30 @@ export default class SoftwareWallet extends React.Component {
               </Button>
             </Box>
           </React.Fragment>
-        )}
+        </Container>
+      )
+    }
 
-        {wallet && (
-          <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column">
-            <Box display="flex" flexDirection="column" className="p-1">
-              <Typography component="div">
-                Address: {wallet.address}
-              </Typography>
-              <Typography component="div">
-                Balance: {balance} TOMO
-              </Typography>
-            </Box>
-            <Box display="flex" justifyContent="center">
-              <Button onClick={this.changeAddress} variant="contained" className="m-1">
-                Change Address
-              </Button>
-              <Button onClick={this.confirm} variant="contained" className="m-1">
-                Confirm
-              </Button>
-            </Box>
+    return (
+      <Container maxWidth="sm">
+        <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column">
+          <Box display="flex" flexDirection="column" className="p-1">
+            <Typography component="div">
+              Address: {wallet.address}
+            </Typography>
+            <Typography component="div">
+              Balance: {balance} TOMO
+            </Typography>
           </Box>
-        )}
+          <Box display="flex" justifyContent="center">
+            <Button onClick={this.changeAddress} variant="contained" className="m-1">
+              Change Address
+            </Button>
+            <Button onClick={this.confirm} variant="contained" className="m-1">
+              Confirm
+            </Button>
+          </Box>
+        </Box>
       </Container>
     )
   }

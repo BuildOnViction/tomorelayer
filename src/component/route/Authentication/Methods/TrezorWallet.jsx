@@ -14,7 +14,9 @@ import {
   Typography,
 } from '@material-ui/core'
 import ledger from '@vutr/purser-ledger'
-import * as blk from 'service/blockchain'
+import {
+  getBalance,
+} from 'service/blockchain'
 
 
 export default class TrezorWallet extends React.Component {
@@ -32,12 +34,14 @@ export default class TrezorWallet extends React.Component {
   unlock = async () => {
     const trezorWallet = await ledger.open()
     const activeAddress = trezorWallet.address
-    const activeBalance = await blk.getBalance(activeAddress)
+    const activeBalance = await getBalance(activeAddress)
+    const openDialog = true
+
     this.setState({
       activeAddress,
       activeBalance,
+      openDialog,
       trezorWallet,
-      openDialog: true,
     })
   }
 
@@ -50,13 +54,12 @@ export default class TrezorWallet extends React.Component {
   setDefaultAddress = async e => {
     const trezorWallet = this.state.trezorWallet
     const activeAddress = e.target.value
-    const activeBalance = await blk.getBalance(activeAddress)
+    const activeBalance = await getBalance(activeAddress)
     const index = trezorWallet.otherAddresses.indexOf(activeAddress)
+
     await trezorWallet.setDefaultAddress(index)
-    this.setState({
-      activeAddress,
-      activeBalance,
-    })
+
+    this.setState({ activeAddress, activeBalance })
   }
 
   confirm = () => this.props.onConfirm(this.state.trezorWallet)
@@ -64,11 +67,11 @@ export default class TrezorWallet extends React.Component {
   render() {
 
     const {
-      hdpath,
-      openDialog,
-      trezorWallet,
       activeAddress,
       activeBalance,
+      openDialog,
+      hdpath,
+      trezorWallet,
     } = this.state
 
     return (

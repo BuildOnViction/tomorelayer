@@ -8,8 +8,13 @@ import {
   Typography,
 } from '@material-ui/core'
 import KeyIcon from '@material-ui/icons/VpnKey'
-import { ethers, Wallet as WalletSigner } from 'ethers'
-import * as blk from 'service/blockchain'
+import {
+  ethers,
+  Wallet as WalletSigner,
+} from 'ethers'
+import {
+  getBalance,
+} from 'service/blockchain'
 
 
 export default class SoftwareWallet extends React.Component {
@@ -36,16 +41,15 @@ export default class SoftwareWallet extends React.Component {
     try {
       wallet = new WalletSigner(this.state.secret, provider)
     } catch (e) {
-      return this.setState({ errorAlert: 'invalid private key' })
+      const errorAlert = 'invalid private key'
+      return this.setState({ errorAlert })
     }
 
-    const balance = await blk.getBalance(wallet.address)
+    const balance = await getBalance(wallet.address)
     this.setState({ wallet, balance })
   }
 
-  confirm = async () => {
-    this.props.onConfirm(this.state.wallet)
-  }
+  confirm = async () => this.props.onConfirm(this.state.wallet)
 
   render() {
 
@@ -55,59 +59,58 @@ export default class SoftwareWallet extends React.Component {
       wallet,
     } = this.state
 
+    if (!wallet) {
+      return (
+        <Container maxWidth="sm">
+          <Box display="flex" flexDirection="column" justifyContent="center">
+            <TextField
+              label="Enter your private key"
+              value={this.state.secret}
+              onChange={this.changeSecret}
+              type="password"
+              error={Boolean(errorAlert)}
+              helperText={errorAlert && <i className="text-alert">{errorAlert}</i>}
+              variant="outlined"
+              className="mb-1"
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <KeyIcon />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Box>
+          <Box justifyContent="center" display="flex" className="mt-2">
+            <Button onClick={this.importWallet} variant="contained">
+              Import
+            </Button>
+          </Box>
+        </Container>
+      )
+    }
+
     return (
       <Container maxWidth="sm">
-
-        {!wallet && (
-          <React.Fragment>
-            <Box display="flex" flexDirection="column" justifyContent="center">
-              <TextField
-                label="Enter your private key"
-                value={this.state.secret}
-                onChange={this.changeSecret}
-                type="password"
-                error={Boolean(errorAlert)}
-                helperText={errorAlert && <i className="text-alert">{errorAlert}</i>}
-                variant="outlined"
-                className="mb-1"
-                fullWidth
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <KeyIcon />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Box>
-            <Box justifyContent="center" display="flex" className="mt-2">
-              <Button onClick={this.importWallet} variant="contained">
-                Import
-              </Button>
-            </Box>
-          </React.Fragment>
-        )}
-
-        {wallet && (
-          <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column">
-            <Box display="flex" flexDirection="column" className="p-1">
-              <Typography component="div">
-                Address: {wallet.address}
-              </Typography>
-              <Typography component="div">
-                Balance: {balance} TOMO
-              </Typography>
-            </Box>
-            <Box display="flex" justifyContent="center">
-              <Button onClick={this.changeAddress} variant="contained" size="small" className="m-1">
-                Change Address
-              </Button>
-              <Button onClick={this.confirm} variant="contained" size="small" className="m-1">
-                Confirm
-              </Button>
-            </Box>
+        <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column">
+          <Box display="flex" flexDirection="column" className="p-1">
+            <Typography component="div">
+              Address: {wallet.address}
+            </Typography>
+            <Typography component="div">
+              Balance: {balance} TOMO
+            </Typography>
           </Box>
-        )}
+          <Box display="flex" justifyContent="center">
+            <Button onClick={this.changeAddress} variant="contained" size="small" className="m-1">
+              Change Address
+            </Button>
+            <Button onClick={this.confirm} variant="contained" size="small" className="m-1">
+              Confirm
+            </Button>
+          </Box>
+        </Box>
       </Container>
     )
   }

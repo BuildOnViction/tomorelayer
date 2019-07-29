@@ -5,7 +5,10 @@ import { Box } from '@material-ui/core'
 import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
 import { getAuthenticated } from 'service/backend'
-import { PushAlert, AlertVariant } from 'service/frontend'
+import {
+  PushAlert,
+  AlertVariant,
+} from 'service/frontend'
 import Header from './Header'
 import MethodBar from './MethodBar'
 import BrowserWallet from './Methods/BrowserWallet'
@@ -23,12 +26,7 @@ const {
   SoftwareWalletPrivate: _PrivateWallet_,
 } = UNLOCK_WALLET_METHODS
 
-/**
- * Enptry point for Authenticationn/Wallet unclock
- * Output: saving a WalletSigner instance to GlobalStore
- * @class Authentication
- * @extends {React.Component}
- */
+
 class Authentication extends React.Component {
 
   state = {
@@ -65,8 +63,10 @@ class Authentication extends React.Component {
     const { error } = await getAuthenticated(address)
 
     if (error) {
-      this.props.PushAlert({ variant: AlertVariant.error, message: `${error.message}: ${error.detail}` })
-      return undefined
+      return this.props.PushAlert({
+        variant: AlertVariant.error,
+        message: `${error.message}: ${error.detail}`,
+      })
     }
 
     this.props.saveWallet(wallet)
@@ -101,14 +101,20 @@ const mapProps = state => ({
 })
 
 const actions = store => ({
-  saveWallet: (state, wallet) => {
-    const user = { ...state.user, wallet }
-    return { user }
-  },
   PushAlert,
+  saveWallet: (state, wallet) => {
+    const user = {
+      ...state.user,
+      wallet,
+    }
+
+    return {
+      user,
+    }
+  },
 })
 
 export default compose(
   withRouter,
-  connect(mapProps, actions)
+  connect(mapProps, actions),
 )(Authentication)
