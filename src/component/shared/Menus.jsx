@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   Button,
+  ClickAwayListener,
   Menu,
   MenuItem,
 } from '@material-ui/core'
@@ -11,15 +12,24 @@ import { AdapterLink } from 'component/shared/Adapters'
 
 const MenuButton = withStyles(theme => ({
   root: {
-    color: '#CFCDE1',
     textTransform: 'none',
-    margin: '0 1rem',
-  },
-}))(Button)
+    margin: `0px ${theme.spacing(2)}px`,
+    color: theme.palette.maintitle,
+  }
+}))(props => {
+  const InnerIcon = props.icon
+  return (
+    <Button {...props} size="small">
+      {props.text}<InnerIcon style={{ marginLeft: 5 }} />
+    </Button>
+  )
+})
 
 const DropDownMenu = withStyles(theme => ({
   paper: {
-    width: 170,
+    width: 'auto',
+    minWidth: 150,
+    maxWidth: 200,
   }
 }))(Menu)
 
@@ -27,7 +37,7 @@ const StyledMenuItem = withStyles(theme => ({
   root: {
     borderRadius: 0,
     margin: 0,
-    color: '#7473A6',
+    color: theme.palette.subtitle,
   }
 }))(MenuItem)
 
@@ -45,25 +55,25 @@ export const UserMenu = () => {
         aria-controls="relayer-list-menu"
         aria-haspopup="true"
         onClick={handleClick}
-        size="small"
-      >
-        User<PersonIcon style={{ marginLeft: 5 }} />
-      </MenuButton>
-      <DropDownMenu
-        id="relayer-list-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        style={{ transform: 'translateY(40px)' }}
-      >
-        <StyledMenuItem component={AdapterLink} to="/profile">
-          Profile
-        </StyledMenuItem>
-        <StyledMenuItem component={AdapterLink} to="/logout">
-          Logout
-        </StyledMenuItem>
-      </DropDownMenu>
+        text="User"
+        icon={PersonIcon}
+      />
+      <ClickAwayListener onClickAway={handleClose}>
+        <DropDownMenu
+          id="relayer-list-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          style={{ transform: 'translateY(40px)' }}
+        >
+          <StyledMenuItem component={AdapterLink} to="/profile">
+            Profile
+          </StyledMenuItem>
+          <StyledMenuItem component={AdapterLink} to="/logout">
+            Logout
+          </StyledMenuItem>
+        </DropDownMenu>
+      </ClickAwayListener>
     </div>
   )
 }
@@ -77,26 +87,31 @@ export const RelayerMenu = ({ relayers }) => {
 
   return (
     <div>
-      <MenuButton aria-controls="relayer-list-menu" aria-haspopup="true" onClick={handleClick} size="small">
-        My Relayers <MenuIcon style={{ marginLeft: 5 }} />
-      </MenuButton>
-      <DropDownMenu
-        id="relayer-list-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        style={{ transform: 'translateY(40px)' }}
-      >
-        {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
-          <StyledMenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
-            {r.name}
+      <MenuButton
+        aria-controls="relayer-list-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        text="My Relayers"
+        icon={MenuIcon}
+      />
+      <ClickAwayListener onClickAway={handleClose}>
+        <DropDownMenu
+          id="relayer-list-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          style={{ transform: 'translateY(40px)' }}
+        >
+          {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
+            <StyledMenuItem component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
+              {r.name}
+            </StyledMenuItem>
+          ))}
+          <StyledMenuItem component={AdapterLink} to="/register">
+            Create new relayer
           </StyledMenuItem>
-        ))}
-        <StyledMenuItem component={AdapterLink} to="/register">
-          Create new relayer
-        </StyledMenuItem>
-      </DropDownMenu>
+        </DropDownMenu>
+      </ClickAwayListener>
     </div>
   )
 }
