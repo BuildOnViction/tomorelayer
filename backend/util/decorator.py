@@ -1,4 +1,5 @@
 import os
+from logzero import logger
 from tornado.web import HTTPError
 from exception import AdminAuthorizationException, UserAuthorizationException
 from .jwt_encoder import decode_token
@@ -7,11 +8,16 @@ from .jwt_encoder import decode_token
 def admin_required(handler):
 
     def wrapped_handler(handler_object):
-        header = handler_object.request.headers
-        authorization = header.get('Authorization', '').split(' ')[1]
-        if authorization != os.getenv('SECRET_HEADER'):
+        try:
+            header = handler_object.request.headers
+            authorization = header.get('Authorization', 'Bearer invalidtoken').split(' ')[1]
+            if authorization != os.getenv('SECRET_HEADER'):
+                raise AdminAuthorizationException
+            return handler(handler_object)
+        except Exception as err:
+            if not isinstance(err, AdminAuthorizationException):
+                logger.debug(err)
             raise AdminAuthorizationException
-        return handler(handler_object)
 
     return wrapped_handler
 
