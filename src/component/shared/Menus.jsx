@@ -20,7 +20,7 @@ const MenuButton = withStyles(theme => ({
   const InnerIcon = props.icon
   return (
     <Button {...props} size="small">
-      {props.text}<InnerIcon style={{ marginLeft: 5 }} />
+      {props.text} <InnerIcon style={{ marginLeft: 5 }} />
     </Button>
   )
 })
@@ -41,8 +41,13 @@ const StyledMenuItem = withStyles(theme => ({
   }
 }))(MenuItem)
 
+
 export const UserMenu = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const [
+    anchorEl,
+    setAnchorEl,
+  ] = React.useState(null)
 
   const handleClick = (event) => setAnchorEl(event.currentTarget)
 
@@ -79,7 +84,10 @@ export const UserMenu = () => {
 }
 
 export const RelayerMenu = ({ relayers }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [
+    anchorEl,
+    setAnchorEl,
+  ] = React.useState(null)
 
   const handleClick = (event) => setAnchorEl(event.currentTarget)
 

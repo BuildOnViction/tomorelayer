@@ -2,12 +2,15 @@ import { bindActions } from 'redux-zero/utils'
 import store from 'service/store'
 import * as http from 'service/backend'
 import { AlertVariant } from 'service/frontend'
-import * as _ from 'service/helper'
+import { ThrowOn } from 'service/helper'
 
 export const FetchPublic = async (state) => {
   const { Contracts, Relayers, Tokens, error } = await http.getPublicResource()
+
   const { tomochain, error: tomoPriceError } = await http.getTomoPrice()
-  _.ThrowOn(error, `Fetch Token Error: ${error}`)
+
+  ThrowOn(error, `Fetch Token Error: ${error}`)
+
   const notifications = [
     ...state.notifications,
     {
@@ -22,7 +25,13 @@ export const FetchPublic = async (state) => {
     tomousd: tomoPriceError ? NaN : tomochain.usd,
   }
 
-  return { Contracts, Relayers, Tokens, notifications, network_info }
+  return {
+    Contracts,
+    Relayers,
+    Tokens,
+    notifications,
+    network_info,
+  }
 }
 
 export const Logout = (state) => {
@@ -31,7 +40,9 @@ export const Logout = (state) => {
     ...state.user,
     wallet: undefined,
   }
-  return { user }
+  return {
+    user,
+  }
 }
 
 export const bindLogout = () => bindActions({ Logout }, store).Logout()

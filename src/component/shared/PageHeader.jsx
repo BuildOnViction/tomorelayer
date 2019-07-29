@@ -1,20 +1,26 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
+import SearchIcon from '@material-ui/icons/Search'
 import {
-  Button,
   Box,
+  Button,
   Container,
   Grid,
-  Link,
   InputAdornment,
+  Link,
   // Switch,
   TextField,
 } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
-import * as _ from 'service/helper'
+import {
+  isEmpty,
+} from 'service/helper'
+import {
+  UserMenu,
+  RelayerMenu,
+} from './Menus'
 import { AdapterLink } from './Adapters'
-import { UserMenu, RelayerMenu } from './Menus'
 import logo from 'asset/logo-tomorelayer.svg'
+
 
 class PageHeader extends React.Component {
 
@@ -28,7 +34,7 @@ class PageHeader extends React.Component {
     } = this.props
 
     const auth = Boolean(user.wallet)
-    const userOwnRelayer = !_.isEmpty(relayers)
+    const userOwnRelayer = !isEmpty(relayers)
 
     return (
       <Box className="tomo-header">
@@ -69,13 +75,13 @@ class PageHeader extends React.Component {
 }
 
 const mapProps = state => ({
-  activeTheme: state.activeTheme
+  activeTheme: state.activeTheme,
 })
 
 const actions = {
   changeTheme: (state) => ({
     activeTheme: state.activeTheme === 'light' ? 'dark' : 'light'
-  })
+  }),
 }
 
 export default connect(mapProps, actions)(PageHeader)

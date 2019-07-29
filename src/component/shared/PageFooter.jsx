@@ -53,7 +53,7 @@ const FooterButtons = [
   },
 ]
 
-const PageFooter = props => (
+const PageFooter = () => (
   <Container>
     <Grid container>
       <Grid item sm={12} md={6}>

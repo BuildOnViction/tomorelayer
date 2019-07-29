@@ -44,9 +44,14 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const MySnackbarContentWrapper = props => {
+const MySnackbarContentWrapper = ({
+  className,
+  message,
+  onClose,
+  variant,
+  ...rest
+}) => {
   const classes = useStyles()
-  const { className, message, onClose, variant, ...other } = props
   const Icon = variantIcon[variant]
 
   return (
@@ -59,14 +64,20 @@ const MySnackbarContentWrapper = props => {
           {message}
         </span>
       }
-      {...other}
+      {...rest}
     />
   )
 }
 
-const Alert = props => {
-  const { notifications, selfClose } = props
-  const anchor = {vertical: 'bottom', horizontal: 'right'}
+const Alert = ({
+  notifications,
+  selfClose,
+}) => {
+
+  const anchor = {
+    vertical: 'bottom',
+    horizontal: 'right',
+  }
 
   const alertDuration = {
     success: 2000,
@@ -109,7 +120,9 @@ const actions = store => ({
     let notifications = Array.from(state.notifications)
     notifications[index].open = false
     const anyOpenAlert = notifications.find(n => n.open)
-    if (!anyOpenAlert) {notifications = []}
+    if (!anyOpenAlert) {
+      notifications = []
+    }
     return { notifications }
   }
 })
