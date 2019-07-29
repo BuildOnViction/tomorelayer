@@ -11,6 +11,7 @@ import { TabMap } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
+import OrderTable from './OrderTable'
 
 const StyledAvatar = withStyles(theme => ({
   root: {
@@ -82,9 +83,9 @@ export default class RelayerStat extends React.Component {
         </Grid>
         <Grid item className="mt-1">
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
-        </Grid>
-        <Grid item>
-          {relayer.name}
+          <Box className="mt-2">
+            {tab === TOPICS.orders && <OrderTable />}
+          </Box>
         </Grid>
       </Grid>
     )
