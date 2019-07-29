@@ -47,18 +47,12 @@ class FormDeposit extends React.Component {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body1">{relayer.name}</Typography>
-              <div className="text-hint">
-                Coinbase: {relayer.coinbase}
-              </div>
-              <div className="text-hint">
-                Balance: {relayer.deposit}
-              </div>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
             </Grid>
             <Grid item container direction="column" spacing={2}>
               <Grid item>
                 <TextField
-                  label="Deposit amount"
+                  label="Deposit amount (minimum 1 TOMO)"
                   value={values.deposit}
                   onChange={handleChange}
                   error={Boolean(errors.deposit)}
@@ -68,12 +62,11 @@ class FormDeposit extends React.Component {
                   InputProps={{
                     endAdornment: 'TOMO'
                   }}
-                // eslint-disable-next-line
+                  // eslint-disable-next-line
                   inputProps={{
                     'data-testid': 'deposit-input'
                   }}
                   fullWidth
-                  helperText={<span className="text-hint">Minimum deposit 1 TOMO</span>}
                   disabled={isSubmitting || relayer.resigning}
                 />
               </Grid>
