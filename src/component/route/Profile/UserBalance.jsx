@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
 import { CustomLink } from 'component/shared/Adapters'
 
+
 const HeadTableCell = withStyles(theme => ({
   root: {
     border: 'none',
@@ -33,7 +34,10 @@ const BodyTableCell = withStyles(theme => ({
   }
 }))(TableCell)
 
-const RelayerStatus = ({ resigning }) => {
+const RelayerStatus = ({
+  resigning,
+}) => {
+
   const statusIconClass = bol => cx(
     'relayer-status',
     {
@@ -43,13 +47,16 @@ const RelayerStatus = ({ resigning }) => {
     'mr-1',
   )
 
+  const status = resigning ? 'Resigning' : 'Active'
+
   return (
     <Box display="flex" alignItems="center">
       <i className={statusIconClass(resigning)} />
-      <span>{resigning ? 'Resigning' : 'Active'}</span>
+      <span>{status}</span>
     </Box>
   )
 }
+
 
 const RelayerTable = ({ relayers }) => (
   <Paper className="p-1" elevation={0}>

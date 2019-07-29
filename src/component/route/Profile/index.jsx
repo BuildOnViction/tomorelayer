@@ -7,8 +7,12 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core'
-import * as blk from 'service/blockchain'
-import { getAccountTx } from 'service/backend'
+import {
+  getBalance,
+} from 'service/blockchain'
+import {
+  getAccountTx,
+} from 'service/backend'
 import { TabMap } from 'service/helper'
 import UserBalance from './UserBalance'
 import AccountTx from './AccountTx'
@@ -28,8 +32,13 @@ export default class Profile extends React.Component {
 
   async componentDidMount() {
     const address = await this.props.user.wallet.getAddress()
-    const balance = await blk.getBalance(address)
-    const tx = await getAccountTx({ address, type: 'in', page: 1 })
+    const balance = await getBalance(address)
+    const tx = await getAccountTx({
+      address,
+      type: 'in',
+      page: 1,
+    })
+
     this.setState({ address, balance, tx })
   }
 
@@ -39,8 +48,8 @@ export default class Profile extends React.Component {
     const {
       address,
       balance,
-      tx,
       selectedInfo,
+      tx,
     } = this.state
 
     const {

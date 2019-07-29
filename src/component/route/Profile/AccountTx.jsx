@@ -9,7 +9,10 @@ import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
 import { fromWei } from 'service/blockchain'
 import { ExternalLinks } from 'service/backend'
-import { CustomLink, StyledLink } from 'component/shared/Adapters'
+import {
+  CustomLink,
+  StyledLink,
+} from 'component/shared/Adapters'
 
 const TableHeaders = [
   'Date',
@@ -54,7 +57,11 @@ const TxTable = ({ txs }) => (
   <Paper elevation={0}>
     <Grid container direction="column" className="pb-1 pt-1">
       <Grid item container>
-        {TableHeaders.map(h => <LimitedGridItem key={h} className="table-header">{h}</LimitedGridItem>)}
+        {TableHeaders.map(h => (
+          <LimitedGridItem key={h} className="table-header">
+            {h}
+          </LimitedGridItem>
+        ))}
       </Grid>
       <Grid item container direction="column">
         {Object.values(txs).map(row => (
@@ -70,12 +77,12 @@ const TxTable = ({ txs }) => (
             </LimitedGridItem>
             <LimitedGridItem>
               {fromWei(row.value)}
-        </LimitedGridItem>
-        <LimitedGridItem className="outlink">
-          <StyledLink href={ExternalLinks.transaction(row.hash)} underline="none" rel="noopener noreferrer" target="_blank">
-            {row.hash}
-          </StyledLink>
-        </LimitedGridItem>
+            </LimitedGridItem>
+            <LimitedGridItem className="outlink">
+              <StyledLink href={ExternalLinks.transaction(row.hash)} underline="none" rel="noopener noreferrer" target="_blank">
+                {row.hash}
+              </StyledLink>
+            </LimitedGridItem>
           </GridRow>
         ))}
       </Grid>
