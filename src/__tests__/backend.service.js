@@ -162,7 +162,7 @@ describe('Testing Token API', () => {
       method: 'POST',
       headers: {
         Accept: 'application/json; charset=UTF-8',
-        Authorization: process.env.SECRET_HEADER,
+        Authorization: 'Bearer ' + process.env.SECRET_HEADER,
       },
       body: JSON.stringify(tokens[0]),
     })
