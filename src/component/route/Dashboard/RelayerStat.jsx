@@ -66,7 +66,7 @@ export default class RelayerStat extends React.Component {
           </Box>
         </Grid>
         <Grid item container spacing={3}>
-          <Grid item sm={4} container direction="column" spacing={3}>
+          <Grid item container xs={12} sm={4} md={3} spacing={3} direction="column">
             <Grid item>
               <StatCard icon="https://picsum.photos/100/100" stat="1000" helpText="trades" />
             </Grid>
@@ -77,7 +77,7 @@ export default class RelayerStat extends React.Component {
               <StatCard icon="https://picsum.photos/100/100" stat="1000" helpText="trades" />
             </Grid>
           </Grid>
-          <Grid item sm={8}>
+          <Grid item xs={12} sm={8} md={9} className="pr-0">
             <TimeVolumeStat />
           </Grid>
         </Grid>

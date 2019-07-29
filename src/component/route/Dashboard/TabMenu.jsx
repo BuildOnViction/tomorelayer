@@ -20,6 +20,7 @@ const Tabs = withStyles(theme => ({
   indicator: {
     backgroundColor: theme.palette.buttonActive,
     width: '60px !important',
+    height: 4,
     borderRadius: 5,
   }
 }))(MuiTabs)
