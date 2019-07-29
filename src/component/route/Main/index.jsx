@@ -36,7 +36,7 @@ const Main = () => {
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={onTabChange} topics={TOPICS.values} />
         </Grid>
         <Grid item>
-          {TOPICS.getByIndex(tab) === TOPICS.relayers && <RelayerTable />}
+          {tab === TOPICS.relayers && <RelayerTable />}
         </Grid>
       </Grid>
     </Grid>
