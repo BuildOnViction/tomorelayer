@@ -31,6 +31,7 @@ const Tab = withStyles(theme => ({
     padding: 0,
     fontSize: 16,
     justifyContent: 'flex-start',
+    marginRight: 20,
     '&>span': {
       width: 'auto',
     }
