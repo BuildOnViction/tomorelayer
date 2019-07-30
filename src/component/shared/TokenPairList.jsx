@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
 import {
-  Button,
   Box,
   Checkbox,
   Grid,
@@ -10,46 +9,57 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  ListSubheader,
+  Paper,
+  Tab,
+  Tabs,
   TextField,
+  Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import LoadSpinner from 'component/utility/LoadSpinner'
 
 
-
-const FilterButton = withStyles({
+const TabControls = withStyles(theme => ({
   root: {
-    color: '#7473A6',
-    borderRadius: '10px',
-    lineHeight: '1rem',
-    width: '100%',
-    padding: '11px',
-    background: '#222239',
-    minWidth: 0,
+    height: 30,
+    minHeight: 30,
   },
-  contained: {
-    color: '#CFCDE1',
-    padding: '10px',
-    minWidth: 0,
-    borderRadius: '10px',
-    background: '#577EEF',
-    '&:hover': {
-      background: '#3656B4',
-    }
-  }
-})(props => <Button size="small" type="button" {...props} />)
+  indicator: {
+    display: 'none',
+  },
+}))(Tabs)
 
 
-const SearchBar = withStyles({
+const TokenTab = withStyles(theme => ({
+  root: {
+    textTransform: 'none',
+    background: theme.palette.tabInactive,
+    marginRight: 15,
+    minWidth: 32,
+    width: 60,
+    minHeight: 30,
+    height: 30,
+    borderRadius: 10,
+    color: theme.palette.body1,
+    lineHeight: '10px',
+    fontSize: 12,
+    '&.selected': {
+      color: theme.palette.maintitle,
+      background: theme.palette.tabActive,
+    },
+  },
+  selected: {},
+}))(props => <Tab disableRipple {...props} />)
+
+
+const SearchBar = withStyles(theme => ({
   root: {
     '& .MuiOutlinedInput-root': {
-      'background': '#222239',
-      'transform': 'translateY(-2px)'
+      'background': theme.palette.tabInactive,
     }
   },
-})(props => <TextField variant="outlined" fullWidth {...props} />)
+}))(props => <TextField variant="outlined" fullWidth {...props} />)
 
 
 const StyledCheckbox = withStyles({
@@ -60,6 +70,50 @@ const StyledCheckbox = withStyles({
   <Checkbox {...props} />
 ))
 
+const ListHeader = withStyles(theme => ({
+  root: {
+    padding: '20px 5px 5px 5px',
+    borderBottom: `solid 1px ${theme.palette.tabInactive}`
+  }
+}))(Box)
+
+const ListBoxWrapper = withStyles(theme => ({
+  root: {
+    height: 500,
+    overflow: 'scroll',
+    paddingBottom: 20,
+    position: 'relative',
+  }
+}))(Box)
+
+const TokenListItem = withStyles(theme => ({
+  root: {
+    borderRadius: 2,
+    '&:hover': {
+      background: theme.palette.tabInactive + '66',
+    },
+  },
+}))(ListItem)
+
+const SearchOverlay = withStyles(theme => ({
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    textAlign: 'center',
+    zIndex: 1,
+    animation: '.5s linear fadeIn',
+    background: theme.palette.paper + 'F2',
+    '&>img': {
+      position: 'absolute',
+      top: '40%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    }
+  }
+}))(Box)
 
 
 class TokenPairList extends React.Component {
@@ -170,66 +224,79 @@ class TokenPairList extends React.Component {
     const filterFunction = activeFilter !== 'SEARCH' ? this.FILTER_CONTROLS[activeFilter] : this.FILTER_CONTROLS[activeFilter](searchText)
 
     return (
-      <Grid container className="token-select-list" direction="column">
-        <Grid item container justify="space-evenly" alignItems="center" spacing={3} className="pt-1 pl-1 pr-1">
-          {quoteTokens.map(token => (
-            <Grid item key={token.address} md={2}>
-              <FilterButton
-                onClick={this.setFilter(token.symbol)}
-                variant={activeFilter === token.symbol ? 'contained' : 'text'}
-              >
-                {token.symbol}
-              </FilterButton>
-            </Grid>
-          ))}
-          <Grid item xs={12} sm={12} md>
-            <SearchBar
-              name="search-input"
-              type="text"
-              value={this.state.debounceText}
-              placeholder="Search"
-              onChange={this.searchInputChange}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                )
-              }}
-            />
-          </Grid>
-        </Grid>
-        <Box style={{ position: 'relative' }} className="token-list">
-          {isSearching && (
-            <div className="search-overlay">
-              <LoadSpinner />
-            </div>
-          )}
-          <List dense>
-            <ListSubheader className="token-list__subheader pr-2 pl-2">
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Box>Pair</Box>
-                <Box>Volume 7 days ($)</Box>
-              </Box>
-            </ListSubheader>
-            {checkList.filter(filterFunction).map(p => (
-              <ListItem key={p.toString()} className="pr-1 pl-1 pointer token-list__item" onClick={this.handleItemClick(p)}>
-                <ListItemIcon>
-                  <StyledCheckbox
-                    color={p.checked ? 'primary' : 'default'}
-                    checked={p.checked}
-                    disabled={disabled}
-                    inputProps={{
-                      'aria-label': p.toString(),
-                    }}
+      <Paper className="p-1" elevation={0}>
+        <Grid container direction="column">
+          <Grid item container justify="space-evenly" alignItems="center" spacing={3}>
+            <Grid item xs={6}>
+              <TabControls value={activeFilter}>
+                {quoteTokens.map(token => (
+                  <TokenTab
+                    key={token.symbol}
+                    value={token.symbol}
+                    onClick={this.setFilter(token.symbol)}
+                    label={token.symbol}
+                    className={activeFilter === token.symbol ? 'selected' : ''}
                   />
-                </ListItemIcon>
-                <ListItemText primary={p.toString()}/>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Grid>
+                ))}
+                <TokenTab key={'ALL'} value={'ALL'} label={'ALL'} style={{ display: 'none' }} />
+                <TokenTab key={'SEARCH'} value={'SEARCH'} label={'SEARCH'} style={{ display: 'none' }} />
+              </TabControls>
+            </Grid>
+            <Grid item xs={6}>
+              <SearchBar
+                name="search-input"
+                type="text"
+                value={this.state.debounceText}
+                placeholder="Search"
+                onChange={this.searchInputChange}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+          </Grid>
+          <ListHeader display="flex" justifyContent="space-between" alignItems="center">
+            <Box>
+              <Typography variant="body2">
+                Pair
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="body2">
+                Volume 7 days ($)
+              </Typography>
+            </Box>
+          </ListHeader>
+          <ListBoxWrapper>
+            {isSearching && (
+              <SearchOverlay>
+                <LoadSpinner />
+              </SearchOverlay>
+            )}
+            <List dense>
+              {checkList.filter(filterFunction).map(p => (
+                <TokenListItem key={p.toString()} onClick={this.handleItemClick(p)} className="pl-0 pointer">
+                  <ListItemIcon>
+                    <StyledCheckbox
+                      color={p.checked ? 'primary' : 'default'}
+                      checked={p.checked}
+                      disabled={disabled}
+                      inputProps={{
+                        'aria-label': p.toString(),
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={p.toString()}/>
+                </TokenListItem>
+              ))}
+            </List>
+          </ListBoxWrapper>
+        </Grid>
+      </Paper>
     )
   }
 }

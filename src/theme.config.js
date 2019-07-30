@@ -35,6 +35,7 @@ const theme = (config) =>
       evenRowBackground: '#23233C',
       link: '#577eef',
       buttonActive: '#703db5',
+      paper: '#272741',
     },
     overrides: {
       MuiPaper: {
