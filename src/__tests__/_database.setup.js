@@ -15,6 +15,10 @@ const setup = async () => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      owner: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       address: {
         type: Sequelize.STRING,
         allowNull: false,

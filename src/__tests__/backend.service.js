@@ -31,6 +31,7 @@ describe('Testing Contract API', () => {
     await Contract.create({
       name: 'RelayerRegistration',
       address: TEST_CONTRACT_ADDRESS,
+      owner: '0xb33b85945534f3f2def26f3b3613a44448f2ccf9',
       abi,
     })
 
