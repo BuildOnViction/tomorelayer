@@ -5,9 +5,11 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core'
+import cx from 'classnames'
 import { withStyles } from '@material-ui/styles'
+import placeholder from 'asset/image-placeholder.png'
 import { StyledLink } from 'component/shared/Adapters'
-import { TabMap, isEmpty } from 'service/helper'
+import { isEmpty, TabMap } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
@@ -19,6 +21,10 @@ const StyledAvatar = withStyles(theme => ({
     width: 60,
     borderRadius: '50%',
     marginRight: 20,
+    '&.empty-avatar': {
+      border: `solid 2px ${theme.palette.paper}99`,
+      padding: 15,
+    }
   }
 }))(Avatar)
 
@@ -44,12 +50,14 @@ export default class RelayerStat extends React.Component {
     const coinbase = match.params.coinbase
     const relayer = allRelayers[coinbase]
 
+    const avatarClassName = cx({ 'empty-avatar': isEmpty(relayer.logo) })
+
     return (
       <Grid container direction="column" spacing={4}>
         <Grid item>
           <Box display="flex" alignItems="center">
             <Box>
-              <StyledAvatar src={relayer.logo} alt={relayer.name} />
+              <StyledAvatar src={relayer.logo || placeholder} alt={relayer.name} className={avatarClassName} />
             </Box>
             <Box display="flex" flexDirection="column">
               <Box>

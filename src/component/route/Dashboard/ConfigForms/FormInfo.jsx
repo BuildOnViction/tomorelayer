@@ -1,10 +1,33 @@
 import React from 'react'
-import { Avatar, Box, Container, Grid, TextField, Button, Typography } from '@material-ui/core'
+import cx from 'classnames'
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/styles'
 import { connect } from 'redux-zero/react'
-import { compose } from 'service/helper'
+import placeholder from 'asset/image-placeholder.png'
+import { compose, isEmpty } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
+
+
+const StyledAvatar = withStyles(theme => ({
+  root: {
+    width: '100%',
+    height: '100%',
+    '&.empty-avatar': {
+      border: `solid 8px ${theme.palette.paper}CC`,
+      padding: 40,
+    }
+  }
+}))(Avatar)
 
 
 class FormInfo extends React.Component {
@@ -20,6 +43,7 @@ class FormInfo extends React.Component {
 
     const inputDisabled = isSubmitting || relayer.resigning
 
+    const avatarClassName = cx('mr-1', { 'empty-avatar': isEmpty(values.logo) })
 
     return (
       <Container>
@@ -34,7 +58,7 @@ class FormInfo extends React.Component {
           <Grid item container spacing={6} direction="column">
             <Grid item container>
               <Grid item sm={6} md={4} className="pr-2">
-                <Avatar alt={values.name} src={values.logo} className="mr-1" style={{ width: '100%', height: '100%' }} />
+                <StyledAvatar alt={values.name} src={values.logo || placeholder} className={avatarClassName} />
               </Grid>
               <Grid item sm={6} md={8} container direction="column" spacing={2}>
                 <Grid item>
