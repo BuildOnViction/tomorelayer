@@ -1,5 +1,3 @@
-import { IS_DEV } from 'service/constant'
-
 export const BACKEND_URI = ((env) => {
   switch (env) {
     case 'test':
@@ -77,7 +75,7 @@ const logging = async (error) => {
   }
 }
 
-const ApiFix = (api) => (IS_DEV ? api : api.replace('.testnet', process.env.API_FIX))
+const ApiFix = (api) => api.replace('.testnet', process.env.REACT_APP_APIFIX)
 
 const API = {
   auth: '/api/auth',
