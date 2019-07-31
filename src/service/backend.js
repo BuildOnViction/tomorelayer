@@ -77,7 +77,7 @@ const logging = async (error) => {
   }
 }
 
-const ApiFix = (api) => (IS_DEV ? api : api.replace('.testnet', ''))
+const ApiFix = (api) => (IS_DEV ? api : api.replace('.testnet', process.env.API_FIX))
 
 const API = {
   auth: '/api/auth',
