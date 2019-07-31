@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 import { StyledLink } from 'component/shared/Adapters'
-import { TabMap } from 'service/helper'
+import { TabMap, isEmpty } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
@@ -58,9 +58,11 @@ export default class RelayerStat extends React.Component {
                 </Typography>
               </Box>
               <Box>
-                <StyledLink href={relayer.link} rel="noopener noreferrer" target="_blank">
-                  {relayer.link}
-                </StyledLink>
+                {!isEmpty(relayer.link) && (
+                  <StyledLink href={relayer.link} rel="noopener noreferrer" target="_blank">
+                    {relayer.link}
+                  </StyledLink>
+                )}
               </Box>
             </Box>
           </Box>

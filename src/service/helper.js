@@ -8,6 +8,9 @@ export const compose = (...functions) => (lastArg) =>
   functions.filter(isFunction).reduce((returned, currentFunc) => currentFunc(returned), lastArg)
 
 export const isEmpty = (something) => {
+  if (!something) {
+    return true
+  }
   if (something === '') {
     return true
   }

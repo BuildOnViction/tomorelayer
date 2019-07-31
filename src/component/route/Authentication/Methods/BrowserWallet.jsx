@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import metamask from '@vutr/purser-metamask'
 import * as blk from 'service/blockchain'
+import { strEqual } from 'service/helper'
 import WalletSigner from 'service/wallet'
 import { bindLogout } from 'component/shared/actions'
 
@@ -43,7 +44,9 @@ class BrowserWallet extends React.Component {
     const signer = new WalletSigner(this.wallet, provider)
     this.props.onConfirm(signer)
     await metamask.accountChangeHook((wallet) => {
-      if (wallet.selectedAddress !== this.state.address) {
+      const currentAddr = this.state.address
+      const sameAddr = strEqual(wallet.selectedAddress, currentAddr)
+      if (!sameAddr) {
         bindLogout()
       }
     })
