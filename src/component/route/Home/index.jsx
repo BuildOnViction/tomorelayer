@@ -14,7 +14,7 @@ import {
 
 const TOPICS = new TabMap('Relayers', 'Fills', 'Tokens')
 
-const Main = () => {
+const Home = () => {
   const [tab, setTab] = React.useState(TOPICS.relayers)
   const onTabChange = (_, tab) => setTab(TOPICS[tab])
 
@@ -43,4 +43,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default Home

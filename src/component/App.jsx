@@ -14,7 +14,7 @@ import PageHeader from 'component/shared/PageHeader'
 import PageFooter from 'component/shared/PageFooter'
 import Alert from 'component/shared/Alert'
 import Authentication from 'component/route/Authentication'
-import Main from 'component/route/Main'
+import Home from 'component/route/Home'
 import Profile from 'component/route/Profile'
 import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
@@ -94,7 +94,7 @@ class App extends React.Component {
           <Alert />
           <Container className="maincontent" maxWidth="lg">
             <Switch>
-              <Route path={SITE_MAP.Home} exact component={Main} />
+              <Route path={SITE_MAP.Home} exact component={Home} />
               <Route path={SITE_MAP.Authentication} component={Authentication} />
               <Protected
                 path={SITE_MAP.Profile}
