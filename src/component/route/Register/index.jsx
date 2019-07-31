@@ -1,11 +1,16 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import { Box, Container } from '@material-ui/core'
+import {
+  Box,
+  Container,
+  Typography,
+} from '@material-ui/core'
 import { MISC, SITE_MAP } from 'service/constant'
 import * as blk from 'service/blockchain'
 import * as http from 'service/backend'
 import * as _ from 'service/helper'
 import { PushAlert, AlertVariant } from 'service/frontend'
+import LoadSpinner from 'component/utility/LoadSpinner'
 import ProgressBar from './ProgressBar'
 import FormStepOne from './FormStepOne'
 import FormStepTwo from './FormStepTwo'
@@ -65,7 +70,7 @@ export class Register extends React.Component {
     if (!status) {
       return this.props.pushAlert({
         variant: AlertVariant.error,
-        message: details.error,
+        message: details,
       })
     }
 
@@ -85,7 +90,30 @@ export class Register extends React.Component {
     const {
       usedCoinbases,
       usedNames,
+      RelayerContract,
     } = this.props
+
+    if (!userAddress || userAddress === '') {
+      return (
+        <Container maxWidth="sm" className="register-container">
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            <LoadSpinner />
+          </Box>
+        </Container>
+      )
+    }
+
+    if (_.strEqual(RelayerContract.contractOwner, userAddress)) {
+      return (
+        <Container maxWidth="sm" className="register-container">
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            <Typography variant="body2" className="text-center">
+              Contract Owner cannot create a relayer
+            </Typography>
+          </Box>
+        </Container>
+      )
+    }
 
     return (
       <Container maxWidth="sm" className="register-container">

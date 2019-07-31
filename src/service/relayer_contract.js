@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 export default class RelayerContract {
   contractWithSigner = undefined
   wallet = undefined
+  contractOwner = undefined
 
   constructor(walletSigner, contractMeta) {
     if (!walletSigner || !contractMeta) {
@@ -10,6 +11,7 @@ export default class RelayerContract {
     }
     this.contractWithSigner = new ethers.Contract(contractMeta.address, contractMeta.abi, walletSigner)
     this.wallet = walletSigner
+    this.contractOwner = contractMeta.owner
     return this
   }
 

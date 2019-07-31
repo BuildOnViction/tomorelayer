@@ -66,7 +66,7 @@ class App extends React.Component {
       relayers.filter(r => _.strEqual(r.owner, userAddress)).forEach(r => {
         userRelayers[r.coinbase] = r
       })
-      this.setState({ userRelayers }, () => finishUpdateUserRelayers())
+      this.setState({ userRelayers }, finishUpdateUserRelayers)
     }
 
     if (!RelayerContract && user.wallet && contract) {
