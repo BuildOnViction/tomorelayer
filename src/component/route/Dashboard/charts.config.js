@@ -1,11 +1,11 @@
-export const VOLUME_CHART = (data, fills) => ({
+export const VOLUME_CHART = (data, bgFill, lineFill) => ({
   type: 'line',
   data: {
     labels: data.map((t) => t.label),
     datasets: [
       {
-        backgroundColor: fills,
-        borderColor: '#707070',
+        backgroundColor: bgFill,
+        borderColor: lineFill,
         borderWidth: 2,
         data: data.map((t) => t.value),
         fill: 'start',

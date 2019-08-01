@@ -92,29 +92,23 @@ export default class TimeVolumeStat extends React.Component {
   }
 
   componentDidMount() {
-    const mockdata = [
-      { label: 'abc', value: 1000 },
-      { label: 'abc', value: 400 },
-      { label: 'abc', value: 1900 },
-      { label: 'abc', value: 1200 },
-      { label: 'abc', value: 323 },
-      { label: 'abc', value: 1250 },
-      { label: 'abc', value: 2799 },
-    ]
+    const mockdata = new Array(80).fill().map((_, idx) => ({
+      label: idx % 5 === 0 ? 'abc' : '',
+      value: Math.random() * 2500 + 500,
+    }))
 
     const ctx = document.getElementById('volume-chart').getContext('2d')
 
     // NOTE: refer to http://victorblog.com/html5-canvas-gradient-creator/
-    const grd = ctx.createLinearGradient(174.000, 300.000, 126.000, 0.200)
+    const bgFill = ctx.createLinearGradient(150.000, 200.000, 150.000, 0.000)
+    bgFill.addColorStop(0.000, 'rgba(21, 12, 123, 0.400)')
+    bgFill.addColorStop(1.000, 'rgba(72, 121, 217, 0.300)')
 
-    // Add colors
-    grd.addColorStop(0.000, 'rgba(24, 16, 58, 0.200)')
-    grd.addColorStop(1.000, 'rgba(0, 22, 135, 0.200)')
+    const lineFill = ctx.createLinearGradient(150.000, 200.000, 150.000, 0.000)
+    lineFill.addColorStop(0.000, 'rgba(27, 0, 109, 0.0500)')
+    lineFill.addColorStop(1.000, 'rgba(0, 199, 255, 0.800)')
 
-    // Fill with gradient
-    ctx.fillStyle = grd
-    ctx.fillRect(0, 0, 300.000, 300.000)
-    this.VOLUME_CHART = new Chart(ctx, volChartCfg(mockdata, grd))
+    this.VOLUME_CHART = new Chart(ctx, volChartCfg(mockdata, bgFill, lineFill))
   }
 
   changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })
@@ -142,7 +136,7 @@ export default class TimeVolumeStat extends React.Component {
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ height: 160 }}>
+          <Grid item sm={12} style={{ height: 200 }}>
             <canvas id="volume-chart" style={{ height: '100%', width: '100%' }} />
           </Grid>
         </Grid>

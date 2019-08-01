@@ -22,8 +22,9 @@ const StyledAvatar = withStyles(theme => ({
     borderRadius: '50%',
     marginRight: 20,
     '&.empty-avatar': {
-      border: `solid 2px ${theme.palette.paper}99`,
-      padding: 15,
+      border: `solid 3px ${theme.palette.paper}`,
+      padding: 20,
+      background: `${theme.palette.paper}80`
     }
   }
 }))(Avatar)

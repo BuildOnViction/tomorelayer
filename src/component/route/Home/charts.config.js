@@ -1,12 +1,12 @@
-export const VOLUME_CHART = (data, fills) => ({
+export const VOLUME_CHART = (data, backgroundFill, lineFill) => ({
   type: 'line',
   data: {
     labels: data.map((t) => t.label),
     datasets: [
       {
-        backgroundColor: fills,
-        borderColor: '#707070',
-        borderWidth: 2,
+        backgroundColor: backgroundFill,
+        borderColor: lineFill,
+        borderWidth: 1.5,
         data: data.map((t) => t.value),
         fill: 'start',
         steppedLine: false,
@@ -58,6 +58,8 @@ export const VOLUME_CHART = (data, fills) => ({
           ticks: {
             fontColor: '#7473A6',
             padding: 20,
+            stepSize: 10,
+            maxRotation: 0,
           },
         },
       ],

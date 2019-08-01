@@ -41,6 +41,15 @@ const StyledMenuItem = withStyles(theme => ({
   }
 }))(MenuItem)
 
+const SpecialStyledMenuItem = withStyles(theme => ({
+  root: {
+    borderRadius: 0,
+    margin: 0,
+    background: theme.palette.tabInactive,
+    color: theme.palette.link,
+  }
+}))(MenuItem)
+
 
 export const UserMenu = () => {
 
@@ -115,9 +124,9 @@ export const RelayerMenu = ({ relayers }) => {
               {r.name}
             </StyledMenuItem>
           ))}
-          <StyledMenuItem component={AdapterLink} to="/register">
+          <SpecialStyledMenuItem component={AdapterLink} to="/register">
             Create new relayer
-          </StyledMenuItem>
+          </SpecialStyledMenuItem>
         </DropDownMenu>
       </ClickAwayListener>
     </div>

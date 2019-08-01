@@ -74,18 +74,11 @@ export default class TokenChart extends React.Component {
 
     const ctx = document.getElementById('token-chart').getContext('2d')
 
-    let grd
-
     // NOTE: refer to http://victorblog.com/html5-canvas-gradient-creator/
-    grd = ctx.createLinearGradient(0.000, 150.000, 300.000, 150.000)
-
-    // Add colors
+    const grd = ctx.createLinearGradient(0.000, 150.000, 300.000, 150.000)
     grd.addColorStop(0.000, 'rgba(1, 30, 173, 1.000)')
-    grd.addColorStop(1.000, 'rgba(94, 166, 255, 1.000)')
+    grd.addColorStop(1.000, 'rgba(94, 206, 245, 1.000)')
 
-    // Fill with gradient
-    ctx.fillStyle = grd
-    ctx.fillRect(0, 0, 300.000, 300.000)
     this.TOKEN_CHART = new Chart(ctx, tokChartCfg(mockdata, grd, ChartDataLabels))
   }
 
@@ -108,7 +101,7 @@ export default class TokenChart extends React.Component {
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ height: 160 }}>
+          <Grid item sm={12} style={{ height: 200 }}>
             <canvas id="token-chart" style={{ height: '100%', width: '100%' }} />
           </Grid>
         </Grid>
