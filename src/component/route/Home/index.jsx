@@ -1,27 +1,35 @@
 import React from 'react'
+import { connect } from 'redux-zero/react'
 import {
   Grid,
 } from '@material-ui/core'
-import { TabMap } from 'service/helper'
+import { TabMap, round } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
 import TokenChart from './TokenChart'
 import RelayerTable from './RelayerTable'
-import {
-  statcard_mock,
-} from './mock.data'
+import networkFeeIcon from 'asset/icon-network-fees.png'
+import networkVolIcon from 'asset/icon-network-volume.png'
+import tradeIcon from 'asset/icon-trades.png'
+import tomoPriceIcon from 'asset/icon-tomo-price.png'
+
 
 const TOPICS = new TabMap('Relayers', 'Fills', 'Tokens')
 
-const Home = () => {
+const Home = ({
+  network,
+}) => {
   const [tab, setTab] = React.useState(TOPICS.relayers)
   const onTabChange = (_, tab) => setTab(TOPICS[tab])
 
   return (
     <Grid container spacing={8}>
       <Grid item container justify="space-between" alignItems="center" spacing={4}>
-        {statcard_mock.map(t => <StatCard key={t.helpText} {...t} />)}
+        <StatCard icon={networkVolIcon} stat={`$${round(network.tomoprice, 2)}`} helpText="Network Volume" />
+        <StatCard icon={networkFeeIcon} stat={`$${round(network.tomoprice, 2)}`} helpText="Network Fees" />
+        <StatCard icon={tradeIcon} stat={`$${round(network.tomoprice, 2)}`} helpText="Trades(24h)" />
+        <StatCard icon={tomoPriceIcon} stat={`$${round(network.tomoprice, 2)}`} helpText="Tomo Price" />
       </Grid>
       <Grid item container spacing={4}>
         <Grid item sm={12} md={7}>
@@ -43,4 +51,12 @@ const Home = () => {
   )
 }
 
-export default Home
+const mapProps = state => ({
+  network: {
+    tomoprice: state.network_info.tomousd
+  }
+})
+
+const connected = connect(mapProps)
+
+export default connected(Home)
