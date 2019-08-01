@@ -24,6 +24,7 @@ export const UNLOCK_WALLET_METHODS = {
 
 export const MISC = {
   MinimumDeposit: 25000,
+  AuthMessage: process.env.REACT_APP_SIGNATURE_MESSAGE,
 }
 
 export const I18N_LANGS = [{ value: 'en', label: 'EN' }, { value: 'vn', label: 'VN' }, { value: 'jp', label: 'JP' }]

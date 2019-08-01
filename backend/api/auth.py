@@ -1,8 +1,10 @@
 import json
+from logzero import logger
 from os import getenv
 from util.jwt_encoder import encode_payload
 from util.decorator import deprecated
-from exception import InvalidValueException, MissingArgumentException
+from exception import InvalidValueException, MissingArgumentException, UserAuthorizationException
+from settings import SIGNATURE_MSG
 from .base import BaseHandler
 from .socket import SocketClient
 
@@ -10,18 +12,26 @@ from .socket import SocketClient
 class AuthHandler(BaseHandler):
 
     def get(self):
+        from eth_account.messages import defunct_hash_message
+
         user_address = self.get_argument('address', None)
+        signature = self.get_argument('signature', None)
 
-        if not user_address:
-            raise MissingArgumentException('Missing user address')
+        if not user_address or not signature:
+            raise MissingArgumentException('Missing required argument(s)')
 
-        try:
-            checksum_addr = self.application.blockchain.web3.toChecksumAddress(user_address.lower())
-            self.application.blockchain.web3.eth.getBalance(checksum_addr)
-            token, expiry = encode_payload({'address': user_address})
-            return self.json_response({'token': token, 'exp': expiry })
-        except Exception as err:
-            raise InvalidValueException('address is not valid')
+        web3 = self.application.blockchain.web3
+        hased_message = defunct_hash_message(text=SIGNATURE_MSG)
+        signing_address = web3.eth.account.recoverHash(hased_message, signature=signature)
+
+        if signing_address.lower() != user_address.lower():
+            logger.debug('Signing_addr: %s' % signing_address)
+            logger.debug('Provided_addr: %s' % user_address)
+            raise UserAuthorizationException('User Address not matching Signature Address')
+
+        token, expiry = encode_payload({'address': user_address})
+        return self.json_response({'token': token, 'exp': expiry })
+
 
     @deprecated
     def post(self):

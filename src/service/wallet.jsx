@@ -20,7 +20,7 @@ export default class WalletSigner extends Signer {
   }
 
   async signMessage(message) {
-    const str = await this._wallet.signMessage(message)
+    const str = await this._wallet.signMessage({ message })
     return str
   }
 

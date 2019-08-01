@@ -105,9 +105,9 @@ const proxiedAPI = new Proxy(API, {
 })
 
 /* API ENDPOINTS THAT ACCEPT REQUESTS FROM ORIGIN */
-export const getAuthenticated = async (address) =>
+export const getAuthenticated = async (address, signature) =>
   HttpClient()
-    .get(`${proxiedAPI.auth}?address=${address}`)
+    .get(`${proxiedAPI.auth}?address=${address}&signature=${signature}`)
     .then(getPayload)
     .catch(logging)
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
-import { UNLOCK_WALLET_METHODS } from 'service/constant'
+import { UNLOCK_WALLET_METHODS, MISC } from 'service/constant'
 import { compose } from 'service/helper'
 import { getAuthenticated } from 'service/backend'
 import {
@@ -60,7 +60,8 @@ class Authentication extends React.Component {
 
   confirmWallet = async wallet => {
     const address = await wallet.getAddress()
-    const { error } = await getAuthenticated(address)
+    const signed = await wallet.signMessage(MISC.AuthMessage)
+    const { error } = await getAuthenticated(address, signed)
 
     if (error) {
       return this.props.PushAlert({

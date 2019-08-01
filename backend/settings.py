@@ -13,6 +13,9 @@ logger.warning('APPLICATION-STAGE: %s', '={}='.format(env_path))
 
 JWT_SECRET = getenv('JWT_SECRET')
 
+# SIGNATURE MESSAGE
+SIGNATURE_MSG = getenv('REACT_APP_SIGNATURE_MESSAGE')
+
 # SETUP ASYNC ORM
 database = PooledPostgresqlExtDatabase(
     getenv('DB_NAME'),
