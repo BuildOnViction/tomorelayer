@@ -18,7 +18,9 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
+import InfoIcon from '@material-ui/icons/Info'
 import {
+  // ExternalLinks,
   getTokenInfo,
   createNewTokens,
 } from 'service/backend'
@@ -30,6 +32,7 @@ import {
   inArray,
   isEmpty,
 } from 'service/helper'
+// import { StyledLink } from 'component/shared/Adapters'
 import LoadSpinner from 'component/utility/LoadSpinner'
 
 const RefreshButton = withStyles(theme => ({
@@ -108,14 +111,21 @@ const ListBoxWrapper = withStyles(theme => ({
     overflow: 'scroll',
     paddingBottom: 10,
     position: 'relative',
+    borderBottom: `solid 1px ${theme.palette.tabInactive}`
   }
 }))(Box)
 
 const TokenListItem = withStyles(theme => ({
   root: {
     borderRadius: 2,
+    marginBottom: 0,
     '&:hover': {
       background: theme.palette.tabInactive + '66',
+      '& .info-icon': {
+        fontSize: 18,
+        color: theme.palette.link,
+        transition: 'font-size .5s, color .5s',
+      }
     },
   },
 }))(ListItem)
@@ -139,6 +149,14 @@ const SearchOverlay = withStyles(theme => ({
     }
   }
 }))(Box)
+
+const PairInfoIcon = withStyles(theme => ({
+  root: {
+    color: `${theme.palette.link}26`,
+    fontSize: 14,
+    transition: 'font-size .5s, color .5s',
+  }
+}))(InfoIcon)
 
 
 class TokenPairList extends React.Component {
@@ -345,18 +363,20 @@ class TokenPairList extends React.Component {
             )}
             <List dense>
               {checkList.filter(filterFunction).map(p => (
-                <TokenListItem key={p.toString()} onClick={this.handleItemClick(p)} className="pl-0 pointer">
+                <TokenListItem key={p.toString()} className="pl-0 pointer">
                   <ListItemIcon>
                     <StyledCheckbox
                       color={p.checked ? 'primary' : 'default'}
                       checked={p.checked}
                       disabled={disabled}
+                      onClick={this.handleItemClick(p)}
                       inputProps={{
                         'aria-label': p.toString(),
                       }}
                     />
                   </ListItemIcon>
-                  <ListItemText primary={p.toString()}/>
+                  <ListItemText primary={p.toString()} />
+                  <PairInfoIcon className="info-icon" />
                 </TokenListItem>
               ))}
             </List>
@@ -411,6 +431,7 @@ export const mapProps = state => {
       to: toToken,
       toString: () => `${fromToken.symbol}/${toToken.symbol}`,
       checked: false,
+      toAddrString: () => `${fromToken.address}-${toToken.address}`,
     }))
   })
 
@@ -426,10 +447,10 @@ export const mapProps = state => {
   })
 
   return {
-    Tokens: Tokens.map(t => t.address.toLowerCase()),
     pairs,
     pairMapping,
     quoteTokens: Tokens.filter(t => t.is_major),
+    Tokens: Tokens.map(t => t.address.toLowerCase()),
     TomoXContract: state.blk.TomoXContract,
   }
 }

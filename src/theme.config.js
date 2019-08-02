@@ -59,6 +59,7 @@ const theme = (config) =>
       link: '#577eef',
       buttonActive: '#703db5',
       paper: '#272741',
+      document: '#1D1E31',
     },
     overrides: {
       MuiPaper: {
