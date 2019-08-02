@@ -90,6 +90,10 @@ const API = {
       const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'
       return ApiFix(`${baseEndpoint}/${address}?page=${page}&limit=10&tx_type=${type}`)
     },
+    getTokenInfo: (tokenAddress) => {
+      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/tokens'
+      return ApiFix(`${baseEndpoint}/${tokenAddress}`)
+    },
   },
 }
 
@@ -153,6 +157,12 @@ export const getTokens = async () =>
     .then(getPayload)
     .catch(logging)
 
+export const createNewTokens = async (payload) =>
+  HttpClient()
+    .post(proxiedAPI.token, payload)
+    .then(getPayload)
+    .catch(logging)
+
 // EXTERNAL API
 export const getTomoPrice = async () =>
   fetch(proxiedAPI.external.tomoprice)
@@ -164,7 +174,13 @@ export const getAccountTx = async (params) =>
     .then(genericHandler)
     .catch(logging)
 
+export const getTokenInfo = async (tokenAddress) =>
+  fetch(proxiedAPI.external.getTokenInfo(tokenAddress))
+    .then(genericHandler)
+    .catch(logging)
+
 // STATIC EXTERNAL LINK
 export const ExternalLinks = {
-  transaction: (tx) => `${ApiFix('https://scan.testnet.tomochain.com/txs')}/${tx}`,
+  transaction: (tx) => ApiFix(`https://scan.testnet.tomochain.com/txs/${tx}`),
+  token: (token) => ApiFix(`https://scan.testnet.tomochain.com/tokens/${token}`),
 }

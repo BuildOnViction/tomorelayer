@@ -7,6 +7,7 @@ import { SITE_MAP, IS_DEV } from 'service/constant'
 import { PushAlert, AlertVariant } from 'service/frontend'
 import * as _ from 'service/helper'
 import RelayerContractClass from 'service/relayer_contract'
+import TomoXContractClass from 'service/tomox_contract'
 import { FetchPublic } from './shared/actions'
 import { Protected } from 'component/utility'
 
@@ -48,6 +49,7 @@ class App extends React.Component {
     const {
       RelayerContract,
       contract,
+      tomoxContract,
       user,
       relayers,
       shouldUpdateUserRelayers,
@@ -70,8 +72,12 @@ class App extends React.Component {
     }
 
     if (!RelayerContract && user.wallet && contract) {
-      const contractInstance = new RelayerContractClass(user.wallet, contract)
-      initRelayerContract(contractInstance)
+      const relayerContractInstance = new RelayerContractClass(user.wallet, contract)
+      const tomoxContractInstance = new TomoXContractClass(user.wallet, tomoxContract)
+      initRelayerContract({
+        RelayerContract: relayerContractInstance,
+        TomoXContract: tomoxContractInstance,
+      })
     }
   }
 
@@ -132,7 +138,8 @@ class App extends React.Component {
 const mapProps = state => ({
   relayers: state.Relayers,
   user: state.user,
-  contract: state.Contracts.find(r => r.name === 'RelayerRegistration' && !r.obsolete),
+  contract: state.Contracts.find(r => r.name === 'RelayerRegistration'),
+  tomoxContract: state.Contracts.find(r => r.name === 'TOMOXListing'),
   shouldUpdateUserRelayers: state.shouldUpdateUserRelayers,
   RelayerContract: state.blk.RelayerContract,
 })
@@ -141,10 +148,11 @@ const actions = {
   FetchPublic,
   PushAlert,
   finishUpdateUserRelayers: () => ({ shouldUpdateUserRelayers: false }),
-  initRelayerContract: (state, RelayerContract) => ({
+  initRelayerContract: (state, { RelayerContract, TomoXContract }) => ({
     blk: {
       ...state.blk,
       RelayerContract,
+      TomoXContract,
     }
   })
 }

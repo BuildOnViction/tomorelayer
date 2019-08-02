@@ -48,6 +48,28 @@ export const ThrowOn = (shit, message) => {
   }
 }
 
+export const inArray = (...args) => {
+  if (args.length === 1) {
+    const item = args[0]
+    return (someArray) => someArray.indexOf(item) >= 0
+  }
+
+  if (args.length >= 2) {
+    const [item, someArray] = args
+    return someArray.indexOf(item) >= 0
+  }
+}
+
+export const onlyKeys = (...keys) => (obj) => {
+  const result = {}
+
+  keys.forEach((key) => {
+    result[key] = obj[key]
+  })
+
+  return result
+}
+
 export class TabMap {
   constructor(...args) {
     if (args.length < 2 || args.some((v) => typeof v !== 'string')) {

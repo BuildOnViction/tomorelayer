@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'redux-zero/react'
 import {
   Box,
+  Button,
   Checkbox,
   Grid,
   InputAdornment,
@@ -17,8 +18,32 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
+import {
+  getTokenInfo,
+  createNewTokens,
+} from 'service/backend'
+import {
+  AlertVariant,
+  PushAlert,
+} from 'service/frontend'
+import {
+  inArray,
+  isEmpty,
+} from 'service/helper'
 import LoadSpinner from 'component/utility/LoadSpinner'
 
+const RefreshButton = withStyles(theme => ({
+  root: {
+    fontSize: 14,
+    color: theme.palette.link,
+    textTransform: 'none',
+    padding: '0px 10px',
+    '&:hover': {
+      background: 'transparent',
+      textDecoration: 'underline',
+    },
+  }
+}))(props => <Button {...props} variant="text" />)
 
 const TabControls = withStyles(theme => ({
   root: {
@@ -81,7 +106,7 @@ const ListBoxWrapper = withStyles(theme => ({
   root: {
     height: 500,
     overflow: 'scroll',
-    paddingBottom: 20,
+    paddingBottom: 10,
     position: 'relative',
   }
 }))(Box)
@@ -205,6 +230,47 @@ class TokenPairList extends React.Component {
     return result
   }
 
+  queryTokens = async () => {
+    const {
+      saveNewTokens,
+      Tokens,
+      TomoXContract,
+    } = this.props
+
+    this.setState({ isSearching: true })
+
+    const contractTokens = await TomoXContract.tokens()
+    const missingTokens = contractTokens.filter(t => !inArray(t.toLowerCase(), Tokens))
+
+    if (isEmpty(missingTokens)) {
+      this.setState({ isSearching: false })
+      return this.props.PushAlert({
+        variant: AlertVariant.info,
+        message: 'No new tokens to be added'
+      })
+    }
+
+    const result = await Promise.all(missingTokens.map(getTokenInfo))
+    const payload = result.map(token => ({
+      address: token.hash.toLowerCase(),
+      name: token.name,
+      symbol: token.symbol,
+      total_supply: token.totalSupply,
+    }))
+    const newTokens = await createNewTokens(payload)
+
+    this.setState({ isSearching: false })
+
+    if (newTokens.error) {
+      return this.props.PushAlert({
+        variant: AlertVariant.error,
+        message: newTokens.error.detail,
+      })
+    }
+
+    return saveNewTokens(newTokens)
+  }
+
   render() {
     const {
       quoteTokens,
@@ -295,6 +361,26 @@ class TokenPairList extends React.Component {
               ))}
             </List>
           </ListBoxWrapper>
+          <Box display="flex" justifyContent="flex-end" alignItems="center" style={{ transform: 'translateY(9px)' }}>
+            {isSearching ? (
+              <Box>
+                refreshing...
+              </Box>
+            ): (
+              <React.Fragment>
+                <Box>
+                  <Typography variant="body2" className="m-0">
+                    Not seeing your tokens?
+                  </Typography>
+                </Box>
+                <Box>
+                  <RefreshButton onClick={this.queryTokens} disabled={isSearching}>
+                    Refresh now
+                  </RefreshButton>
+                </Box>
+              </React.Fragment>
+            )}
+          </Box>
         </Grid>
       </Paper>
     )
@@ -340,12 +426,24 @@ export const mapProps = state => {
   })
 
   return {
+    Tokens: Tokens.map(t => t.address.toLowerCase()),
     pairs,
     pairMapping,
     quoteTokens: Tokens.filter(t => t.is_major),
+    TomoXContract: state.blk.TomoXContract,
   }
 }
 
-const storeConnect = connect(mapProps)
+const actions = store => ({
+  saveNewTokens: (state, tokens) => ({
+    Tokens: [
+      ...state.Tokens,
+      ...tokens,
+    ]
+  }),
+  PushAlert,
+})
+
+const storeConnect = connect(mapProps, actions)
 
 export default storeConnect(TokenPairList)
