@@ -12,7 +12,7 @@ import { initialState } from 'service/store'
 import * as http from 'service/backend'
 import FormInfo from 'component/route/Dashboard/ConfigForms/FormInfo'
 import Alert from 'component/shared/Alert'
-
+import { TestApp } from './_mui.setup'
 
 global.document.createRange = () => ({
   setStart: () => {},
@@ -39,25 +39,20 @@ describe('Test Relayer-Config Info Form', () => {
       logo: 'http://dummy.dev/dummy.img',
     }
 
-    const store = createStore({
-      ...initialState,
+    const store = {
       Relayers: [ActiveRelayer],
-    })
+    }
 
-    const ParentComponent = connect(
-      state => ({ relayers: state.Relayers })
-    )(({ relayers }) => (
+    const App = ({ relayers }) => (
       <div>
         <Alert />
         <FormInfo relayer={relayers.find(r => r.id === ActiveRelayer.id)} />
       </div>
-    ))
-
-    const R = render(
-      <Provider store={store}>
-        <ParentComponent />
-      </Provider>
     )
+
+    const R = render((
+      <TestApp testStore={store} component={App} inject={state => ({ relayers: state.Relayers })} />
+    ))
 
     const nameInput = R.getByDisplayValue(new RegExp(ActiveRelayer.name), 'i')
     const linkInput = R.getByDisplayValue(new RegExp(ActiveRelayer.link), 'i')
