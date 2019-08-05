@@ -100,7 +100,7 @@ class App extends React.Component {
           <Alert />
           <Container className="maincontent" maxWidth="lg">
             <Switch>
-              <Route path={SITE_MAP.Home} exact component={Home} />
+              <Protected path={SITE_MAP.Home} exact component={Home} redirect={SITE_MAP.Authentication} condition={false} />
               <Route path={SITE_MAP.Authentication} component={Authentication} />
               <Protected
                 path={SITE_MAP.Profile}
