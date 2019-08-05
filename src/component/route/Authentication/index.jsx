@@ -71,7 +71,16 @@ class Authentication extends React.Component {
     }
 
     this.props.saveWallet(wallet)
-    this.props.history.push('/')
+    const findFirstRelayer = this.props.relayers.find(r => r.owner === address)
+
+    if (findFirstRelayer) {
+      setTimeout(() => {
+        const path = `/dashboard/${findFirstRelayer.coinbase}`
+        return this.props.history.push(path)
+      })
+    }
+    return this.props.history.push('/login')
+
   }
 
   render () {

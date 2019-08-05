@@ -89,6 +89,7 @@ class App extends React.Component {
 
     const {
       user,
+      relayers,
     } = this.props
 
     const userLoggedIn = Boolean(user.wallet)
@@ -100,8 +101,14 @@ class App extends React.Component {
           <Alert />
           <Container className="maincontent" maxWidth="lg">
             <Switch>
-              <Protected path={SITE_MAP.Home} exact component={Home} redirect={SITE_MAP.Authentication} condition={false} />
-              <Route path={SITE_MAP.Authentication} component={Authentication} />
+              <Protected
+                path={SITE_MAP.Home}
+                exact
+                component={Home}
+                redirect={SITE_MAP.Authentication}
+                condition={false}
+              />
+              <Route path={SITE_MAP.Authentication} component={props => <Authentication {...props} relayers={relayers} />} />
               <Protected
                 path={SITE_MAP.Profile}
                 component={props => <Profile relayers={userRelayers} user={user} {...props} />}
