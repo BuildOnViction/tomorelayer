@@ -104,6 +104,7 @@ class TokenPairList extends React.Component {
       pairMapping,
       value,
       disabled,
+      viewOnly,
     } = this.props
 
     const checkList = this.makeCheckList(pairs, pairMapping, value)
@@ -115,18 +116,18 @@ class TokenPairList extends React.Component {
     return (
       <Paper elevation={0}>
         <Grid container direction="column">
-          {!disabled && <FilterControls onChange={this.setFilter} quoteTokens={quoteTokens} />}
+          {!viewOnly && <FilterControls onChange={this.setFilter} quoteTokens={quoteTokens} />}
           <PairList>
             {checkList.filter(filterFunction).map(p => (
               <PairItem
                 key={p.toAddrString()}
                 pair={p}
-                disabled={disabled}
+                disabled={viewOnly || disabled}
                 onChange={this.onItemChange}
               />
             ))}
           </PairList>
-          {!disabled && <RefreshControl onRefresh={this.queryTokens} disabled={isRefreshing} />}
+          {!viewOnly && <RefreshControl onRefresh={this.queryTokens} disabled={isRefreshing || disabled} />}
         </Grid>
       </Paper>
     )

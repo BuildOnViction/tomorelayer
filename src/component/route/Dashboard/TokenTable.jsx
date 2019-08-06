@@ -49,11 +49,16 @@ const TokenTable = ({
             <Grid item sm={3} container justify="center">{item.name}</Grid>
             <Grid item sm={3} container justify="center">{item.symbol}</Grid>
             <Grid item sm={3} container justify="center">
-              <StyledLink href={ExternalLinks.token(item.address)} rel="noopener noreferrer" target="_blank" className="m-0" style={{ lineHeight: -1 }}>
+              <StyledLink
+                href={ExternalLinks.token(item.address)}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="m-0"
+                style={{ lineHeight: '19px' }}
+              >
                 {item.address}
               </StyledLink>
             </Grid>
-            <Grid item sm={3} container justify="center">{item.name}</Grid>
           </Grid>
         </StyledPaper>
       </Grid>

@@ -29,8 +29,6 @@ const FormTrade = ({
     setFieldValue('to_tokens', pairs.map(p => p.to.address))
   }
 
-  const disableForm = relayer.resigning || isSubmitting
-
   return (
     <Container>
       <form onSubmit={handleSubmit}>
@@ -51,7 +49,7 @@ const FormTrade = ({
                 min: 0.01,
               }}
               fullWidth
-              disabled={disableForm}
+              disabled={isSubmitting}
               InputProps={{
                 endAdornment: '%'
               }}
@@ -67,12 +65,13 @@ const FormTrade = ({
               <TokenPairList
                 value={values}
                 onChange={setPairsValues}
-                disabled={disableForm}
+                disabled={isSubmitting}
+                viewOnly={relayer.resigning}
               />
             </Grid>
           </Grid>
           <Grid item container justify="center">
-            <Button color="primary" variant="contained" type="submit" disabled={disableForm} data-testid="save-button">
+            <Button color="primary" variant="contained" type="submit" disabled={isSubmitting} data-testid="save-button">
               Save
             </Button>
           </Grid>

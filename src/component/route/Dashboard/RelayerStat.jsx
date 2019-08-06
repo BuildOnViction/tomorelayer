@@ -61,7 +61,6 @@ class RelayerStat extends React.Component {
 
     const unifiedTokens = _.unique([...relayer.from_tokens, ...relayer.to_tokens])
     const listedTokens = AvailableTokens.filter(t => unifiedTokens.indexOf(t.address) >= 0)
-                                        .map(_.onlyKeys('name', 'symbol', 'address'))
 
     const relayerStat = {
       tomousd: `$${_.round(stats.tomousd, 2)}`,
@@ -120,9 +119,9 @@ class RelayerStat extends React.Component {
             <TimeVolumeStat />
           </Grid>
         </Grid>
-        <Grid item className="mt-1" style={{ minHeight: 400 }}>
+        <Grid item className="mt-2" style={{ minHeight: 400 }}>
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
-          <Box className="mt-2">
+          <Box className="mt-0">
             {tab === TOPICS.orders && <OrderTable />}
             {tab === TOPICS.tokens && <TokenTable relayer={relayer} tokens={listedTokens} />}
           </Box>

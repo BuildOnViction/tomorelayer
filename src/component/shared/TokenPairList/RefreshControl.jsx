@@ -2,9 +2,18 @@ import React from 'react'
 import {
   Box,
   Button,
+  CircularProgress,
   Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+
+const Spinner = withStyles({
+  root: {
+    width: '17px !important',
+    height: '17px !important',
+    marginRight: 10,
+  }
+})(CircularProgress)
 
 const RefreshButton = withStyles(theme => ({
   root: {
@@ -34,7 +43,7 @@ const RefreshControl = ({
   <RefreshControlContainer display="flex" justifyContent="flex-end" alignItems="center">
     {disabled ? (
       <Box>
-        refreshing...
+        <Spinner />
       </Box>
     ): (
       <React.Fragment>
