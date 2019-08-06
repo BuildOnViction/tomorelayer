@@ -1,7 +1,7 @@
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { connect } from 'redux-zero/react'
-import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { Container } from '@material-ui/core'
 import { SITE_MAP, IS_DEV } from 'service/constant'
 import { PushAlert, AlertVariant } from 'service/frontend'
@@ -108,7 +108,12 @@ class App extends React.Component {
                 redirect={SITE_MAP.Authentication}
                 condition={false}
               />
-              <Route path={SITE_MAP.Authentication} component={props => <Authentication {...props} relayers={relayers} />} />
+              <Protected
+                path={SITE_MAP.Authentication}
+                component={props => <Authentication {...props} relayers={relayers} />}
+                condition={!userLoggedIn}
+                redirect={SITE_MAP.Logout}
+              />
               <Protected
                 path={SITE_MAP.Profile}
                 component={props => <Profile relayers={userRelayers} user={user} {...props} />}

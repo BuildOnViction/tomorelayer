@@ -41,9 +41,10 @@ class PageHeader extends React.Component {
         <Container maxWidth="lg" className="p-1">
           <Grid container direction="row" justify="space-between" alignItems="center">
             <Grid item sm={3} md={2}>
-              <Link display="block" component={AdapterLink} to="/">
-                <img alt="logo" src={logo} height="30px" />
-              </Link>
+              <img alt="logo" src={logo} height="30px" />
+              {/* <Link display="block" component={AdapterLink} to="/">
+                  <img alt="logo" src={logo} height="30px" />
+                  </Link> */}
             </Grid>
             <Grid item sm={false} md={6}>
               <TextField
