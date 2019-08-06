@@ -26,20 +26,9 @@ const NotExistRelayer = () => (
   </div>
 )
 
-const ConfigBoard = ({ match, relayers }) => {
+const ConfigBoard = ({ relayer }) => {
   const [formstep, setFormstep] = React.useState(SIDE_MENU_ITEMS.info)
   const changeForm = step => () => setFormstep(step)
-  const nullRelayer = {
-    coinbase: undefined,
-    owner: undefined,
-    trade_fee: undefined,
-    from_tokens: [],
-    to_tokens: [],
-    link: undefined,
-    logo: undefined,
-    name: undefined,
-  }
-  const relayer = relayers[match.params.coinbase] || nullRelayer
 
   return (
     <Grid container className="relayer-config-container" spacing={6} justify="flex-start">

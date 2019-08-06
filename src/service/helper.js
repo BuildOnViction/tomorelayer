@@ -70,6 +70,11 @@ export const onlyKeys = (...keys) => (obj) => {
   return result
 }
 
+export const unique = (array) => array.filter((item, index) => array.indexOf(item) === index)
+
+export const uniqueBy = (array, key) =>
+  array.filter((item, index) => array.findIndex((i) => i[key] === item[key]) === index)
+
 export class TabMap {
   constructor(...args) {
     if (args.length < 2 || args.some((v) => typeof v !== 'string')) {

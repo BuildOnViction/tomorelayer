@@ -25,7 +25,7 @@ class Dashboard extends React.Component {
 
     const SafePath = (Component) => props => Object.keys(relayers).includes(props.match.params.coinbase) ? (
       <Component
-        relayers={relayers}
+        relayer={relayers[props.match.params.coinbase]}
         {...props}
       />
     ) : (

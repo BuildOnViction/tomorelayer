@@ -3,6 +3,7 @@ import { connect } from 'redux-zero/react'
 import {
   Avatar,
   Box,
+  CircularProgress,
   Grid,
   Typography,
 } from '@material-ui/core'
@@ -19,7 +20,9 @@ import { isEmpty, TabMap } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
-// import OrderTable from './OrderTable'
+
+import OrderTable from './OrderTable'
+import TokenTable from './TokenTable'
 
 
 const StyledAvatar = withStyles(theme => ({
@@ -47,8 +50,8 @@ class RelayerStat extends React.Component {
 
   render() {
     const {
-      relayers: allRelayers,
-      match,
+      AvailableTokens,
+      relayer,
       stats,
     } = this.props
 
@@ -56,8 +59,9 @@ class RelayerStat extends React.Component {
       tab,
     } = this.state
 
-    const coinbase = match.params.coinbase
-    const relayer = allRelayers[coinbase]
+    const unifiedTokens = _.unique([...relayer.from_tokens, ...relayer.to_tokens])
+    const listedTokens = AvailableTokens.filter(t => unifiedTokens.indexOf(t.address) >= 0)
+                                        .map(_.onlyKeys('name', 'symbol', 'address'))
 
     const relayerStat = {
       tomousd: `$${_.round(stats.tomousd, 2)}`,
@@ -66,6 +70,16 @@ class RelayerStat extends React.Component {
     }
 
     const avatarClassName = cx({ 'empty-avatar': isEmpty(relayer.logo) })
+
+    if (_.isEmpty(relayer)) {
+      return (
+        <Grid container direction="column" spacing={4} justify="center">
+          <Grid item>
+            <CircularProgress />
+          </Grid>
+        </Grid>
+      )
+    }
 
     return (
       <Grid container direction="column" spacing={4}>
@@ -109,7 +123,8 @@ class RelayerStat extends React.Component {
         <Grid item className="mt-1" style={{ minHeight: 400 }}>
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
           <Box className="mt-2">
-            Your relayer hasn't has any order yet
+            {tab === TOPICS.orders && <OrderTable />}
+            {tab === TOPICS.tokens && <TokenTable relayer={relayer} tokens={listedTokens} />}
           </Box>
         </Grid>
       </Grid>
@@ -122,6 +137,7 @@ const mapProps = state => ({
     tomousd: state.network_info.tomousd,
     trades: state.network_info.trades,
   },
+  AvailableTokens: state.Tokens,
 })
 
 export default connect(mapProps)(RelayerStat)
