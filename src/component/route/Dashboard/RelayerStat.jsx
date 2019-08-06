@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'redux-zero/react'
 import {
   Avatar,
   Box,
@@ -8,12 +9,15 @@ import {
 import cx from 'classnames'
 import { withStyles } from '@material-ui/styles'
 import placeholder from 'asset/image-placeholder.png'
+import IconTomoPrice from 'asset/icon-tomo-price.png'
+import * as _ from 'service/helper'
 import { StyledLink } from 'component/shared/Adapters'
 import { isEmpty, TabMap } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import TimeVolumeStat from './TimeVolumeStat'
-import OrderTable from './OrderTable'
+// import OrderTable from './OrderTable'
+
 
 const StyledAvatar = withStyles(theme => ({
   root: {
@@ -31,7 +35,7 @@ const StyledAvatar = withStyles(theme => ({
 
 const TOPICS = new TabMap('Orders', 'Tokens')
 
-export default class RelayerStat extends React.Component {
+class RelayerStat extends React.Component {
   state = {
     tab: TOPICS.orders,
   }
@@ -42,6 +46,7 @@ export default class RelayerStat extends React.Component {
     const {
       relayers: allRelayers,
       match,
+      stats,
     } = this.props
 
     const {
@@ -85,20 +90,28 @@ export default class RelayerStat extends React.Component {
               <StatCard icon="https://picsum.photos/100/100" stat="1000" helpText="trades" />
             </Grid>
             <Grid item>
-              <StatCard icon="https://picsum.photos/100/100" stat="1000" helpText="trades" />
+              <StatCard icon={IconTomoPrice} stat={`$${_.round(stats.tomousd, 2)}`} helpText="Tomo Price" />
             </Grid>
           </Grid>
           <Grid item xs={12} sm={8} md={9} className="pr-0">
             <TimeVolumeStat />
           </Grid>
         </Grid>
-        <Grid item className="mt-1">
+        <Grid item className="mt-1" style={{ minHeight: 400 }}>
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
           <Box className="mt-2">
-            {tab === TOPICS.orders && <OrderTable />}
+            Your relayer hasn't has any order yet
           </Box>
         </Grid>
       </Grid>
     )
   }
 }
+
+const mapProps = state => ({
+  stats: {
+    tomousd: state.network_info.tomousd,
+  },
+})
+
+export default connect(mapProps)(RelayerStat)

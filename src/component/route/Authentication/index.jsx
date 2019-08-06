@@ -79,7 +79,7 @@ class Authentication extends React.Component {
         return this.props.history.push(path)
       })
     }
-    return this.props.history.push('/login')
+    return this.props.history.push('/register')
 
   }
 
