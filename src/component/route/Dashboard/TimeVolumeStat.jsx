@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
+import { IS_DEV } from 'service/constant'
 import {
   VOLUME_CHART as volChartCfg,
 } from './charts.config'
@@ -108,7 +109,9 @@ export default class TimeVolumeStat extends React.Component {
     lineFill.addColorStop(0.000, 'rgba(27, 0, 109, 0.0500)')
     lineFill.addColorStop(1.000, 'rgba(0, 199, 255, 0.800)')
 
-    this.VOLUME_CHART = new Chart(ctx, volChartCfg(mockdata, bgFill, lineFill))
+    const chartData = IS_DEV ? mockdata : this.props.data
+
+    this.VOLUME_CHART = new Chart(ctx, volChartCfg(chartData, bgFill, lineFill))
   }
 
   changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })

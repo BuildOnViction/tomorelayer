@@ -10,6 +10,9 @@ import cx from 'classnames'
 import { withStyles } from '@material-ui/styles'
 import placeholder from 'asset/image-placeholder.png'
 import IconTomoPrice from 'asset/icon-tomo-price.png'
+import IconTrades from 'asset/icon-trades.png'
+import IconFees from 'asset/icon-network-fees.png'
+
 import * as _ from 'service/helper'
 import { StyledLink } from 'component/shared/Adapters'
 import { isEmpty, TabMap } from 'service/helper'
@@ -56,6 +59,12 @@ class RelayerStat extends React.Component {
     const coinbase = match.params.coinbase
     const relayer = allRelayers[coinbase]
 
+    const relayerStat = {
+      tomousd: `$${_.round(stats.tomousd, 2)}`,
+      trades: (!_.isEmpty(stats.trades) && stats.trades[relayer.coinbase]) || 1000,
+      fees: (!_.isEmpty(stats.fees) && stats.fees[relayer.coinbase]) || '1000 TOMO',
+    }
+
     const avatarClassName = cx({ 'empty-avatar': isEmpty(relayer.logo) })
 
     return (
@@ -84,13 +93,13 @@ class RelayerStat extends React.Component {
         <Grid item container spacing={3}>
           <Grid item container xs={12} sm={4} md={3} spacing={3} direction="column">
             <Grid item>
-              <StatCard icon="https://picsum.photos/100/100" stat="1000" helpText="trades" />
+              <StatCard icon={IconFees} stat={relayerStat.fees} helpText="Fees(24h)" />
             </Grid>
             <Grid item>
-              <StatCard icon="https://picsum.photos/100/100" stat="1000" helpText="trades" />
+              <StatCard icon={IconTrades} stat={relayerStat.trades} helpText="Trades (24h)" />
             </Grid>
             <Grid item>
-              <StatCard icon={IconTomoPrice} stat={`$${_.round(stats.tomousd, 2)}`} helpText="Tomo Price" />
+              <StatCard icon={IconTomoPrice} stat={relayerStat.tomousd} helpText="Tomo Price" />
             </Grid>
           </Grid>
           <Grid item xs={12} sm={8} md={9} className="pr-0">
@@ -111,6 +120,7 @@ class RelayerStat extends React.Component {
 const mapProps = state => ({
   stats: {
     tomousd: state.network_info.tomousd,
+    trades: state.network_info.trades,
   },
 })
 
