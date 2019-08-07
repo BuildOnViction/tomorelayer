@@ -84,7 +84,11 @@ class TokenPairList extends React.Component {
       })
     }
 
-    return saveNewTokens(newTokens)
+    await saveNewTokens(newTokens)
+    return this.props.PushAlert({
+      variant: AlertVariant.success,
+      message: `${missingTokens.length} new tokens added`
+    })
   }
 
   setFilter = func => this.setState({ filterFunction: func })
