@@ -60,6 +60,7 @@ const theme = (config) =>
       buttonActive: '#703db5',
       paper: '#272741',
       document: '#1D1E31',
+      navItemSelected: '#323252',
     },
     overrides: {
       MuiPaper: {
@@ -190,28 +191,6 @@ const theme = (config) =>
           height: 100,
           margin: 0,
           borderRadius: 4,
-        },
-      },
-      MuiListItem: {
-        root: {
-          'borderRadius': 20,
-          'paddingTop': 4,
-          'paddingBottom': 4,
-          'marginBottom': '1rem',
-          '&$selected': {
-            'backgroundColor': '#323252',
-            '&:hover': {
-              backgroundColor: '#323252',
-            },
-          },
-        },
-        gutters: {
-          paddingLeft: '15%',
-        },
-        button: {
-          '&:hover': {
-            backgroundColor: '#323252',
-          },
         },
       },
     },

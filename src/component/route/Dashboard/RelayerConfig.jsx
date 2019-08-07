@@ -5,12 +5,27 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/styles'
 import FormInfo from './ConfigForms/FormInfo'
 import FormDeposit from './ConfigForms/FormDeposit'
 import FormTrade from './ConfigForms/FormTrade'
 import FormTransfer from './ConfigForms/FormTransfer'
 import FormResign from './ConfigForms/FormResign'
 
+const StyledListItem = withStyles(theme => ({
+  root: {
+    borderRadius: 10,
+    padding: '5px 5px 5px 45px',
+    maxWidth: 200,
+    marginBottom: 10,
+    '&:hover': {
+      backgroundColor: theme.palette.navItemSelected,
+    },
+  },
+  selected: {
+    backgroundColor: `${theme.palette.navItemSelected} !important`,
+  },
+}))(ListItem)
 
 const SIDE_MENU_ITEMS = {
   info: 'Information',
@@ -33,11 +48,11 @@ const ConfigBoard = ({ relayer }) => {
   return (
     <Grid container className="relayer-config-container" spacing={6} justify="flex-start">
       <Grid item xs={12} sm={3} md={2} lg={3}>
-        <List component="nav">
+        <List>
           {Object.values(SIDE_MENU_ITEMS).map((item, idx) => (
-            <ListItem key={item} button selected={formstep === item} onClick={changeForm(item)}>
+            <StyledListItem key={item} button selected={formstep === item} onClick={changeForm(item)}>
               <ListItemText primary={item} />
-            </ListItem>
+            </StyledListItem>
           ))}
         </List>
       </Grid>

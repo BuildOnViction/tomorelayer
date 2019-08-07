@@ -7,6 +7,7 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/styles'
 import {
   getBalance,
 } from 'service/blockchain'
@@ -21,6 +22,21 @@ const NavMenu = new TabMap(
   'Balance',
   'Transactions',
 )
+
+const StyledListItem = withStyles(theme => ({
+  root: {
+    borderRadius: 10,
+    padding: '5px 5px 5px 45px',
+    maxWidth: 200,
+    marginBottom: 10,
+    '&:hover': {
+      backgroundColor: theme.palette.navItemSelected,
+    },
+  },
+  selected: {
+    backgroundColor: `${theme.palette.navItemSelected} !important`,
+  },
+}))(ListItem)
 
 export default class Profile extends React.Component {
   state = {
@@ -69,9 +85,9 @@ export default class Profile extends React.Component {
           <Grid item md={3} className="pr-5">
             <List component="nav">
               {NavMenu.map((item, idx) => (
-                <ListItem key={item} button className="mb-1" onClick={this.changeInfoBoard(item)} selected={selectedInfo === item}>
+                <StyledListItem key={item} button className="mb-1" onClick={this.changeInfoBoard(item)} selected={selectedInfo === item}>
                   <ListItemText primary={item} />
-                </ListItem>
+                </StyledListItem>
               ))}
             </List>
           </Grid>
