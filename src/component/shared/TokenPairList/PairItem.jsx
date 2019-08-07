@@ -115,7 +115,7 @@ export default class PairItem extends React.Component {
         </TokenListItem>
         {showDetails && (
           <PairDetails container spacing={4} justify="space-between" alignItems="center">
-            <Grid item container direction="column" xs={5} spacing={0.5} className="pt-0">
+            <Grid item container direction="column" xs={5} className="pt-0">
               <DetailGridItem item className="w_100 text-ellipsis">
                 {pair.from.name} ({pair.from.symbol})
               </DetailGridItem>
@@ -132,7 +132,7 @@ export default class PairItem extends React.Component {
             <Grid item xs={2} className="text-center">
               <CompareArrows />
             </Grid>
-            <Grid item container direction="column" xs={5} spacing={0.5} className="pt-0">
+            <Grid item container direction="column" xs={5} className="pt-0">
               <DetailGridItem item className="w_100 text-ellipsis">
                 {pair.to.name} ({pair.to.symbol})
               </DetailGridItem>
