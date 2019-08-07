@@ -39,6 +39,7 @@ export const Logout = (state) => {
   const user = {
     ...state.user,
     wallet: undefined,
+    hooked: false,
   }
   return {
     user,

@@ -1,7 +1,7 @@
 /*
  * Basic function helpers
  */
-const isFunction = (t) => typeof t === 'function'
+export const isFunction = (t) => typeof t === 'function'
 
 // Compose from left-most to right-most
 export const compose = (...functions) => (lastArg) =>
@@ -22,6 +22,8 @@ export const isEmpty = (something) => {
   }
   return false
 }
+
+export const isTruthy = (something) => Boolean(something)
 
 export const round = (value, precision) => {
   const multiplier = 10 ** (precision || 0)

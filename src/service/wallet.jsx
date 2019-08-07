@@ -1,14 +1,21 @@
 import { Signer, utils } from 'ethers'
 import { bigNumber } from '@vutr/purser-core/utils'
+import { isFunction, isTruthy } from './helper'
 
 export default class WalletSigner extends Signer {
   _wallet = undefined
   _provider = undefined
+  _hook = undefined
 
-  constructor(wallet, provider) {
+  constructor(wallet, provider, addressHook = undefined) {
     super()
     this._wallet = wallet
     this._provider = provider
+    this._hook = addressHook
+  }
+
+  get hookAvailable() {
+    return isTruthy(this._hook)
   }
 
   get provider() {
@@ -17,6 +24,10 @@ export default class WalletSigner extends Signer {
 
   getAddress() {
     return Promise.resolve(this._wallet.address)
+  }
+
+  async hook(func) {
+    return isFunction(this.hook) ? this._hook(func) : this._hook
   }
 
   async signMessage(message) {
@@ -41,9 +52,6 @@ export default class WalletSigner extends Signer {
     tx.value = bigNumber(tx.value ? tx.value.toString() : '0')
     const resp = await this._wallet.sign(tx)
     const rawTx = utils.parseTransaction(resp)
-    return this._provider.getTransaction(rawTx.hash).then((tx) => {
-      if (tx === null) {return undefined}
-      return this._provider._wrapTransaction(tx, rawTx.hash)
-    })
+    return this._provider.getTransaction(rawTx.hash).then((tx) => Boolean(tx) && this._provider._wrapTransaction(tx, rawTx.hash))
   }
 }

@@ -1,6 +1,7 @@
 import createStore from 'redux-zero'
 import { applyMiddleware } from 'redux-zero/middleware'
 import { connect } from 'redux-zero/devtools'
+import { isTruthy } from './helper'
 
 export const initialState = {
   user: {
@@ -20,7 +21,7 @@ export const initialState = {
   },
 }
 
-const middlewares = connect ? applyMiddleware(connect(initialState)) : []
+const middlewares = applyMiddleware(...[connect && connect(initialState)].filter(isTruthy))
 
 const store = createStore(initialState, middlewares)
 
