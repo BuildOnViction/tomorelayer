@@ -40,16 +40,17 @@ CLOSED: [2019-07-10 Thu 15:12]
 CLOSED: [2019-06-26 Wed 17:42]
 **** DONE Only one kind of fee: MarketFee instead of {maker_fee,taker_fee}
 CLOSED: [2019-07-11 Thu 09:39]
+**** ACTIVE Fixing Wallet Hook
 *** [ ] Error catch boundary
-**** [ ] Backend api endpoint to present error & Slack integration
-**** [ ] Frontend setup
+**** LATER Backend api endpoint to present error & Slack integration
+**** LATER Frontend setup
 *** [ ] Quality Control
 **** DONE Setup husky
 CLOSED: [2019-07-03 Wed 23:18]
 **** DONE Backend test
 CLOSED: [2019-07-03 Wed 22:13]
-**** [ ] Setup CICD Testing for each PR
-**** ACTIVE Frontend test with Jest
+**** LATER Setup CICD Testing for each PR
+**** [ ] Fixing Tests
 *** DONE Deploy to Test Server
 CLOSED: [2019-06-18 Tue 17:31]
 
