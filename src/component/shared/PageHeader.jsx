@@ -64,7 +64,6 @@ class PageHeader extends React.Component {
               {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
               {auth && !userOwnRelayer && <Button variant="contained" component={AdapterLink} to="/register">Start a Relayer</Button>}
               {auth && <UserMenu />}
-              {!auth && <Button variant="contained" component={AdapterLink} to="/login">Login</Button>}
               {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}
               {/* <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} /> */}
             </Grid>
