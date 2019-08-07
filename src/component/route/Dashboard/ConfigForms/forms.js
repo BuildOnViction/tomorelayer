@@ -69,6 +69,11 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
         const relayer = await http.updateRelayer(payload)
+
+        if (meta.props.relayer.link) {
+          await http.notifyDex(relayer.link)
+        }
+
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer trade options updated' })
         meta.props.UpdateRelayer(relayer)
       }

@@ -35,6 +35,12 @@ const HttpClient = () => {
         headers,
       }).then(genericHandler),
 
+    put: async (api) =>
+      fetch(api, {
+        method: 'PUT',
+        headers,
+      }).then(genericHandler),
+
     post: async (api, value) =>
       fetch(api, {
         method: 'POST',
@@ -176,6 +182,12 @@ export const getAccountTx = async (params) =>
 
 export const getTokenInfo = async (tokenAddress) =>
   fetch(proxiedAPI.external.getTokenInfo(tokenAddress))
+    .then(genericHandler)
+    .catch(logging)
+
+export const notifyDex = async (dexUrl) =>
+  HttpClient()
+    .put(`${dexUrl}/api/relayer`)
     .then(genericHandler)
     .catch(logging)
 
