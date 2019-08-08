@@ -14,6 +14,8 @@ import {
   Typography,
 } from '@material-ui/core'
 import ledger from '@vutr/purser-ledger'
+import { ethers } from 'ethers'
+import WalletSigner from 'service/wallet'
 import * as blk from 'service/blockchain'
 
 
@@ -32,7 +34,7 @@ export default class LedgerWallet extends React.Component {
   })
 
   unlock = async () => {
-    const ledgerWallet = await ledger.open()
+    const ledgerWallet = await ledger.open({ coinType: 889 })
     const activeAddress = ledgerWallet.address
     const activeBalance = await blk.getBalance(activeAddress)
     this.setState({
@@ -67,7 +69,11 @@ export default class LedgerWallet extends React.Component {
     })
   }
 
-  confirm = () => this.props.onConfirm(this.state.ledgerWallet)
+  confirm = () => {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
+    const signer = new WalletSigner(this.state.ledgerWallet, provider)
+    this.props.onConfirm(signer)
+  }
 
   render() {
 

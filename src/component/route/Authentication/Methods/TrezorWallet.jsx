@@ -13,10 +13,12 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import ledger from '@vutr/purser-ledger'
+import trezor from '@vutr/purser-trezor'
 import {
   getBalance,
 } from 'service/blockchain'
+import { ethers } from 'ethers'
+import WalletSigner from 'service/wallet'
 
 
 export default class TrezorWallet extends React.Component {
@@ -32,7 +34,7 @@ export default class TrezorWallet extends React.Component {
   changePath = e => this.setState({ hdpath: e.target.value })
 
   unlock = async () => {
-    const trezorWallet = await ledger.open()
+    const trezorWallet = await trezor.open()
     const activeAddress = trezorWallet.address
     const activeBalance = await getBalance(activeAddress)
     const openDialog = true
@@ -62,7 +64,11 @@ export default class TrezorWallet extends React.Component {
     this.setState({ activeAddress, activeBalance })
   }
 
-  confirm = () => this.props.onConfirm(this.state.trezorWallet)
+  confirm = () => {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
+    const signer = new WalletSigner(this.state.trezorWallet, provider)
+    this.props.onConfirm(signer)
+  }
 
   render() {
 
