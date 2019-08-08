@@ -27,7 +27,7 @@ const MethodIcons = {
 const BoxWrap = withStyles({
   root: {
     margin: '50px auto',
-    overflow: 'scroll',
+    overflow: 'auto',
   }
 })(Box)
 

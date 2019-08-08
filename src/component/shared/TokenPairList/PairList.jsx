@@ -16,10 +16,10 @@ const ListHeader = withStyles(theme => ({
 const ListBoxWrapper = withStyles(theme => ({
   root: {
     height: 500,
-    overflow: 'scroll',
+    overflow: 'auto',
     paddingBottom: 10,
     position: 'relative',
-    borderBottom: `solid 1px ${theme.palette.tabInactive}`
+    borderBottom: `solid 1px ${theme.palette.tabInactive}`,
   }
 }))(Box)
 
