@@ -147,3 +147,7 @@ export default class TimeVolumeStat extends React.Component {
     )
   }
 }
+
+TimeVolumeStat.defaultProps = {
+  data: [],
+}
