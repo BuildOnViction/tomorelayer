@@ -9,7 +9,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 import ledgerwallet_icon from 'asset/logo-ledgerwallet.png'
 import metamask_icon from 'asset/logo-metamask.png'
-import mnemonic_icon from 'asset/logo-mnemonic.png'
 import privatekey_icon from 'asset/logo-privatekey.png'
 import tomowallet_icon from 'asset/logo-tomowallet.png'
 import trezorwallet_icon from 'asset/logo-trezorwallet.png'
@@ -19,7 +18,7 @@ const MethodIcons = {
   'Tomo Wallet': tomowallet_icon,
   'Ledger Wallet': ledgerwallet_icon,
   'MetaMask': metamask_icon,
-  'Mnemonic': mnemonic_icon,
+  'Mnemonic': privatekey_icon,
   'Private Key': privatekey_icon,
   'Trezor Wallet': trezorwallet_icon,
 }

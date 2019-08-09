@@ -55,7 +55,6 @@ class Authentication extends React.Component {
     // this.getQRCode()
   }
 
-
   changeMethod = (unlockingMethod) => this.setState({ unlockingMethod })
 
   confirmWallet = async wallet => {
