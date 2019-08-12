@@ -137,17 +137,16 @@ export default class AccountTx extends React.Component {
     currentTab: TxTypes.deposit,
   }
 
-  handleChangeTab = (event, newTab) => {
+  handleChangeTab = (_, newTab) => {
     this.setState({
       currentTab: newTab,
     })
 
     const { onTxTypeChange } = this.props
-    newTab === TxTypes.deposit ? onTxTypeChange('in') : onTxTypeChange('out')
+    onTxTypeChange(newTab === TxTypes.deposit ? 'in' : 'out')
   }
 
   render() {
-    console.log(this.state)
     const {
       props: { tx },
       state: { currentTab },
@@ -157,18 +156,14 @@ export default class AccountTx extends React.Component {
     return (
       <Box display="flex" flexDirection="column">
         <TxTabs value={currentTab} onChange={handleChangeTab} aria-label="tx types">
-          {
-            Object.keys(TxTypes).map((type, index) => {
-              return (<TxTab key={index} label={type} />)
-            })            
-          }
+          {Object.keys(TxTypes).map((type, index) => (
+            <TxTab key={index} label={type} />
+          ))}
         </TxTabs>
         {isEmpty(tx.items || tx) ? (
           <NoTx />
         ) : (
-          <React.Fragment>
-            <TxTable txs={tx.items} />
-          </React.Fragment>
+          <TxTable txs={tx.items} />
         )}
       </Box>
     )
