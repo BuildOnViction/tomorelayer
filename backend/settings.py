@@ -30,7 +30,7 @@ database = PooledPostgresqlExtDatabase(
 objects = Manager(database)
 
 # SETUP REDIS CONNECTION
-redis_conn = aioredis.create_pool((getenv('REDIS_URI'), getenv('REDIS_PORT')))
+redis_conn = aioredis.create_redis_pool(getenv('REDIS_URI'))
 
 
 # APPLICATION BACKEND SETTINGS
