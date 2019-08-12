@@ -87,21 +87,21 @@ const Paginator = ({
     <Grid container spacing={4} justify="center" alignItems="center" className="mt-1">
       <IconButton
         onClick={onBegin}
-        disabled={activePage === 0}
+        disabled={activePage <= 1}
         aria-label="first page"
       >
         <FirstPageIconStyled />
       </IconButton>
-      <IconButton onClick={onPrev} disabled={activePage === 0} aria-label="previous page">
+      <IconButton onClick={onPrev} disabled={activePage <= 1} aria-label="previous page">
         <KeyboardArrowLeftStyled />
       </IconButton>
       {renderPageNumItem(activePage, totalPages)}
-      <IconButton onClick={onNext} disabled={activePage >= Math.ceil(totalPages / rowsPerPage) - 1} aria-label="next page">
+      <IconButton onClick={onNext} disabled={activePage >= totalPages} aria-label="next page">
         <KeyboardArrowRightStyled />
       </IconButton>
       <IconButton
         onClick={onEnd}
-        disabled={activePage >= Math.ceil(totalPages / rowsPerPage) - 1}
+        disabled={activePage >= totalPages}
         aria-label="last page"
       >
         <LastPageIconStyled />
