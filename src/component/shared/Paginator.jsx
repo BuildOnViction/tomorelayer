@@ -12,11 +12,26 @@ import { sequence } from 'service/helper'
 
 const PageNumItem = withStyles(theme => ({
   root: {
-    '&.page-active': {
+    cursor: 'pointer',
+    '&:hover, &.page-active': {
       color: 'white',
     }
   }
 }))(Grid)
+
+const iconStyles = (theme) => ({
+  root: {
+    color: theme.palette.subtitle,
+    '&:hover': {
+      color: 'white',
+    },
+  },
+})
+
+const FirstPageIconStyled = withStyles(iconStyles)(FirstPageIcon)
+const LastPageIconStyled = withStyles(iconStyles)(LastPageIcon)
+const KeyboardArrowLeftStyled = withStyles(iconStyles)(KeyboardArrowLeft)
+const KeyboardArrowRightStyled = withStyles(iconStyles)(KeyboardArrowRight)
 
 const renderPageNumItem = (current, total) => {
   const numberRender = (numberList) => numberList.map((idx) => (
@@ -75,21 +90,21 @@ const Paginator = ({
         disabled={activePage === 0}
         aria-label="first page"
       >
-        <FirstPageIcon />
+        <FirstPageIconStyled />
       </IconButton>
       <IconButton onClick={onPrev} disabled={activePage === 0} aria-label="previous page">
-        <KeyboardArrowRight />
+        <KeyboardArrowLeftStyled />
       </IconButton>
       {renderPageNumItem(activePage, totalPages)}
       <IconButton onClick={onNext} disabled={activePage >= Math.ceil(totalPages / rowsPerPage) - 1} aria-label="next page">
-        <KeyboardArrowLeft />
+        <KeyboardArrowRightStyled />
       </IconButton>
       <IconButton
         onClick={onEnd}
         disabled={activePage >= Math.ceil(totalPages / rowsPerPage) - 1}
         aria-label="last page"
       >
-        <LastPageIcon />
+        <LastPageIconStyled />
       </IconButton>
     </Grid>
   )
