@@ -4,6 +4,8 @@ import {
   Grid,
   Paper,
   Typography,
+  Tabs,
+  Tab,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
@@ -21,6 +23,11 @@ const TableHeaders = [
   'Amount (TOMO)',
   'TxHash',
 ]
+
+const TxTypes = {
+  'deposit': 0,
+  'withdrawal': 1,
+}
 
 const LimitedGridItem = withStyles(theme => ({
   root: {
@@ -52,6 +59,28 @@ const GridRow = withStyles(theme => ({
     },
   }
 }))(Grid)
+
+const TxTabs = withStyles(theme => ({
+  root: {
+    borderBottom: 'none',
+  },
+  indicator: {
+    backgroundColor: 'initial',
+  },
+}))(Tabs)
+
+const TxTab = withStyles(theme => ({
+  root: {
+    textTransform: 'capitalize',
+    marginLeft: 0,
+    marginRight: '30px',
+    minWidth: 'initial',
+    padding: 0,
+  },
+  selected: {
+    color: theme.palette.maintitle,
+  },
+}))(props => <Tab {...props} />)
 
 const TxTable = ({ txs }) => (
   <Paper elevation={0}>
@@ -104,23 +133,37 @@ const NoTx = () => (
 
 
 export default class AccountTx extends React.Component {
+  state = {
+    currentTab: TxTypes.deposit,
+  }
+
+  handleChangeTab = (_, newTab) => {
+    this.setState({
+      currentTab: newTab,
+    })
+
+    const { onTxTypeChange } = this.props
+    onTxTypeChange(newTab === TxTypes.deposit ? 'in' : 'out')
+  }
 
   render() {
     const {
-      tx,
-    } = this.props
+      props: { tx },
+      state: { currentTab },
+      handleChangeTab,
+    } = this
 
     return (
       <Box display="flex" flexDirection="column">
+        <TxTabs value={currentTab} onChange={handleChangeTab} aria-label="tx types">
+          {Object.keys(TxTypes).map((type, index) => (
+            <TxTab key={index} label={type} />
+          ))}
+        </TxTabs>
         {isEmpty(tx.items || tx) ? (
           <NoTx />
         ) : (
-          <React.Fragment>
-            <Typography variant="body1" className="mb-1">
-              Relayer Contract Transaction records
-            </Typography>
-            <TxTable txs={tx.items} />
-          </React.Fragment>
+          <TxTable txs={tx.items} />
         )}
       </Box>
     )
