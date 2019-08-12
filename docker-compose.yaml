@@ -9,6 +9,11 @@ services:
       - POSTGRES_PASSWORD=root
     ports:
       - 5432:5432
+  redis:
+    image: redis:5-alpine
+    container_name: tomorelayer-cache
+    expose:
+      - 6379
   pgtest:
     image: postgres:10-alpine
     container_name: tomorelayer-test
