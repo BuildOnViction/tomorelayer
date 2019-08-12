@@ -1,3 +1,5 @@
+import qs from 'qs'
+
 export const BACKEND_URI = ((env) => {
   switch (env) {
     case 'test':
@@ -92,9 +94,15 @@ const API = {
   external: {
     tomoprice: ApiFix('https://scan.testnet.tomochain.com/api/setting/usd'),
     accountTx: (params) => {
-      const { address, page, type } = params
-      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'
-      return ApiFix(`${baseEndpoint}/${address}?page=${page}&limit=10&tx_type=${type}`)
+      const { ownerAddress, contractAddress, limit, page, type } = params
+      const paramsEncoded = qs.stringify({
+        tx_type: type,
+        filterAddress: contractAddress,
+        page,
+        limit,
+      })
+      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'      
+      return ApiFix(`${baseEndpoint}/${ownerAddress}?${paramsEncoded}`)
     },
     getTokenInfo: (tokenAddress) => {
       const baseEndpoint = 'https://scan.testnet.tomochain.com/api/tokens'

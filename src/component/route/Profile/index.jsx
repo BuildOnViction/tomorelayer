@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'redux-zero/react'
 import {
   Box,
   Grid,
@@ -23,6 +24,11 @@ const NavMenu = new TabMap(
   'Transactions',
 )
 
+const PaginationDefault = {
+  limit: 10,
+  page: 1,
+}
+
 const StyledListItem = withStyles(theme => ({
   root: {
     borderRadius: 10,
@@ -38,7 +44,7 @@ const StyledListItem = withStyles(theme => ({
   },
 }))(ListItem)
 
-export default class Profile extends React.Component {
+class Profile extends React.Component {
   state = {
     address: '',
     balance: '',
@@ -50,15 +56,27 @@ export default class Profile extends React.Component {
     const address = await this.props.user.wallet.getAddress()
     const balance = await getBalance(address)
     const tx = await getAccountTx({
-      address,
+      ownerAddress: address,
+      contractAddress: this.props.contractAddress,
       type: 'in',
-      page: 1,
+      ...PaginationDefault,
     })
 
     this.setState({ address, balance, tx })
   }
 
   changeInfoBoard = (selectedInfo) => () => this.setState({ selectedInfo })
+
+  onTxTypeChange = async (newTxType) => {
+    const tx = await getAccountTx({
+      ownerAddress: this.state.address,
+      contractAddress: this.props.contractAddress,
+      type: newTxType,
+      ...PaginationDefault,
+    })
+
+    this.setState({ tx })
+  }
 
   render() {
     const {
@@ -93,10 +111,19 @@ export default class Profile extends React.Component {
           </Grid>
           <Grid item md={7} sm={12}>
             {selectedInfo === NavMenu.balance && <UserBalance relayers={relayers} user={user} balance={balance} />}
-            {selectedInfo === NavMenu.transactions && <AccountTx tx={tx} />}
+            {selectedInfo === NavMenu.transactions && <AccountTx onTxTypeChange={this.onTxTypeChange} tx={tx} />}
           </Grid>
         </Grid>
       </Box>
     )
   }
 }
+
+const mapProps = (state) => {
+  const { Contracts } = state
+  const contractAddress = Contracts.find(contract => contract.name === 'RelayerRegistration').address
+
+  return { contractAddress }
+}
+
+export default connect(mapProps)(Profile)
