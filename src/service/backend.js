@@ -101,7 +101,7 @@ const API = {
         page,
         limit,
       })
-      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'      
+      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'
       return ApiFix(`${baseEndpoint}/${ownerAddress}?${paramsEncoded}`)
     },
     getTokenInfo: (tokenAddress) => {

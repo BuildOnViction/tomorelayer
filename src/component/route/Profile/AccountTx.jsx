@@ -148,23 +148,19 @@ export default class AccountTx extends React.Component {
 
   render() {
     const {
-      props: { tx },
-      state: { currentTab },
-      handleChangeTab,
-    } = this
+      tx,
+    } = this.props
+
+    const {
+      currentTab,
+    } = this.state
 
     return (
       <Box display="flex" flexDirection="column">
-        <TxTabs value={currentTab} onChange={handleChangeTab} aria-label="tx types">
-          {Object.keys(TxTypes).map((type, index) => (
-            <TxTab key={index} label={type} />
-          ))}
+        <TxTabs value={currentTab} onChange={this.handleChangeTab} aria-label="tx types">
+          {Object.keys(TxTypes).map(type => <TxTab key={type} label={type} />)}
         </TxTabs>
-        {isEmpty(tx.items || tx) ? (
-          <NoTx />
-        ) : (
-          <TxTable txs={tx.items} />
-        )}
+        {isEmpty(tx.items || tx) ? <NoTx /> : <TxTable txs={tx.items} />}
       </Box>
     )
   }
