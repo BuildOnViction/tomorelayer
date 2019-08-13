@@ -1,7 +1,7 @@
-import aioredis
 from os import getenv, path
 from logzero import logger
 from dotenv import load_dotenv
+from aioredis import create_redis_pool
 from peewee_async import Manager
 from peewee_asyncext import PooledPostgresqlExtDatabase
 
@@ -30,7 +30,10 @@ database = PooledPostgresqlExtDatabase(
 objects = Manager(database)
 
 # SETUP REDIS CONNECTION
-redis_conn = aioredis.create_redis_pool(getenv('REDIS_URI'))
+async def redis_conn():
+    conn = await create_redis_pool(getenv('REDIS_URI'))
+    await conn.flushall()
+    return conn
 
 
 # APPLICATION BACKEND SETTINGS

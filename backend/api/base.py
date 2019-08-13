@@ -52,17 +52,14 @@ class BaseHandler(RequestHandler):
             error['message'] = http_exception.message
             error['detail'] = http_exception.detail
 
-        elif isinstance(http_exception, PeeweeException):
+        if isinstance(http_exception, PeeweeException):
             error['code'] = 500
             error['message'] = 'DatabaseError: {}'.format(http_exception)
             error['detail'] = self.request_body
 
-        else:
-            # if settings['stg'] == 'development':
-            #     logger.exception(http_exception)
-            #     traceback.print_tb(stack_trace)
-            #     breakpoint()
-            pass
+        if settings['stg'] == 'development':
+            logger.exception(http_exception)
+            traceback.print_tb(stack_trace)
 
         self.set_status(error['code'])
         self.finish(json.dumps({'error': error}))

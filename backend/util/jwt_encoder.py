@@ -1,5 +1,4 @@
 import jwt
-from logzero import logger
 from settings import JWT_SECRET
 
 JWT_ALGORITHM = 'HS256'

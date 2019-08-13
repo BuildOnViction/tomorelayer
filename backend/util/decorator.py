@@ -42,7 +42,7 @@ def authenticated(handler):
             decoded = decode_token(jwt_token)
             return handler(handler_object, user=decoded['address'])
         except Exception as err:
-            raise UserAuthorizationException('Authorization token is invalid')
+            raise UserAuthorizationException('Authorization token is invalid: {}'.format(err))
 
     return wrapped_handler
 
@@ -73,7 +73,7 @@ def common_authenticated(handler):
     return wrapped_handler
 
 
-def deprecated(handler):
+def deprecated(_handler):
 
     def wrapped_handler(handler_object):
         raise HTTPError(status_code=404, reason="Invalid api endpoint.")

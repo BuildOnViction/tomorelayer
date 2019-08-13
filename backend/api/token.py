@@ -8,17 +8,17 @@ from .base import BaseHandler
 class TokenHandler(BaseHandler):
 
     @authenticated
-    def get(self, user):
+    def get(self):
         """Return all available tokens for trading"""
         tokens = [model_to_dict(token or {}) for token in Token.select()]
         self.json_response(tokens)
 
     @common_authenticated
-    async def post(self, user):
+    async def post(self):
         """Add new token"""
         tokens = self.request_body
 
-        if type(tokens) != list or len(tokens) == 0:
+        if not tokens or not isinstance(tokens, list):
             raise InvalidValueException('Invalid payload data')
 
         async with self.application.objects.atomic():
