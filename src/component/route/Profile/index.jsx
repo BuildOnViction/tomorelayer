@@ -49,6 +49,7 @@ class Profile extends React.Component {
     address: '',
     balance: '',
     selectedInfo: NavMenu.balance,
+    txType: 'in',
     tx: {},
   }
 
@@ -58,7 +59,7 @@ class Profile extends React.Component {
     const tx = await getAccountTx({
       ownerAddress: address,
       contractAddress: this.props.contractAddress,
-      type: 'in',
+      type: this.state.txType,
       ...PaginationDefault,
     })
 
@@ -73,6 +74,65 @@ class Profile extends React.Component {
       contractAddress: this.props.contractAddress,
       type: newTxType,
       ...PaginationDefault,
+    })
+
+    this.setState({ tx, txType: newTxType })
+  }
+
+  moveNextTxPage = async () => {
+    const { contractAddress } = this.props
+    const {
+      txType,
+      tx: { address, currentPage, pages }
+    } = this.state
+
+    const tx = await getAccountTx({
+      ownerAddress: address,
+      contractAddress: contractAddress,
+      type: txType,
+      limit: PaginationDefault.limit,
+      page: Math.min(currentPage + 1, pages),
+    })
+
+    this.setState({ tx })
+  }
+
+  moveTxPrevPage = async () => {
+    const { contractAddress } = this.props
+    const {
+      txType,
+      tx: { address, currentPage }
+    } = this.state
+
+    const tx = await getAccountTx({
+      ownerAddress: address,
+      contractAddress: contractAddress,
+      type: txType,
+      limit: PaginationDefault.limit,
+      page: Math.max(currentPage - 1, 1),
+    })
+
+    this.setState({ tx })
+  }
+
+  moveTxBeginPage = async () => {
+    const tx = await getAccountTx({
+      ownerAddress: this.state.address,
+      contractAddress: this.props.contractAddress,
+      type: this.state.txType,
+      ...PaginationDefault,
+    })
+
+    this.setState({ tx })
+  }
+
+  moveTxEndPage = async () => {
+    const tx = await getAccountTx({
+      ownerAddress: this.state.address,
+      contractAddress: this.props.contractAddress,
+      type: this.state.txType,
+      limit: PaginationDefault.limit,
+      page: this.tx.pages,
     })
 
     this.setState({ tx })
@@ -111,7 +171,15 @@ class Profile extends React.Component {
           </Grid>
           <Grid item md={7} sm={12}>
             {selectedInfo === NavMenu.balance && <UserBalance relayers={relayers} user={user} balance={balance} />}
-            {selectedInfo === NavMenu.transactions && <AccountTx onTxTypeChange={this.onTxTypeChange} tx={tx} />}
+            {selectedInfo === NavMenu.transactions && (
+              <AccountTx 
+                onTxTypeChange={this.onTxTypeChange}
+                onNext={this.moveNextTxPage}
+                onPrev={this.moveTxPrevPage}
+                onBegin={this.moveTxBeginPage}
+                onEnd={this.moveTxEndPage}
+                tx={tx} 
+              />)}
           </Grid>
         </Grid>
       </Box>
