@@ -79,47 +79,43 @@ class Profile extends React.Component {
     this.setState({ tx, txType: newTxType })
   }
 
-  moveNextTxPage = async _ => {
+  moveNextTxPage = async () => {
+    const { contractAddress } = this.props
     const {
-      props: { contractAddress },
-      state: {
-        txType,
-        tx: { address, currentPage, pages }
-      }
-    } = this
+      txType,
+      tx: { address, currentPage, pages }
+    } = this.state
 
     const tx = await getAccountTx({
       ownerAddress: address,
       contractAddress: contractAddress,
       type: txType,
       limit: PaginationDefault.limit,
-      page: (currentPage + 1) >= pages ? pages : currentPage + 1,
+      page: Math.min(currentPage + 1, pages),
     })
 
     this.setState({ tx })
   }
 
-  moveTxPrevPage = async _ => {
+  moveTxPrevPage = async () => {
+    const { contractAddress } = this.props
     const {
-      props: { contractAddress },
-      state: {
-        txType,
-        tx: { address, currentPage }
-      }
-    } = this
+      txType,
+      tx: { address, currentPage }
+    } = this.state
 
     const tx = await getAccountTx({
       ownerAddress: address,
       contractAddress: contractAddress,
       type: txType,
       limit: PaginationDefault.limit,
-      page: (currentPage - 1) <= 1 ? 1 : currentPage - 1,
+      page: Math.max(currentPage - 1, 1),
     })
 
     this.setState({ tx })
   }
 
-  moveTxBeginPage = async _ => {
+  moveTxBeginPage = async () => {
     const tx = await getAccountTx({
       ownerAddress: this.state.address,
       contractAddress: this.props.contractAddress,
@@ -130,7 +126,7 @@ class Profile extends React.Component {
     this.setState({ tx })
   }
 
-  moveTxEndPage = async _ => {
+  moveTxEndPage = async () => {
     const tx = await getAccountTx({
       ownerAddress: this.state.address,
       contractAddress: this.props.contractAddress,
@@ -175,14 +171,15 @@ class Profile extends React.Component {
           </Grid>
           <Grid item md={7} sm={12}>
             {selectedInfo === NavMenu.balance && <UserBalance relayers={relayers} user={user} balance={balance} />}
-            {selectedInfo === NavMenu.transactions 
-              && <AccountTx 
+            {selectedInfo === NavMenu.transactions && (
+              <AccountTx 
                 onTxTypeChange={this.onTxTypeChange}
                 onNext={this.moveNextTxPage}
                 onPrev={this.moveTxPrevPage}
                 onBegin={this.moveTxBeginPage}
                 onEnd={this.moveTxEndPage}
-                tx={tx} />}
+                tx={tx} 
+              />)}
           </Grid>
         </Grid>
       </Box>

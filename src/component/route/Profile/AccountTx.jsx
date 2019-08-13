@@ -176,7 +176,8 @@ export default class AccountTx extends React.Component {
               onNext={onNext}
               onPrev={onPrev}
               onBegin={onBegin}
-              onEnd={onEnd} />
+              onEnd={onEnd} 
+            />
           </React.Fragment>
         }
       </Box>
