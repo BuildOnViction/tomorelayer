@@ -31,8 +31,7 @@ objects = Manager(database)
 
 # SETUP REDIS CONNECTION
 async def redis_conn():
-    conn = await create_redis_pool(getenv('REDIS_URI'))
-    await conn.flushall()
+    conn = await create_redis_pool(getenv('REDIS_URI'), encoding='utf-8')
     return conn
 
 

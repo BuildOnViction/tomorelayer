@@ -15,6 +15,7 @@ import {
   CustomLink,
   StyledLink,
 } from 'component/shared/Adapters'
+import Paginator from 'component/shared/Paginator'
 
 const TableHeaders = [
   'Date',
@@ -149,6 +150,10 @@ export default class AccountTx extends React.Component {
   render() {
     const {
       tx,
+      onNext,
+      onPrev,
+      onBegin,
+      onEnd,
     } = this.props
 
     const {
@@ -160,7 +165,21 @@ export default class AccountTx extends React.Component {
         <TxTabs value={currentTab} onChange={this.handleChangeTab} aria-label="tx types">
           {Object.keys(TxTypes).map(type => <TxTab key={type} label={type} />)}
         </TxTabs>
-        {isEmpty(tx.items || tx) ? <NoTx /> : <TxTable txs={tx.items} />}
+        {isEmpty(tx.items || tx) ? 
+          <NoTx /> : 
+          <React.Fragment>
+            <TxTable txs={tx.items} />
+            <Paginator
+              rowsPerPage={tx.perPage}
+              activePage={tx.currentPage}
+              totalPages={tx.pages}
+              onNext={onNext}
+              onPrev={onPrev}
+              onBegin={onBegin}
+              onEnd={onEnd} 
+            />
+          </React.Fragment>
+        }
       </Box>
     )
   }

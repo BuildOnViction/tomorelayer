@@ -13,9 +13,8 @@ class PublicHandler(BaseHandler):
         logger.debug('Length = %d', keys)
 
         if keys:
-            cached = await redis.hmget('public_res', 'relayers', 'contracts', 'tokens', encoding='utf-8')
-            logger.debug(cached)
-            return self.json_response(cached)
+            cached = await redis.hgetall('public_res', encoding='utf-8')
+            return self.json_response({k: json.loads(v) for k, v in cached.items()})
 
         relayers = [model_to_dict(relayer or {}) for relayer in Relayer.select()]
         contracts = [model_to_dict(c or {}) for c in Contract.select().where(Contract.obsolete == False)]
@@ -26,6 +25,6 @@ class PublicHandler(BaseHandler):
             'Tokens': tokens
         })
         await redis.hmset_dict('public_res',
-                               relayers=json.dumps(relayers),
-                               contracts=json.dumps(contracts),
-                               tokens=json.dumps(tokens))
+                               Relayers=json.dumps(relayers),
+                               Contracts=json.dumps(contracts),
+                               Tokens=json.dumps(tokens))
