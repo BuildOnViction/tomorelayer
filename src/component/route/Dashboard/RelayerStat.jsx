@@ -103,22 +103,29 @@ class RelayerStat extends React.Component {
             </Box>
           </Box>
         </Grid>
-        <Grid item container spacing={3}>
-          <Grid item container xs={12} sm={4} md={3} spacing={3} direction="column">
-            <Grid item>
-              <StatCard icon={IconFees} stat={relayerStat.fees} helpText="Fees(24h)" />
+
+        <Grid item>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={4} md={3}>
+              <Grid container spacing={3} direction="column">
+                <Grid item>
+                  <StatCard icon={IconFees} stat={relayerStat.fees} helpText="Fees(24h)" />
+                </Grid>
+                <Grid item>
+                  <StatCard icon={IconTrades} stat={relayerStat.trades} helpText="Trades (24h)" />
+                </Grid>
+                <Grid item>
+                  <StatCard icon={IconTomoPrice} stat={relayerStat.tomousd} helpText="Tomo Price" />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item>
-              <StatCard icon={IconTrades} stat={relayerStat.trades} helpText="Trades (24h)" />
+
+            <Grid item xs={12} sm={8} md={9}>
+              <TimeVolumeStat />
             </Grid>
-            <Grid item>
-              <StatCard icon={IconTomoPrice} stat={relayerStat.tomousd} helpText="Tomo Price" />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={8} md={9} className="pr-0">
-            <TimeVolumeStat />
           </Grid>
         </Grid>
+
         <Grid item className="mt-2" style={{ minHeight: 400 }}>
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
           <Box className="mt-0">
