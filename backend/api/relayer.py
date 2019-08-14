@@ -14,6 +14,7 @@ class RelayerHandler(BaseHandler):
         self.json_response(relayers)
 
     @authenticated
+    @save_redis(field='relayer')
     async def post(self, user):
         """Add new relayer"""
         relayer = self.request_body
@@ -28,6 +29,7 @@ class RelayerHandler(BaseHandler):
             raise InvalidValueException('relayer payload is invalid: {param}'.format(param=str(relayer)))
 
     @authenticated
+    @save_redis(field='relayer')
     async def patch(self, user):
         """Update existing relayer"""
         relayer = self.request_body
@@ -56,6 +58,7 @@ class RelayerHandler(BaseHandler):
             raise InvalidValueException('update payload is invalid: {param}'.format(param=str(relayer)))
 
     @authenticated
+    @save_redis(field='relayer')
     async def delete(self, user):
         """Delete a relayer"""
         relayer_id = self.get_argument('id', None)
