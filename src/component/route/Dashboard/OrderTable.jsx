@@ -3,6 +3,8 @@ import { format } from 'date-fns'
 import {
   Grid,
   Paper,
+  Hidden,
+  withWidth,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -14,10 +16,27 @@ const StyledPaper = withStyles(theme => ({
   }
 }))(Paper)
 
+const Cell = withStyles(theme => ({
+  root: {
+    [theme.breakpoints.down('xs')]: {
+      position: 'relative',
+      paddingLeft: '50%',
+      justifyContent: 'flex-start',
+      '&:before': {
+        content: 'attr(data-label)',
+        position: 'absolute',
+        left: 0,
+        width: '47%',
+        textAlign: 'right',
+      },
+    }
+  }
+}))(Grid)
+
 const TableHeads = [
   'Date',
-  'MakerAmount',
-  'TakerAmount',
+  'Maker Amount',
+  'Taker Amount',
   'Fee',
 ]
 
@@ -31,7 +50,7 @@ const mock = [
   { date: format(Date.now(), 'D/MM/YY'), makerAmount: 110, takerAmount: 2000, Fee: 100 },
 ]
 
-export default class OrderTable extends React.Component {
+class OrderTable extends React.Component {
 
   componentDidMount() {
     // NOTE: Calculate volumes
@@ -41,17 +60,19 @@ export default class OrderTable extends React.Component {
 
     return (
       <Grid container direction="column">
-        <Grid item container className="mb-1" className="p-1">
-          {TableHeads.map(h => <Grid key={h} item sm={h === 'Rank' ? 2 : 3} container justify="center">{h}</Grid>)}
-        </Grid>
+        <Hidden xsDown>
+          <Grid item container className="mb-1" className="p-1">
+            {TableHeads.map(h => <Grid key={h} item sm={h === 'Rank' ? 2 : 3} container justify="center">{h}</Grid>)}
+          </Grid>
+        </Hidden>
         {mock.map((item, index) => (
           <Grid item key={index}>
             <StyledPaper elevation={0}>
               <Grid container>
                 {Object.values(item).map((t, idx) => (
-                  <Grid item sm={3} key={idx} container justify="center">
+                  <Cell item sm={3} key={idx} data-label={TableHeads[idx]} container justify="center">
                     {t}
-                  </Grid>
+                  </Cell>
                 ))}
               </Grid>
             </StyledPaper>
@@ -61,3 +82,7 @@ export default class OrderTable extends React.Component {
     )
   }
 }
+
+const OrderTableResponsive = withWidth()(OrderTable)
+
+export default OrderTableResponsive
