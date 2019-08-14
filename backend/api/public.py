@@ -8,7 +8,7 @@ from .base import BaseHandler
 class PublicHandler(BaseHandler):
 
     async def get(self):
-        redis = await self.application.redis()
+        redis = self.application.redis
         keys = await redis.hlen('public_res')
         logger.debug('Length = %d', keys)
 
