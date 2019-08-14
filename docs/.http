@@ -10,7 +10,7 @@ Content-Type: application/json
 {
   "name": "ABC",
   "address": "0x77e725d8D66846B44801C044EE6f9c416a694bfE",
-  "logo": "https://via.placeholder.com/150",m
+  "logo": "https://via.placeholder.com/150",
   "dex_rate": 0.4
 }
 
