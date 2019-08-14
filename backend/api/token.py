@@ -8,7 +8,7 @@ from .base import BaseHandler
 class TokenHandler(BaseHandler):
 
     @authenticated
-    def get(self):
+    def get(self, user=None):
         """Return all available tokens for trading"""
         tokens = [model_to_dict(token or {}) for token in Token.select()]
         self.json_response(tokens)
