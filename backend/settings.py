@@ -1,7 +1,7 @@
-from os import getenv
-from os import path
+from os import getenv, path
 from logzero import logger
 from dotenv import load_dotenv
+from aioredis import create_redis_pool
 from peewee_async import Manager
 from peewee_asyncext import PooledPostgresqlExtDatabase
 
@@ -29,6 +29,12 @@ database = PooledPostgresqlExtDatabase(
 
 objects = Manager(database)
 
+# SETUP REDIS CONNECTION
+async def redis_conn():
+    conn = await create_redis_pool(getenv('REDIS_URI'), encoding='utf-8')
+    return conn
+
+
 # APPLICATION BACKEND SETTINGS
 base_path = path.dirname(__file__)
 settings = {
@@ -40,4 +46,5 @@ settings = {
     'static_path': base_path + '/static',
     'stg': getenv('STG'),
     'template_path': base_path + '/template',
+    'redis': redis_conn,
 }

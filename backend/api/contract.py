@@ -8,7 +8,7 @@ from .base import BaseHandler
 class ContractHandler(BaseHandler):
 
     @authenticated
-    def get(self, user):
+    def get(self, user=None):
         """Return all Contracts"""
         contracts = []
         contracts = [model_to_dict(c or {}) for c in Contract.select().where(Contract.obsolete == False)]

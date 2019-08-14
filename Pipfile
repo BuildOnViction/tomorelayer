@@ -19,6 +19,7 @@ aiopg = "*"
 web3 = "*"
 logzero = "*"
 pyjwt = "*"
+aioredis = "*"
 
 [requires]
 python_version = "3.7"

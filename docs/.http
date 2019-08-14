@@ -1,6 +1,9 @@
 :url = http://localhost:8888/api
 :res = register
 
+# get public
+GET :url/public
+
 # Test async post
 POST :url/:res
 Content-Type: application/json

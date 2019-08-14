@@ -1,6 +1,9 @@
 import os
+import json
 from logzero import logger
 from tornado.web import HTTPError
+from playhouse.shortcuts import model_to_dict
+from model import Token, Relayer, Contract
 from exception import AdminAuthorizationException, UserAuthorizationException
 from .jwt_encoder import decode_token
 
@@ -33,7 +36,9 @@ def json_header(handler):
 
 
 def authenticated(handler):
-
+    """
+    User authentication is required
+    """
     def wrapped_handler(handler_object):
         header = handler_object.request.headers
 
@@ -42,7 +47,7 @@ def authenticated(handler):
             decoded = decode_token(jwt_token)
             return handler(handler_object, user=decoded['address'])
         except Exception as err:
-            raise UserAuthorizationException('Authorization token is invalid')
+            raise UserAuthorizationException('Authorization token is invalid: {}'.format(err))
 
     return wrapped_handler
 
@@ -73,9 +78,39 @@ def common_authenticated(handler):
     return wrapped_handler
 
 
-def deprecated(handler):
-
+def deprecated(_handler):
+    """
+    Deprecated API shall be denoted with this decorator
+    """
     def wrapped_handler(handler_object):
         raise HTTPError(status_code=404, reason="Invalid api endpoint.")
 
     return wrapped_handler
+
+
+MODEL_TYPE = {
+    'token': Token,
+    'contract': Contract,
+    'relayer': Relayer,
+}
+
+def save_redis(key='public_res', field=None):
+
+    def wrapped(handler):
+
+        async def wrapped_handler(request_handler, *args, **kwargs):
+            await handler(request_handler, *args, **kwargs)
+
+            if not field:
+                return
+
+            dbmodel = MODEL_TYPE[field]
+            hfield = field.capitalize() + 's'
+
+            entities = [model_to_dict(entity or {}) for entity in dbmodel.select()]
+            logger.debug('Save new %s to redis', field)
+            await request_handler.application.redis.hmset_dict('public_res', {hfield: json.dumps(entities)})
+
+        return wrapped_handler
+
+    return wrapped

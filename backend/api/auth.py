@@ -1,9 +1,9 @@
 import json
-from logzero import logger
 from os import getenv
+from logzero import logger
 from util.jwt_encoder import encode_payload
 from util.decorator import deprecated
-from exception import InvalidValueException, MissingArgumentException, UserAuthorizationException
+from exception import MissingArgumentException, UserAuthorizationException
 from settings import SIGNATURE_MSG
 from .base import BaseHandler
 from .socket import SocketClient
@@ -25,12 +25,12 @@ class AuthHandler(BaseHandler):
         signing_address = web3.eth.account.recoverHash(hased_message, signature=signature)
 
         if signing_address.lower() != user_address.lower():
-            logger.debug('Signing_addr: %s' % signing_address)
-            logger.debug('Provided_addr: %s' % user_address)
+            logger.debug('Signing_addr: %s', signing_address)
+            logger.debug('Provided_addr: %s', user_address)
             raise UserAuthorizationException('User Address not matching Signature Address')
 
         token, expiry = encode_payload({'address': user_address})
-        return self.json_response({'token': token, 'exp': expiry })
+        return self.json_response({'token': token, 'exp': expiry})
 
 
     @deprecated

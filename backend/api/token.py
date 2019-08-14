@@ -1,6 +1,6 @@
 from playhouse.shortcuts import model_to_dict
 from model import Token
-from util.decorator import authenticated, common_authenticated
+from util.decorator import authenticated, common_authenticated, save_redis
 from exception import InvalidValueException
 from .base import BaseHandler
 
@@ -8,17 +8,18 @@ from .base import BaseHandler
 class TokenHandler(BaseHandler):
 
     @authenticated
-    def get(self, user):
+    def get(self, user=None):
         """Return all available tokens for trading"""
         tokens = [model_to_dict(token or {}) for token in Token.select()]
         self.json_response(tokens)
 
     @common_authenticated
-    async def post(self, user):
+    @save_redis(field='token')
+    async def post(self, user=None):
         """Add new token"""
         tokens = self.request_body
 
-        if type(tokens) != list or len(tokens) == 0:
+        if not tokens or not isinstance(tokens, list):
             raise InvalidValueException('Invalid payload data')
 
         async with self.application.objects.atomic():

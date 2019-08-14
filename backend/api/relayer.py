@@ -1,7 +1,7 @@
 from playhouse.shortcuts import model_to_dict
 from peewee import ProgrammingError
 from model import Relayer
-from exception import InvalidValueException, MissingArgumentException, UserAuthorizationException
+from exception import InvalidValueException, MissingArgumentException
 from util.decorator import authenticated
 from .base import BaseHandler
 
