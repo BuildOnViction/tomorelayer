@@ -11,16 +11,13 @@ from .jwt_encoder import decode_token
 def admin_required(handler):
 
     def wrapped_handler(handler_object):
-        try:
-            header = handler_object.request.headers
-            authorization = header.get('Authorization', 'Bearer invalidtoken').split(' ')[1]
-            if authorization != os.getenv('SECRET_HEADER'):
-                raise AdminAuthorizationException
-            return handler(handler_object)
-        except Exception as err:
-            if not isinstance(err, AdminAuthorizationException):
-                logger.debug(err)
+        header = handler_object.request.headers
+        authorization = header.get('Authorization', 'Bearer invalidtoken').split(' ')[1]
+
+        if authorization != os.getenv('SECRET_HEADER'):
             raise AdminAuthorizationException
+
+        return handler(handler_object)
 
     return wrapped_handler
 

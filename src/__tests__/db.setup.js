@@ -107,12 +107,10 @@ const setup = async () => {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
       symbol: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
       logo: {
         type: Sequelize.STRING,

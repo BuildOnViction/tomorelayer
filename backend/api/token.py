@@ -16,7 +16,7 @@ class TokenHandler(BaseHandler):
     @common_authenticated
     @save_redis(field='token')
     async def post(self, user=None):
-        """Add new token"""
+        """Add new tokens"""
         tokens = self.request_body
 
         if not tokens or not isinstance(tokens, list):

@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core'
 import {
   getTokenInfo,
-  createNewTokens,
+  createTokens,
 } from 'service/backend'
 import {
   AlertVariant,
@@ -73,7 +73,7 @@ class TokenPairList extends React.Component {
       symbol: token.symbol,
       total_supply: token.totalSupply,
     }))
-    const newTokens = await createNewTokens(payload)
+    const newTokens = await createTokens(payload)
 
     this.setState({ isRefreshing: false })
 
