@@ -82,7 +82,7 @@ class RelayerStat extends React.Component {
 
     return (
       <Grid container direction="column" spacing={4}>
-        <Grid item>
+        <Grid item xs={12}>
           <Box display="flex" alignItems="center">
             <Box>
               <StyledAvatar src={relayer.logo || placeholder} alt={relayer.name} className={avatarClassName} />
@@ -104,7 +104,7 @@ class RelayerStat extends React.Component {
           </Box>
         </Grid>
 
-        <Grid item>
+        <Grid item item xs={12}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={4} md={3}>
               <Grid container spacing={3} direction="column">
@@ -126,7 +126,7 @@ class RelayerStat extends React.Component {
           </Grid>
         </Grid>
 
-        <Grid item className="mt-2" style={{ minHeight: 400 }}>
+        <Grid item xs={12} className="mt-2" style={{ minHeight: 400 }}>
           <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
           <Box className="mt-0">
             {tab === TOPICS.orders && <OrderTable />}
