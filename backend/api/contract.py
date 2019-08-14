@@ -17,11 +17,18 @@ class ContractHandler(BaseHandler):
     @admin_required
     @save_redis(field='contract')
     async def post(self):
-        payload = self.request_body.get('contract', None)
+        """
+        Add new contracts
+        """
+        contracts = self.request_body
 
-        if not payload:
-            raise InvalidValueException('relayer payload is empty')
+        if not contracts or not isinstance(contracts, list):
+            raise InvalidValueException('contracts payload is invalid')
 
         async with self.application.objects.atomic():
-            contract = await self.application.objects.create(Contract, **payload)
-            self.json_response(model_to_dict(contract))
+            result = []
+            for contract in contracts:
+                obj = await self.application.objects.create(Contract, **contract)
+                result.append(model_to_dict(obj))
+
+            self.json_response(result)

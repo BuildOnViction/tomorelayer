@@ -74,13 +74,26 @@ export const onlyKeys = (...keys) => (obj) => {
 
 export const unique = (array) => array.filter((item, index) => array.indexOf(item) === index)
 
-export const uniqueBy = (array, key) =>
-  array.filter((item, index) => array.findIndex((i) => i[key] === item[key]) === index)
+export const uniqueBy = (...args) => {
+  const baseFunc = (array, key) => array.filter((item, index) => array.findIndex((i) => i[key] === item[key]) === index)
+  if (args.length === 2) {
+    return baseFunc(...args)
+  }
+
+  if (args.length === 1 && typeof args[0] === 'string') {
+    const key = args[0]
+    return (array) => baseFunc(array, key)
+  }
+}
 
 export const sequence = (from = 0, to = 10) =>
   Array.from({ length: to - from })
     .fill()
     .map((_, idx) => idx + from)
+
+export const times = (func, nth) => {
+  return Array.from({ length: nth }).map(func)
+}
 
 export class TabMap {
   constructor(...args) {

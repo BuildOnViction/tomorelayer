@@ -141,6 +141,12 @@ export const getContracts = async () =>
     .then(getPayload)
     .catch(logging)
 
+export const createContracts = async (contracts) =>
+  HttpClient()
+    .post(proxiedAPI.contract, contracts)
+    .then(getPayload)
+    .catch(logging)
+
 export const getRelayers = async () =>
   HttpClient()
     .get(proxiedAPI.relayer)
@@ -171,7 +177,7 @@ export const getTokens = async () =>
     .then(getPayload)
     .catch(logging)
 
-export const createNewTokens = async (payload) =>
+export const createTokens = async (payload) =>
   HttpClient()
     .post(proxiedAPI.token, payload)
     .then(getPayload)

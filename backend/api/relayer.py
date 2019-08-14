@@ -2,7 +2,7 @@ from playhouse.shortcuts import model_to_dict
 from peewee import ProgrammingError
 from model import Relayer
 from exception import InvalidValueException, MissingArgumentException
-from util.decorator import authenticated
+from util.decorator import authenticated, save_redis
 from .base import BaseHandler
 
 

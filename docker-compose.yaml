@@ -14,6 +14,11 @@ services:
     container_name: tomorelayer-cache
     ports:
       - 6379:6379
+  redistest:
+    image: redis:5-alpine
+    container_name: tomorelayer-cache-test
+    ports:
+      - 6380:6379
   pgtest:
     image: postgres:10-alpine
     container_name: tomorelayer-test
