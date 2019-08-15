@@ -16,6 +16,7 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
     ],
   },
   options: {
+    maintainAspectRatio: false,
     legend: {
       display: false,
     },
