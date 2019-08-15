@@ -30,3 +30,9 @@ export const FuzzySearch = async (pouch, fuzzyString) => {
 
   return result
 }
+
+export const PouchDelete = async (pouch, id) => {
+  const doc = await pouch.get(id)
+  const resp = await pouch.remove(doc)
+  return resp.ok
+}

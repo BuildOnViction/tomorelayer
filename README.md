@@ -138,8 +138,8 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
    - [x] RelayerRegistration
    - [x] Complete Registration & Configuration Flow for Relayer User
 3. Polishing Frontend
+   - [x] Client Searching
    - [ ] Customizing Material-UI
-   - [ ] Index Searching
 4. Backend Making
    - [x] Caching with Redis
    - [x] Open API for calling with other application (TomoIssuer, DEXX)

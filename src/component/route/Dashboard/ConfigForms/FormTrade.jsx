@@ -58,6 +58,10 @@ const FormTrade = ({
   }
 
   const handleNotify = async () => {
+    if (isEmpty(relayer.link)) {
+      return undefined
+    }
+
     setIsNotifying(true)
     await notifyDex(relayer.link)
     setIsNotifying(false)

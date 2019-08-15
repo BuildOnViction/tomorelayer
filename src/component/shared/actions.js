@@ -71,7 +71,10 @@ export const FetchPublic = async (state) => {
 
   await pouch.createIndex({
     index: {
-      fields: ['fuzzy']
+      fields: [
+        '_id',
+        'fuzzy',
+      ],
     },
   })
 
