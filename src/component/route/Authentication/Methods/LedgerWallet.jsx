@@ -22,7 +22,7 @@ import * as blk from 'service/blockchain'
 export default class LedgerWallet extends React.Component {
 
   state = {
-    hdpath: "m/44'/889'/0'/0",
+    hdpath: "m/44'/60'/0'",
     openDialog: false,
     activeAddress: undefined,
     activeBalance: undefined,
@@ -34,7 +34,7 @@ export default class LedgerWallet extends React.Component {
   })
 
   unlock = async () => {
-    const ledgerWallet = await ledger.open({ coinType: 889 })
+    const ledgerWallet = await ledger.open({ customDerivationPath: this.state.hdpath })
     const activeAddress = ledgerWallet.address
     const activeBalance = await blk.getBalance(activeAddress)
     this.setState({
