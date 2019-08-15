@@ -1,6 +1,12 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import { addDays, format as timeFormat, distanceInWordsToNow, isPast, parse as dateParse } from 'date-fns'
+import {
+  addDays,
+  distanceInWordsToNow,
+  format as timeFormat,
+  isPast,
+  parse as dateParse,
+} from 'date-fns'
 import {
   Box,
   Button,
@@ -15,7 +21,11 @@ import {
 } from '@material-ui/core'
 import TextIcon from '@material-ui/icons/AccountCircle'
 import WalletIcon from '@material-ui/icons/AccountBalanceWallet'
-import { PushAlert, AlertVariant } from 'service/frontend'
+import {
+  AlertVariant,
+  PushAlert,
+  PouchDelete,
+} from 'service/frontend'
 import * as http from 'service/backend'
 import { ResignNotice } from './PresentComponents'
 
@@ -63,6 +73,7 @@ const FormResign = props => {
     }
 
     await http.deleteRelayer(relayer.id)
+    await PouchDelete(this.props.pouch, `relayer${relayer.id}`)
     return refundRelayer(relayer.id)
   }
 
@@ -155,7 +166,8 @@ const FormResign = props => {
 }
 
 const mapProps = state => ({
-  RelayerContract: state.blk.RelayerContract
+  RelayerContract: state.blk.RelayerContract,
+  pouch: state.pouch,
 })
 
 const actions = {

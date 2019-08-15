@@ -17,6 +17,9 @@ import {
   isEmpty,
 } from 'service/helper'
 import {
+  FuzzySearch,
+} from 'service/frontend'
+import {
   UserMenu,
   RelayerMenu,
   StartRelayerButton,
@@ -36,13 +39,26 @@ const SearchTextField = withStyles(theme => ({
     },
   },
 }))(TextField)
+
 class PageHeader extends React.Component {
+
+  state = {
+    searchResult: []
+  }
+
+  pouchQuery = async e => {
+    const value = e.target.value
+    const searchResult = await FuzzySearch(this.props.pouch, value)
+    this.setState({ searchResult })
+    console.log(searchResult)
+  }
 
   render() {
 
     const {
       user,
       relayers,
+      pouch,
       /* changeTheme,
        * activeTheme, */
     } = this.props
@@ -62,19 +78,23 @@ class PageHeader extends React.Component {
             </Grid>
             <Hidden smDown>
               <Grid item xs={6} md={6}>
-                <SearchBox />
+                <SearchBox onChange={this.pouchQuery} disabled={!Boolean(pouch)}/>
               </Grid>
             </Hidden>
             <Grid item xs={9} md={4} container justify="flex-end" direction="row" spacing={4} alignItems="center">
               <Hidden smDown>
-                {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}              
+                {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
                 {auth && !userOwnRelayer && <StartRelayerButton />}
                 {auth && <UserMenu />}
               </Hidden>
 
               <Hidden mdUp>
-                {auth && userOwnRelayer && <ResponsiveMenu ref={ref} relayers={relayers} userOwnRelayer={userOwnRelayer}><SearchBox /></ResponsiveMenu>}
-              </Hidden>  
+                {auth && userOwnRelayer && (
+                  <ResponsiveMenu ref={ref} relayers={relayers} userOwnRelayer={userOwnRelayer}>
+                    <SearchBox />
+                  </ResponsiveMenu>
+                )}
+              </Hidden>
               {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}
               {/* <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} /> */}
             </Grid>
@@ -85,11 +105,16 @@ class PageHeader extends React.Component {
   }
 }
 
-const SearchBox = () => (
+const SearchBox = ({
+  disabled,
+  onChange,
+}) => (
   <SearchTextField
-    placeholder="Search everything you want…"
+    placeholder="Search for contract, relayer or token data..."
     fullWidth
     variant="outlined"
+    onChange={onChange}
+    disabled={disabled}
     InputProps={{
       endAdornment: (
         <InputAdornment position="end">
@@ -97,10 +122,12 @@ const SearchBox = () => (
         </InputAdornment>
       )
     }}
-  />)
+  />
+)
 
 const mapProps = state => ({
   activeTheme: state.activeTheme,
+  pouch: state.pouch,
 })
 
 const actions = {

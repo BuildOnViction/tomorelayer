@@ -75,6 +75,19 @@ export class Register extends React.Component {
     }
 
     const newRelayer = await http.createRelayer(payload)
+
+    await this.props.pouch.put({
+      ...newRelayer,
+      _id: 'relayer' + newRelayer.id.toString(),
+      type: 'relayer',
+      fuzzy: [
+        newRelayer.name,
+        newRelayer.owner,
+        newRelayer.coinbase,
+        newRelayer.address,
+      ].join(','),
+    })
+
     this.props.saveNewRelayer(newRelayer)
     this.setState({ step: 6 })
   }
@@ -92,6 +105,16 @@ export class Register extends React.Component {
       usedNames,
       RelayerContract,
     } = this.props
+
+    if (!RelayerContract) {
+      return (
+        <Container maxWidth="sm" className="register-container">
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            <LoadSpinner />
+          </Box>
+        </Container>
+      )
+    }
 
     if (!userAddress || userAddress === '') {
       return (
@@ -170,6 +193,7 @@ const mapProps = state => ({
   wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase).concat(state.Relayers.map(t => t.owner)),
   usedNames: state.Relayers.map(t => t.name),
+  pouch: state.pouch,
 })
 
 const actions = store => ({

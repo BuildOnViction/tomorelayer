@@ -75,6 +75,13 @@ class TokenPairList extends React.Component {
     }))
     const newTokens = await createTokens(payload)
 
+    await Promise.all(...newTokens.map(async token => this.props.pouch.put({
+      ...token,
+      _id: 'token' + token.id.toString(),
+      type: 'token',
+      fuzzy: [token.name, token.symbol, token.address].join(',')
+    })))
+
     this.setState({ isRefreshing: false })
 
     if (newTokens.error) {
@@ -183,6 +190,7 @@ export const mapProps = state => {
     quoteTokens: Tokens.filter(t => t.is_major),
     Tokens: Tokens.map(t => t.address.toLowerCase()),
     TomoXContract: state.blk.TomoXContract,
+    pouch: state.pouch,
   }
 }
 

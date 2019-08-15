@@ -138,15 +138,22 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
    - [x] RelayerRegistration
    - [x] Complete Registration & Configuration Flow for Relayer User
 3. Polishing Frontend
+   - [x] Client Searching
    - [ ] Customizing Material-UI
-4. Showing & Updating all filled Orders from Relayers(OrderBook) in real time
-   - [ ] List all filled orders
-   - [ ] Showing Fill Order Details
-5. Showing & Updating all supported token available for trading
-6. Listing signed & verified Relayers
+4. Backend Making
+   - [x] Caching with Redis
+   - [x] Open API for calling with other application (TomoIssuer, DEXX)
+5. Backend Making
+   - [x] Caching with Redis
+   - [x] Open API for calling with other application (TomoIssuer, DEXX)
+6. Deployment
+   - [x] Test app
+   - [x] Documentation
+7. Showing & Updating all supported token available for trading
+8. Listing signed & verified Relayers
    - [ ] Counting filled orders
    - [ ] Network volume details
-7. Make Portable/Reusable API Kit
+9. Make Portable/Reusable API Kit
 
 
 
