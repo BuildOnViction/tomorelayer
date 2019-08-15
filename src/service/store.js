@@ -19,6 +19,7 @@ export const initialState = {
   network_info: {
     tomousd: NaN,
   },
+  pouch: undefined,
 }
 
 const middlewares = applyMiddleware(...[connect && connect(initialState)].filter(isTruthy))

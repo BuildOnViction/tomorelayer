@@ -93,6 +93,16 @@ export class Register extends React.Component {
       RelayerContract,
     } = this.props
 
+    if (!RelayerContract) {
+      return (
+        <Container maxWidth="sm" className="register-container">
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            <LoadSpinner />
+          </Box>
+        </Container>
+      )
+    }
+
     if (!userAddress || userAddress === '') {
       return (
         <Container maxWidth="sm" className="register-container">
