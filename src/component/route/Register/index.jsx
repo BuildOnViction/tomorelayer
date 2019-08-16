@@ -24,6 +24,7 @@ export class Register extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isRegistering: false,
       step: 1,
       payload: {
         owner: '',
@@ -62,38 +63,50 @@ export class Register extends React.Component {
       trade_fee: _.round(this.state.payload.trade_fee * 100, 0),
     }
 
-    const config = { value: blk.toWei(payload.deposit) }
+    try {
+      this.setState({ isRegistering: true })
+      const config = { value: blk.toWei(payload.deposit) }
 
-    const { RelayerContract } = this.props
-    const { status, details } = await RelayerContract.register(payload, config)
+      const { RelayerContract } = this.props
+      const { status, details } = await RelayerContract.register(payload, config)
 
-    if (!status) {
-      return this.props.pushAlert({
-        variant: AlertVariant.error,
-        message: details,
+      if (!status) {
+        this.setState({ isRegistering: false })
+        return this.props.pushAlert({
+          variant: AlertVariant.error,
+          message: details,
+        })
+      }
+
+      const newRelayer = await http.createRelayer(payload)
+
+      await this.props.pouch.put({
+        ...newRelayer,
+        _id: 'relayer' + newRelayer.id.toString(),
+        type: 'relayer',
+        fuzzy: [
+          newRelayer.name,
+          newRelayer.owner,
+          newRelayer.coinbase,
+          newRelayer.address,
+        ].join(','),
       })
+
+      this.props.saveNewRelayer(newRelayer)
+      this.setState({
+        step: 6,
+        isRegistering: false,
+      })
+
+    } catch (e) {
+      this.setState({ isRegistering: false })
     }
 
-    const newRelayer = await http.createRelayer(payload)
-
-    await this.props.pouch.put({
-      ...newRelayer,
-      _id: 'relayer' + newRelayer.id.toString(),
-      type: 'relayer',
-      fuzzy: [
-        newRelayer.name,
-        newRelayer.owner,
-        newRelayer.coinbase,
-        newRelayer.address,
-      ].join(','),
-    })
-
-    this.props.saveNewRelayer(newRelayer)
-    this.setState({ step: 6 })
   }
 
   render() {
     const {
+      isRegistering,
       step,
       payload,
     } = this.state
@@ -178,6 +191,7 @@ export class Register extends React.Component {
                 meta={payload}
                 goBack={this.goBack}
                 registerRelayer={this.confirmRegister}
+                isRegistering={isRegistering}
               />
             )}
             {step === 6 && <SuccessRegistration navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`} />}

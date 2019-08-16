@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Box,
   Button,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -43,6 +44,7 @@ const Review = ({
   meta,
   goBack,
   registerRelayer,
+  isRegistering,
 }) => {
   const pairs = document.__memoizedUserSelectedPairs__ || []
   return (
@@ -66,13 +68,21 @@ const Review = ({
           </TableBody>
         </Table>
       </Paper>
-      <Box display="flex" justifyContent="space-between" className="mt-2">
-        <Button color="secondary" variant="contained" type="button" onClick={goBack}>
+      <Box display="flex" justifyContent="space-between" className="mt-2" alignItems="center">
+        <Button color="secondary" variant="contained" type="button" onClick={goBack} disabled={isRegistering}>
           Back
         </Button>
-        <Button color="primary" variant="contained" type="button" onClick={registerRelayer}>
-          Confirm
-        </Button>
+        {isRegistering && (
+          <Box display="flex" alignItems="center" className="pr-1">
+            <span className="mr-1">Submitting...</span>
+            <CircularProgress style={{ width: 20, height: 20 }}/>
+          </Box>
+        )}
+        {!isRegistering && (
+          <Button color="primary" variant="contained" type="button" onClick={registerRelayer} disabled={isRegistering}>
+            Confirm
+          </Button>
+        )}
       </Box>
     </Box>
   )
