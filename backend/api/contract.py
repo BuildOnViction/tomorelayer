@@ -32,3 +32,26 @@ class ContractHandler(BaseHandler):
                 result.append(model_to_dict(obj))
 
             self.json_response(result)
+
+    @admin_required
+    @save_redis(field='contract')
+    async def patch(self):
+        """
+        Save contracts
+        """
+        contract = self.request_body
+        contract_id = contract.get('id', None)
+
+        if not contract_id:
+            raise InvalidValueException('Missing contract id')
+
+        del contract['id']
+
+        try:
+            query = (Contract.update(**contract).where(Contract.id == contract_id).returning(Contract))
+            cursor = query.execute()
+            self.json_response(model_to_dict(cursor[0]))
+        except IndexError:
+            raise InvalidValueException('contract id={param} does not exist'.format(param=str(contract_id)))
+        except ProgrammingError:
+            raise InvalidValueException('update payload is invalid: {param}'.format(param=str(contract)))
