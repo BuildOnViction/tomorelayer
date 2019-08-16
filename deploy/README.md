@@ -35,6 +35,33 @@ $ task dep backend
 
 Thats it!
 
+# Incremental Deploy
+
+Incremental Deployment means local source codes will be bundled (if needed) and copied directly to server. Web Admin may
+have to restart/refresh server process manager for changes to be realized and take effects
+
+### Frontend Deploy
+There are 2 ways to deploy frontend codes
+1. Local bundling then copied to server
+   - Run `npm run build` and copied code bundle to server, or
+   - Usinng `task` command
+   ``` shell
+   $ task dep frontend swap
+   ```
+2. Bundling at server, dont forget to install required dependencies with npm
+   ``` shell
+   $ task dep frontend
+   ```
+
+### Backend Deploy
+All required dependencies specified by `Pipenv` must be properly installed at server-side
+1. Directly copy local codes to server.
+   ```shell
+   $ task dep backend swap
+   ```
+2. Restart the Application with `Supervisor`
+   - Go to `http://tomorelayer.tomochain.com/supervisord` and sign-in with pre-setup `user` and `password`
+   - Restart all
 
 
 # Diving deep...
