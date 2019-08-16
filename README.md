@@ -143,16 +143,18 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
 4. Backend Making
    - [x] Caching with Redis
    - [x] Open API for calling with other application (TomoIssuer, DEXX)
-5. Backend Making
-   - [x] Caching with Redis
-   - [x] Open API for calling with other application (TomoIssuer, DEXX)
-6. Deployment
+5. Deployment
    - [x] Test app
    - [x] Documentation
-7. Showing & Updating all supported token available for trading
-8. Listing signed & verified Relayers
+6. Showing & Updating all supported token available for trading
+   - [x] Open API for calls from TomoIssuer
+   - [x] Client manually update token from TomoXListing Contract
+   - [x] Notifying DEX about Token Change for Relayer
+7. Listing signed & verified Relayers
    - [ ] Counting filled orders
    - [ ] Network volume details
+8. Documentation
+   - [ ] API Document
 9. Make Portable/Reusable API Kit
 
 
