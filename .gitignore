@@ -36,3 +36,4 @@ src/artifacts/
 log.txt
 
 __pycache__
+apidoc/

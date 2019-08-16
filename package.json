@@ -44,7 +44,8 @@
     "embark": "embark run",
     "build": "react-app-rewired build",
     "lint": "eslint --ext .jsx,.js src/",
-    "pylint": "pipenv run pylint backend/*"
+    "pylint": "pipenv run pylint backend/*",
+    "apidoc": "apidoc -i backend/ -o apidoc/"
   },
   "proxy": "http://localhost:8888",
   "eslintConfig": {
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@testing-library/react": "^8.0.1",
     "@testing-library/user-event": "^4.1.0",
+    "apidoc": "^0.17.7",
     "chai": "^4.2.0",
     "dotenv": "^7.0.0",
     "embark": "^4.1.0",

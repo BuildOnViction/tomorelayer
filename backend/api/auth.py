@@ -3,7 +3,7 @@ from os import getenv
 from logzero import logger
 from util.jwt_encoder import encode_payload
 from util.decorator import deprecated
-from exception import MissingArgumentException, UserAuthorizationException
+from exception import MissingArgumentException, UserAuthorizationException, InvalidValueException
 from settings import SIGNATURE_MSG
 from .base import BaseHandler
 from .socket import SocketClient
@@ -12,6 +12,59 @@ from .socket import SocketClient
 class AuthHandler(BaseHandler):
 
     def get(self):
+        """
+        @api {get} /api/auth?address=:address&signature=:signature User Authentication
+        @apiName userGetAuthenticated
+        @apiGroup Authentication
+
+        @apiDescription This API is for authentication with JWT & typically Eth Address.
+        User must verify their address ownership by signing a message.
+        Both signature & user's wallet address must be sent as query parameters to backend.
+        If signature is verified, an authentication Token shell be returned along with its expiring time.
+        Admin do not need to authenticate
+
+        @apiParam {String} address User Eth Address
+        @apiParam {String} signature User Signature by signing pre-defined message (check environment variable REACT_APP_SIGNATURE_MESSAGE)
+
+        @apiSuccess {String} token User token to be used
+        @apiSuccess {String} exp  Expiry time
+
+        @apiSampleRequest http://localhost:8888/api/auth
+
+        @apiError InvalidSignatureFormat Signature is not a Hex
+        @apiErrorExample {json} InvalidSignatureFormat:
+        HTTP/1.1 400 Bad Request
+        {
+            "error": {
+                "code": 400,
+                "message": "Invalid value(s)",
+                "detail": "Signature message is not a valid hex string"
+            }
+        }
+
+        @apiError InvalidAddress Parsed address from Signature doesnt match user'address
+        @apiErrorExample {json} InvalidAddress:
+        HTTP/1.1 400 Bad Request
+        {
+            "error": {
+                "code": 400,
+                "message": "Invalid value(s)",
+                "detail": "User Address not matching Signature Address"
+            }
+        }
+
+        @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+          "payload": {
+             "token": "some-very-long-token",
+             "exp": 123455678
+           },
+          "meta": ""
+        }
+
+        @apiVersion 0.1.0
+        """
         from eth_account.messages import defunct_hash_message
 
         user_address = self.get_argument('address', None)
@@ -21,8 +74,14 @@ class AuthHandler(BaseHandler):
             raise MissingArgumentException('Missing required argument(s)')
 
         web3 = self.application.blockchain.web3
-        hased_message = defunct_hash_message(text=SIGNATURE_MSG)
-        signing_address = web3.eth.account.recoverHash(hased_message, signature=signature)
+
+        hased_message, signing_address = '', ''
+
+        try:
+            hased_message = defunct_hash_message(text=SIGNATURE_MSG)
+            signing_address = web3.eth.account.recoverHash(hased_message, signature=signature)
+        except Exception:
+            raise InvalidValueException('Signature message is not a valid hex string')
 
         if signing_address.lower() != user_address.lower():
             logger.debug('Signing_addr: %s', signing_address)
