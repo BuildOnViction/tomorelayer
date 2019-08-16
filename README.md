@@ -117,7 +117,30 @@ Those are where you get started.
 #### Backend Development
 
 -   Checkout Python Tornado docs&#x2026;
--   Communicate with Frontend through 2 channels: one is Socket and one for Restful API, checkout `backend/route` for details
+-   Communicate with Frontend through 2 channels: one is Socket and one for Restful API, checkout `backend/route` for
+    details
+-   Models & available API
+
+     + Admin (not used)
+
+     + Contract: **GET, POST, PATCH** (method in **bold** format require **admin privilieges**)
+
+     | id  | name   | owner  | address     | abi   | obsolete |
+     |-----|--------|--------|-------------|-------|----------|
+     | int | string | string | eth_address | bjson | boolean  |
+
+     + Relayer: GET POST PATCH DELETE
+
+     | id  | owner   | name   | coinbase | deposit | trade_fee | from_tokens | to_tokens | logo | link | resigning | lock_time |
+     |-----|---------|--------|----------|---------|-----------|-------------|-----------|------|------|-----------|-----------|
+     | int | address | string | address  | int     | int       | array       | array     | link | link | boolean   | int       |
+
+     + Token: GET POST
+
+     | id  | name   | symbol | address | total_supply | logo | is_major |
+     |-----|--------|--------|---------|--------------|------|----------|
+     | int | string | string | address | number       | link | boolean  |
+
 
 <a id="roadmap"></a>
 
@@ -128,34 +151,31 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
 
 ## Development Roadmap
 
-1. Relayer Registration & Update
-   - [x] Backend Database
-   - [x] SmartContract
+1. Backend
+   - [x] Backend Database Models & available API
+   - [x] Authentication (with **JWT**)
    - [x] Depovs Document & Deployment
-2. Refactoring frontend structure, finalise bundling setup
-   - [x] Refactor UI/UX
-   - [x] Login
-   - [x] RelayerRegistration
-   - [x] Complete Registration & Configuration Flow for Relayer User
-3. Polishing Frontend
-   - [x] Client Searching
-   - [ ] Customizing Material-UI
-4. Backend Making
    - [x] Caching with Redis
-   - [x] Open API for calling with other application (TomoIssuer, DEXX)
-5. Deployment
-   - [x] Test app
-   - [x] Documentation
-6. Showing & Updating all supported token available for trading
-   - [x] Open API for calls from TomoIssuer
+   - [x] Open API for calling with other application (TomoIssuer, DEX)
    - [x] Client manually update token from TomoXListing Contract
    - [x] Notifying DEX about Token Change for Relayer
-7. Listing signed & verified Relayers
+2. Blockchain & Infras
+   - [x] SmartContract
+   - [x] Testing SmartContract
+3. Frontend development
+   - [x] Finalized UI/UX Design
+   - [ ] Complete Wallet-Integration
+   - [x] Client Searching
+   - [ ] Customizing Material-UI
+4. Deployment
+   - [x] Test app
+   - [x] How-To Documentation
+5. View Orders
    - [ ] Counting filled orders
    - [ ] Network volume details
-8. Documentation
+6. Documentation
    - [ ] API Document
-9. Make Portable/Reusable API Kit
+7. Make Portable/Reusable API Kit
 
 
 
