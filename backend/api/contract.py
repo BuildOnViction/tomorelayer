@@ -9,7 +9,49 @@ class ContractHandler(BaseHandler):
 
     @authenticated
     def get(self, user=None):
-        """Return all Contracts"""
+        """
+        @api {get} /api/contract Get Contract
+        @apiName getContracts
+        @apiGroup Contract
+
+        @apiDescription This API is for getting Contract.
+        This API endpoint require authentication, either of user or admin.
+
+        @apiPermission user
+
+        @apiSuccess {Object[]} contracts Array of in-use (not-obsolete) Contracts
+
+        @apiHeaderExample {json} Header-Example:
+        {
+          "Content-Type": "application/json",
+          "Authorization" "Bearer user-token-or-admin-token"
+        }
+
+        @apiSampleRequest http://localhost:8888/api/contract
+
+        @apiHeader {String} Authorization Users unique access-token
+        @apiHeader {String} Content-Type Content-Type
+
+        @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+          "payload": [
+             {
+               "name": "RelayerRegistration",
+               "address": "contract-address",
+               "owner": "owner-address"
+             },
+             {
+               "name": "TomoXListing",
+               "address": "contract-address",
+               "owner": "empty"
+             }
+           ],
+          "meta": ""
+        }
+
+        @apiVersion 0.1.0
+        """
         contracts = []
         contracts = [model_to_dict(c or {}) for c in Contract.select().where(Contract.obsolete == False)]
         self.json_response(contracts)
@@ -18,12 +60,71 @@ class ContractHandler(BaseHandler):
     @save_redis(field='contract')
     async def post(self):
         """
-        Add new contracts
+        @api {post} /api/contract Create Contract
+        @apiName createContracts
+        @apiGroup Contract
+
+        @apiDescription This API is for creating Contract.
+        Can be used to create a single contract or multiple contract entities.
+        This API endpoint require Admin Authentication.
+        Newly created contracts shall be updated to Redis as well.
+
+        @apiPermission admin
+
+        @apiSuccess {Object} contract Newly-created Contract
+
+        @apiSampleRequest http://localhost:8888/api/contract
+
+        @apiHeader {String} Authorization Admin secret token bearer
+        @apiHeader {String} Content-Type application/json
+
+        @apiParam {String} name Contract name
+        @apiParam {String} owner Contract owner address, required but can just be any valid string
+        @apiParam {String} address Contract address
+        @apiParam {Object} abi Contract abi
+
+        @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+          "payload": {
+            "id": 1,
+            "name": "RelayerRegistration",
+            "address": "contract-address",
+            "owner": "owner-address",
+            "abi": "...abi-json"
+          },
+          "meta": ""
+        }
+
+        @apiError Unauthenticated Not permitted to create contract
+        @apiErrorExample {json} Unauthorized
+        HTTP/1.1 401 Unauthorized
+        {
+          "error": {
+            "code": 401,
+            "message": "Not authorized"
+          }
+        }
+
+        @apiError Invalid invalid contract payload
+        @apiErrorExample {json} Invalid Contract Payload:
+        HTTP/1.1 400 Bad Request
+        {
+          "error": {
+            "code": 400,
+            "message": "Invalid value(s)",
+            "detail": "contract payload is invaid"
+          }
+        }
+
+        @apiVersion 0.1.0
         """
         contracts = self.request_body
 
         if not contracts or not isinstance(contracts, list):
-            raise InvalidValueException('contracts payload is invalid')
+            contract = contracts
+            obj = await self.application.objects.create(Contract, **contract)
+            return self.json_response(model_to_dict(obj))
 
         async with self.application.objects.atomic():
             result = []
@@ -31,7 +132,7 @@ class ContractHandler(BaseHandler):
                 obj = await self.application.objects.create(Contract, **contract)
                 result.append(model_to_dict(obj))
 
-            self.json_response(result)
+            return self.json_response(result)
 
     @admin_required
     @save_redis(field='contract')

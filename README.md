@@ -6,6 +6,7 @@
     -  [Start hacking](#org30ae7c1)
         1.  [Frontend Development](#org7f062cc)
         2.  [Backend Development](#orga954538)
+        3.  [API Document](#apidoc)
 3.  [Development Roadmap](#roadmap)
 4.  [Troubleshooting](#trouble)
 
@@ -117,13 +118,12 @@ Those are where you get started.
 #### Backend Development
 
 -   Checkout Python Tornado docs&#x2026;
--   Communicate with Frontend through 2 channels: one is Socket and one for Restful API, checkout `backend/route` for
-    details
+
 -   Models & available API
 
      + Admin (not used)
 
-     + Contract: **GET, POST, PATCH** (method in **bold** format require **admin privilieges**)
+     + Contract: GET, **POST, PATCH** (method in **bold** format require **admin privilieges**)
 
      | id  | name   | owner  | address     | abi   | obsolete |
      |-----|--------|--------|-------------|-------|----------|
@@ -141,6 +141,16 @@ Those are where you get started.
      |-----|--------|--------|---------|--------------|------|----------|
      | int | string | string | address | number       | link | boolean  |
 
+
+<a id="apidoc"></a>
+
+#### API Document
+For more details, you can browse the API-Documents by running command
+
+``` shell
+$ npm run apidoc
+```
+Then open file `tomorelayer/apidoc/index.html` to see sample and requirements for each api endpoints
 
 <a id="roadmap"></a>
 
