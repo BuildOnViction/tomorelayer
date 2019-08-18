@@ -12,59 +12,6 @@ from .socket import SocketClient
 class AuthHandler(BaseHandler):
 
     def get(self):
-        """
-        @api {get} /api/auth?address=:address&signature=:signature User Authentication
-        @apiName userGetAuthenticated
-        @apiGroup Authentication
-
-        @apiDescription This API is for authentication with JWT & typically Eth Address.
-        User must verify their address ownership by signing a message.
-        Both signature & user's wallet address must be sent as query parameters to backend.
-        If signature is verified, an authentication Token shell be returned along with its expiring time.
-        Admin do not need to authenticate
-
-        @apiParam {String} address User Eth Address
-        @apiParam {String} signature User Signature by signing pre-defined message (check environment variable REACT_APP_SIGNATURE_MESSAGE)
-
-        @apiSuccess {String} token User token to be used
-        @apiSuccess {String} exp  Expiry time
-
-        @apiSampleRequest http://localhost:8888/api/auth
-
-        @apiError InvalidSignatureFormat Signature is not a Hex
-        @apiErrorExample {json} InvalidSignatureFormat:
-        HTTP/1.1 400 Bad Request
-        {
-            "error": {
-                "code": 400,
-                "message": "Invalid value(s)",
-                "detail": "Signature message is not a valid hex string"
-            }
-        }
-
-        @apiError InvalidAddress Parsed address from Signature doesnt match user'address
-        @apiErrorExample {json} InvalidAddress:
-        HTTP/1.1 400 Bad Request
-        {
-            "error": {
-                "code": 400,
-                "message": "Invalid value(s)",
-                "detail": "User Address not matching Signature Address"
-            }
-        }
-
-        @apiSuccessExample {json} Success-Response:
-        HTTP/1.1 200 OK
-        {
-          "payload": {
-             "token": "some-very-long-token",
-             "exp": 123455678
-           },
-          "meta": ""
-        }
-
-        @apiVersion 0.1.0
-        """
         from eth_account.messages import defunct_hash_message
 
         user_address = self.get_argument('address', None)
@@ -127,3 +74,58 @@ class AuthSocketHandler():
                 'url': url,
             }
         })
+
+
+"""
+@api {get} /api/auth?address=:address&signature=:signature User Authentication
+@apiName userGetAuthenticated
+@apiGroup Authentication
+
+@apiDescription This API is for authentication with JWT & typically Eth Address.
+User must verify their address ownership by signing a message.
+Both signature & user's wallet address must be sent as query parameters to backend.
+If signature is verified, an authentication Token shell be returned along with its expiring time.
+Admin do not need to authenticate
+
+@apiParam {String} address User Eth Address
+@apiParam {String} signature User Signature by signing pre-defined message (check environment variable REACT_APP_SIGNATURE_MESSAGE)
+
+@apiSuccess {String} token User token to be used
+@apiSuccess {String} exp  Expiry time
+
+@apiSampleRequest http://localhost:8888/api/auth
+
+@apiError InvalidSignatureFormat Signature is not a Hex
+@apiErrorExample {json} InvalidSignatureFormat:
+HTTP/1.1 400 Bad Request
+{
+    "error": {
+        "code": 400,
+        "message": "Invalid value(s)",
+        "detail": "Signature message is not a valid hex string"
+    }
+}
+
+@apiError InvalidAddress Parsed address from Signature doesnt match user'address
+@apiErrorExample {json} InvalidAddress:
+HTTP/1.1 400 Bad Request
+{
+    "error": {
+        "code": 400,
+        "message": "Invalid value(s)",
+        "detail": "User Address not matching Signature Address"
+    }
+}
+
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+  "payload": {
+     "token": "some-very-long-token",
+     "exp": 123455678
+   },
+  "meta": ""
+}
+
+@apiVersion 0.1.0
+"""

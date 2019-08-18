@@ -145,12 +145,14 @@ Those are where you get started.
 <a id="apidoc"></a>
 
 #### API Document
-For more details, you can browse the API-Documents by running command
+
+For more details about API Endpoint required params and technical requirements, open `tomorelayer/apidoc/index.html` to see sample and requirements for each api endpoints
+
+You can also re-run API Document Generator to get the latest document, using command
 
 ``` shell
 $ npm run apidoc
 ```
-Then open file `tomorelayer/apidoc/index.html` to see sample and requirements for each api endpoints
 
 <a id="roadmap"></a>
 
