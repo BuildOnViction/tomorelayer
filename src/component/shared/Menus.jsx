@@ -34,9 +34,6 @@ const DropDownMenu = withStyles(theme => ({
     width: 'auto',
     minWidth: 150,
     maxWidth: 200,
-    [theme.breakpoints.down('sm')]: {
-      minWidth: 300,
-    },
   }
 }))(Menu)
 
@@ -161,7 +158,7 @@ export const RelayerMenu = ({ relayers }) => {
 
 export const StartRelayerButton = () => <Button variant="contained" component={AdapterLink} to="/register">Start a Relayer</Button>
 
-export const ResponsiveMenu = React.forwardRef((props, ref) => {
+export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
   const [
     anchorEl,
     setAnchorEl,
@@ -188,13 +185,10 @@ export const ResponsiveMenu = React.forwardRef((props, ref) => {
           onClose={handleClose}
           style={{ transform: 'translateY(40px)' }}
         >
-          <MenuTitle ref={ref}>
-            {props.children}
-          </MenuTitle >
-          {props.userOwnRelayer && (
+          {userOwnRelayer && (
             <Box>
               <MenuTitle>My Relayers</MenuTitle>
-              {Object.values(props.relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
+              {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
                 <StyledMenuItem onClick={handleClose} component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
                   {r.name}
                 </StyledMenuItem>
@@ -204,7 +198,7 @@ export const ResponsiveMenu = React.forwardRef((props, ref) => {
               </SpecialStyledMenuItem>
             </Box>
           )}
-          {!props.userOwnRelayer && <StyledMenuItem onClick={handleClose}><StartRelayerButton onClick={handleClose} /></StyledMenuItem>}
+          {!userOwnRelayer && <StyledMenuItem onClick={handleClose}><StartRelayerButton onClick={handleClose} /></StyledMenuItem>}
           <Box>
             <MenuTitle>User</MenuTitle>
             <StyledMenuItem onClick={handleClose} component={AdapterLink} to="/profile">
@@ -218,4 +212,4 @@ export const ResponsiveMenu = React.forwardRef((props, ref) => {
       </ClickAwayListener>
     </Box>
   )
-})
+}

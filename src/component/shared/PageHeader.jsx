@@ -1,17 +1,13 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import SearchIcon from '@material-ui/icons/Search'
 import {
   Box,
   Container,
   Grid,
-  InputAdornment,
   Link,
   // Switch,
-  TextField,
   Hidden,
   withWidth,
-  withStyles,
 } from '@material-ui/core'
 import {
   isEmpty,
@@ -27,19 +23,9 @@ import {
 } from './Menus'
 import { AdapterLink } from './Adapters'
 import logo from 'asset/logo-tomorelayer.svg'
+import PageSearch, { PageSearchResponsive } from './PageSearch'
 
 const ref = React.createRef()
-
-const SearchTextField = withStyles(theme => ({
-  root: {
-    [theme.breakpoints.down('sm')]: {
-      '& .MuiOutlinedInput-root': {
-        backgroundColor: theme.palette.document,
-      },
-    },
-  },
-}))(TextField)
-
 class PageHeader extends React.Component {
 
   state = {
@@ -63,6 +49,8 @@ class PageHeader extends React.Component {
        * activeTheme, */
     } = this.props
 
+    const { searchResult } = this.state
+
     const auth = Boolean(user.wallet)
     const userOwnRelayer = !isEmpty(relayers)
 
@@ -77,8 +65,8 @@ class PageHeader extends React.Component {
                   </Link> */}
             </Grid>
             <Hidden smDown>
-              <Grid item xs={6} md={6}>
-                <SearchBox onChange={this.pouchQuery} disabled={!Boolean(pouch)}/>
+              <Grid item md={6}>
+                <PageSearch onChange={this.pouchQuery} searchResult={searchResult} disabled={!Boolean(pouch)} />
               </Grid>
             </Hidden>
             <Grid item xs={9} md={4} container justify="flex-end" direction="row" spacing={4} alignItems="center">
@@ -89,12 +77,9 @@ class PageHeader extends React.Component {
               </Hidden>
 
               <Hidden mdUp>
-                {auth && userOwnRelayer && (
-                  <ResponsiveMenu ref={ref} relayers={relayers} userOwnRelayer={userOwnRelayer}>
-                    <SearchBox />
-                  </ResponsiveMenu>
-                )}
-              </Hidden>
+                <PageSearchResponsive onChange={this.pouchQuery} searchResult={searchResult} disabled={!Boolean(pouch)} />
+                {auth && userOwnRelayer && <ResponsiveMenu ref={ref} relayers={relayers} userOwnRelayer={userOwnRelayer}></ResponsiveMenu>}
+              </Hidden>  
               {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}
               {/* <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} /> */}
             </Grid>
@@ -104,26 +89,6 @@ class PageHeader extends React.Component {
     )
   }
 }
-
-const SearchBox = ({
-  disabled,
-  onChange,
-}) => (
-  <SearchTextField
-    placeholder="Search for contract, relayer or token data..."
-    fullWidth
-    variant="outlined"
-    onChange={onChange}
-    disabled={disabled}
-    InputProps={{
-      endAdornment: (
-        <InputAdornment position="end">
-          <SearchIcon />
-        </InputAdornment>
-      )
-    }}
-  />
-)
 
 const mapProps = state => ({
   activeTheme: state.activeTheme,
