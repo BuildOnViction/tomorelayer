@@ -73,6 +73,12 @@ const SpecialStyledMenuItem = withStyles(theme => ({
   }
 }))(MenuItem)
 
+const RouteMenuItem = props => (
+  <StyledMenuItem onClick={props.onClick} component={AdapterLink} to={props.routeTo}>
+    {props.text}
+  </StyledMenuItem>
+)
+
 
 export const UserMenu = () => {
 
@@ -103,12 +109,8 @@ export const UserMenu = () => {
           onClose={handleClose}
           style={{ transform: 'translateY(40px)' }}
         >
-          <StyledMenuItem onClick={handleClose} component={AdapterLink} to="/profile">
-            Profile
-          </StyledMenuItem>
-          <StyledMenuItem onClick={handleClose} component={AdapterLink} to="/logout">
-            Logout
-          </StyledMenuItem>
+          <RouteMenuItem onClick={handleClose} routeTo="/profile" text="Profile" />
+          <RouteMenuItem onClick={handleClose} routeTo="/logout" text="Logout" />
         </DropDownMenu>
       </ClickAwayListener>
     </Box>
@@ -124,6 +126,8 @@ export const RelayerMenu = ({ relayers }) => {
   const handleClick = (event) => setAnchorEl(event.currentTarget)
 
   const handleClose = () => setAnchorEl(null)
+
+  const sortedRelayers = Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name))
 
   return (
     <Box>
@@ -142,21 +146,34 @@ export const RelayerMenu = ({ relayers }) => {
           onClose={handleClose}
           style={{ transform: 'translateY(40px)' }}
         >
-          {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
-            <StyledMenuItem onClick={handleClose} component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
-              {r.name}
-            </StyledMenuItem>
+          {sortedRelayers.map(r => (
+            <RouteMenuItem
+              onClick={handleClose}
+              routeTo={`/dashboard/${r.coinbase}`}
+              key={r.coinbase}
+              text={r.name}
+            />
           ))}
-          <SpecialStyledMenuItem onClick={handleClose} component={AdapterLink} to="/register">
-            Create new relayer
-          </SpecialStyledMenuItem>
+          <RouteMenuItem
+            onClick={handleClose}
+            routeTo="/register"
+            text="Create relayer"
+          />
         </DropDownMenu>
       </ClickAwayListener>
     </Box>
   )
 }
 
-export const StartRelayerButton = () => <Button variant="contained" component={AdapterLink} to="/register">Start a Relayer</Button>
+export const StartRelayerButton = () => (
+  <Button
+    variant="contained"
+    component={AdapterLink}
+    to="/register"
+  >
+    Start a Relayer
+  </Button>
+)
 
 export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
   const [
@@ -167,6 +184,8 @@ export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
   const handleClick = (event) => setAnchorEl(event.currentTarget)
 
   const handleClose = () => setAnchorEl(null)
+
+  const sortedRelayers = Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name))
 
   return (
     <Box>
@@ -188,25 +207,28 @@ export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
           {userOwnRelayer && (
             <Box>
               <MenuTitle>My Relayers</MenuTitle>
-              {Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name)).map(r => (
-                <StyledMenuItem onClick={handleClose} component={AdapterLink} to={`/dashboard/${r.coinbase}`} key={r.coinbase}>
-                  {r.name}
-                </StyledMenuItem>
+              {sortedRelayers.map(r => (
+                <RouteMenuItem
+                  onClick={handleClose}
+                  routeTo={`/dashboard/${r.coinbase}`}
+                  key={r.coinbase}
+                  text={r.name}
+                />
               ))}
-              <SpecialStyledMenuItem onClick={handleClose} component={AdapterLink} to="/register">
+              <SpecialStyledMenuItem onClick={handleClose} routeTo="/register">
                 Create new relayer
               </SpecialStyledMenuItem>
             </Box>
           )}
-          {!userOwnRelayer && <StyledMenuItem onClick={handleClose}><StartRelayerButton onClick={handleClose} /></StyledMenuItem>}
+          {!userOwnRelayer && (
+            <StyledMenuItem onClick={handleClose}>
+              <StartRelayerButton onClick={handleClose} />
+            </StyledMenuItem>
+          )}
           <Box>
             <MenuTitle>User</MenuTitle>
-            <StyledMenuItem onClick={handleClose} component={AdapterLink} to="/profile">
-              Profile
-            </StyledMenuItem>
-            <StyledMenuItem onClick={handleClose} component={AdapterLink} to="/logout">
-              Logout
-            </StyledMenuItem>
+            <RouteMenuItem onClick={handleClose} routeTo="/profile" text="Profile" />
+            <RouteMenuItem onClick={handleClose} routeTo="/logout" text="Logout" />
           </Box>
         </DropDownMenu>
       </ClickAwayListener>

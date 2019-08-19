@@ -66,7 +66,11 @@ class PageHeader extends React.Component {
             </Grid>
             <Hidden smDown>
               <Grid item md={6}>
-                <PageSearch onChange={this.pouchQuery} searchResult={searchResult} disabled={!Boolean(pouch)} />
+                <PageSearch
+                  onChange={this.pouchQuery}
+                  searchResult={searchResult}
+                  disabled={!Boolean(pouch)}
+                />
               </Grid>
             </Hidden>
             <Grid item xs={9} md={4} container justify="flex-end" direction="row" spacing={4} alignItems="center">
@@ -77,10 +81,24 @@ class PageHeader extends React.Component {
               </Hidden>
 
               <Hidden mdUp>
-                <PageSearchResponsive onChange={this.pouchQuery} searchResult={searchResult} disabled={!Boolean(pouch)} />
-                {auth && userOwnRelayer && <ResponsiveMenu ref={ref} relayers={relayers} userOwnRelayer={userOwnRelayer}></ResponsiveMenu>}
-              </Hidden>  
-              {!auth && <Link component={AdapterLink} to="/login" className="ml-3">Help</Link>}
+                <PageSearchResponsive
+                  onChange={this.pouchQuery}
+                  searchResult={searchResult}
+                  disabled={!Boolean(pouch)}
+                />
+                {auth && userOwnRelayer && (
+                  <ResponsiveMenu
+                    ref={ref}
+                    relayers={relayers}
+                    userOwnRelayer={userOwnRelayer}
+                  />
+                )}
+              </Hidden>
+              {!auth && (
+                <Link component={AdapterLink} to="/login" className="ml-3">
+                  Help
+                </Link>
+              )}
               {/* <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} /> */}
             </Grid>
           </Grid>

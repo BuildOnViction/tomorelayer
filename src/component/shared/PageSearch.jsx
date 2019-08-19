@@ -2,15 +2,15 @@ import React from 'react'
 import Downshift from 'downshift'
 import { makeStyles } from '@material-ui/core/styles'
 import {
-    TextField,
-    InputAdornment,
-    Paper,
-    Menu,
-    MenuItem,
-    Button,
-    withStyles,
-    ClickAwayListener,
-    Box,
+  TextField,
+  InputAdornment,
+  Paper,
+  Menu,
+  MenuItem,
+  Button,
+  withStyles,
+  ClickAwayListener,
+  Box,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import relayerUrl from '../../asset/relayer.svg'
@@ -102,8 +102,8 @@ const getSuggestions = (value, suggestions) => {
   const inputLength = inputValue.length
 
   return inputLength === 0
-    ? []
-    : suggestions
+       ? []
+       : suggestions
 }
 
 export const PageSearch = ({ searchResult, onChange }) => {
@@ -113,46 +113,46 @@ export const PageSearch = ({ searchResult, onChange }) => {
     <div className={classes.root}>
       <Downshift id="downshift-simple">
         {({
-        getInputProps,
-        getItemProps,
-        getLabelProps,
-        getMenuProps,
-        highlightedIndex,
-        inputValue,
-        isOpen,
-        selectedItem,
+          getInputProps,
+          getItemProps,
+          getLabelProps,
+          getMenuProps,
+          highlightedIndex,
+          inputValue,
+          isOpen,
+          selectedItem,
         }) => {
-        const { onBlur, onFocus, ...inputProps } = getInputProps({
+          const { onBlur, onFocus, ...inputProps } = getInputProps({
             placeholder: 'Search everything you want…',
             onChange: onChange,
-        })
+          })
 
-        return (
+          return (
             <div className={classes.container}>
-            {renderInput({
+              {renderInput({
                 fullWidth: true,
                 variant:'outlined',
                 classes,
                 inputProps,
-            })}
+              })}
 
-            <div {...getMenuProps()}>
+              <div {...getMenuProps()}>
                 {isOpen ? (
-                <Paper className={classes.paper} square>
+                  <Paper className={classes.paper} square>
                     {getSuggestions(inputValue, searchResult).map((suggestion, index) =>
-                    renderSuggestion({
+                      renderSuggestion({
                         suggestion,
                         index,
                         itemProps: getItemProps({ item: suggestion }),
                         highlightedIndex,
                         selectedItem,
-                    }),
+                      }),
                     )}
-                </Paper>
+                  </Paper>
                 ) : null}
+              </div>
             </div>
-            </div>
-        )
+          )
         }}
       </Downshift>
     </div>
@@ -162,23 +162,23 @@ export const PageSearch = ({ searchResult, onChange }) => {
 export default PageSearch
 
 const MenuButton = withStyles(theme => ({
-    root: {
-      textTransform: 'none',
-      margin: `0px ${theme.spacing(2)}px`,
-      color: theme.palette.maintitle,
-      [theme.breakpoints.down('sm')]: {
-        margin: 0,
-      },
-    }
-  }))(props => {
-    const InnerIcon = props.icon
-    return (
-      <Button {...props} size="small">
-        {props.text} <InnerIcon style={{ marginLeft: 5 }} />
-      </Button>
-    )
+  root: {
+    textTransform: 'none',
+    margin: `0px ${theme.spacing(2)}px`,
+    color: theme.palette.maintitle,
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+    },
+  }
+}))(props => {
+  const InnerIcon = props.icon
+  return (
+    <Button {...props} size="small">
+      {props.text} <InnerIcon style={{ marginLeft: 5 }} />
+    </Button>
+  )
 })
-  
+
 const DropDownMenu = withStyles(theme => ({
   paper: {
     width: 320,
@@ -195,7 +195,7 @@ export const PageSearchResponsive = React.forwardRef((props, ref) => {
     anchorEl,
     setAnchorEl,
   ] = React.useState(null)
-  
+
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
 
@@ -220,6 +220,6 @@ export const PageSearchResponsive = React.forwardRef((props, ref) => {
           <Box ref={ref}><PageSearch onChange={props.onChange} searchResult={props.searchResult} disabled={props.disabled} /></Box>
         </DropDownMenu>
       </ClickAwayListener>
-    </Box>  
+    </Box>
   )
 })
