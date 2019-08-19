@@ -1,3 +1,4 @@
+from logzero import logger
 from playhouse.shortcuts import model_to_dict
 from peewee import ProgrammingError
 from model import Relayer
@@ -39,7 +40,9 @@ class RelayerHandler(BaseHandler):
         if not relayer_id:
             raise MissingArgumentException('missing relayer id')
 
-        if not relayer_owner or relayer_owner != user:
+        if not relayer_owner or relayer_owner.lower() != user.lower():
+            logger.debug('Relayer Owner: %s', relayer_owner)
+            logger.debug('User Address: %s', user)
             raise InvalidValueException('Owner address does not match user_address')
 
         del relayer['id']
