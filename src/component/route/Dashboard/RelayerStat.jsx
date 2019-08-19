@@ -62,10 +62,17 @@ class RelayerStat extends React.Component {
     const unifiedTokens = _.unique([...relayer.from_tokens, ...relayer.to_tokens])
     const listedTokens = AvailableTokens.filter(t => unifiedTokens.indexOf(t.address) >= 0)
 
+    const mockChartData = () => new Array(80).fill().map((_, idx) => ({
+      label: idx % 5 === 0 ? 'abc' : '',
+      value: Math.random() * 2500 + 500,
+    }))
+
     const relayerStat = {
       tomousd: `$${_.round(stats.tomousd, 2)}`,
       trades: (!_.isEmpty(stats.trades) && stats.trades[relayer.coinbase]) || 1000,
       fees: (!_.isEmpty(stats.fees) && stats.fees[relayer.coinbase]) || '1000 TOMO',
+      volumes: stats.volumes || mockChartData(),
+      fills: stats.fills || mockChartData(),
     }
 
     const avatarClassName = cx({ 'empty-avatar': isEmpty(relayer.logo) })
@@ -121,7 +128,7 @@ class RelayerStat extends React.Component {
             </Grid>
 
             <Grid item xs={12} sm={8} md={9}>
-              <TimeVolumeStat />
+              <TimeVolumeStat data={relayerStat} />
             </Grid>
           </Grid>
         </Grid>

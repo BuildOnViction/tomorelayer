@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
-import { IS_DEV } from 'service/constant'
 import {
   VOLUME_CHART as volChartCfg,
 } from './charts.config'
@@ -93,25 +92,26 @@ export default class TimeVolumeStat extends React.Component {
   }
 
   componentDidMount() {
-    const mockdata = new Array(80).fill().map((_, idx) => ({
-      label: idx % 5 === 0 ? 'abc' : '',
-      value: Math.random() * 2500 + 500,
-    }))
+    const renderChart = (chartData, chartId) => {
 
-    const ctx = document.getElementById('volume-chart').getContext('2d')
+      const ctx = document.getElementById(chartId).getContext('2d')
 
-    // NOTE: refer to http://victorblog.com/html5-canvas-gradient-creator/
-    const bgFill = ctx.createLinearGradient(150.000, 200.000, 150.000, 0.000)
-    bgFill.addColorStop(0.000, 'rgba(21, 12, 123, 0.400)')
-    bgFill.addColorStop(1.000, 'rgba(72, 121, 217, 0.300)')
+      // NOTE: refer to http://victorblog.com/html5-canvas-gradient-creator/
+      const bgFill = ctx.createLinearGradient(150.000, 200.000, 150.000, 0.000)
+      bgFill.addColorStop(0.000, 'rgba(21, 12, 123, 0.400)')
+      bgFill.addColorStop(1.000, 'rgba(72, 121, 217, 0.300)')
 
-    const lineFill = ctx.createLinearGradient(150.000, 200.000, 150.000, 0.000)
-    lineFill.addColorStop(0.000, 'rgba(27, 0, 109, 0.0500)')
-    lineFill.addColorStop(1.000, 'rgba(0, 199, 255, 0.800)')
+      const lineFill = ctx.createLinearGradient(150.000, 200.000, 150.000, 0.000)
+      lineFill.addColorStop(0.000, 'rgba(27, 0, 109, 0.0500)')
+      lineFill.addColorStop(1.000, 'rgba(0, 199, 255, 0.800)')
 
-    const chartData = IS_DEV ? mockdata : this.props.data
+      const chart = new Chart(ctx, volChartCfg(chartData, bgFill, lineFill))
+      return chart
+    }
 
-    this.VOLUME_CHART = new Chart(ctx, volChartCfg(chartData, bgFill, lineFill))
+    this.VOLUME_CHART = renderChart(this.props.data.volumes, 'volume-chart')
+    this.FILLS_CHART = renderChart(this.props.data.fills, 'fills-chart')
+
   }
 
   changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })
@@ -123,6 +123,7 @@ export default class TimeVolumeStat extends React.Component {
       period,
       topic,
     } = this.state
+
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={4}>
@@ -140,7 +141,14 @@ export default class TimeVolumeStat extends React.Component {
             </PeriodTabs>
           </Grid>
           <Grid item sm={12} style={{ position: 'relative', height: 282 }}>
-            <canvas id="volume-chart" style={{ height: '100%', width: '100%' }} />
+            <canvas
+              id="volume-chart"
+              style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
+            />
+            <canvas
+              id="fills-chart"
+              style={{ height: '100%', width: '100%', display: topic === Topic._fills ? 'initial' : 'none' }}
+            />
           </Grid>
         </Grid>
       </StyledPaper>
