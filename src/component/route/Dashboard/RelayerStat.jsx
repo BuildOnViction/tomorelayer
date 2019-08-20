@@ -13,7 +13,7 @@ import placeholder from 'asset/image-placeholder.png'
 import IconTomoPrice from 'asset/icon-tomo-price.png'
 import IconTrades from 'asset/icon-trades.png'
 import IconFees from 'asset/icon-network-fees.png'
-
+import * as http from 'service/backend'
 import * as _ from 'service/helper'
 import { StyledLink } from 'component/shared/Adapters'
 import { isEmpty, TabMap } from 'service/helper'
@@ -44,6 +44,30 @@ const TOPICS = new TabMap('Orders', 'Tokens')
 class RelayerStat extends React.Component {
   state = {
     tab: TOPICS.orders,
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.relayer.coinbase !== this.props.relayer.coinbase) {
+      const getData = await this.getRelayerStat()
+      console.log(getData)
+    }
+  }
+
+  getRelayerStat = async () => {
+    const { relayer } = this.props
+
+    if (_.isEmpty(relayer.link)) {
+      return undefined
+    }
+
+    const result = await Promise.all(relayer.from_tokens.map(async (token, idx) => {
+      const data = await http.getDexTrades(relayer.link, {
+        quoteToken: token,
+        baseToken: relayer.to_tokens[idx]
+      })
+      return data
+    }))
+    return result
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -134,7 +158,11 @@ class RelayerStat extends React.Component {
         </Grid>
 
         <Grid item xs={12} className="mt-2" style={{ minHeight: 400 }}>
-          <TableControl tabValue={TOPICS.getIndex(tab)} onTabChange={this.onTabChange} topics={TOPICS.values} />
+          <TableControl
+            tabValue={TOPICS.getIndex(tab)}
+            onTabChange={this.onTabChange}
+            topics={TOPICS.values}
+          />
           <Box className="mt-0">
             {tab === TOPICS.orders && <OrderTable />}
             {tab === TOPICS.tokens && <TokenTable relayer={relayer} tokens={listedTokens} />}

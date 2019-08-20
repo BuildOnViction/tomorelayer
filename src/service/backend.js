@@ -66,7 +66,7 @@ const HttpClient = () => {
 }
 
 export const getPayload = (r) => {
-  if (r.payload.token) {
+  if (r.payload && r.payload.token) {
     window.sessionStorage.setItem('tomorelayerAccessToken', r.payload.token)
   }
   return r.payload || r
