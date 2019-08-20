@@ -109,8 +109,9 @@ def save_redis(key='public_res', field=None):
             hfield = field.capitalize() + 's'
 
             entities = [model_to_dict(entity or {}) for entity in dbmodel.select()]
-            logger.debug('Save new %s to redis', field)
             await request_handler.application.redis.hmset_dict('public_res', {hfield: json.dumps(entities)})
+            logger.debug('Save new %s to redis', field)
+
 
         return wrapped_handler
 

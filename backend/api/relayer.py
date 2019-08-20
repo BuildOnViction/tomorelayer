@@ -7,6 +7,17 @@ from util.decorator import authenticated, save_redis
 from .base import BaseHandler
 
 
+def verify_user(user, relayer_owner):
+    if not user:
+        raise InvalidValueException('Missing user address')
+
+    if not relayer_owner:
+        raise InvalidValueException('Missing relayer owner address')
+
+    if user.lower() != relayer_owner.lower():
+        raise InvalidValueException('Owner address does not match relayer_owner address')
+
+
 class RelayerHandler(BaseHandler):
 
     @authenticated
@@ -20,8 +31,7 @@ class RelayerHandler(BaseHandler):
         """Add new relayer"""
         relayer = self.request_body
 
-        if user != relayer['owner']:
-            raise InvalidValueException('Owner address does not match user_address')
+        verify_user(user, relayer['owner'])
 
         try:
             obj = await self.application.objects.create(Relayer, **relayer)
@@ -37,13 +47,10 @@ class RelayerHandler(BaseHandler):
         relayer_id = relayer.get('id', None)
         relayer_owner = relayer.get('owner', None)
 
+        verify_user(user, relayer_owner)
+
         if not relayer_id:
             raise MissingArgumentException('missing relayer id')
-
-        if not relayer_owner or relayer_owner.lower() != user.lower():
-            logger.debug('Relayer Owner: %s', relayer_owner)
-            logger.debug('User Address: %s', user)
-            raise InvalidValueException('Owner address does not match user_address')
 
         del relayer['id']
 
