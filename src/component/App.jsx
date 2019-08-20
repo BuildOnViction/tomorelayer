@@ -9,7 +9,10 @@ import * as _ from 'service/helper'
 import RelayerContractClass from 'service/relayer_contract'
 import TomoXContractClass from 'service/tomox_contract'
 import { FetchPublic } from './shared/actions'
-import { Protected } from 'component/utility'
+import {
+  Protected,
+  MainAppLoader,
+} from 'component/utility'
 
 import PageHeader from 'component/shared/PageHeader'
 import PageFooter from 'component/shared/PageFooter'
@@ -30,12 +33,14 @@ const Router = IS_DEV ? HashRouter : BrowserRouter
 class App extends React.Component {
 
   state = {
-    userRelayers: {}
+    userRelayers: {},
+    publicFetchLoading: true,
   }
 
   async componentDidMount() {
     try {
       await this.props.FetchPublic()
+      this.setState({ publicFetchLoading: false })
     } catch (error) {
       console.error(error)
       this.props.PushAlert({
@@ -85,6 +90,7 @@ class App extends React.Component {
 
     const {
       userRelayers,
+      publicFetchLoading,
     } = this.state
 
     const {
@@ -93,6 +99,17 @@ class App extends React.Component {
     } = this.props
 
     const userLoggedIn = Boolean(user.wallet)
+
+    if (publicFetchLoading) {
+      return (
+        <Router>
+          <div>
+            <PageHeader relayers={userRelayers} user={user} />
+            <MainAppLoader />
+          </div>
+        </Router>
+      )
+    }
 
     return (
       <Router>

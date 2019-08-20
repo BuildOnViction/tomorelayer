@@ -1,0 +1,10 @@
+.apploader.container {
+  height: 90vh;
+  width: 100vw;
+  text-align: center;
+}
+
+.apploader.spinner {
+  top: 50%;
+  transform: translateY(50%);
+}

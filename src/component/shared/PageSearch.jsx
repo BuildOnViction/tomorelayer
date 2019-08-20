@@ -104,15 +104,17 @@ const renderSuggestion = (suggestionProps) => {
       {...itemProps}
       key={suggestion._id}
       selected={isHighlighted}
-      component="div"
+      component={Link}
       style={{
         fontWeight: isSelected ? 500 : 400,
       }}
+      href={routeParser(suggestion)}
+      color="inherit"
+      rel="noopener noreferrer"
+      target="_blank"
     >
-      <Link href={routeParser(suggestion)} color="inherit" rel="noopener noreferrer" target="_blank">
-        <img style={{width: 15, height: 15, marginRight: 7}} src={Icons[suggestion.type]} alt={suggestion.type}/>
-        <span>{ `${suggestion.name} (${suggestion.type})` }</span>
-      </Link>
+      <img style={{width: 15, height: 15, marginRight: 7}} src={Icons[suggestion.type]} alt={suggestion.type}/>
+      <span>{ `${suggestion.name} (${suggestion.type})` }</span>
     </MenuItem>
   )
 }

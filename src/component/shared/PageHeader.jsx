@@ -36,7 +36,6 @@ class PageHeader extends React.Component {
     const value = e.target.value
     const searchResult = await FuzzySearch(this.props.pouch, value)
     this.setState({ searchResult })
-    console.log(searchResult)
   }
 
   render() {
