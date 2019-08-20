@@ -69,7 +69,7 @@ export const getPayload = (r) => {
   if (r.payload.token) {
     window.sessionStorage.setItem('tomorelayerAccessToken', r.payload.token)
   }
-  return r.payload
+  return r.payload || r
 }
 
 const logging = async (error) => {
@@ -203,6 +203,12 @@ export const notifyDex = async (dexUrl) =>
   HttpClient()
     .put(`${dexUrl}/api/relayer`)
     .then(genericHandler)
+    .catch(logging)
+
+export const getDexTrades = async (dexUrl, queryParams) =>
+  HttpClient()
+    .get(`${dexUrl}/api/trades?${qs.stringify(queryParams)}`)
+    .then(getPayload)
     .catch(logging)
 
 // STATIC EXTERNAL LINK
