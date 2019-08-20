@@ -11,6 +11,7 @@ import {
   withStyles,
   ClickAwayListener,
   Box,
+  Link,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import relayerUrl from '../../asset/relayer.svg'
@@ -91,8 +92,10 @@ const renderSuggestion = (suggestionProps) => {
         fontWeight: isSelected ? 500 : 400,
       }}
     >
-      <img style={{width: 15, height: 15, marginRight: 7}} src={Icons[suggestion.type]} alt={suggestion.type}/>
-      <span>{ `${suggestion.name} (${suggestion.type})` }</span>
+      <Link href="https://scan.tomochain.com/" color="inherit" rel="noopener noreferrer" target="_blank">
+        <img style={{width: 15, height: 15, marginRight: 7}} src={Icons[suggestion.type]} alt={suggestion.type}/>
+        <span>{ `${suggestion.name} (${suggestion.type})` }</span>
+      </Link>
     </MenuItem>
   )
 }
@@ -143,7 +146,7 @@ export const PageSearch = ({ searchResult, onChange }) => {
                       renderSuggestion({
                         suggestion,
                         index,
-                        itemProps: getItemProps({ item: suggestion }),
+                        itemProps: getItemProps({ item: suggestion.name }),
                         highlightedIndex,
                         selectedItem,
                       }),
