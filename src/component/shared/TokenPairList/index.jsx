@@ -100,7 +100,8 @@ class TokenPairList extends React.Component {
 
   setFilter = func => this.setState({ filterFunction: func })
 
-  onItemChange = pair => () => {
+  onItemChange = pair => e => {
+    e.stopPropagation()
     const index = this.props.pairs.indexOf(pair)
     const newList = Array.from(this.props.pairs)
     newList[index].checked = !newList[index].checked

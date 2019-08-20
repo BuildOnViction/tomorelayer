@@ -8,7 +8,7 @@ import {
   ListItemText,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import InfoIcon from '@material-ui/icons/Info'
+import InfoIcon from '@material-ui/icons/ArrowDownward'
 import Arrows from '@material-ui/icons/CompareArrows'
 import {
   ExternalLinks,
@@ -58,7 +58,7 @@ const StyledListItemIcon = withStyles(theme => ({
 const PairInfoIcon = withStyles(theme => ({
   root: {
     color: `${theme.palette.link}26`,
-    fontSize: 14,
+    fontSize: 18,
     transition: 'font-size .5s, color .5s',
     display: 'none',
   }
@@ -90,13 +90,21 @@ export default class PairItem extends React.Component {
   handleInfoClick = () => this.setState({ showDetails: !this.state.showDetails })
 
   render() {
-    const { disabled, pair, onChange } = this.props
-    const { showDetails } = this.state
+    const {
+      disabled,
+      onChange,
+      pair,
+    } = this.props
+
+    const {
+      showDetails,
+    } = this.state
+
     const cls = cx({ 'selected': showDetails })
 
     return (
       <React.Fragment>
-        <TokenListItem key={pair.toString()} dense button className={cls}>
+        <TokenListItem key={pair.toString()} dense button className={cls} onClick={this.handleInfoClick}>
           <StyledListItemIcon>
             <StyledCheckbox
               color={pair.checked ? 'primary' : 'default'}
@@ -108,10 +116,8 @@ export default class PairItem extends React.Component {
               }}
             />
           </StyledListItemIcon>
-          <ListItemText primary={pair.toString()} onClick={this.handleInfoClick} />
-          <PairInfoIcon
-            className="info-icon"
-          />
+          <ListItemText primary={pair.toString()} />
+          <PairInfoIcon className="info-icon" />
         </TokenListItem>
         {showDetails && (
           <PairDetails container spacing={4} justify="space-between" alignItems="center">
