@@ -14,9 +14,9 @@ import {
   Link,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-import relayerUrl from '../../asset/relayer.svg'
-import issuerUrl from '../../asset/issuer.svg'
-import contractUrl from '../../asset/contract.svg'
+import relayerUrl from 'asset/relayer.svg'
+import issuerUrl from 'asset/issuer.svg'
+import contractUrl from 'asset/contract.svg'
 
 const Icons = {
   'relayer': relayerUrl,
@@ -82,6 +82,23 @@ const renderSuggestion = (suggestionProps) => {
   const isHighlighted = highlightedIndex === index
   const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1
 
+  const routeParser = suggestedItem => {
+
+    const tomoscanUrl = 'https://scan.tomochain.com'
+    const tomorelayerUrl = window.location.origin
+
+    switch (suggestedItem.type) {
+      case 'contract':
+        return `${tomoscanUrl}/address/${suggestedItem.address}`
+      case 'token':
+        return `${tomoscanUrl}/tokens/${suggestedItem.address}`
+      case 'relayer':
+        return `${tomorelayerUrl}/dashboard/${suggestedItem.coinbase}`
+      default:
+        return ''
+    }
+  }
+
   return (
     <MenuItem
       {...itemProps}
@@ -92,7 +109,7 @@ const renderSuggestion = (suggestionProps) => {
         fontWeight: isSelected ? 500 : 400,
       }}
     >
-      <Link href="https://scan.tomochain.com/" color="inherit" rel="noopener noreferrer" target="_blank">
+      <Link href={routeParser(suggestion)} color="inherit" rel="noopener noreferrer" target="_blank">
         <img style={{width: 15, height: 15, marginRight: 7}} src={Icons[suggestion.type]} alt={suggestion.type}/>
         <span>{ `${suggestion.name} (${suggestion.type})` }</span>
       </Link>
@@ -104,9 +121,7 @@ const getSuggestions = (value, suggestions) => {
   const inputValue = value.trim().toLowerCase()
   const inputLength = inputValue.length
 
-  return inputLength === 0
-       ? []
-       : suggestions
+  return inputLength === 0 ? [] : suggestions
 }
 
 export const PageSearch = ({ searchResult, onChange }) => {
@@ -220,7 +235,13 @@ export const PageSearchResponsive = React.forwardRef((props, ref) => {
           onClose={handleClose}
           style={{ transform: 'translateY(40px)' }}
         >
-          <Box ref={ref}><PageSearch onChange={props.onChange} searchResult={props.searchResult} disabled={props.disabled} /></Box>
+          <Box ref={ref}>
+            <PageSearch
+              onChange={props.onChange}
+              searchResult={props.searchResult}
+              disabled={props.disabled}
+            />
+          </Box>
         </DropDownMenu>
       </ClickAwayListener>
     </Box>
