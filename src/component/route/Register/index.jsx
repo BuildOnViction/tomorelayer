@@ -25,7 +25,7 @@ export class Register extends React.Component {
     super(props)
     this.state = {
       isRegistering: false,
-      step: 1,
+      step: 6,
       payload: {
         owner: '',
         deposit: MISC.MinimumDeposit,
@@ -194,7 +194,12 @@ export class Register extends React.Component {
                 isRegistering={isRegistering}
               />
             )}
-            {step === 6 && <SuccessRegistration navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`} />}
+            {step === 6 && (
+              <SuccessRegistration
+                navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`}
+                deposit={payload.deposit}
+              />
+            )}
           </div>
         </Box>
       </Container>

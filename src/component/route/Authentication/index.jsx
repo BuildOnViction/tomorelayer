@@ -12,16 +12,16 @@ import {
 import Header from './Header'
 import MethodBar from './MethodBar'
 import BrowserWallet from './Methods/BrowserWallet'
-// import LedgerWallet from './Methods/LedgerWallet'
-// import TrezorWallet from './Methods/TrezorWallet'
+import LedgerWallet from './Methods/LedgerWallet'
+import TrezorWallet from './Methods/TrezorWallet'
 import PrivatekeyWallet from './Methods/PrivatekeyWallet'
 import MnemonicWallet from './Methods/MnemonicWallet'
 
 
 const {
   BrowserWallet: _BrowserWallet_,
-  // LedgerWallet: _LedgerWallet_,
-  // TrezorWallet: _TrezorWallet_,
+  LedgerWallet: _LedgerWallet_,
+  TrezorWallet: _TrezorWallet_,
   SoftwareWalletMnemonic: _MnemonicWallet_,
   SoftwareWalletPrivate: _PrivateWallet_,
 } = UNLOCK_WALLET_METHODS
@@ -36,8 +36,8 @@ class Authentication extends React.Component {
 
   MethodOptions = [
     _BrowserWallet_,
-    /* _LedgerWallet_,
-     * _TrezorWallet_, */
+    _LedgerWallet_,
+    _TrezorWallet_,
     _PrivateWallet_,
     _MnemonicWallet_,
   ]
@@ -100,8 +100,8 @@ class Authentication extends React.Component {
           options={this.MethodOptions}
         />
         {isActiveMethod(_BrowserWallet_) && <BrowserWallet onConfirm={this.confirmWallet} />}
-        {/* {isActiveMethod(_LedgerWallet_) && <LedgerWallet onConfirm={this.confirmWallet} />}
-            {isActiveMethod(_TrezorWallet_) && <TrezorWallet onConfirm={this.confirmWallet} />} */}
+        {isActiveMethod(_LedgerWallet_) && <LedgerWallet onConfirm={this.confirmWallet} />}
+        {isActiveMethod(_TrezorWallet_) && <TrezorWallet onConfirm={this.confirmWallet} />}
         {isActiveMethod(_PrivateWallet_) && <PrivatekeyWallet onConfirm={this.confirmWallet} />}
         {isActiveMethod(_MnemonicWallet_) && <MnemonicWallet onConfirm={this.confirmWallet} />}
       </Box>
