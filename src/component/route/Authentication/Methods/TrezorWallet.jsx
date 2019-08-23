@@ -66,7 +66,7 @@ export default class TrezorWallet extends React.Component {
 
   confirm = () => {
     const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
-    const signer = new WalletSigner(this.state.trezorWallet, provider)
+    const signer = new WalletSigner(this.state.trezorWallet, provider, undefined, 'coldwallet')
     this.props.onConfirm(signer)
   }
 

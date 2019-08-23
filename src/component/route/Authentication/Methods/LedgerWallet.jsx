@@ -71,7 +71,7 @@ export default class LedgerWallet extends React.Component {
 
   confirm = () => {
     const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC)
-    const signer = new WalletSigner(this.state.ledgerWallet, provider)
+    const signer = new WalletSigner(this.state.ledgerWallet, provider, undefined, 'coldwallet')
     this.props.onConfirm(signer)
   }
 

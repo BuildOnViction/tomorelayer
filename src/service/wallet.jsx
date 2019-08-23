@@ -7,11 +7,12 @@ export default class WalletSigner extends Signer {
   _provider = undefined
   _hook = undefined
 
-  constructor(wallet, provider, addressHook = undefined) {
+  constructor(wallet, provider, addressHook = undefined, type = 'hotwallet') {
     super()
     this._wallet = wallet
     this._provider = provider
     this._hook = addressHook
+    this._type = type
   }
 
   get hookAvailable() {
@@ -43,7 +44,7 @@ export default class WalletSigner extends Signer {
     const to = await tx.to
     tx.to = to
     tx.inputData = tx.data
-    tx.chainId = this._wallet.chainId
+    tx.chainId = 89
     delete tx.data
 
     const nonce = await this._provider.getTransactionCount(this._wallet.address)
@@ -52,6 +53,11 @@ export default class WalletSigner extends Signer {
     tx.value = bigNumber(tx.value ? tx.value.toString() : '0')
     const resp = await this._wallet.sign(tx)
     const rawTx = utils.parseTransaction(resp)
+
+    if (this._type === 'coldwallet') {
+      await this._provider.sendTransaction(resp)
+    }
+
     return this._provider.getTransaction(rawTx.hash).then((tx) => Boolean(tx) && this._provider._wrapTransaction(tx, rawTx.hash))
   }
 }
