@@ -25,7 +25,7 @@ export class Register extends React.Component {
     super(props)
     this.state = {
       isRegistering: false,
-      step: 6,
+      step: 1,
       payload: {
         owner: '',
         deposit: MISC.MinimumDeposit,
