@@ -117,14 +117,14 @@ export default class LedgerWallet extends React.Component {
                 Balance: {activeBalance} TOMO
               </Typography>
             </Grid>
-            <Grid item container sm={12}>
-              <Grid item sm={6} md={12}>
-                <Button onClick={this.changeAddress} variant="outlined">
+            <Grid item container sm={12} className="mt-1">
+              <Grid item xs={6}>
+                <Button onClick={this.changeAddress} variant="contained">
                   Change Address
                 </Button>
               </Grid>
-              <Grid item sm={6} md={12}>
-                <Button onClick={this.confirm} variant="outlined">
+              <Grid item xs={6}>
+                <Button onClick={this.confirm} variant="contained">
                   Confirm
                 </Button>
               </Grid>

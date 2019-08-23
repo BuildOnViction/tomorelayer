@@ -44,7 +44,7 @@ export default class WalletSigner extends Signer {
     const to = await tx.to
     tx.to = to
     tx.inputData = tx.data
-    tx.chainId = 89
+    tx.chainId = process.env.REACT_APP_CHAIN_ID
     delete tx.data
 
     const nonce = await this._provider.getTransactionCount(this._wallet.address)
