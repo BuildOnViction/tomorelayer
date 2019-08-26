@@ -41,12 +41,9 @@
     "backend:test": "NODE_ENV=test node custom-script.js",
     "test": "react-app-rewired test --testPathIgnorePatterns .*\\.setup\\.js",
     "test:debug": "react-app-rewired --inspect-brk test --runInBand --no-cache --testPathIgnorePatterns .*\\.setup\\.js",
-    "contract-test": "embark test test/relayer-contract.test.js",
-    "embark": "embark run",
     "build": "react-app-rewired build",
     "lint": "eslint --ext .jsx,.js src/",
-    "pylint": "pipenv run pylint backend/*",
-    "apidoc": "apidoc -i backend/ -o apidoc/"
+    "pylint": "pipenv run pylint backend/*"
   },
   "proxy": "http://localhost:8888",
   "eslintConfig": {
@@ -61,11 +58,8 @@
   "devDependencies": {
     "@testing-library/react": "^8.0.1",
     "@testing-library/user-event": "^4.1.0",
-    "apidoc": "^0.17.7",
     "chai": "^4.2.0",
     "dotenv": "^7.0.0",
-    "embark": "^4.1.0",
-    "embarkjs-connector-web3": "^4.0.0",
     "exec-sh": "^0.3.2",
     "faker": "^4.1.0",
     "husky": "^3.0.0",

@@ -6,7 +6,6 @@
     -  [Start hacking](#org30ae7c1)
         1.  [Frontend Development](#org7f062cc)
         2.  [Backend Development](#orga954538)
-        3.  [API Document](#apidoc)
 3.  [Development Roadmap](#roadmap)
 4.  [Troubleshooting](#trouble)
 
@@ -141,18 +140,6 @@ Those are where you get started.
      |-----|--------|--------|---------|--------------|------|----------|
      | int | string | string | address | number       | link | boolean  |
 
-
-<a id="apidoc"></a>
-
-#### API Document
-
-For more details about API Endpoint required params and technical requirements, open `tomorelayer/apidoc/index.html` to see sample and requirements for each api endpoints
-
-You can also re-run API Document Generator to get the latest document, using command
-
-``` shell
-$ npm run apidoc
-```
 
 <a id="roadmap"></a>
 
