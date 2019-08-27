@@ -35,8 +35,8 @@ const EmptyTokenTable = ({ coinbase }) => (
 )
 
 const TokenTable = ({
-  tokens,
-  relayer,
+  tokens = [],
+  relayer = {},
 }) => isEmpty(tokens) ? <EmptyTokenTable coinbase={relayer.coinbase} /> : (
   <Grid container direction="column">
     <Grid item container className="mb-1" className="p-1">
