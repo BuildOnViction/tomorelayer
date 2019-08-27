@@ -92,7 +92,7 @@ export default class VolumeChart extends React.Component {
   }
 
   componentDidMount() {
-    const renderChart = (chartData, chartId) => {
+    const renderChart = (chartData = [], chartId) => {
 
       const ctx = document.getElementById(chartId).getContext('2d')
 
@@ -109,8 +109,8 @@ export default class VolumeChart extends React.Component {
       return chart
     }
 
-    this.VOLUME_CHART = renderChart(this.props.data.volumes, 'volume-chart')
-    this.FILLS_CHART = renderChart(this.props.data.fills, 'fills-chart')
+    this.VOLUME_CHART = renderChart(this.props.volumeData, 'volume-chart')
+    this.FILLS_CHART = renderChart(this.props.fillData, 'fills-chart')
 
   }
 
@@ -127,20 +127,20 @@ export default class VolumeChart extends React.Component {
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={4}>
-          <Grid item sm={6}>
+          <Grid item sm={6} xs={4}>
             <PeriodTabs value={Object.values(Topic).indexOf(topic)} onChange={this.changeTopic}>
               <TopicTab label="Volume" />
               <TopicTab label="Fills" />
             </PeriodTabs>
           </Grid>
-          <Grid item container justify="flex-end" sm={6}>
+          <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
               <PeriodTab label="24h" />
               <PeriodTab label="7d" />
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ position: 'relative', height: 200 }}>
+          <Grid item sm={12} style={{ position: 'relative', height: 180 }}>
             <canvas
               id="volume-chart"
               style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
@@ -154,8 +154,4 @@ export default class VolumeChart extends React.Component {
       </StyledPaper>
     )
   }
-}
-
-VolumeChart.defaultProps = {
-  data: [],
 }

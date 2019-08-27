@@ -91,17 +91,17 @@ export default class TokenChart extends React.Component {
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={2}>
-          <Grid item sm={6}>
+          <Grid item sm={6} xs={4}>
             Top Tokens
           </Grid>
-          <Grid item container justify="flex-end" sm={6}>
+          <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
               <PeriodTab label="24h" />
               <PeriodTab label="7d" />
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ height: 200 }}>
+          <Grid item sm={12} style={{ height: 180 }}>
             <canvas id="token-chart" style={{ height: '100%', width: '100%' }} />
           </Grid>
         </Grid>
