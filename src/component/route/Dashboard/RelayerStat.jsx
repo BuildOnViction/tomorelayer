@@ -1,4 +1,5 @@
 import React from 'react'
+// import * as datefns from 'date-fns'
 import { connect } from 'redux-zero/react'
 import {
   Avatar,
@@ -9,12 +10,20 @@ import {
 } from '@material-ui/core'
 import cx from 'classnames'
 import { withStyles } from '@material-ui/styles'
+
 import placeholder from 'asset/image-placeholder.png'
-import IconTomoPrice from 'asset/icon-tomo-price.png'
-import IconTrades from 'asset/icon-trades.png'
-import IconFees from 'asset/icon-network-fees.png'
-import * as http from 'service/backend'
+import networkFeeIcon from 'asset/icon-network-fees.png'
+import networkVolIcon from 'asset/icon-network-volume.png'
+import tradeIcon from 'asset/icon-trades.png'
+import tomoPriceIcon from 'asset/icon-tomo-price.png'
+
 import * as _ from 'service/helper'
+import * as http from 'service/backend'
+import {
+  AlertVariant,
+  PushAlert,
+}from 'service/frontend'
+
 import { StyledLink } from 'component/shared/Adapters'
 import { isEmpty, TabMap } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
@@ -46,6 +55,13 @@ class RelayerStat extends React.Component {
     tab: TOPICS.orders,
   }
 
+  async componentDidMount() {
+    if (this.props.relayer.link) {
+      const getData = await this.getRelayerStat()
+      console.log(getData)
+    }
+  }
+
   async componentDidUpdate(prevProps) {
     if (prevProps.relayer.coinbase !== this.props.relayer.coinbase) {
       const getData = await this.getRelayerStat()
@@ -54,20 +70,28 @@ class RelayerStat extends React.Component {
   }
 
   getRelayerStat = async () => {
-    const { relayer } = this.props
+    const {
+      relayer,
+    } = this.props
 
     if (_.isEmpty(relayer.link)) {
       return undefined
     }
 
-    const result = await Promise.all(relayer.from_tokens.map(async (token, idx) => {
-      const data = await http.getDexTrades(relayer.link, {
-        quoteToken: token,
-        baseToken: relayer.to_tokens[idx]
+    const data = await http.getDexTrades(relayer.link, {
+      sortType: 'dec',
+      sortBy: 'time',
+    })
+
+    if (data.error) {
+      console.log(data.error)
+      return this.props.alert({
+        variant: AlertVariant.error,
+        message: `Unable to get stat from Relayer's link`
       })
-      return data
-    }))
-    return result
+    }
+
+    return data.trades || data
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -112,7 +136,7 @@ class RelayerStat extends React.Component {
     }
 
     return (
-      <Grid container direction="column" spacing={4}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <Box display="flex" alignItems="center">
             <Box>
@@ -135,25 +159,16 @@ class RelayerStat extends React.Component {
           </Box>
         </Grid>
 
-        <Grid item item xs={12}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={4} md={3}>
-              <Grid container spacing={3} direction="column">
-                <Grid item>
-                  <StatCard icon={IconFees} stat={relayerStat.fees} helpText="Fees(24h)" />
-                </Grid>
-                <Grid item>
-                  <StatCard icon={IconTrades} stat={relayerStat.trades} helpText="Trades (24h)" />
-                </Grid>
-                <Grid item>
-                  <StatCard icon={IconTomoPrice} stat={relayerStat.tomousd} helpText="Tomo Price" />
-                </Grid>
-              </Grid>
-            </Grid>
+        <Grid item xs={12} container direction="column">
+          <Grid item container spacing={4}>
+            <StatCard icon={networkVolIcon} stat={`$${_.round(stats.tomoprice, 2)}`} helpText="Network Volume" />
+            <StatCard icon={networkFeeIcon} stat={`$${_.round(stats.tomoprice, 2)}`} helpText="Network Fees" />
+            <StatCard icon={tradeIcon} stat={`$${_.round(stats.tomoprice, 2)}`} helpText="Trades(24h)" />
+            <StatCard icon={tomoPriceIcon} stat={`$${_.round(stats.tomoprice, 2)}`} helpText="Tomo Price" />
+          </Grid>
 
-            <Grid item xs={12} sm={8} md={9}>
-              <TimeVolumeStat data={relayerStat} />
-            </Grid>
+          <Grid item className="mt-2">
+            <TimeVolumeStat data={relayerStat} />
           </Grid>
         </Grid>
 
@@ -181,4 +196,8 @@ const mapProps = state => ({
   AvailableTokens: state.Tokens,
 })
 
-export default connect(mapProps)(RelayerStat)
+const actions = {
+  alert: PushAlert
+}
+
+export default connect(mapProps, actions)(RelayerStat)
