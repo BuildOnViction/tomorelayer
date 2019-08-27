@@ -28,7 +28,8 @@ import { StyledLink } from 'component/shared/Adapters'
 import { isEmpty, TabMap } from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
-import TimeVolumeStat from './TimeVolumeStat'
+import VolumeChart from './VolumeChart'
+import TokenChart from './TokenChart'
 
 import OrderTable from './OrderTable'
 import TokenTable from './TokenTable'
@@ -167,8 +168,13 @@ class RelayerStat extends React.Component {
             <StatCard icon={tomoPriceIcon} stat={`$${_.round(stats.tomoprice, 2)}`} helpText="Tomo Price" />
           </Grid>
 
-          <Grid item className="mt-2">
-            <TimeVolumeStat data={relayerStat} />
+          <Grid item className="mt-2" container spacing={4}>
+            <Grid item xs={12} md={7}>
+              <VolumeChart data={relayerStat} />
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <TokenChart data={relayerStat} />
+            </Grid>
           </Grid>
         </Grid>
 

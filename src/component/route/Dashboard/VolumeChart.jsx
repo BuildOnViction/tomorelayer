@@ -81,7 +81,7 @@ const Topic = {
   _fills: 'Fills',
 }
 
-export default class TimeVolumeStat extends React.Component {
+export default class VolumeChart extends React.Component {
 
   VOLUME_CHART = undefined
   FILLS_CHART = undefined
@@ -140,7 +140,7 @@ export default class TimeVolumeStat extends React.Component {
               <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ position: 'relative', height: 265 }}>
+          <Grid item sm={12} style={{ position: 'relative', height: 200 }}>
             <canvas
               id="volume-chart"
               style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
@@ -156,6 +156,6 @@ export default class TimeVolumeStat extends React.Component {
   }
 }
 
-TimeVolumeStat.defaultProps = {
+VolumeChart.defaultProps = {
   data: [],
 }
