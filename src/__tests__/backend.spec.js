@@ -43,11 +43,23 @@ describe('Testing backend API', () => {
   })
 
   it('Create 10(ten) tokens...', async () => {
-    const randomTokens = Array.from({ length: 10 }).map(() => ({
+    // Create a single token
+    const singleToken = {
       name: faker.finance.currencyName(),
       symbol: faker.finance.currencyCode(),
       total_supply: faker.random.number(),
       address: faker.finance.bitcoinAddress(), // ethereumAddress is not available yet
+    }
+
+    const resp = await http.createTokens(singleToken)
+    expect(resp.error).toBeFalsy()
+
+    // Create multiple tokens
+    const randomTokens = Array.from({ length: 10 }).map(() => ({
+      name: faker.finance.currencyName(),
+      symbol: faker.finance.currencyCode(),
+      total_supply: faker.random.number(),
+      address: faker.finance.bitcoinAddress(),
     }))
 
     const tokens = _.uniqueBy(randomTokens, 'address')

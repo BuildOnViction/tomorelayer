@@ -19,8 +19,13 @@ class TokenHandler(BaseHandler):
         """Add new tokens"""
         tokens = self.request_body
 
-        if not tokens or not isinstance(tokens, list):
-            raise InvalidValueException('Invalid payload data')
+        if not tokens:
+            raise InvalidValueException('Invalid empty payload')
+
+        if not isinstance(tokens, list):
+            token = tokens
+            obj = await self.application.objects.create(Token, **token)
+            return self.json_response(model_to_dict(obj))
 
         async with self.application.objects.atomic():
             result = []

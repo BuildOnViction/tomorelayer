@@ -18,7 +18,11 @@ class ContractHandler(BaseHandler):
     async def post(self):
         contracts = self.request_body
 
-        if not contracts or not isinstance(contracts, list):
+        if not contracts:
+            raise InvalidValueException('Invalid empty payload')
+
+        if not isinstance(contracts, list):
+            # NOTE: might need to implement Ceberus for Schema Validator
             contract = contracts
             obj = await self.application.objects.create(Contract, **contract)
             return self.json_response(model_to_dict(obj))
