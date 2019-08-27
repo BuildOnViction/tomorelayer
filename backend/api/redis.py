@@ -11,6 +11,6 @@ class RedisHandler(BaseHandler):
 
         if action == 'flush':
             await redis.flushall()
-            self.json_response()
-        else:
-            self.write('No action')
+            return self.write('redis flushed successfully')
+
+        return self.write('No action')
