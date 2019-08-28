@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  CircularProgress,
   Grid,
   Paper,
   Tab,
@@ -64,6 +65,10 @@ export default class TokenChart extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.loading) {
+      return
+    }
+
     const mockdata = [
       { label: 'GNBA', value: 8 },
       { label: 'BNB', value: 22 },
@@ -85,9 +90,15 @@ export default class TokenChart extends React.Component {
   changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })
 
   render() {
+
     const {
       period,
     } = this.state
+
+    const {
+      loading,
+    } = this.props
+
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={2}>
@@ -96,13 +107,22 @@ export default class TokenChart extends React.Component {
           </Grid>
           <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
-              <PeriodTab label="24h" />
-              <PeriodTab label="7d" />
-              <PeriodTab label="1M" />
+              <PeriodTab label="24h" disabled={loading} />
+              <PeriodTab label="7d" disabled={loading} />
+              <PeriodTab label="1M" disabled={loading} />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ height: 180 }}>
-            <canvas id="token-chart" style={{ height: '100%', width: '100%' }} />
+          <Grid item sm={12} style={{ height: 180 }} container justify="center" alignItems="center">
+            {loading ? (
+              <CircularProgress
+                style={{ height: 50, width: 50 }}
+              />
+            ) : (
+              <canvas
+                id="token-chart"
+                style={{ height: '100%', width: '100%' }}
+              />
+            )}
           </Grid>
         </Grid>
       </StyledPaper>

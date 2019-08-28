@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  CircularProgress,
   Grid,
   Paper,
   Tab,
@@ -92,6 +93,10 @@ export default class VolumeChart extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.loading) {
+      return
+    }
+
     const renderChart = (chartData = [], chartId) => {
 
       const ctx = document.getElementById(chartId).getContext('2d')
@@ -124,6 +129,10 @@ export default class VolumeChart extends React.Component {
       topic,
     } = this.state
 
+    const {
+      loading,
+    } = this.props
+
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={4}>
@@ -135,20 +144,26 @@ export default class VolumeChart extends React.Component {
           </Grid>
           <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
-              <PeriodTab label="24h" />
-              <PeriodTab label="7d" />
-              <PeriodTab label="1M" />
+              <PeriodTab label="24h" disabled={loading} />
+              <PeriodTab label="7d" disabled={loading} />
+              <PeriodTab label="1M" disabled={loading} />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ position: 'relative', height: 180 }}>
-            <canvas
-              id="volume-chart"
-              style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
-            />
-            <canvas
-              id="fills-chart"
-              style={{ height: '100%', width: '100%', display: topic === Topic._fills ? 'initial' : 'none' }}
-            />
+          <Grid item sm={12} style={{ position: 'relative', height: 180 }} container justify="center" alignItems="center">
+            {loading ? (
+              <CircularProgress style={{ height: 50, width: 50 }} />
+            ) : (
+              <React.Fragment>
+                <canvas
+                  id="volume-chart"
+                  style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
+                />
+                <canvas
+                  id="fills-chart"
+                  style={{ height: '100%', width: '100%', display: topic === Topic._fills ? 'initial' : 'none' }}
+                />
+              </React.Fragment>
+            )}
           </Grid>
         </Grid>
       </StyledPaper>

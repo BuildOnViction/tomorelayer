@@ -4,6 +4,7 @@ import { connect } from 'redux-zero/react'
 import {
   Avatar,
   Box,
+  CircularProgress,
   Grid,
   Typography,
 } from '@material-ui/core'
@@ -54,6 +55,7 @@ class RelayerStat extends React.Component {
   render() {
     const {
       relayer,
+      loading,
     } = this.props
 
     const {
@@ -96,10 +98,10 @@ class RelayerStat extends React.Component {
 
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
-              <VolumeChart coinbase={relayer.coinbase} />
+              <VolumeChart coinbase={relayer.coinbase} loading={loading} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart coinbase={relayer.coinbase} />
+              <TokenChart coinbase={relayer.coinbase} loading={loading} />
             </Grid>
           </Grid>
         </Grid>
@@ -110,9 +112,10 @@ class RelayerStat extends React.Component {
             onTabChange={this.onTabChange}
             topics={TOPICS.values}
           />
-          <Box className="mt-0">
-            {tab === TOPICS.orders && <OrderTable coinbase={relayer.coinbase} />}
-            {tab === TOPICS.tokens && <TokenTable coinbase={relayer.coinbase} />}
+          <Box className="mt-0" display="flex" justifyContent="center">
+            {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
+            {!loading && tab === TOPICS.orders && <OrderTable coinbase={relayer.coinbase} />}
+            {!loading && tab === TOPICS.tokens && <TokenTable coinbase={relayer.coinbase} />}
           </Box>
         </Grid>
       </Grid>
