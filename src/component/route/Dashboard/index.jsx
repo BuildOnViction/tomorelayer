@@ -1,6 +1,5 @@
 import React from 'react'
 import { Switch, Redirect, Route } from 'react-router'
-import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
 import { SITE_MAP } from 'service/constant'
 import TabMenu from './TabMenu'
@@ -8,22 +7,6 @@ import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
 
 class Dashboard extends React.Component {
-  state = {
-    loading: true,
-  }
-
-  async componentDidUpdate(prevProps) {
-    if (!this.props.match) {
-      return
-    }
-
-    const coinbase = this.props.match.params.coinbase
-    const prevCoinbase = prevProps.match.params.coinbase
-
-    if (coinbase !== prevCoinbase) {
-      return
-    }
-  }
 
   render() {
 
@@ -32,10 +15,6 @@ class Dashboard extends React.Component {
     const {
       relayers,
     } = this.props
-
-    const {
-      loading,
-    } = this.state
 
     const firstRelayer = Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name))[0]
 
@@ -48,7 +27,6 @@ class Dashboard extends React.Component {
     const SafePath = (Component) => props => Object.keys(relayers).includes(props.match.params.coinbase) ? (
       <Component
         relayer={relayers[props.match.params.coinbase]}
-        loading={loading}
         {...props}
       />
     ) : (
@@ -77,10 +55,4 @@ class Dashboard extends React.Component {
   }
 }
 
-const mapProps = state => ({})
-
-const actions = {
-
-}
-
-export default connect(mapProps, actions)(Dashboard)
+export default Dashboard

@@ -1,5 +1,4 @@
 import React from 'react'
-// import * as datefns from 'date-fns'
 import { connect } from 'redux-zero/react'
 import {
   Avatar,
@@ -17,16 +16,30 @@ import networkVolIcon from 'asset/icon-network-volume.png'
 import tradeIcon from 'asset/icon-trades.png'
 import tomoPriceIcon from 'asset/icon-tomo-price.png'
 
-import { StyledLink } from 'component/shared/Adapters'
-import { isEmpty, TabMap } from 'service/helper'
+import {
+  StyledLink,
+} from 'component/shared/Adapters'
+
+import {
+  isEmpty,
+  TabMap,
+  strEqual,
+} from 'service/helper'
+
+import {
+  PushAlert,
+} from 'service/frontend'
+
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
 import VolumeChart from './VolumeChart'
 import TokenChart from './TokenChart'
-
 import OrderTable from './OrderTable'
 import TokenTable from './TokenTable'
 
+import {
+  getFilledOrders,
+} from './actions'
 
 const StyledAvatar = withStyles(theme => ({
   root: {
@@ -48,6 +61,42 @@ class RelayerStat extends React.Component {
 
   state = {
     tab: TOPICS.orders,
+    loading: true,
+  }
+
+  async componentDidMount() {
+    const {
+      stats,
+    } = this.props
+
+    if (!stats.trades) {
+      return this.getStats()
+    }
+
+  }
+
+  async componentDidUpdate(prevProps) {
+    const {
+      stats,
+      relayer,
+    } = this.props
+
+    if (!strEqual(relayer.coinbase, prevProps.relayer.coinbase) && !stats.trades) {
+      return this.getStats()
+    }
+  }
+
+  async getStats() {
+    const {
+      stats,
+      relayer,
+    } = this.props
+
+    if (stats.relayer[relayer.coinbase]) {
+      return
+    }
+
+    await this.props.getFilledOrders(relayer.link)
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -55,11 +104,12 @@ class RelayerStat extends React.Component {
   render() {
     const {
       relayer,
-      loading,
+      stats,
     } = this.props
 
     const {
       tab,
+      loading,
     } = this.state
 
     const avatarClassName = cx({ 'empty-avatar': isEmpty(relayer.logo) })
@@ -98,10 +148,10 @@ class RelayerStat extends React.Component {
 
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
-              <VolumeChart coinbase={relayer.coinbase} loading={loading} />
+              <VolumeChart loading={loading} data={stats.volume} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart coinbase={relayer.coinbase} loading={loading} />
+              <TokenChart loading={loading} data={stats.token} />
             </Grid>
           </Grid>
         </Grid>
@@ -114,8 +164,8 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {!loading && tab === TOPICS.orders && <OrderTable coinbase={relayer.coinbase} />}
-            {!loading && tab === TOPICS.tokens && <TokenTable coinbase={relayer.coinbase} />}
+            {!loading && tab === TOPICS.orders && <OrderTable data={stats.trades} />}
+            {!loading && tab === TOPICS.tokens && <TokenTable data={stats.tokens} />}
           </Box>
         </Grid>
       </Grid>
@@ -125,10 +175,18 @@ class RelayerStat extends React.Component {
 
 const mapProps = state => ({
   stats: {
+    volume: [],
+    token: [],
+    trades: [],
+    tokens: [],
     tomousd: state.network_info.tomousd,
-    trades: state.network_info.trades,
   },
   AvailableTokens: state.Tokens,
 })
 
-export default connect(mapProps)(RelayerStat)
+const actions = {
+  getFilledOrders,
+  PushAlert,
+}
+
+export default connect(mapProps, actions)(RelayerStat)
