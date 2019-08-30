@@ -9,7 +9,9 @@ import * as http from 'service/backend'
 import { AlertVariant } from 'service/frontend'
 import { ThrowOn } from 'service/helper'
 
-export const FetchPublic = async (state) => {
+
+export const AppInitialization = async (state) => {
+  // GET BASIC DATA FROM BACKENDS
   const {
     Contracts,
     Relayers,
@@ -38,6 +40,7 @@ export const FetchPublic = async (state) => {
     tomousd: tomoPriceError ? NaN : tomochain.usd,
   }
 
+  // INIT POUCHDB FOR FRONTEND-SEARCHING
   PouchDB.plugin(pouchMemory)
   PouchDB.plugin(pouchQuery)
 
