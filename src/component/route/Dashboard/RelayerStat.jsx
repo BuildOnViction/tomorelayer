@@ -19,16 +19,8 @@ import tomoPriceIcon from 'asset/icon-tomo-price.png'
 import {
   StyledLink,
 } from 'component/shared/Adapters'
-
-import {
-  isEmpty,
-  TabMap,
-  strEqual,
-} from 'service/helper'
-
-import {
-  PushAlert,
-} from 'service/frontend'
+import * as _ from 'service/helper'
+import { PushAlert } from 'service/frontend'
 
 import TableControl from 'component/shared/TableControl'
 import StatCard from './StatCard'
@@ -38,7 +30,7 @@ import OrderTable from './OrderTable'
 import TokenTable from './TokenTable'
 
 import {
-  getFilledOrders,
+  GetStats,
 } from './actions'
 
 const StyledAvatar = withStyles(theme => ({
@@ -55,7 +47,7 @@ const StyledAvatar = withStyles(theme => ({
   }
 }))(Avatar)
 
-const TOPICS = new TabMap('Orders', 'Tokens')
+const TOPICS = new _.TabMap('Orders', 'Tokens')
 
 class RelayerStat extends React.Component {
 
@@ -65,38 +57,11 @@ class RelayerStat extends React.Component {
   }
 
   async componentDidMount() {
-    const {
-      stats,
-    } = this.props
-
-    if (!stats.trades) {
-      return this.getStats()
-    }
-
+    this.props.GetStats()
   }
 
-  async componentDidUpdate(prevProps) {
-    const {
-      stats,
-      relayer,
-    } = this.props
-
-    if (!strEqual(relayer.coinbase, prevProps.relayer.coinbase) && !stats.trades) {
-      return this.getStats()
-    }
-  }
-
-  async getStats() {
-    const {
-      stats,
-      relayer,
-    } = this.props
-
-    if (stats.relayer[relayer.coinbase]) {
-      return
-    }
-
-    await this.props.getFilledOrders(relayer.link)
+  async componentDidUpdate() {
+    this.props.GetStats()
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -112,7 +77,7 @@ class RelayerStat extends React.Component {
       loading,
     } = this.state
 
-    const avatarClassName = cx({ 'empty-avatar': isEmpty(relayer.logo) })
+    const avatarClassName = cx({ 'empty-avatar': _.isEmpty(relayer.logo) })
 
     return (
       <Grid container spacing={4}>
@@ -128,7 +93,7 @@ class RelayerStat extends React.Component {
                 </Typography>
               </Box>
               <Box>
-                {!isEmpty(relayer.link) && (
+                {!_.isEmpty(relayer.link) && (
                   <StyledLink href={relayer.link} rel="noopener noreferrer" target="_blank">
                     {relayer.link}
                   </StyledLink>
@@ -185,7 +150,7 @@ const mapProps = state => ({
 })
 
 const actions = {
-  getFilledOrders,
+  GetStats,
   PushAlert,
 }
 

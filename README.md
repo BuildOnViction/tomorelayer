@@ -165,6 +165,7 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
    - [x] Finalized UI/UX Design
    - [ ] Complete Wallet-Integration
    - [x] Client Searching
+   - [ ] Integrate JSON Schema Validator (AJV)
    - [ ] Customizing Material-UI
 4. Deployment
    - [x] Test app
