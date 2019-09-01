@@ -11,6 +11,7 @@ export const UpdateRelayer = (state, relayer) => {
 }
 
 export const GetStats = async (state, url) => {
+
   const orders = await getDexTrades(url, {
     sortType: 'dec',
   })

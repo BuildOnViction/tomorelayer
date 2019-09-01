@@ -126,4 +126,4 @@ const actions = {
 
 const ConnectedApp = connect(mapProps, actions)(App)
 
-export default process.env.NODE_ENV === "development" ? hot(ConnectedApp) : ConnectedApp
+export default process.env.NODE_ENV in ['production', 'test'] ? ConnectedApp : hot(ConnectedApp)

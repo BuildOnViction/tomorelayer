@@ -56,14 +56,6 @@ class RelayerStat extends React.Component {
     loading: true,
   }
 
-  async componentDidMount() {
-    this.props.GetStats()
-  }
-
-  async componentDidUpdate() {
-    this.props.GetStats()
-  }
-
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
 
   render() {
