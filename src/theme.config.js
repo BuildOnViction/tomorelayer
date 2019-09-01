@@ -1,6 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
-import blue from '@material-ui/core/colors/blue'
 /**
    HEX TRANSPARENCY
    100% — FF
@@ -50,14 +49,13 @@ const theme = (config) =>
       fontFamily: ['Nunito Sans', 'sans-serif'].join(','),
     },
     palette: {
-      primary: blue,
       subtitle: '#7473A6',
       maintitle: '#CFCDE1',
-      tabActive: config.palette.tabActive, //'#577EEF',
+      tabActive: '#577EEF',
       tabInactive: '#222239',
       evenRowBackground: '#23233C',
-      link: '#577eef',
-      buttonActive: '#703db5',
+      link: '#577EEF',
+      buttonActive: '#703DB5',
       paper: '#272741',
       document: '#1D1E31',
       navItemSelected: '#323252',
