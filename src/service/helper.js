@@ -86,7 +86,10 @@ export const uniqueBy = (...args) => {
   }
 }
 
-export const sequence = (from = 0, to = 10) => Array.from({ length: to - from }).fill().map((_, idx) => idx + from)
+export const sequence = (from = 0, to = 10, mapper = i => i) => Array.from({ length: to - from })
+                                                                     .fill()
+                                                                     .map((_, idx) => idx + from)
+                                                                     .map(mapper)
 
 export const times = (func, nth) => {
   return Array.from({ length: nth }).map(func)

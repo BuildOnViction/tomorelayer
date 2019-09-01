@@ -4,7 +4,6 @@ import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { Container } from '@material-ui/core'
 import { SITE_MAP, IS_DEV } from 'service/constant'
-import { AlertVariant, PushAlert } from 'service/frontend'
 import { AppInitialization } from './shared/actions'
 
 import {
@@ -37,14 +36,6 @@ class App extends React.Component {
   async componentDidMount() {
     await this.props.AppInitialization()
     this.setState({ publicFetchLoading: false })
-  }
-
-  componentDidCatch(error, info) {
-    console.log(error)
-    this.props.PushAlert({
-      message: info,
-      variant: AlertVariant.error,
-    })
   }
 
   render() {
@@ -89,7 +80,7 @@ class App extends React.Component {
                 path={SITE_MAP.Authentication}
                 component={Authentication}
                 condition={!userLoggedIn}
-                redirect={SITE_MAP.Logout}
+                redirect={SITE_MAP.Dashboard}
               />
               <Protected
                 path={SITE_MAP.Profile}
@@ -105,15 +96,15 @@ class App extends React.Component {
               />
               <Protected
                 path={SITE_MAP.Dashboard}
-                render={() => <Dashboard relayers={userRelayers} /> }
+                render={Dashboard}
                 condition={userLoggedIn}
                 redirect={SITE_MAP.Authentication}
               />
               <Protected
                 path={SITE_MAP.Logout}
-                condition={userLoggedIn}
-                redirect={SITE_MAP.Home}
                 component={Logout}
+                condition={userLoggedIn}
+                redirect={SITE_MAP.Authentication}
               />
             </Switch>
           </Container>
@@ -131,7 +122,6 @@ const mapProps = state => ({
 
 const actions = {
   AppInitialization,
-  PushAlert,
 }
 
 const ConnectedApp = connect(mapProps, actions)(App)

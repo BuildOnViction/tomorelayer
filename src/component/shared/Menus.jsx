@@ -10,6 +10,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import MenuIcon from '@material-ui/icons/Menu'
 import { withStyles } from '@material-ui/core/styles'
 import { AdapterLink } from 'component/shared/Adapters'
+import { sequence } from 'service/helper'
 
 const MenuButton = withStyles(theme => ({
   root: {
@@ -127,7 +128,7 @@ export const RelayerMenu = ({ relayers }) => {
 
   const handleClose = () => setAnchorEl(null)
 
-  const sortedRelayers = Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name))
+  const getRelayers = sequence(0, Object.keys(relayers).length / 2, idx => relayers[idx])
 
   return (
     <Box>
@@ -146,7 +147,7 @@ export const RelayerMenu = ({ relayers }) => {
           onClose={handleClose}
           style={{ transform: 'translateY(40px)' }}
         >
-          {sortedRelayers.map(r => (
+          {getRelayers.map(r => (
             <RouteMenuItem
               onClick={handleClose}
               routeTo={`/dashboard/${r.coinbase}`}
@@ -185,7 +186,7 @@ export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
 
   const handleClose = () => setAnchorEl(null)
 
-  const sortedRelayers = Object.values(relayers).sort((a,b) => a.name.localeCompare(b.name))
+  const getRelayers = sequence(0, Object.keys(relayers).length / 2, idx => relayers[idx])
 
   return (
     <Box>
@@ -207,7 +208,7 @@ export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
           {userOwnRelayer && (
             <Box>
               <MenuTitle>My Relayers</MenuTitle>
-              {sortedRelayers.map(r => (
+              {getRelayers.map(r => (
                 <RouteMenuItem
                   onClick={handleClose}
                   routeTo={`/dashboard/${r.coinbase}`}

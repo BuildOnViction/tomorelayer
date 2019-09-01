@@ -25,8 +25,9 @@ export const ConfirmLogin = async (state, wallet) => {
 
   // CHERRY-PICK RELAYERS
   const userRelayers = {}
-  state.Relayers.filter(r => _.strEqual(r.owner, address)).forEach(r => {
+  state.Relayers.filter(r => _.strEqual(r.owner, address)).forEach((r, idx) => {
     userRelayers[r.coinbase] = r
+    userRelayers[idx] = r
   })
 
   return {
