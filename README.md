@@ -170,9 +170,8 @@ Please refer to this short [Deployment Guideline](https://github.com/tomochain/t
 4. Deployment
    - [x] Test app
    - [x] How-To Documentation
-5. View Orders/Trades and statistics view
-   - [ ] Counting filled orders
-   - [ ] Network volume details
+5. Statistics views
+   - [ ] Prepare charts & statistics
 6. Documentation
    - [ ] API Document
 7. Make Portable/Reusable API Kit
