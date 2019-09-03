@@ -74,11 +74,11 @@ const SpecialStyledMenuItem = withStyles(theme => ({
   }
 }))(MenuItem)
 
-const RouteMenuItem = props => (
-  <StyledMenuItem onClick={props.onClick} component={AdapterLink} to={props.routeTo}>
+const RouteMenuItem = React.forwardRef((props, ref) => (
+  <StyledMenuItem onClick={props.onClick} component={AdapterLink} to={props.routeTo} innerRef={ref}>
     {props.text}
   </StyledMenuItem>
-)
+))
 
 
 export const UserMenu = () => {
