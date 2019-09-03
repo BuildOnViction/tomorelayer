@@ -75,6 +75,15 @@ class TokenPairList extends React.Component {
     this.setState({ isRefreshing: true })
 
     const contractTokens = await TomoXContract.tokens()
+
+    if (contractTokens.error) {
+      this.setState({ isRefreshing: false })
+      return this.props.PushAlert({
+        message: contractTokens.error.toString(),
+        variant: AlertVariant.error,
+      })
+    }
+
     const missingTokens = contractTokens.filter(t => !inArray(t.toLowerCase(), Tokens))
 
     if (isEmpty(missingTokens)) {

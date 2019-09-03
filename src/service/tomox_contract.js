@@ -14,7 +14,14 @@ export default class TomoXContract {
   }
 
   async tokens() {
-    const tokens = await this.contractWithSigner.tokens.call()
-    return tokens
+    try {
+      const tokens = await this.contractWithSigner.tokens.call()
+      return tokens
+    } catch(e) {
+      return {
+        error: e
+      }
+    }
+
   }
 }
