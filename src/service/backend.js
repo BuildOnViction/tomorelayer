@@ -24,9 +24,10 @@ const defaultHeader = {
   Accept: 'application/json; charset=UTF-8',
 }
 
-const HttpClient = () => {
+const HttpClient = (extraConfig = {}) => {
   const headers = {
     ...defaultHeader,
+    ...extraConfig,
     Authorization: `Bearer ${window.sessionStorage.getItem('tomorelayerAccessToken')}`,
   }
 
@@ -202,8 +203,14 @@ export const getTokenInfo = async (tokenAddress) =>
 export const notifyDex = async (dexUrl) =>
   HttpClient()
     .put(`${dexUrl}/api/relayer`)
-    .then(genericHandler)
-    .catch(logging)
+    .then(resp => {
+      try {
+        return resp
+      } catch(e) {
+        throw resp
+      }
+    })
+    .catch(error => ({ error }))
 
 export const getDexTrades = async (dexUrl, queryParams) =>
   HttpClient()

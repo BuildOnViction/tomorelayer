@@ -6,38 +6,12 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/styles'
-import FeedIcon from '@material-ui/icons/RssFeed'
 import { connect } from 'redux-zero/react'
-import { compose, isEmpty } from 'service/helper'
+import { compose } from 'service/helper'
 import { PushAlert } from 'service/frontend'
-import { notifyDex } from 'service/backend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 import TokenPairList from 'component/shared/TokenPairList'
-
-const MenuButton = withStyles(theme => ({
-  root: {
-    textTransform: 'none',
-    color: theme.palette.subtitle,
-    padding: 0,
-    margin: 0,
-    fontSize: 14,
-    '&:hover': {
-      background: 'none',
-      color: theme.palette.maintitle,
-    },
-    '&:active': {
-
-    }
-  }
-}))(props => {
-  return (
-    <Button {...props} size="small" >
-      {props.text} <FeedIcon style={{ marginLeft: 5, fontSize: 16 }} />
-    </Button>
-  )
-})
 
 
 const FormTrade = ({
@@ -50,21 +24,9 @@ const FormTrade = ({
   relayer,
 }) => {
 
-  const [isNotifying, setIsNotifying] = React.useState(false)
-
   const setPairsValues = pairs => {
     setFieldValue('from_tokens', pairs.map(p => p.from.address))
     setFieldValue('to_tokens', pairs.map(p => p.to.address))
-  }
-
-  const handleNotify = async () => {
-    if (isEmpty(relayer.link)) {
-      return undefined
-    }
-
-    setIsNotifying(true)
-    await notifyDex(relayer.link)
-    setIsNotifying(false)
   }
 
   return (
@@ -98,12 +60,6 @@ const FormTrade = ({
               <Typography variant="body1" className="m-0">
                 Set trade Tokens
               </Typography>
-              {!isEmpty(relayer.link) && (
-                <MenuButton
-                  text={isNotifying ? 'Notifying...' : 'NotifyDex'}
-                  onClick={handleNotify}
-                />
-              )}
             </Grid>
             <Grid item>
               <TokenPairList
@@ -111,6 +67,7 @@ const FormTrade = ({
                 onChange={setPairsValues}
                 disabled={isSubmitting}
                 viewOnly={relayer.resigning}
+                dexUrl={relayer.link}
               />
             </Grid>
           </Grid>

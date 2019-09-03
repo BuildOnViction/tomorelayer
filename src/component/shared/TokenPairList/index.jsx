@@ -7,6 +7,7 @@ import {
 import {
   getTokenInfo,
   createTokens,
+  notifyDex,
 } from 'service/backend'
 import {
   AlertVariant,
@@ -26,7 +27,25 @@ class TokenPairList extends React.Component {
 
   state = {
     isRefreshing: false,
+    isNotifying: false,
     filterFunction: p => p
+  }
+
+  manualNotifyDex = async () => {
+    if (isEmpty(this.props.dexUrl)) {
+      return undefined
+    }
+
+    this.setState({ isNotifying: true })
+    const resp = await notifyDex(this.props.dexUrl)
+    console.log(resp)
+    if (resp.error) {
+      this.props.PushAlert({
+        message: 'Cannot send request to DEX link',
+        variant: AlertVariant.error
+      })
+    }
+    this.setState({ isNotifying: false })
   }
 
   makeCheckList = (pairs, pairMapping, value) => {
@@ -123,6 +142,7 @@ class TokenPairList extends React.Component {
     const {
       filterFunction,
       isRefreshing,
+      isNotifying,
     } = this.state
 
     return (
@@ -139,7 +159,12 @@ class TokenPairList extends React.Component {
               />
             ))}
           </PairList>
-          {!viewOnly && <RefreshControl onRefresh={this.queryTokens} disabled={isRefreshing || disabled} />}
+          {!viewOnly && (
+            <RefreshControl
+              onRefresh={this.queryTokens}
+              disabled={isRefreshing || isNotifying || disabled}
+              notifyDex={!isEmpty(this.props.dexUrl) && this.manualNotifyDex}
+            />)}
         </Grid>
       </Paper>
     )
@@ -175,9 +200,15 @@ export const mapProps = state => {
   })
 
   pairs.sort((a, b) => {
-    if (a.from.symbol === b.from.symbol) {return 1 * a.to.symbol.localeCompare(b.to.symbol)}
-    if (a.from.symbol === 'TOMO') {return -1}
-    if (a.from.is_major && b.from.is_major) {return 1 * a.from.symbol.localeCompare(b.from.symbol)}
+    if (a.from.symbol === b.from.symbol) {
+      return 1 * a.to.symbol.localeCompare(b.to.symbol)
+    }
+    if (a.from.symbol === 'TOMO') {
+      return -1
+    }
+    if (a.from.is_major && b.from.is_major) {
+      return 1 * a.from.symbol.localeCompare(b.from.symbol)
+    }
     return 1 * a.from.symbol.localeCompare(b.from.symbol)
   })
 
