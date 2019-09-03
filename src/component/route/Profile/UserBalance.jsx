@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { isEmpty } from 'service/helper'
+import { isEmpty, sequence } from 'service/helper'
 import { CustomLink } from 'component/shared/Adapters'
 
 
@@ -58,34 +58,37 @@ const RelayerStatus = ({
 }
 
 
-const RelayerTable = ({ relayers }) => (
-  <Paper className="p-1" elevation={0}>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <HeadTableCell>Relayer</HeadTableCell>
-          <HeadTableCell>Balance</HeadTableCell>
-          <HeadTableCell>Status</HeadTableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {Object.values(relayers).map(row => (
-          <TableRow key={row.name}>
-            <BodyTableCell component="th" scope="row">
-              <Link href={row.link}>{row.name}</Link>
-            </BodyTableCell>
-            <BodyTableCell>
-              {row.deposit} TOMO
-            </BodyTableCell>
-            <BodyTableCell>
-              <RelayerStatus resigning={row.resigning} />
-            </BodyTableCell>
+const RelayerTable = ({ relayers }) => {
+  const getRelayers = sequence(0, Object.keys(relayers).length / 2, idx => relayers[idx])
+  return (
+    <Paper className="p-1" elevation={0}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <HeadTableCell>Relayer</HeadTableCell>
+            <HeadTableCell>Balance</HeadTableCell>
+            <HeadTableCell>Status</HeadTableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </Paper>
-)
+        </TableHead>
+        <TableBody>
+          {getRelayers.map(row => (
+            <TableRow key={row.name}>
+              <BodyTableCell component="th" scope="row">
+                <Link href={row.link}>{row.name}</Link>
+              </BodyTableCell>
+              <BodyTableCell>
+                {row.deposit} TOMO
+              </BodyTableCell>
+              <BodyTableCell>
+                <RelayerStatus resigning={row.resigning} />
+              </BodyTableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Paper>
+  )
+}
 
 
 const NoRelayer = () => (

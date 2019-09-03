@@ -13,7 +13,6 @@ import {
   Container,
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Grid,
   Paper,
@@ -142,19 +141,19 @@ const FormResign = props => {
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            PaperProps={{ className: 'p-1' }}
+            PaperProps={{ style: { padding: 5 } }}
           >
             <DialogTitle id="alert-dialog-title">WARNING!</DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <Typography id="alert-dialog-description" variant="body2">
                 If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
-              </DialogContentText>
+              </Typography>
             </DialogContent>
             <Box display="flex" justifyContent="space-between" className="p-1">
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={confirmAndClose} color="secondary" variant="contained" data-testid="accept-button">
+              <Button onClick={confirmAndClose} color="primary" variant="contained" data-testid="accept-button">
                 Accept
               </Button>
             </Box>

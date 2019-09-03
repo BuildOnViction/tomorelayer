@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  CircularProgress,
   Grid,
   Paper,
   Tab,
@@ -81,7 +82,7 @@ const Topic = {
   _fills: 'Fills',
 }
 
-export default class TimeVolumeStat extends React.Component {
+export default class VolumeChart extends React.Component {
 
   VOLUME_CHART = undefined
   FILLS_CHART = undefined
@@ -92,7 +93,11 @@ export default class TimeVolumeStat extends React.Component {
   }
 
   componentDidMount() {
-    const renderChart = (chartData, chartId) => {
+    if (this.props.loading) {
+      return
+    }
+
+    const renderChart = (chartData = [], chartId) => {
 
       const ctx = document.getElementById(chartId).getContext('2d')
 
@@ -109,8 +114,8 @@ export default class TimeVolumeStat extends React.Component {
       return chart
     }
 
-    this.VOLUME_CHART = renderChart(this.props.data.volumes, 'volume-chart')
-    this.FILLS_CHART = renderChart(this.props.data.fills, 'fills-chart')
+    this.VOLUME_CHART = renderChart(this.props.volumeData, 'volume-chart')
+    this.FILLS_CHART = renderChart(this.props.fillData, 'fills-chart')
 
   }
 
@@ -124,38 +129,44 @@ export default class TimeVolumeStat extends React.Component {
       topic,
     } = this.state
 
+    const {
+      loading,
+    } = this.props
+
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={4}>
-          <Grid item sm={6}>
+          <Grid item sm={6} xs={4}>
             <PeriodTabs value={Object.values(Topic).indexOf(topic)} onChange={this.changeTopic}>
               <TopicTab label="Volume" />
               <TopicTab label="Fills" />
             </PeriodTabs>
           </Grid>
-          <Grid item container justify="flex-end" sm={6}>
+          <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
-              <PeriodTab label="24h" />
-              <PeriodTab label="7d" />
-              <PeriodTab label="1M" />
+              <PeriodTab label="24h" disabled={loading} />
+              <PeriodTab label="7d" disabled={loading} />
+              <PeriodTab label="1M" disabled={loading} />
             </PeriodTabs>
           </Grid>
-          <Grid item sm={12} style={{ position: 'relative', height: 265 }}>
-            <canvas
-              id="volume-chart"
-              style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
-            />
-            <canvas
-              id="fills-chart"
-              style={{ height: '100%', width: '100%', display: topic === Topic._fills ? 'initial' : 'none' }}
-            />
+          <Grid item sm={12} style={{ position: 'relative', height: 180 }} container justify="center" alignItems="center">
+            {loading ? (
+              <CircularProgress style={{ height: 50, width: 50 }} />
+            ) : (
+              <React.Fragment>
+                <canvas
+                  id="volume-chart"
+                  style={{ height: '100%', width: '100%', display: topic === Topic._volume ? 'initial' : 'none' }}
+                />
+                <canvas
+                  id="fills-chart"
+                  style={{ height: '100%', width: '100%', display: topic === Topic._fills ? 'initial' : 'none' }}
+                />
+              </React.Fragment>
+            )}
           </Grid>
         </Grid>
       </StyledPaper>
     )
   }
-}
-
-TimeVolumeStat.defaultProps = {
-  data: [],
 }

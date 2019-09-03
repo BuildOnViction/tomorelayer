@@ -4,11 +4,8 @@ import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { Container } from '@material-ui/core'
 import { SITE_MAP, IS_DEV } from 'service/constant'
-import { PushAlert, AlertVariant } from 'service/frontend'
-import * as _ from 'service/helper'
-import RelayerContractClass from 'service/relayer_contract'
-import TomoXContractClass from 'service/tomox_contract'
-import { FetchPublic } from './shared/actions'
+import { AppInitialization } from './shared/actions'
+
 import {
   Protected,
   MainAppLoader,
@@ -33,69 +30,23 @@ const Router = IS_DEV ? HashRouter : BrowserRouter
 class App extends React.Component {
 
   state = {
-    userRelayers: {},
     publicFetchLoading: true,
   }
 
   async componentDidMount() {
-    try {
-      await this.props.FetchPublic()
-      this.setState({ publicFetchLoading: false })
-    } catch (error) {
-      console.error(error)
-      this.props.PushAlert({
-        message: 'Cannot fetch public resources',
-        variant: AlertVariant.error,
-      })
-    }
-  }
-
-  async componentDidUpdate(prevProps) {
-    const {
-      RelayerContract,
-      contract,
-      tomoxContract,
-      user,
-      relayers,
-      shouldUpdateUserRelayers,
-      finishUpdateUserRelayers,
-      initRelayerContract,
-    } = this.props
-
-    const relayersJustFetched = relayers.length && !prevProps.relayers.length
-    const userJustLoggedIn = user.wallet && !prevProps.user.wallet
-
-    const shouldFilterUserRelayer = (relayersJustFetched && user.wallet) || (userJustLoggedIn && relayers.length > 0)
-
-    if (shouldFilterUserRelayer || shouldUpdateUserRelayers) {
-      const userAddress = await user.wallet.getAddress()
-      const userRelayers = {}
-      relayers.filter(r => _.strEqual(r.owner, userAddress)).forEach(r => {
-        userRelayers[r.coinbase] = r
-      })
-      this.setState({ userRelayers }, finishUpdateUserRelayers)
-    }
-
-    if (!RelayerContract && user.wallet && contract) {
-      const relayerContractInstance = new RelayerContractClass(user.wallet, contract)
-      const tomoxContractInstance = new TomoXContractClass(user.wallet, tomoxContract)
-      initRelayerContract({
-        RelayerContract: relayerContractInstance,
-        TomoXContract: tomoxContractInstance,
-      })
-    }
+    await this.props.AppInitialization()
+    this.setState({ publicFetchLoading: false })
   }
 
   render() {
 
     const {
-      userRelayers,
       publicFetchLoading,
     } = this.state
 
     const {
       user,
-      relayers,
+      userRelayers,
     } = this.props
 
     const userLoggedIn = Boolean(user.wallet)
@@ -127,9 +78,9 @@ class App extends React.Component {
               />
               <Protected
                 path={SITE_MAP.Authentication}
-                component={props => <Authentication {...props} relayers={relayers} />}
+                component={Authentication}
                 condition={!userLoggedIn}
-                redirect={SITE_MAP.Logout}
+                redirect={SITE_MAP.Dashboard}
               />
               <Protected
                 path={SITE_MAP.Profile}
@@ -145,15 +96,15 @@ class App extends React.Component {
               />
               <Protected
                 path={SITE_MAP.Dashboard}
-                render={() => <Dashboard relayers={userRelayers} /> }
+                render={Dashboard}
                 condition={userLoggedIn}
                 redirect={SITE_MAP.Authentication}
               />
               <Protected
                 path={SITE_MAP.Logout}
-                condition={userLoggedIn}
-                redirect={SITE_MAP.Home}
                 component={Logout}
+                condition={userLoggedIn}
+                redirect={SITE_MAP.Authentication}
               />
             </Switch>
           </Container>
@@ -165,26 +116,14 @@ class App extends React.Component {
 }
 
 const mapProps = state => ({
-  relayers: state.Relayers,
   user: state.user,
-  contract: state.Contracts.find(r => r.name === 'RelayerRegistration'),
-  tomoxContract: state.Contracts.find(r => r.name === 'TOMOXListing'),
-  shouldUpdateUserRelayers: state.shouldUpdateUserRelayers,
-  RelayerContract: state.blk.RelayerContract,
+  userRelayers: state.user.relayers,
 })
 
 const actions = {
-  FetchPublic,
-  PushAlert,
-  finishUpdateUserRelayers: () => ({ shouldUpdateUserRelayers: false }),
-  initRelayerContract: (state, { RelayerContract, TomoXContract }) => ({
-    blk: {
-      ...state.blk,
-      RelayerContract,
-      TomoXContract,
-    }
-  })
+  AppInitialization,
 }
+
 const ConnectedApp = connect(mapProps, actions)(App)
 
-export default process.env.NODE_ENV === "development" ? hot(ConnectedApp) : ConnectedApp
+export default process.env.NODE_ENV in ['production', 'test'] ? ConnectedApp : hot(ConnectedApp)

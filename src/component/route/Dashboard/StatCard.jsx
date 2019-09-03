@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   Box,
+  Grid,
   Paper,
   Typography,
 } from '@material-ui/core'
@@ -10,15 +11,19 @@ const StatCard = ({
   stat,
   helpText,
 }) => (
-  <Paper elevation={0} className="">
-    <Box display="flex" flexDirection="column" style={{ padding: 5 }}>
-      <Box display="flex" justifyContent="center" alignItems="center" className="m-1">
-        <img alt="" src={icon} height="100%" className="mr-1" />
-        <Typography variant="subtitle1" className="m-0">{stat}</Typography>
+  <Grid item xs={6} md={3}>
+    <Paper elevation={0} style={{ padding: 20 }}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <img alt="" src={icon} height="27px" />
+        <Typography variant="subtitle1" className="mt-1">
+          {stat}
+        </Typography>
+        <Typography variant="body2" className="text-center m-0">
+          {helpText}
+        </Typography>
       </Box>
-      <Typography variant="body2" className="text-center">{helpText}</Typography>
-    </Box>
-  </Paper>
+    </Paper>
+  </Grid>
 )
 
 export default StatCard

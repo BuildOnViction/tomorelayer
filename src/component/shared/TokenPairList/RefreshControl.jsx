@@ -20,7 +20,7 @@ const RefreshButton = withStyles(theme => ({
     fontSize: 14,
     color: theme.palette.link,
     textTransform: 'none',
-    padding: '0px 10px',
+    padding: '0px 8px',
     '&:hover': {
       background: 'transparent',
       textDecoration: 'underline',
@@ -37,6 +37,7 @@ const RefreshControlContainer = withStyles(theme => ({
 }))(Box)
 
 const RefreshControl = ({
+  notifyDex,
   onRefresh,
   disabled,
 }) => (
@@ -57,6 +58,20 @@ const RefreshControl = ({
             Refresh now
           </RefreshButton>
         </Box>
+        {notifyDex && (
+          <React.Fragment>
+            <Box>
+              <Typography variant="body2" className="m-0">
+                or manually
+              </Typography>
+            </Box>
+            <Box>
+              <RefreshButton onClick={notifyDex}>
+                notify your DEX
+              </RefreshButton>
+            </Box>
+          </React.Fragment>
+        )}
       </React.Fragment>
     )}
   </RefreshControlContainer>

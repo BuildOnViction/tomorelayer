@@ -2,12 +2,10 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
-import { UNLOCK_WALLET_METHODS, MISC } from 'service/constant'
+import { UNLOCK_WALLET_METHODS } from 'service/constant'
 import { compose } from 'service/helper'
-import { getAuthenticated } from 'service/backend'
 import {
   PushAlert,
-  AlertVariant,
 } from 'service/frontend'
 import Header from './Header'
 import MethodBar from './MethodBar'
@@ -16,6 +14,10 @@ import LedgerWallet from './Methods/LedgerWallet'
 // import TrezorWallet from './Methods/TrezorWallet'
 import PrivatekeyWallet from './Methods/PrivatekeyWallet'
 import MnemonicWallet from './Methods/MnemonicWallet'
+
+import {
+  ConfirmLogin,
+} from './actions'
 
 
 const {
@@ -57,31 +59,7 @@ class Authentication extends React.Component {
 
   changeMethod = (unlockingMethod) => this.setState({ unlockingMethod })
 
-  confirmWallet = async wallet => {
-    const address = await wallet.getAddress()
-    const signed = await wallet.signMessage(MISC.AuthMessage)
-    const { error } = await getAuthenticated(address, signed)
-
-    if (error) {
-      return this.props.PushAlert({
-        variant: AlertVariant.error,
-        message: `${error.message}: ${error.detail}`,
-      })
-    }
-
-    this.props.saveWallet(wallet)
-    const findFirstRelayer = this.props.relayers.find(r => r.owner === address)
-
-    if (findFirstRelayer) {
-      return setTimeout(() => {
-        const path = `/dashboard/${findFirstRelayer.coinbase}`
-        return this.props.history.push(path)
-      })
-    }
-
-    return this.props.history.push('/register')
-
-  }
+  confirmWallet = this.props.ConfirmLogin
 
   render () {
 
@@ -114,16 +92,7 @@ const mapProps = state => ({
 
 const actions = store => ({
   PushAlert,
-  saveWallet: (state, wallet) => {
-    const user = {
-      ...state.user,
-      wallet,
-    }
-
-    return {
-      user,
-    }
-  },
+  ConfirmLogin,
 })
 
 export default compose(
