@@ -2,6 +2,10 @@ import { Signer, utils } from 'ethers'
 import { bigNumber } from '@vutr/purser-core/utils'
 import { isFunction, isTruthy } from './helper'
 
+/*
+ * Wallet Abstraction to interact with Ethersjs
+ * Checkout Signer Interface of EthersJs
+ */
 export default class WalletSigner extends Signer {
   _wallet = undefined
   _provider = undefined
@@ -41,6 +45,9 @@ export default class WalletSigner extends Signer {
     tx.gasLimit = bigNumber(tx.gasLimit || 1000000)
     tx.gasPrice = bigNumber(tx.gasPrice ? tx.gasPrice.toNumber() : '10000').toGwei()
 
+    /*
+     * Convert purser's payload body to ethersjs transaction-request
+     */
     const to = await tx.to
     tx.to = to
     tx.inputData = tx.data

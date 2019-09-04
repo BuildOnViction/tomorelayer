@@ -58,7 +58,11 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
           },
           ticks: {
             fontColor: '#7473A6',
-            padding: 20,
+            maxTicksLimit: 8,
+            beginAtZero: false,
+            maxRotation: 0,
+            padding: 10,
+            labelOffset: 15,
           },
         },
       ],
