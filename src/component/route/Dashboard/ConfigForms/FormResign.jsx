@@ -146,7 +146,7 @@ const FormResign = props => {
             <DialogTitle id="alert-dialog-title">WARNING!</DialogTitle>
             <DialogContent>
               <Typography id="alert-dialog-description" variant="body2">
-                If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
+                Once resigned, you cannot undo the cancelling process and your business with this relayer will be terminated permanently
               </Typography>
             </DialogContent>
             <Box display="flex" justifyContent="space-between" className="p-1">

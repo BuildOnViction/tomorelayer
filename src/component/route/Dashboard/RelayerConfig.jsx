@@ -32,7 +32,7 @@ const SIDE_MENU_ITEMS = {
   trade: 'Trade Options',
   deposit: 'Deposit',
   transfer: 'Transfer',
-  resign: 'Resign',
+  resign: 'Shutdown',
 }
 
 const NotExistRelayer = () => (
