@@ -7,6 +7,7 @@ import { compose } from 'service/helper'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
+import FeedBack from './FeedBack'
 
 const baseUrl = SITE_MAP.Dashboard
 
@@ -46,6 +47,10 @@ const Dashboard = ({
           <Route
             path={`${baseUrl}/:coinbase/config`}
             render={SafePath(RelayerConfig)}
+          />
+          <Route
+            path={`${baseUrl}/:coinbase/feedback`}
+            render={SafePath(FeedBack)}
           />
         </Switch>
       </Box>

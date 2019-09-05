@@ -39,9 +39,28 @@ const Tab = withStyles(theme => ({
 }))(MuiTab)
 
 const mapRouteToValue = path => {
-  if (path.includes('config')) {return 1}
+  if (path.includes('config')) {
+    return 1
+  }
+
+  if (path.includes('feedback')) {
+    return 2
+  }
+
   return 0
 }
+
+const FeedBack = React.forwardRef((props, ref) => (
+  <AdapterLink
+    {...props}
+    innerRef={ref}
+    style={{
+      marginRight: 10,
+      marginLeft: 'auto',
+      minWidth: 'auto',
+    }}
+  />
+))
 
 const TabMenu = ({
   location,
@@ -52,8 +71,9 @@ const TabMenu = ({
   return (
     <AppBar position="static">
       <Tabs value={mapRouteToValue(path)}>
-        <Tab label="Relayer Page" component={AdapterLink} to={path.replace('/config', '')} />
-        <Tab label="Configurations" component={AdapterLink} to={`${path}/config`} />
+        <Tab label="Relayer Page" component={AdapterLink} to={path.replace(/\/(config|feedback)/i, '')} />
+        <Tab label="Configurations" component={AdapterLink} to={path.replace('/feedback', '') + '/config'} />
+        <Tab label="Feedback" component={FeedBack} to={path.replace('/config', '') + '/feedback'} />
       </Tabs>
     </AppBar>
   )
