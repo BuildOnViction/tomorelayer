@@ -19,5 +19,4 @@ route = [(ALLOWED_HOSTS, [
     ("/api/token", TokenHandler),
     ("/api/public", PublicHandler),
     ("/api/redis", RedisHandler),
-    ("/api/mailer", MailHandler),
 ])]
