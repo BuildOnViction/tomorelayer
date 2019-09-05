@@ -136,7 +136,7 @@ const theme = (config) =>
           boxShadow: 'none',
           textTransform: 'none',
           lineHeight: '1',
-          minWidth: '120px',
+          minWidth: '140px',
         },
         containedSecondary: {
           background: '#323252!important',
