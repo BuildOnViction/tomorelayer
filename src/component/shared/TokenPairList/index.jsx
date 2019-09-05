@@ -38,7 +38,6 @@ class TokenPairList extends React.Component {
 
     this.setState({ isNotifying: true })
     const resp = await notifyDex(this.props.dexUrl)
-    console.log(resp)
     if (resp.error) {
       this.props.PushAlert({
         message: 'Cannot send request to DEX link',

@@ -62,12 +62,17 @@ class RelayerStat extends React.Component {
     const {
       relayer,
       stats,
+      AvailableTokens,
     } = this.props
 
     const {
       tab,
       loading,
     } = this.state
+
+    const tokenTableData = _.unique(relayer.from_tokens.concat(relayer.to_tokens))
+                            .map(t => AvailableTokens.find(token => token.address === t))
+                            .filter(_.isTruthy)
 
     const avatarClassName = cx({ 'empty-avatar': _.isEmpty(relayer.logo) })
 
@@ -122,7 +127,7 @@ class RelayerStat extends React.Component {
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
             {tab === TOPICS.orders && <OrderTable data={stats.trades} />}
-            {tab === TOPICS.tokens && <TokenTable data={stats.tokens} />}
+            {tab === TOPICS.tokens && <TokenTable tokens={tokenTableData} relayer={relayer} />}
           </Box>
         </Grid>
       </Grid>
