@@ -34,7 +34,7 @@ export default class PairList extends React.Component {
       <React.Fragment>
         <ListHeader display="flex" justifyContent="space-between" alignItems="center" className="pr-1 pl-1">
           <Box>
-            <Typography variant="body2">
+            <Typography variant="body2" style={{ marginLeft: 4 }}>
               Pair
             </Typography>
           </Box>

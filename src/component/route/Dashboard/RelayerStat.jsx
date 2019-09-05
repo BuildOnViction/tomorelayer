@@ -53,7 +53,7 @@ class RelayerStat extends React.Component {
 
   state = {
     tab: TOPICS.orders,
-    loading: true,
+    loading: false,
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -105,10 +105,10 @@ class RelayerStat extends React.Component {
 
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
-              <VolumeChart loading={loading} data={stats.volume} />
+              <VolumeChart data={stats.volume} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart loading={loading} data={stats.token} />
+              <TokenChart data={stats.token} />
             </Grid>
           </Grid>
         </Grid>
@@ -121,8 +121,8 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {!loading && tab === TOPICS.orders && <OrderTable data={stats.trades} />}
-            {!loading && tab === TOPICS.tokens && <TokenTable data={stats.tokens} />}
+            {tab === TOPICS.orders && <OrderTable data={stats.trades} />}
+            {tab === TOPICS.tokens && <TokenTable data={stats.tokens} />}
           </Box>
         </Grid>
       </Grid>
