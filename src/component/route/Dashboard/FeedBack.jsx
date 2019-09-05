@@ -23,14 +23,16 @@ const CustomTextInput = withStyles(theme => {
     multiline
     rows={10}
     fullWidth
+    placeholder="Enter your feedback here..."
   />
 ))
+
 
 export default class FeedBack extends React.Component {
   render() {
     return (
       <Container maxWidth="sm" className="pt-2">
-        <Grid container justify="center" spacing={3}>
+        <Grid container justify="center" spacing={2}>
 
           <Grid item xs={12}>
             <Typography variant="h5">
@@ -50,9 +52,17 @@ export default class FeedBack extends React.Component {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} container justify="space-around">
-            <Button variant="contained" color="secondary">Cancel</Button>
-            <Button variant="contained">Submit</Button>
+          <Grid item xs={12} container justify="space-around" spacing={3}>
+            <Grid item xs={6} container justify="center">
+              <Button variant="contained" color="secondary">
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item xs={6} container justify="center">
+              <Button variant="contained">
+                Submit
+              </Button>
+            </Grid>
           </Grid>
 
         </Grid>
