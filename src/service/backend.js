@@ -91,6 +91,7 @@ const API = {
   contract: '/api/contract',
   relayer: '/api/relayer',
   token: '/api/token',
+  mailer: '/api/mailer',
   public: '/api/public',
   external: {
     tomoprice: ApiFix('https://scan.testnet.tomochain.com/api/setting/usd'),
@@ -183,6 +184,13 @@ export const createTokens = async (payload) =>
     .post(proxiedAPI.token, payload)
     .then(getPayload)
     .catch(logging)
+
+export const sendFeedback = async feedback =>
+  HttpClient()
+    .post(proxiedAPI.mailer, { feedback })
+    .then(getPayload)
+    .catch(logging)
+
 
 // EXTERNAL API
 export const getTomoPrice = async () =>

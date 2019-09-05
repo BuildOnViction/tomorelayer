@@ -6,6 +6,7 @@ from api.relayer import RelayerHandler
 from api.contract import ContractHandler
 from api.public import PublicHandler
 from api.redis import RedisHandler
+from api.mailer import MailHandler
 
 # HostMatches
 ALLOWED_HOSTS = HostMatches(r'.*(tomochain.com|localhost)')
@@ -18,4 +19,5 @@ route = [(ALLOWED_HOSTS, [
     ("/api/token", TokenHandler),
     ("/api/public", PublicHandler),
     ("/api/redis", RedisHandler),
+    ("/api/mailer", MailHandler),
 ])]
