@@ -24,9 +24,12 @@ const FormStepFour = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Typography variant="h5" className="mb-2">
+      <Typography variant="h5">
         Select trading pairs
       </Typography>
+      <Box className="mb-3">
+        Select a token in list A to match with tokens in list B to make the trading pair
+      </Box>
       <TokenPairList
         value={values}
         onChange={setPairsValues}
@@ -36,7 +39,7 @@ const FormStepFour = ({
           Back
         </Button>
         <Button color="primary" variant="contained" type="submit">
-          Confirm
+          Save & Preview
         </Button>
       </Box>
     </form>

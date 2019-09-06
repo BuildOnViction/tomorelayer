@@ -16,12 +16,15 @@ import { withStyles } from '@material-ui/core/styles'
 
 
 const tableData = (meta, pairs) => {
+  const fixPairList = pairs.map(p => p.toString().replace(' ', ''))
+                           .sort((a,b) => a.localeCompare(b))
+                           .join('   ')
   return [
     { key: 'Relayer Name', value: meta.name },
     { key: 'Coinbase', value: meta.coinbase },
     { key: 'Deposit', value: meta.deposit + ' TOMO' },
-    { key: 'Trade Fee', value: round(meta.trade_fee, 2) + '%' },
-    { key: 'Token Pairs', value: pairs.map(p => p.toString()).join(', ') },
+    { key: 'Trading Fee', value: round(meta.trade_fee, 2) + '%' },
+    { key: `Trading Pairs # (${pairs.length})`, value: fixPairList },
   ]
 }
 
@@ -58,7 +61,7 @@ const Review = ({
             {tableData(meta, pairs).map(row => (
               <TableRow key={row.key}>
                 <StyledTableCell>
-                  {row.key}
+                  {row.key.split('#').map(r => r !== '#' && <div>{r}</div>)}
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   {row.value}
@@ -80,7 +83,7 @@ const Review = ({
         )}
         {!isRegistering && (
           <Button color="primary" variant="contained" type="button" onClick={registerRelayer} disabled={isRegistering}>
-            Confirm
+            Publish
           </Button>
         )}
       </Box>
