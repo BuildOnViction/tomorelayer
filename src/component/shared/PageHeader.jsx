@@ -26,10 +26,20 @@ import logo from 'asset/logo-tomorelayer.svg'
 import PageSearch, { PageSearchResponsive } from './PageSearch'
 
 const ref = React.createRef()
+
 class PageHeader extends React.Component {
 
   state = {
-    searchResult: []
+    searchResult: [],
+    address: undefined,
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (!prevProps.user.wallet && this.props.user.wallet) {
+      const address = await this.props.user.wallet.getAddress()
+      const fixedAddr = address.slice(0, 5) + ' ... ' + address.slice(-4)
+      this.setState({ address: fixedAddr })
+    }
   }
 
   pouchQuery = async e => {
@@ -76,7 +86,7 @@ class PageHeader extends React.Component {
               <Hidden smDown>
                 {auth && userOwnRelayer && <RelayerMenu relayers={relayers} />}
                 {auth && !userOwnRelayer && <StartRelayerButton />}
-                {auth && <UserMenu />}
+                {auth && <UserMenu address={this.state.address} />}
               </Hidden>
 
               <Hidden mdUp>
@@ -90,6 +100,7 @@ class PageHeader extends React.Component {
                     ref={ref}
                     relayers={relayers}
                     userOwnRelayer={userOwnRelayer}
+                    address={this.state.address}
                   />
                 )}
               </Hidden>

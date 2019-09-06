@@ -6,7 +6,7 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core'
-import PersonIcon from '@material-ui/icons/Person'
+import WalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import MenuIcon from '@material-ui/icons/Menu'
 import { withStyles } from '@material-ui/core/styles'
 import { AdapterLink } from 'component/shared/Adapters'
@@ -25,7 +25,8 @@ const MenuButton = withStyles(theme => ({
   const InnerIcon = props.icon
   return (
     <Button {...props} size="small">
-      {props.text} <InnerIcon style={{ marginLeft: 5 }} />
+      <InnerIcon style={{ marginRight: 5 }} />
+      {props.text}
     </Button>
   )
 })
@@ -87,7 +88,9 @@ const RouteMenuItem = React.forwardRef((props, ref) => (
 ))
 
 
-export const UserMenu = () => {
+export const UserMenu = ({
+  address,
+}) => {
 
   const [
     anchorEl,
@@ -105,8 +108,9 @@ export const UserMenu = () => {
         aria-controls="relayer-list-menu"
         aria-haspopup="true"
         onClick={handleClick}
-        text="User"
-        icon={PersonIcon}
+        text={address}
+        icon={WalletIcon}
+
       />
       <ClickAwayListener onClickAway={handleClose}>
         <DropDownMenu
@@ -182,7 +186,7 @@ export const StartRelayerButton = () => (
   </Button>
 )
 
-export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
+export const ResponsiveMenu = ({ address, relayers, userOwnRelayer }) => {
   const [
     anchorEl,
     setAnchorEl,
@@ -233,7 +237,7 @@ export const ResponsiveMenu = ({ relayers, userOwnRelayer }) => {
             </StyledMenuItem>
           )}
           <Box>
-            <MenuTitle>User</MenuTitle>
+            <MenuTitle>Wallet: {address}</MenuTitle>
             <RouteMenuItem onClick={handleClose} routeTo="/profile" text="Profile" />
             <RouteMenuItem onClick={handleClose} routeTo="/logout" text="Logout" />
           </Box>
