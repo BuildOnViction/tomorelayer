@@ -22,11 +22,21 @@ const CompareArrows = withStyles(theme => ({
   }
 }))(Arrows)
 
-const StyledCheckbox = withStyles({
+const StyledCheckbox = withStyles(theme => ({
   root: {
-    'color': '#7473A6',
+    color: theme.palette.maintitle,
+    opacity: .3,
+    '& svg': {
+      fontSize: '1rem',
+    }
   },
-})(Checkbox)
+  checked: {
+    opacity: 1,
+    '& svg': {
+      color: theme.palette.link,
+    }
+  }
+}))(Checkbox)
 
 const TokenListItem = withStyles(theme => ({
   root: {
@@ -48,6 +58,12 @@ const TokenListItem = withStyles(theme => ({
     },
   },
 }))(ListItem)
+
+const StyledListItemText = withStyles(theme => ({
+  primary: {
+    color: 'white'
+  }
+}))(ListItemText)
 
 const StyledListItemIcon = withStyles(theme => ({
   root: {
@@ -116,7 +132,7 @@ export default class PairItem extends React.Component {
               }}
             />
           </StyledListItemIcon>
-          <ListItemText primary={pair.toString()} />
+          <StyledListItemText primary={pair.toString()} />
           <PairInfoIcon className="info-icon" />
         </TokenListItem>
         {showDetails && (

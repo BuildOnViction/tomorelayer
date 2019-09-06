@@ -201,7 +201,7 @@ export const mapProps = state => {
     }).forEach((toToken, toIdx) => pairs.push({
       from: fromToken,
       to: toToken,
-      toString: () => `${fromToken.symbol}/${toToken.symbol}`,
+      toString: () => `${fromToken.symbol} / ${toToken.symbol}`,
       checked: false,
       toAddrString: () => `${fromToken.address}-${toToken.address}`,
     }))
