@@ -67,7 +67,7 @@ const renderInput = (inputProps) => {
         },
         endAdornment: (
           <InputAdornment position="end">
-            <SearchIcon />
+            <SearchIcon style={{ width: 17, height: 17, opacity: .3 }} />
           </InputAdornment>
         ),
         ...InputProps,
@@ -143,7 +143,7 @@ export const PageSearch = ({ searchResult, onChange }) => {
           selectedItem,
         }) => {
           const { onBlur, onFocus, ...inputProps } = getInputProps({
-            placeholder: 'Search everything you want…',
+            placeholder: 'Search Relayers/Tokens/Contracts…',
             onChange: onChange,
           })
 

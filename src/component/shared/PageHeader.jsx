@@ -55,10 +55,10 @@ class PageHeader extends React.Component {
 
     return (
       <Box className="tomo-header">
-        <Container maxWidth="lg" className="p-1">
+        <Container maxWidth="lg" style={{ padding: 12 }}>
           <Grid container direction="row" justify="space-between" alignItems="center">
             <Grid item xs={3} md={2}>
-              <img alt="logo" src={logo} height="30px" />
+              <img alt="logo" src={logo} height="32.7px" />
               {/* <Link display="block" component={AdapterLink} to="/">
                   <img alt="logo" src={logo} height="30px" />
                   </Link> */}
