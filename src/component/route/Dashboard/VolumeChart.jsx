@@ -100,8 +100,8 @@ export default class VolumeChart extends React.Component {
     }
 
     // MOCK
-    const mockdata = () => Array.from({ length: 100 }).fill().map((_, idx) => ({
-      label: datefns.format(datefns.addDays(datefns.subDays(Date.now(), 100), idx), 'MM/DD'),
+    const mockdata = () => Array.from({ length: 30 }).fill().map((_, idx) => ({
+      label: datefns.format(datefns.addDays(datefns.subDays(Date.now(), 100), idx), 'MMMM DD'),
       value: faker.random.number(),
     }))
 

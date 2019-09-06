@@ -9,9 +9,10 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
         borderWidth: 2,
         data: data.map((t) => t.value),
         fill: 'start',
-        steppedLine: false,
         lineTension: 0,
         radius: 0,
+        hitRadius: 8,
+        steppedLine: 'before',
       },
     ],
   },
@@ -24,6 +25,15 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
       datalabels: {
         display: false,
       },
+    },
+    tooltips: {
+      enabled: true,
+      backgroundColor: 'rgba(0, 0, 0, .8)',
+      mode: 'nearest',
+      displayColors: false,
+      callbacks: {
+        label: tooltipItem => `$ ${tooltipItem.value}`
+      }
     },
     scales: {
       yAxes: [
@@ -58,7 +68,7 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
           },
           ticks: {
             fontColor: '#7473A6',
-            maxTicksLimit: 8,
+            maxTicksLimit: 6,
             beginAtZero: false,
             maxRotation: 0,
             padding: 10,
