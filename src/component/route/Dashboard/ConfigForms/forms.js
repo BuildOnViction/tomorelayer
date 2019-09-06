@@ -122,9 +122,9 @@ export const wrappers = {
     displayName: 'RelayerTransferForm',
     enableReinitialize: true,
     validateOnChange: false,
-    mapPropsToValues: (props) => ({
-      owner: props.relayer.owner,
-      coinbase: props.relayer.coinbase,
+    mapPropsToValues: () => ({
+      owner: undefined,
+      coinbase: undefined,
     }),
 
     validate: (values, props) => {

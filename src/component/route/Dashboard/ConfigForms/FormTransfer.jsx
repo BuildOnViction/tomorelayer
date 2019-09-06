@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
-import { compose } from 'service/helper'
+import { compose, isEmpty } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
@@ -40,7 +40,7 @@ const FormTransfer = props => {
     submitForm()
   }
 
-  const transferDisabled = isSubmitting || values.owner === relayer.owner
+  const transferDisabled = isSubmitting || values.owner === relayer.owner || isEmpty(values.owner) || isEmpty(values.coinbase)
 
   const nextStep = () => setStep(1)
 

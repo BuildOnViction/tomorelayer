@@ -23,7 +23,7 @@ const StyledAvatar = withStyles(theme => ({
     width: '100%',
     height: '100%',
     '&.empty-avatar': {
-      border: `solid 8px ${theme.palette.paper}CC`,
+      backgroundColor: `${theme.palette.paper}CC`,
       padding: 40,
     }
   }
@@ -44,6 +44,12 @@ class FormInfo extends React.Component {
     const inputDisabled = isSubmitting || relayer.resigning
 
     const avatarClassName = cx('mr-1', { 'empty-avatar': isEmpty(values.logo) })
+
+    const helpTextRelayerName = errors.name ? (
+      <i className="text-alert">{errors.name}</i>
+    ) : (
+      <Typography variant="subtitle2" style={{ float: 'right' }}>Max 200 chars</Typography>
+    )
 
     return (
       <Container>
@@ -90,7 +96,7 @@ class FormInfo extends React.Component {
                 id="relayer-name"
                 name="name"
                 variant="outlined"
-                helperText={errors.name && <i className="text-alert">{errors.name}</i>}
+                helperText={helpTextRelayerName}
                 disabled={inputDisabled}
                 fullWidth
               />
