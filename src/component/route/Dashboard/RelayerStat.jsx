@@ -102,10 +102,10 @@ class RelayerStat extends React.Component {
 
         <Grid item xs={12} container direction="column">
           <Grid item container spacing={4}>
-            <StatCard icon={networkVolIcon} stat="1000" helpText="Network Volume" />
-            <StatCard icon={networkFeeIcon} stat="1000" helpText="Network Fees" />
-            <StatCard icon={tradeIcon} stat="1000" helpText="Trades(24h)" />
-            <StatCard icon={tomoPriceIcon} stat="1000" helpText="Tomo Price" />
+            <StatCard icon={networkVolIcon} stat="$ 4389" helpText="Network Volume" />
+            <StatCard icon={networkFeeIcon} stat="290 TOMO" helpText="Network Fees" />
+            <StatCard icon={tradeIcon} stat="5323" helpText="Trades(24h)" />
+            <StatCard icon={tomoPriceIcon} stat="$ 0.7" helpText="Tomo Price" />
           </Grid>
 
           <Grid item className="mt-2" container spacing={4}>

@@ -56,6 +56,12 @@ const StyledMenuItem = withStyles(theme => ({
     borderRadius: 0,
     margin: 0,
     color: theme.palette.subtitle,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display:'inline-block',
+    width: 200,
+    lineHeight: '45px',
     [theme.breakpoints.down('sm')]: {
       paddingLeft: 28,
     },
