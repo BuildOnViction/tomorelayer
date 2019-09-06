@@ -18,13 +18,16 @@ const FormStepThree = props => {
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
-      <Typography variant="h5" className="mb-2">
-        Choose trading fee
+      <Typography variant="h5" className="mb-1">
+        Set the trading fee
+      </Typography>
+      <Typography variant="body2" className="mb-2">
+        The brokerage fee is chaged when a trader buy or sell tokens
       </Typography>
       <Box display="flex" className="mb-1">
         <TextField
           name="trade_fee"
-          label="Trade Fee (min: 0.01%, max: 99.9%)"
+          label="Trading Fee (Min: 0.01%, Max: 99.9%)"
           id="trade_fee-input"
           value={values.trade_fee}
           onChange={handleChange}
@@ -48,7 +51,7 @@ const FormStepThree = props => {
           Back
         </Button>
         <Button color="primary" variant="contained" type="submit">
-          Confirm
+          Save & Continue
         </Button>
       </Box>
     </form>

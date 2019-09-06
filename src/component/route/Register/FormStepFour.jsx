@@ -25,7 +25,7 @@ const FormStepFour = ({
   return (
     <form onSubmit={handleSubmit}>
       <Typography variant="h5" className="mb-2">
-        Choose Trading Pairs of Token
+        Select trading pairs
       </Typography>
       <TokenPairList
         value={values}
