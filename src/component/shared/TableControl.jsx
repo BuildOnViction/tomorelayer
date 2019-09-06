@@ -42,9 +42,11 @@ const TableControl = ({
   tabValue,
   onPaginationChange,
   topics,
+  textMask = [],
+  ...props
 }) => (
-  <StyledTabs value={tabValue} onChange={onTabChange}>
-    {topics.map(t => <TopicTab key={t} label={t} />)}
+  <StyledTabs value={tabValue} onChange={onTabChange} {...props}>
+    {topics.map((t, idx) => <TopicTab key={t} label={textMask[idx] || t} />)}
   </StyledTabs>
 )
 

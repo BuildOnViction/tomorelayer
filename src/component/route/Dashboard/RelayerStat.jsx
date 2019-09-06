@@ -123,6 +123,8 @@ class RelayerStat extends React.Component {
             tabValue={TOPICS.getIndex(tab)}
             onTabChange={this.onTabChange}
             topics={TOPICS.values}
+            textMask={['Orders', `Tokens (${tokenTableData.length})`]}
+            style={{ marginBottom: 20 }}
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
