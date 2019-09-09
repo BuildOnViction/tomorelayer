@@ -170,7 +170,7 @@ class TokenPairList extends React.Component {
           {!viewOnly && (
             <RefreshControl
               onRefresh={this.queryTokens}
-              disabled={isRefreshing || isNotifying || disabled}
+              disabled={isRefreshing || isNotifying}
               notifyDex={!isEmpty(this.props.dexUrl) && this.manualNotifyDex}
             />)}
         </Grid>

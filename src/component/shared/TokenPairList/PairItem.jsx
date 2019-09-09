@@ -35,6 +35,10 @@ const StyledCheckbox = withStyles(theme => ({
     '& svg': {
       color: theme.palette.link,
     }
+  },
+  disabled: {
+    opacity: 1,
+    color: `${theme.palette.maintitle}33 !important`,
   }
 }))(Checkbox)
 

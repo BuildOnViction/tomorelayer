@@ -137,6 +137,13 @@ const theme = (config) =>
           textTransform: 'none',
           lineHeight: '1',
           minWidth: '140px',
+          '&.Mui-disabled': {
+            color: '#52526e',
+            background: '#272741',
+          },
+          '&:hover': {
+            boxShadow: '0 10px 15px rgba(145, 92, 182, .2)'
+          }
         },
         containedSecondary: {
           background: '#323252!important',
