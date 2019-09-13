@@ -25,7 +25,7 @@ export class Register extends React.Component {
     super(props)
     this.state = {
       isRegistering: false,
-      step: 6,
+      step: 1,
       payload: {
         owner: '',
         deposit: MISC.MinimumDeposit,
@@ -217,9 +217,36 @@ const mapProps = state => ({
 
 const actions = store => ({
   pushAlert: PushAlert,
-  saveNewRelayer: (state, relayer) => {
+  saveNewRelayer: async (state, relayer) => {
     const Relayers = [ ...state.Relayers, relayer ]
-    return { Relayers, shouldUpdateUserRelayers: true }
+    const newIndex = Object.keys(state.user.relayers).length / 2
+    const user = {
+      ...state.user,
+      relayers: {
+        ...state.user.relayers,
+        [relayer.coinbase]: relayer,
+        [newIndex]: relayer,
+      },
+    }
+
+    const pouch = state.pouch
+    await pouch.put({
+      ...relayer,
+      _id: 'relayer' + relayer.id.toString(),
+      type: 'relayer',
+      fuzzy: [
+        relayer.name,
+        relayer.owner,
+        relayer.coinbase,
+        relayer.address,
+      ].join(','),
+    })
+
+    return {
+      user,
+      Relayers,
+      shouldUpdateUserRelayers: true,
+    }
   },
 })
 

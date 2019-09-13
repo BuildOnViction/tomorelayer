@@ -61,7 +61,7 @@ const Review = ({
             {tableData(meta, pairs).map(row => (
               <TableRow key={row.key}>
                 <StyledTableCell>
-                  {row.key.split('#').map(r => r !== '#' && <div>{r}</div>)}
+                  {row.key.split('#').map((r, idx) => r !== '#' && <div key={idx}>{r}</div>)}
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   {row.value}
