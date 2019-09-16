@@ -5,18 +5,26 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
   Grid,
   TextField,
   Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
+/*
+   import TextIcon from '@material-ui/icons/TextRotationNone'
+   import WebIcon from '@material-ui/icons/Web'
+   import ImageIcon from '@material-ui/icons/InsertPhoto'
+ */
 import { connect } from 'redux-zero/react'
 import placeholder from 'asset/image-placeholder.png'
 import { compose, isEmpty } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
-
 
 const StyledAvatar = withStyles(theme => ({
   root: {
@@ -29,14 +37,27 @@ const StyledAvatar = withStyles(theme => ({
   }
 }))(Avatar)
 
-
 class FormInfo extends React.Component {
+
+  state = {
+    open: false,
+  }
+
+  openConfirmDiaglog = () => this.setState({ open: !this.state.open })
+
+  handleClose = () => this.setState({ open: false })
+
+  confirmAndSubmit = async () => {
+    await this.props.submitForm()
+    this.setState({ open: false })
+  }
+
   render() {
+    const { open } = this.state
     const {
       values,
       errors,
       handleChange,
-      handleSubmit,
       isSubmitting,
       relayer,
     } = this.props
@@ -60,7 +81,7 @@ class FormInfo extends React.Component {
             </Typography>
           </Box>
         )}
-        <form onSubmit={handleSubmit}>
+        <form>
           <Grid item container spacing={6} direction="column">
             <Grid item container>
               <Grid item sm={6} md={4} className="pr-2">
@@ -116,11 +137,56 @@ class FormInfo extends React.Component {
               />
             </Grid>
             <Grid item container justify="center">
-              <Button color="primary" variant="contained" type="submit" data-testid="save-button" disabled={inputDisabled}>
+              <Button color="primary" variant="contained" onClick={this.openConfirmDiaglog} type="button">
                 Save
               </Button>
             </Grid>
           </Grid>
+          <Dialog open={open} onClose={this.handleClose}>
+
+            <DialogTitle id="alert-dialog-title" className="text-center">
+              Preview and Confirm
+            </DialogTitle>
+
+            <Divider />
+
+            <DialogContent className="mt-2">
+              <Box display="flex">
+                <Box flexGrow={1} className="mr-1">
+                  <Typography variant="body1">
+                    Relayer Name
+                  </Typography>
+                  <Typography variant="body1">
+                    Dex URL
+                  </Typography>
+                  <Typography variant="body1">
+                    Dex Logo URL
+                  </Typography>
+                </Box>
+
+                <Box flexGrow={3}>
+                  <Typography variant="body2">
+                    {values.name}
+                  </Typography>
+                  <Typography variant="body2">
+                    {values.link}
+                  </Typography>
+                  <Typography variant="body2">
+                    {values.logo}
+                  </Typography>
+                </Box>
+              </Box>
+
+            </DialogContent>
+            <Box display="flex" justifyContent="space-between" className="p-1 mt-2">
+              <Button onClick={this.handleClose} color="primary" size="small" type="button" disabled={isSubmitting}>
+                Cancel
+              </Button>
+              <Button color="primary" variant="contained" size="small" onClick={this.confirmAndSubmit} disabled={isSubmitting}>
+                Accept
+              </Button>
+            </Box>
+          </Dialog>
         </form>
       </Container>
     )
