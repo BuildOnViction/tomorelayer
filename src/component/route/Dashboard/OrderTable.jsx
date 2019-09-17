@@ -99,6 +99,7 @@ class OrderTable extends React.Component {
           onPrev={this.setPage(-1)}
           onBegin={this.setPage(currentPage)}
           onEnd={this.setPage(Math.ceil(data.total / 10) - currentPage)}
+          onPageClick={idx => this.setState({ currentPage: idx - 1 })}
         />
       </Grid>
     )

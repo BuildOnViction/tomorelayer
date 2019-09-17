@@ -33,9 +33,9 @@ const LastPageIconStyled = withStyles(iconStyles)(LastPageIcon)
 const KeyboardArrowLeftStyled = withStyles(iconStyles)(KeyboardArrowLeft)
 const KeyboardArrowRightStyled = withStyles(iconStyles)(KeyboardArrowRight)
 
-const renderPageNumItem = (current, total) => {
+const renderPageNumItem = (current, total, onPageClick) => {
   const numberRender = (numberList) => numberList.map((idx) => (
-    <PageNumItem item key={idx} className={idx === current ? 'page-active' : ''}>
+    <PageNumItem item key={idx} className={idx === current ? 'page-active' : ''} onClick={() => onPageClick(idx)}>
       {idx}
     </PageNumItem>
   ))
@@ -81,6 +81,7 @@ const Paginator = ({
   onPrev,
   onBegin,
   onEnd,
+  onPageClick,
 }) => {
 
   return (
@@ -95,7 +96,7 @@ const Paginator = ({
       <IconButton onClick={onPrev} disabled={activePage <= 1} aria-label="previous page">
         <KeyboardArrowLeftStyled />
       </IconButton>
-      {renderPageNumItem(activePage, totalPages)}
+      {renderPageNumItem(activePage, totalPages, onPageClick)}
       <IconButton onClick={onNext} disabled={activePage >= totalPages} aria-label="next page">
         <KeyboardArrowRightStyled />
       </IconButton>
