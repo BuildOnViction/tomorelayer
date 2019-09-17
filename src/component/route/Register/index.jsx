@@ -80,18 +80,6 @@ export class Register extends React.Component {
 
       const newRelayer = await http.createRelayer(payload)
 
-      await this.props.pouch.put({
-        ...newRelayer,
-        _id: 'relayer' + newRelayer.id.toString(),
-        type: 'relayer',
-        fuzzy: [
-          newRelayer.name,
-          newRelayer.owner,
-          newRelayer.coinbase,
-          newRelayer.address,
-        ].join(','),
-      })
-
       this.props.saveNewRelayer(newRelayer)
       this.setState({
         step: 6,
@@ -212,7 +200,6 @@ const mapProps = state => ({
   wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase).concat(state.Relayers.map(t => t.owner)),
   usedNames: state.Relayers.map(t => t.name),
-  pouch: state.pouch,
 })
 
 const actions = store => ({
