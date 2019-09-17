@@ -65,6 +65,28 @@ class RelayerStat extends React.Component {
     this.props.saveStat({ type: 'trades', data: trades, coinbase })
   }
 
+  requestData = type => async page => {
+    // NOTE: saving to localStorage..
+
+    if (type === 'Trades') {
+      const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
+      const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}?page=${page}`).get().json()
+      const currentTrades = this.props.stats.trades
+      this.props.saveStat({
+        type: 'trades',
+        data: {
+          ...currentTrades.data,
+          items: [
+            ...currentTrades.data.items,
+            ...trades.items
+          ],
+        },
+        coinbase,
+      })
+    }
+
+  }
+
   render() {
 
     const {
@@ -136,7 +158,7 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {tab === TOPICS.orders && <OrderTable data={stats.trades.data} />}
+            {tab === TOPICS.orders && <OrderTable data={stats.trades.data} requestData={this.requestData('Trades')} />}
             {tab === TOPICS.tokens && <TokenTable tokens={tokenTableData} relayer={relayer} />}
           </Box>
         </Grid>

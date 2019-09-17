@@ -43,6 +43,13 @@ class OrderTable extends React.Component {
 
   setPage = num => () => this.setState({ currentPage: this.state.currentPage + num })
 
+  setExactPage = async num => {
+    if (num * 10 > this.props.data.items.length) {
+      await this.props.requestData(num)
+    }
+    this.setState({ currentPage: num - 1 })
+  }
+
   render() {
 
     const { data } = this.props
@@ -99,7 +106,7 @@ class OrderTable extends React.Component {
           onPrev={this.setPage(-1)}
           onBegin={this.setPage(currentPage)}
           onEnd={this.setPage(Math.ceil(data.total / 10) - currentPage)}
-          onPageClick={idx => this.setState({ currentPage: idx - 1 })}
+          onPageClick={this.setExactPage}
         />
       </Grid>
     )
