@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import cx from 'classnames'
+import wretch from 'wretch'
 import { withStyles } from '@material-ui/styles'
 
 import placeholder from 'asset/image-placeholder.png'
@@ -58,7 +59,14 @@ class RelayerStat extends React.Component {
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
 
+  async componentDidMount() {
+    const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
+    const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}`).get().json()
+    this.props.saveStat({ type: 'trades', data: trades, coinbase })
+  }
+
   render() {
+
     const {
       relayer,
       stats,
@@ -105,7 +113,7 @@ class RelayerStat extends React.Component {
             <StatCard icon={networkVolIcon} stat="$ 4389" helpText="Relayer Volume 24h" />
             <StatCard icon={networkFeeIcon} stat="290 TOMO" helpText="Relayer Fee 24h" />
             <StatCard icon={tradeIcon} stat="5323" helpText="Trades(24h)" />
-            <StatCard icon={tomoPriceIcon} stat="$ 0.7" helpText="Tomo Price" />
+            <StatCard icon={tomoPriceIcon} stat={`$ ${stats.tomousd}`} helpText="Tomo Price" />
           </Grid>
 
           <Grid item className="mt-2" container spacing={4}>
@@ -128,7 +136,7 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {tab === TOPICS.orders && <OrderTable data={stats.trades} />}
+            {tab === TOPICS.orders && <OrderTable data={stats.trades.data} />}
             {tab === TOPICS.tokens && <TokenTable tokens={tokenTableData} relayer={relayer} />}
           </Box>
         </Grid>
@@ -141,7 +149,7 @@ const mapProps = state => ({
   stats: {
     volume: [],
     token: [],
-    trades: [],
+    trades: state.user.stat.trades || {},
     tokens: [],
     tomousd: state.network_info.tomousd,
   },
@@ -151,6 +159,18 @@ const mapProps = state => ({
 const actions = {
   GetStats,
   PushAlert,
+  saveStat: (state, { type, data, coinbase }) => ({
+    user: {
+      ...state.user,
+      stat: {
+        ...state.user.stat,
+        [type]: {
+          coinbase,
+          data,
+        },
+      },
+    },
+  })
 }
 
 export default connect(mapProps, actions)(RelayerStat)
