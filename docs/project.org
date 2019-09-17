@@ -42,6 +42,7 @@ CLOSED: [2019-06-26 Wed 17:42]
 CLOSED: [2019-07-11 Thu 09:39]
 **** DONE Notify Dex anout Token changes
 CLOSED: [2019-08-08 Thu 15:01]
+**** ACTIVE Time-out for Every contract call
 **** LATER Fixing Wallet Hook
 *** [ ] Error catch boundary
 **** LATER Backend api endpoint to present error & Slack integration
