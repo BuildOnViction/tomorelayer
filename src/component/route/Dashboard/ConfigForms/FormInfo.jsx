@@ -150,7 +150,7 @@ class FormInfo extends React.Component {
 
             <Divider />
 
-            <DialogContent className="mt-2">
+            <DialogContent className="mt-2" style={{ maxWidth: '80vw', width: 600 }}>
               <Box display="flex">
                 <Box flexGrow={1} className="mr-1">
                   <Typography variant="body1">
