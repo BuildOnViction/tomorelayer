@@ -31,8 +31,12 @@ const TableHeads = [
 
 const EmptyTokenTable = ({ coinbase }) => (
   <Grid container direction="column" className="mt-2">
-    <Grid>You have yet to set any token for trading.</Grid>
-    <Grid>Start adding some token <CustomLink to={`${SITE_MAP.Dashboard}/${coinbase}/config`}>here</CustomLink>...</Grid>
+    <Grid item className="text-center">
+      You have yet to set any token for trading.
+    </Grid>
+    <Grid item className="text-center">
+      Start adding some token <CustomLink to={`${SITE_MAP.Dashboard}/${coinbase}/config`}>here</CustomLink>...
+    </Grid>
   </Grid>
 )
 

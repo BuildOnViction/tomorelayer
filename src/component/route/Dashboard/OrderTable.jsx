@@ -1,10 +1,12 @@
 import React from 'react'
 import { format } from 'date-fns'
 import {
+  Box,
   CircularProgress,
   Grid,
   Paper,
   Hidden,
+  Typography,
   withWidth,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
@@ -38,16 +40,17 @@ const Cell = withStyles(theme => ({
 class OrderTable extends React.Component {
 
   state = {
-    currentPage: 0,
+    currentPage: 1,
   }
 
   setPage = num => () => this.setState({ currentPage: this.state.currentPage + num })
 
-  setExactPage = async num => {
-    if (num * 10 > this.props.data.items.length) {
-      await this.props.requestData(num)
+  setExactPage = async page => {
+    if (page * 10 > this.props.data.items.length) {
+      const apiPage = Math.ceil(page * 10 / 20)
+      await this.props.requestData(apiPage)
     }
-    this.setState({ currentPage: num - 1 })
+    this.setState({ currentPage: page })
   }
 
   render() {
@@ -62,7 +65,18 @@ class OrderTable extends React.Component {
         </Grid>
       )
     }
-    const slicedData = data.items.slice(currentPage * 10, (currentPage + 1) * 10)
+
+    const slicedData = data.items[currentPage]
+
+    if (!slicedData.length) {
+      return (
+        <Box>
+          <Typography variant="body2" className="mt-3">
+            No data to show yet...
+          </Typography>
+        </Box>
+      )
+    }
 
     return (
       <Grid container direction="column">
@@ -80,7 +94,7 @@ class OrderTable extends React.Component {
             <StyledPaper elevation={0}>
               <Grid container>
                 <Cell item sm={1} data-label="#" container justify="center">
-                  {1 + index + currentPage * 10}
+                  {1 + index + (currentPage * 10 - 10)}
                 </Cell>
                 <Cell item sm={3} data-label="Date" container justify="center">
                   {format(new Date(item.updatedAt), 'DD MMM  YYYY')}
@@ -100,12 +114,12 @@ class OrderTable extends React.Component {
         ))}
         <Paginator
           rowsPerPage={10}
-          activePage={currentPage + 1}
+          activePage={currentPage}
           totalPages={data.total}
           onNext={this.setPage(1)}
           onPrev={this.setPage(-1)}
-          onBegin={this.setPage(currentPage)}
-          onEnd={this.setPage(Math.ceil(data.total / 10) - currentPage)}
+          onBegin={() => this.setExactPage(1)}
+          onEnd={() => this.setExactPage(Math.ceil(data.total / 10))}
           onPageClick={this.setExactPage}
         />
       </Grid>

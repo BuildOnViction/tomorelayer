@@ -54,7 +54,7 @@ class RelayerStat extends React.Component {
 
   state = {
     tab: TOPICS.orders,
-    loading: false,
+    loading: true,
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -62,29 +62,41 @@ class RelayerStat extends React.Component {
   async componentDidMount() {
     const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
     const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}`).get().json()
-    this.props.saveStat({ type: 'trades', data: trades, coinbase })
+    this.props.saveStat({
+      type: 'trades',
+      data: {
+        ...trades,
+        items: {
+          1: trades.items.slice(0, 10),
+          2: trades.items.slice(10, 20),
+        }
+      },
+      coinbase: this.props.relayer.coinbase,
+    })
+    this.setState({ loading: false })
   }
 
   requestData = type => async page => {
     // NOTE: saving to localStorage..
-
-    if (type === 'Trades') {
+    if (type === 'trades') {
       const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
       const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}?page=${page}`).get().json()
       const currentTrades = this.props.stats.trades
-      this.props.saveStat({
+      const stats = {
         type: 'trades',
         data: {
           ...currentTrades.data,
-          items: [
+          items: {
             ...currentTrades.data.items,
-            ...trades.items
-          ],
+            [page * 2 - 1]: trades.items.slice(0, 10),
+            [page * 2]: trades.items.slice(10, 20),
+          },
         },
-        coinbase,
-      })
+        coinbase: this.props.relayer.coinbase,
+      }
+      console.log(stats)
+      // this.props.saveStat()
     }
-
   }
 
   render() {
@@ -105,6 +117,10 @@ class RelayerStat extends React.Component {
                             .filter(_.isTruthy)
 
     const avatarClassName = cx({ 'empty-avatar': _.isEmpty(relayer.logo) })
+
+    console.log(stats)
+    const shouldShowOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
+    const shouldShowTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
 
     return (
       <Grid container spacing={4}>
@@ -158,8 +174,18 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {tab === TOPICS.orders && <OrderTable data={stats.trades.data} requestData={this.requestData('Trades')} />}
-            {tab === TOPICS.tokens && <TokenTable tokens={tokenTableData} relayer={relayer} />}
+            {shouldShowOrderTable && (
+              <OrderTable
+                data={stats[relayer.coinbase].trades}
+                requestData={this.requestData('trades')}
+              />
+            )}
+            {shouldShowTokenTable && (
+              <TokenTable
+                tokens={tokenTableData}
+                relayer={relayer}
+              />
+            )}
           </Box>
         </Grid>
       </Grid>
@@ -169,10 +195,7 @@ class RelayerStat extends React.Component {
 
 const mapProps = state => ({
   stats: {
-    volume: [],
-    token: [],
-    trades: state.user.stat.trades || {},
-    tokens: [],
+    ...state.user.stats,
     tomousd: state.network_info.tomousd,
   },
   AvailableTokens: state.Tokens,
@@ -184,13 +207,13 @@ const actions = {
   saveStat: (state, { type, data, coinbase }) => ({
     user: {
       ...state.user,
-      stat: {
-        ...state.user.stat,
-        [type]: {
-          coinbase,
-          data,
-        },
-      },
+      stats: {
+        ...state.user.stats,
+        [coinbase]: {
+          ...state.user.stats[coinbase],
+          [type]: data,
+        }
+      }
     },
   })
 }

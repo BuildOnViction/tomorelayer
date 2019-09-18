@@ -40,7 +40,7 @@ const renderPageNumItem = (current, total, onPageClick) => {
     </PageNumItem>
   ))
 
-  if (current <= 4) {
+  if (current < 3) {
     const nums = sequence(1, Math.min(4, total + 1))
     return (
       <React.Fragment>
@@ -54,8 +54,8 @@ const renderPageNumItem = (current, total, onPageClick) => {
     )
   }
 
-  if (current > 4) {
-    const nums = sequence(current - 2, Math.min(current + 2, total + 1))
+  if (current >= 3) {
+    const nums = sequence(current - 1, Math.min(current + 2, total + 1))
     return (
       <React.Fragment>
         <Grid item style={{ letterSpacing: 2 }}>
