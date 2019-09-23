@@ -86,4 +86,37 @@ export default class RelayerContract {
       return { status: false, details: 'Unable to refund' }
     }
   }
+
+  async sell(payload, config = {}) {
+    try {
+      const tx = await this.contractWithSigner.sell(payload.coinbase, payload.price, config)
+      const details = await tx.wait()
+      return { status: true, details }
+    } catch (e) {
+      console.error(e)
+      return { status: false, details: 'Unable to sell relayer' }
+    }
+  }
+
+  async cancelSelling(payload, config = {}) {
+    try {
+      const tx = await this.contractWithSigner.sell(payload.coinbase, config)
+      const details = await tx.wait()
+      return { status: true, details }
+    } catch (e) {
+      console.error(e)
+      return { status: false, details: 'Unable to sell relayer' }
+    }
+  }
+
+  async buy(payload, config = {}) {
+    try {
+      const tx = await this.contractWithSigner.sell(payload.coinbase, config)
+      const details = await tx.wait()
+      return { status: true, details }
+    } catch (e) {
+      console.error(e)
+      return { status: false, details: 'Unable to sell relayer' }
+    }
+  }
 }

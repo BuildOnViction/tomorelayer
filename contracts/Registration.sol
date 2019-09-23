@@ -23,7 +23,7 @@ contract RelayerRegistration {
     mapping(address => address[]) private COINBASE_LIST;
     /// @dev coinbase -> time
     mapping(address => uint) private RESIGN_REQUESTS;
-    /// @dev coinbase -> bool
+    /// @dev coinbase -> price
     mapping(address => uint256) public RELAYER_ON_SALE_LIST;
 
     uint public RelayerCount;
