@@ -23,6 +23,8 @@ contract RelayerRegistration {
     mapping(address => address[]) private COINBASE_LIST;
     /// @dev coinbase -> time
     mapping(address => uint) private RESIGN_REQUESTS;
+    /// @dev coinbase -> bool
+    mapping(address => uint256) public RELAYER_ON_SALE_LIST;
 
     uint public RelayerCount;
     uint256 public MinimumDeposit;
@@ -35,6 +37,9 @@ contract RelayerRegistration {
     event TransferEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
     event ResignEvent(uint deposit_release_time, uint256 deposit_amount);
     event RefundEvent(bool success, uint remaining_time, uint256 deposit_amount);
+
+    event SellEvent(bool is_on_sale, address coinbase, uint256 price);
+    event BuyEvent(bool success, address coinbase, uint256 price);
 
     constructor (uint maxRelayers, uint maxTokenList, uint minDeposit) public {
         RelayerCount = 0;
@@ -64,6 +69,11 @@ contract RelayerRegistration {
 
     modifier nonZeroValue() {
         require(msg.value > 0, "Transfer value must be > 0");
+        _;
+    }
+
+    modifier notForSale(address coinbase) {
+        require(RELAYER_ON_SALE_LIST[coinbase] == 0, "The relayer must be not currently for Sale");
         _;
     }
 
@@ -108,7 +118,7 @@ contract RelayerRegistration {
     }
 
 
-    function update(address coinbase, uint16 tradeFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+    function update(address coinbase, uint16 tradeFee, address[] memory fromTokens, address[] memory toTokens) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) notForSale(coinbase) {
         require(tradeFee >= 1 && tradeFee < 10000, "Invalid Maker Fee");
         require(fromTokens.length <= MaximumTokenList, "Exceeding number of trade pairs");
         require(toTokens.length == fromTokens.length, "Not valid number of Pairs");
@@ -121,7 +131,7 @@ contract RelayerRegistration {
     }
 
 
-    function transfer(address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+    function transfer(address coinbase, address new_owner, address new_coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) notForSale(coinbase) {
         require(new_owner != address(0) && new_owner != msg.sender);
         require(RELAYER_LIST[new_owner]._tradeFee == 0, "Owner address must not be currently used as relayer-coinbase");
         require(new_coinbase != address(0));
@@ -152,7 +162,7 @@ contract RelayerRegistration {
     }
 
 
-    function depositMore(address coinbase) public payable relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) nonZeroValue {
+    function depositMore(address coinbase) public payable relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) notForSale(coinbase)  nonZeroValue {
         require(msg.value >= 1 ether, "At least 1 TOMO is required for a deposit request");
         RELAYER_LIST[coinbase]._deposit += msg.value;
         emit UpdateEvent(
@@ -163,7 +173,7 @@ contract RelayerRegistration {
     }
 
 
-    function resign(address coinbase) public relayerOwnerOnly(coinbase) {
+    function resign(address coinbase) public relayerOwnerOnly(coinbase) notForSale(coinbase) {
         require(RELAYER_LIST[coinbase]._deposit > 0, "No relayer associated with this address");
         require(RESIGN_REQUESTS[coinbase] == 0, "Request already received");
         RESIGN_REQUESTS[coinbase] = now + 4 weeks;
@@ -171,7 +181,7 @@ contract RelayerRegistration {
     }
 
 
-    function refund(address coinbase) public relayerOwnerOnly(coinbase) {
+    function refund(address coinbase) public relayerOwnerOnly(coinbase) notForSale(coinbase) {
         require(RESIGN_REQUESTS[coinbase] > 0, "Request not found");
         uint256 amount = RELAYER_LIST[coinbase]._deposit;
 
@@ -195,6 +205,49 @@ contract RelayerRegistration {
             /// Not yet, remind user about the remaining time...
             emit RefundEvent(false, RESIGN_REQUESTS[coinbase] - now, amount);
         }
+    }
+
+
+    /// @dev SELLING/BUYING RELAYERS
+    // NOTE: Putting a relayer on sale will immediately halt all the state-changing actions on this relayer...
+    // ...including Update, Deposit, Resign, Refund and Transfer
+    function sellRelayer(address coinbase, uint256 price) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+        // NOTE: calling this function more than once will act like changing Price-tag
+        // Min-price shall be 1 TOMO
+        require(price > 0, "Price tag must be different than Zero(0)");
+        uint baseEth = 1 ether;
+        RELAYER_ON_SALE_LIST[coinbase] = price * baseEth;
+        emit SellEvent(true, coinbase, price);
+    }
+
+    function cancelSelling(address coinbase) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
+        require(RELAYER_ON_SALE_LIST[coinbase] > 0, "Relayer is not currently for sale");
+        delete RELAYER_ON_SALE_LIST[coinbase];
+        emit SellEvent(false, coinbase, 0);
+    }
+
+    function buyRelayer(address coinbase) public payable onlyActiveRelayer(coinbase) {
+        uint256 price = RELAYER_ON_SALE_LIST[coinbase];
+
+        require(price > 0, "Relayer is not currently for sale");
+        require(msg.value == price, "Price-tag must be matched");
+
+        address seller = OWNER_LIST[coinbase];
+        require(msg.sender != 0 && msg.sender != seller && seller != 0, "Address not valid");
+
+        for (uint i = 0; i < COINBASE_LIST[seller].length; i++) {
+            if (COINBASE_LIST[seller][i] == coinbase) {
+
+                delete RELAYER_ON_SALE_LIST[coinbase];
+                OWNER_LIST[coinbase] = msg.sender;
+                delete COINBASE_LIST[seller][i];
+                COINBASE_LIST[msg.sender].push(coinbase);
+                seller.transfer(price);
+
+                emit BuyEvent(true, coinbase, msg.value);
+            }
+        }
+
     }
 
 
