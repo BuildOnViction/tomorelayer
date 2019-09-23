@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
+import { getBalance } from 'service/blockchain'
 import { compose } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
@@ -15,6 +16,23 @@ import { wrappers } from './forms'
 
 
 class FormDeposit extends React.Component {
+
+  constructor(props) {
+    super(props)
+    // FIXME: this deposit may change over time and must present the latest result
+    // call contract on componentDidMount
+    this.state = {
+      remainingDeposit: props.relayer.deposit,
+      userBalance: 0,
+    }
+  }
+
+  async componentDidMount() {
+    const address = await this.props.wallet.getAddress()
+    const userBalance = await getBalance(address)
+    this.setState({ userBalance })
+  }
+
   render() {
     const {
       values,
@@ -24,6 +42,10 @@ class FormDeposit extends React.Component {
       isSubmitting,
       relayer,
     } = this.props
+
+    const {
+      userBalance,
+    } = this.state
 
     const inputDisabled = isSubmitting || relayer.resigning || values.deposit < 1
 
@@ -45,14 +67,14 @@ class FormDeposit extends React.Component {
               <Typography variant="h5">
                 Deposit
               </Typography>
+              <Grid item>
+                Remaining deposit: {relayer.deposit} TOMO
+              </Grid>
             </Grid>
-            <Grid item>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
-            </Grid>
-            <Grid item container direction="column" spacing={2}>
+            <Grid item container direction="column" spacing={2} className="mt-2">
               <Grid item>
                 <TextField
-                  label="Deposit amount (minimum 1 TOMO)"
+                  label="How many TOMO would you like to deposit? (minimum 1 TOMO)"
                   value={values.deposit}
                   onChange={handleChange}
                   error={Boolean(errors.deposit)}
@@ -62,13 +84,15 @@ class FormDeposit extends React.Component {
                   InputProps={{
                     endAdornment: 'TOMO'
                   }}
-                  // eslint-disable-next-line
                   inputProps={{
                     'data-testid': 'deposit-input'
                   }}
                   fullWidth
                   disabled={isSubmitting || relayer.resigning}
                 />
+              </Grid>
+              <Grid item>
+                <Typography variant="body2">{`Current balance: ${userBalance} TOMO`}</Typography>
               </Grid>
             </Grid>
             <Grid item container justify="center">
@@ -84,7 +108,8 @@ class FormDeposit extends React.Component {
 }
 
 const mapProps = state => ({
-  RelayerContract: state.blk.RelayerContract
+  RelayerContract: state.blk.RelayerContract,
+  wallet: state.user.wallet,
 })
 
 const actions = {

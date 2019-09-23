@@ -2,7 +2,6 @@ import React from 'react'
 import cx from 'classnames'
 import {
   Box,
-  Link,
   Paper,
   Table,
   TableBody,
@@ -14,7 +13,7 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { isEmpty, sequence } from 'service/helper'
-import { CustomLink } from 'component/shared/Adapters'
+import { CustomLink, AdapterLink } from 'component/shared/Adapters'
 
 
 const HeadTableCell = withStyles(theme => ({
@@ -66,7 +65,7 @@ const RelayerTable = ({ relayers }) => {
         <TableHead>
           <TableRow>
             <HeadTableCell>Relayer</HeadTableCell>
-            <HeadTableCell>Balance</HeadTableCell>
+            <HeadTableCell>Remaining Deposit</HeadTableCell>
             <HeadTableCell>Status</HeadTableCell>
           </TableRow>
         </TableHead>
@@ -74,7 +73,9 @@ const RelayerTable = ({ relayers }) => {
           {getRelayers.map(row => (
             <TableRow key={row.name}>
               <BodyTableCell component="th" scope="row">
-                <Link href={row.link}>{row.name}</Link>
+                <CustomLink component={AdapterLink} to={`/dashboard/${row.coinbase}`}>
+                  {row.name}
+                </CustomLink>
               </BodyTableCell>
               <BodyTableCell>
                 {row.deposit} TOMO

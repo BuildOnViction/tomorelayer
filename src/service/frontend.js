@@ -1,3 +1,6 @@
+import { bindActions } from 'redux-zero/utils'
+import store from 'service/store'
+
 export const AlertVariant = {
   success: 'success',
   warning: 'warning',
@@ -13,6 +16,14 @@ export const PushAlert = (state, { variant, message }) => {
   const notifications = [...state.notifications, newNotification]
   return { notifications }
 }
+
+export const bindPushAlert = ({
+  message,
+  variant,
+}) => bindActions({ PushAlert }, store).PushAlert({
+  message,
+  variant,
+})
 
 export const FuzzySearch = async (pouch, fuzzyString) => {
   let result = []

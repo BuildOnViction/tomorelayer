@@ -80,18 +80,6 @@ export class Register extends React.Component {
 
       const newRelayer = await http.createRelayer(payload)
 
-      await this.props.pouch.put({
-        ...newRelayer,
-        _id: 'relayer' + newRelayer.id.toString(),
-        type: 'relayer',
-        fuzzy: [
-          newRelayer.name,
-          newRelayer.owner,
-          newRelayer.coinbase,
-          newRelayer.address,
-        ].join(','),
-      })
-
       this.props.saveNewRelayer(newRelayer)
       this.setState({
         step: 6,
@@ -212,14 +200,40 @@ const mapProps = state => ({
   wallet: state.user.wallet,
   usedCoinbases: state.Relayers.map(t => t.coinbase).concat(state.Relayers.map(t => t.owner)),
   usedNames: state.Relayers.map(t => t.name),
-  pouch: state.pouch,
 })
 
 const actions = store => ({
   pushAlert: PushAlert,
-  saveNewRelayer: (state, relayer) => {
+  saveNewRelayer: async (state, relayer) => {
     const Relayers = [ ...state.Relayers, relayer ]
-    return { Relayers, shouldUpdateUserRelayers: true }
+    const newIndex = Object.keys(state.user.relayers).length / 2
+    const user = {
+      ...state.user,
+      relayers: {
+        ...state.user.relayers,
+        [relayer.coinbase]: relayer,
+        [newIndex]: relayer,
+      },
+    }
+
+    const pouch = state.pouch
+    await pouch.put({
+      ...relayer,
+      _id: 'relayer' + relayer.id.toString(),
+      type: 'relayer',
+      fuzzy: [
+        relayer.name,
+        relayer.owner,
+        relayer.coinbase,
+        relayer.address,
+      ].join(','),
+    })
+
+    return {
+      user,
+      Relayers,
+      shouldUpdateUserRelayers: true,
+    }
   },
 })
 

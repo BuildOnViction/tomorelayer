@@ -11,10 +11,18 @@ const FormStepTwo = props => {
     goBack,
   } = props
 
+  const helpText = errors.name ? (
+    <i className="text-alert">* {errors.name}</i>
+  ) : (
+    <Typography style={{ float: 'right' }} variant="subtitle2">
+      {200 - values.name.length || 0} words left
+    </Typography>
+  )
+
   return (
     <form onSubmit={handleSubmit}>
       <Typography variant="h5" className="mb-2">
-        Choose Relayer Name
+        Type your relayer name
       </Typography>
       <TextField
         name="name"
@@ -23,7 +31,7 @@ const FormStepTwo = props => {
         value={values.name}
         onChange={handleChange}
         error={Boolean(errors.name)}
-        helperText={errors.name && <i className="text-alert">* {errors.name}</i>}
+        helperText={helpText}
         type="text"
         variant="outlined"
         className="mb-2"
@@ -34,7 +42,7 @@ const FormStepTwo = props => {
           Back
         </Button>
         <Button color="primary" variant="contained" type="submit">
-          Confirm
+          Save & Continue
         </Button>
       </Box>
     </form>

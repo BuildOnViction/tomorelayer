@@ -17,12 +17,13 @@ const FormStepOne = props => {
         Relayer Registration
       </Typography>
       <Box display="flex" flexDirection="column" className="mb-2">
-        <div>You are required to deposit a minimum {MISC.MinimumDeposit} TOMO.</div>
-        <div>This deposit will be locked.</div>
+        <div>You are required to deposit a minimum {MISC.MinimumDeposit} TOMO as relayer operating cost</div>
+        <div>This deposit will be locked during the operation of your relayer</div>
+        <div>The logged-in address must be different from the relayer coinbase</div>
       </Box>
       <TextField
         name="deposit"
-        label="Deposit"
+        label="How many TOMO do you want to deposit?"
         id="deposit-input"
         placeholder={`minimum ${MISC.MinimumDeposit}`}
         value={values.deposit}
@@ -40,7 +41,7 @@ const FormStepOne = props => {
       />
       <TextField
         name="coinbase"
-        label="Coinbase"
+        label="What is your relayer coinbase address?"
         id="coinbase-input"
         value={values.coinbase}
         onChange={handleChange}
@@ -55,7 +56,7 @@ const FormStepOne = props => {
       />
       <Box display="flex" justifyContent="flex-end" className="mt-2">
         <Button color="primary" variant="contained" type="submit">
-          Confirm
+          Save & Continue
         </Button>
       </Box>
     </form>

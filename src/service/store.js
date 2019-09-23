@@ -8,6 +8,7 @@ export const initialState = {
     wallet: undefined,
     expire: 60, // minutes
     relayers: {},
+    stats: {},
   },
   Tokens: [],
   Contracts: [],

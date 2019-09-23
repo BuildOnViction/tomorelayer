@@ -148,10 +148,13 @@ export default class FilterControls extends React.Component {
       isSearching,
     } = this.state
 
+    const searchIconStyle = { width: 17, height: 17, opacity: .3 }
+
     return (
       <FilterControlContainer item container justify="space-evenly" alignItems="center" spacing={3} className="pt-1 pr-1 pl-1">
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <TabControls value={activeFilter}>
+            <TokenTab key={'ALL'} value={'ALL'} label={'ALL'} className={activeFilter === 'ALL' ? 'selected' : ''} />
             {quoteTokens.map(token => (
               <TokenTab
                 key={token.symbol}
@@ -161,11 +164,10 @@ export default class FilterControls extends React.Component {
                 className={activeFilter === token.symbol ? 'selected' : ''}
               />
             ))}
-            <TokenTab key={'ALL'} value={'ALL'} label={'ALL'} style={{ display: 'none' }} />
             <TokenTab key={'SEARCH'} value={'SEARCH'} label={'SEARCH'} style={{ display: 'none' }} />
           </TabControls>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <SearchBar
             name="search-input"
             type="text"
@@ -175,7 +177,7 @@ export default class FilterControls extends React.Component {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  {isSearching ? <Spinner /> : <SearchIcon />}
+                  {isSearching ? <Spinner style={searchIconStyle} /> : <SearchIcon style={searchIconStyle} />}
                 </InputAdornment>
               )
             }}

@@ -38,7 +38,7 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error })
       } else {
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer info updated' })
-        meta.props.UpdateRelayer(relayer)
+        await meta.props.UpdateRelayer(relayer)
       }
 
       meta.setSubmitting(false)
@@ -75,7 +75,7 @@ export const wrappers = {
         }
 
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer trade options updated' })
-        meta.props.UpdateRelayer(relayer)
+        await meta.props.UpdateRelayer(relayer)
       }
 
       meta.setSubmitting(false)
@@ -111,7 +111,7 @@ export const wrappers = {
           id: meta.props.relayer.id,
         })
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'new deposit has been made' })
-        meta.props.UpdateRelayer(relayer)
+        await meta.props.UpdateRelayer(relayer)
       }
 
       meta.setSubmitting(false)
@@ -122,9 +122,9 @@ export const wrappers = {
     displayName: 'RelayerTransferForm',
     enableReinitialize: true,
     validateOnChange: false,
-    mapPropsToValues: (props) => ({
-      owner: props.relayer.owner,
-      coinbase: props.relayer.coinbase,
+    mapPropsToValues: () => ({
+      owner: undefined,
+      coinbase: undefined,
     }),
 
     validate: (values, props) => {
@@ -173,7 +173,7 @@ export const wrappers = {
           id: meta.props.relayer.id,
         })
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer transfered successfuly' })
-        meta.props.UpdateRelayer(relayer)
+        await meta.props.UpdateRelayer(relayer)
       }
 
       meta.setSubmitting(false)

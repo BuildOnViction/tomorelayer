@@ -38,7 +38,6 @@ class TokenPairList extends React.Component {
 
     this.setState({ isNotifying: true })
     const resp = await notifyDex(this.props.dexUrl)
-    console.log(resp)
     if (resp.error) {
       this.props.PushAlert({
         message: 'Cannot send request to DEX link',
@@ -171,7 +170,7 @@ class TokenPairList extends React.Component {
           {!viewOnly && (
             <RefreshControl
               onRefresh={this.queryTokens}
-              disabled={isRefreshing || isNotifying || disabled}
+              disabled={isRefreshing || isNotifying}
               notifyDex={!isEmpty(this.props.dexUrl) && this.manualNotifyDex}
             />)}
         </Grid>
@@ -202,7 +201,7 @@ export const mapProps = state => {
     }).forEach((toToken, toIdx) => pairs.push({
       from: fromToken,
       to: toToken,
-      toString: () => `${fromToken.symbol}/${toToken.symbol}`,
+      toString: () => `${fromToken.symbol} / ${toToken.symbol}`,
       checked: false,
       toAddrString: () => `${fromToken.address}-${toToken.address}`,
     }))

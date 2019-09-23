@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import cx from 'classnames'
+import wretch from 'wretch'
 import { withStyles } from '@material-ui/styles'
 
 import placeholder from 'asset/image-placeholder.png'
@@ -58,10 +59,52 @@ class RelayerStat extends React.Component {
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
 
+  async componentDidMount() {
+    const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
+    const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}`).get().json()
+    this.props.saveStat({
+      type: 'trades',
+      data: {
+        ...trades,
+        items: {
+          1: trades.items.slice(0, 10),
+          2: trades.items.slice(10, 20),
+        }
+      },
+      coinbase: this.props.relayer.coinbase,
+    })
+    this.setState({ loading: false })
+  }
+
+  requestData = type => async page => {
+    // NOTE: saving to localStorage..
+    if (type === 'trades') {
+      const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
+      const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}?page=${page}`).get().json()
+      const currentTrades = this.props.stats.trades
+      const stats = {
+        type: 'trades',
+        data: {
+          ...currentTrades.data,
+          items: {
+            ...currentTrades.data.items,
+            [page * 2 - 1]: trades.items.slice(0, 10),
+            [page * 2]: trades.items.slice(10, 20),
+          },
+        },
+        coinbase: this.props.relayer.coinbase,
+      }
+      console.log(stats)
+      // this.props.saveStat()
+    }
+  }
+
   render() {
+
     const {
       relayer,
       stats,
+      AvailableTokens,
     } = this.props
 
     const {
@@ -69,7 +112,15 @@ class RelayerStat extends React.Component {
       loading,
     } = this.state
 
+    const tokenTableData = _.unique(relayer.from_tokens.concat(relayer.to_tokens))
+                            .map(t => AvailableTokens.find(token => token.address === t))
+                            .filter(_.isTruthy)
+
     const avatarClassName = cx({ 'empty-avatar': _.isEmpty(relayer.logo) })
+
+    console.log(stats)
+    const shouldShowOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
+    const shouldShowTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
 
     return (
       <Grid container spacing={4}>
@@ -97,18 +148,18 @@ class RelayerStat extends React.Component {
 
         <Grid item xs={12} container direction="column">
           <Grid item container spacing={4}>
-            <StatCard icon={networkVolIcon} stat="1000" helpText="Network Volume" />
-            <StatCard icon={networkFeeIcon} stat="1000" helpText="Network Fees" />
-            <StatCard icon={tradeIcon} stat="1000" helpText="Trades(24h)" />
-            <StatCard icon={tomoPriceIcon} stat="1000" helpText="Tomo Price" />
+            <StatCard icon={networkVolIcon} stat="$ 4389" helpText="Relayer Volume 24h" />
+            <StatCard icon={networkFeeIcon} stat="290 TOMO" helpText="Relayer Fee 24h" />
+            <StatCard icon={tradeIcon} stat="5323" helpText="Trades(24h)" />
+            <StatCard icon={tomoPriceIcon} stat={`$ ${stats.tomousd}`} helpText="Tomo Price" />
           </Grid>
 
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
-              <VolumeChart loading={loading} data={stats.volume} />
+              <VolumeChart data={stats.volume} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart loading={loading} data={stats.token} />
+              <TokenChart data={stats.token} />
             </Grid>
           </Grid>
         </Grid>
@@ -118,11 +169,23 @@ class RelayerStat extends React.Component {
             tabValue={TOPICS.getIndex(tab)}
             onTabChange={this.onTabChange}
             topics={TOPICS.values}
+            textMask={['Orders', `Tokens (${tokenTableData.length})`]}
+            style={{ marginBottom: 20 }}
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {!loading && tab === TOPICS.orders && <OrderTable data={stats.trades} />}
-            {!loading && tab === TOPICS.tokens && <TokenTable data={stats.tokens} />}
+            {shouldShowOrderTable && (
+              <OrderTable
+                data={stats[relayer.coinbase].trades}
+                requestData={this.requestData('trades')}
+              />
+            )}
+            {shouldShowTokenTable && (
+              <TokenTable
+                tokens={tokenTableData}
+                relayer={relayer}
+              />
+            )}
           </Box>
         </Grid>
       </Grid>
@@ -132,10 +195,7 @@ class RelayerStat extends React.Component {
 
 const mapProps = state => ({
   stats: {
-    volume: [],
-    token: [],
-    trades: [],
-    tokens: [],
+    ...state.user.stats,
     tomousd: state.network_info.tomousd,
   },
   AvailableTokens: state.Tokens,
@@ -144,6 +204,18 @@ const mapProps = state => ({
 const actions = {
   GetStats,
   PushAlert,
+  saveStat: (state, { type, data, coinbase }) => ({
+    user: {
+      ...state.user,
+      stats: {
+        ...state.user.stats,
+        [coinbase]: {
+          ...state.user.stats[coinbase],
+          [type]: data,
+        }
+      }
+    },
+  })
 }
 
 export default connect(mapProps, actions)(RelayerStat)
