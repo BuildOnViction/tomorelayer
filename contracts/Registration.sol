@@ -4,18 +4,21 @@ contract RelayerRegistration {
 
     /// @dev constructor arguments
     address public CONTRACT_OWNER;
-    uint public MaximumRelayers;
+    int16 public MaximumRelayers;
     uint public MaximumTokenList;
 
     /// @dev Data types
     struct Relayer {
+        int16 _index;
         uint256 _deposit;
         uint16 _tradeFee;
         address[] _fromTokens;
         address[] _toTokens;
     }
 
-    /// @dev coinbase -> relayer
+    /// @dev inndex -> coinbase
+    mapping(int16 => address) public RELAYER_COINBASES;
+    /// @DEV coinbase -> relayer
     mapping(address => Relayer) private RELAYER_LIST;
     /// @dev coinbase -> owner
     mapping(address => address) private OWNER_LIST;
@@ -26,12 +29,12 @@ contract RelayerRegistration {
     /// @dev coinbase -> price
     mapping(address => uint256) public RELAYER_ON_SALE_LIST;
 
-    uint public RelayerCount;
+    int16 public RelayerCount;
     uint256 public MinimumDeposit;
 
     /// @dev Events
     /// struct-mapping -> values
-    event ConfigEvent(uint max_relayer, uint max_token, uint256 min_deposit);
+    event ConfigEvent(int16 max_relayer, uint max_token, uint256 min_deposit);
     event RegisterEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
     event UpdateEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
     event TransferEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
@@ -41,7 +44,7 @@ contract RelayerRegistration {
     event SellEvent(bool is_on_sale, address coinbase, uint256 price);
     event BuyEvent(bool success, address coinbase, uint256 price);
 
-    constructor (uint maxRelayers, uint maxTokenList, uint minDeposit) public {
+    constructor (int16 maxRelayers, uint maxTokenList, uint minDeposit) public {
         RelayerCount = 0;
         MaximumRelayers = maxRelayers;
         MaximumTokenList = maxTokenList;
@@ -79,7 +82,7 @@ contract RelayerRegistration {
 
 
     /// @dev Contract Config Modifications
-    function reconfigure(uint maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
+    function reconfigure(int16 maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
         require(maxRelayer > RelayerCount);
         require(maxToken > 4 && maxToken < 1001);
         require(minDeposit > 10000);
@@ -107,7 +110,8 @@ contract RelayerRegistration {
         require(RelayerCount < MaximumRelayers, "Maximum relayers registered");
 
         /// @notice Do we need to check the duplication of Token trade-pairs?
-        Relayer memory relayer = Relayer(msg.value, tradeFee, fromTokens, toTokens);
+        Relayer memory relayer = Relayer(RelayerCount, msg.value, tradeFee, fromTokens, toTokens);
+        RELAYER_COINBASES[RelayerCount] = coinbase;
         RELAYER_LIST[coinbase] = relayer;
         OWNER_LIST[coinbase] = msg.sender;
         COINBASE_LIST[msg.sender].push(coinbase);
@@ -154,6 +158,7 @@ contract RelayerRegistration {
 
                 OWNER_LIST[new_coinbase] = new_owner;
                 COINBASE_LIST[new_owner].push(new_coinbase);
+                RELAYER_COINBASES[relayer._index] = new_coinbase;
 
                 emit TransferEvent(RELAYER_LIST[new_coinbase]._deposit, RELAYER_LIST[new_coinbase]._tradeFee, RELAYER_LIST[new_coinbase]._fromTokens, RELAYER_LIST[new_coinbase]._toTokens);
             }
@@ -184,6 +189,7 @@ contract RelayerRegistration {
     function refund(address coinbase) public relayerOwnerOnly(coinbase) notForSale(coinbase) {
         require(RESIGN_REQUESTS[coinbase] > 0, "Request not found");
         uint256 amount = RELAYER_LIST[coinbase]._deposit;
+        int16 deleting_index = RELAYER_LIST[coinbase]._index;
 
         if (RESIGN_REQUESTS[coinbase] < now) {
             /// Passed the release time, return the deposit to user
@@ -195,11 +201,19 @@ contract RelayerRegistration {
                     delete RESIGN_REQUESTS[coinbase];
 
                     RelayerCount--;
-
-                    msg.sender.transfer(amount);
-                    emit RefundEvent(true, 0, amount);
+                    break;
                 }
             }
+
+            for (int16 index = deleting_index; index < RelayerCount; index++) {
+                //? @dev Shifting all relayers to the left
+                address next_coinbase = RELAYER_COINBASES[index + 1];
+                RELAYER_COINBASES[index] = next_coinbase;
+                RELAYER_LIST[next_coinbase]._index = index;
+            }
+
+            msg.sender.transfer(amount);
+            emit RefundEvent(true, 0, amount);
 
         } else {
             /// Not yet, remind user about the remaining time...
