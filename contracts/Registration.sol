@@ -4,7 +4,7 @@ contract RelayerRegistration {
 
     /// @dev constructor arguments
     address public CONTRACT_OWNER;
-    int16 public MaximumRelayers;
+    uint public MaximumRelayers;
     uint public MaximumTokenList;
 
     /// @dev Data types
@@ -13,25 +13,25 @@ contract RelayerRegistration {
         uint16 _tradeFee;
         address[] _fromTokens;
         address[] _toTokens;
-        int16 _index;
+        uint _index;
         address _owner;
     }
 
-    /// @dev index -> coinbase
-    mapping(int16 => address) public RELAYER_COINBASES;
     /// @DEV coinbase -> relayer
     mapping(address => Relayer) private RELAYER_LIST;
+    /// @dev index -> coinbase
+    mapping(uint => address) public RELAYER_COINBASES;
     /// @dev coinbase -> time
     mapping(address => uint) private RESIGN_REQUESTS;
     /// @dev coinbase -> price
     mapping(address => uint256) public RELAYER_ON_SALE_LIST;
 
-    int16 public RelayerCount;
+    uint public RelayerCount;
     uint256 public MinimumDeposit;
 
     /// @dev Events
     /// struct-mapping -> values
-    event ConfigEvent(int16 max_relayer, uint max_token, uint256 min_deposit);
+    event ConfigEvent(uint max_relayer, uint max_token, uint256 min_deposit);
     event RegisterEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
     event UpdateEvent(uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
     event TransferEvent(address owner, uint256 deposit, uint16 tradeFee, address[] fromTokens, address[] toTokens);
@@ -41,7 +41,7 @@ contract RelayerRegistration {
     event SellEvent(bool is_on_sale, address coinbase, uint256 price);
     event BuyEvent(bool success, address coinbase, uint256 price);
 
-    constructor (int16 maxRelayers, uint maxTokenList, uint minDeposit) public {
+    constructor (uint maxRelayers, uint maxTokenList, uint minDeposit) public {
         RelayerCount = 0;
         MaximumRelayers = maxRelayers;
         MaximumTokenList = maxTokenList;
@@ -79,7 +79,7 @@ contract RelayerRegistration {
 
 
     /// @dev Contract Config Modifications
-    function reconfigure(int16 maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
+    function reconfigure(uint maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
         require(maxRelayer > RelayerCount);
         require(maxToken > 4 && maxToken < 1001);
         require(minDeposit > 10000);
@@ -165,13 +165,13 @@ contract RelayerRegistration {
     function refund(address coinbase) public relayerOwnerOnly(coinbase) notForSale(coinbase) {
         require(RESIGN_REQUESTS[coinbase] > 0, "Request not found");
         uint256 amount = RELAYER_LIST[coinbase]._deposit;
-        int16 deleting_index = RELAYER_LIST[coinbase]._index;
+        uint deleting_index = RELAYER_LIST[coinbase]._index;
 
         if (RESIGN_REQUESTS[coinbase] < now) {
             delete RELAYER_LIST[coinbase];
             delete RESIGN_REQUESTS[coinbase];
 
-            for (int16 index = deleting_index; index < RelayerCount; index++) {
+            for (uint index = deleting_index; index < RelayerCount; index++) {
                 //? @dev Shifting all relayers to the left
                 address next_coinbase = RELAYER_COINBASES[index + 1];
                 RELAYER_COINBASES[index] = next_coinbase;
