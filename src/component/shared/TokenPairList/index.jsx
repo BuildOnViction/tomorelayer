@@ -185,11 +185,24 @@ export const mapProps = state => {
   const Tokens = state.Tokens
 
   const pairs = []
+  /*
+   * NOTE: due to concern over the excessive size of token-pairs array each relayer may has,
+   * we keep a special Object called `pairMapping` utilizing `fromAddress/toAddress` as key
+   * and `index` of the pair in array pair - for faster query/retrieve data
+   * the object, being memoized as well, should be saved in the store for referrence
 
-  // NOTE: due to concern over the excessive size of token-pairs array each relayer may has,
-  // we keep a special Object called `pairMapping` utilizing `fromAddress/toAddress` as key
-  // and `index` of the pair in array pair - for faster query/retrieve data
-  // the object, being memoized as well, should be saved in the store for referrence
+   * Eventually, we have 2 Entities:
+   * type Pair = {
+   *   from: address,
+   *   to: address,
+   *   toString: () SYMBOL_A/SYMBOL_B,
+   *   checked: boolean,
+   *   toAddrString: () => address-address,
+   * }
+   * pairs = Pair[]
+   * pairMapping = { from_address + to_address: integer as index of pair in pairs }
+   */
+
   const pairMapping = {}
 
   Tokens.forEach((fromToken, fromIdx) => {
@@ -208,6 +221,13 @@ export const mapProps = state => {
   })
 
   pairs.sort((a, b) => {
+    /*
+     * NOTE: sorting piorities:
+     * 1./ TOMO first
+     * 2./ Quote tokens by Alphabet
+     * 3./ Base Token by Alphabet
+     */
+
     if (a.from.symbol === b.from.symbol) {
       return 1 * a.to.symbol.localeCompare(b.to.symbol)
     }
