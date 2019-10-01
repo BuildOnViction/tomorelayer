@@ -42,13 +42,13 @@ have to restart/refresh server process manager for changes to be realized and ta
 
 ### Frontend Deploy
 There are 2 ways to deploy frontend codes
-1. Local bundling then copied to server
-   - Run `npm run build` and copied code bundle to server, or
-   - Usinng `task` command
+1. Local bundling then copy everything to server
+   - Run `npm run build` and manually copy bundles to server, or
+   - Using `task` command, given `tor` is the server alias already declared in `ssh config`
    ``` shell
    $ task dep frontend swap
    ```
-2. Bundling at server, dont forget to install required dependencies with npm
+2. Bundling at server, dont forget to install required dependencies with npm first and `env` is set correctly
    ``` shell
    $ task dep frontend
    ```
