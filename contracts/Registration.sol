@@ -214,7 +214,8 @@ contract RelayerRegistration {
         require(msg.value == price, "Price-tag must be matched");
 
         address seller = RELAYER_LIST[coinbase]._owner;
-        require(msg.sender != 0 && msg.sender != seller && seller != 0, "Address not valid");
+        require(msg.sender != address(0) && msg.sender != seller && seller != address(0), "Address not valid");
+        RELAYER_LIST[coinbase]._owner = msg.sender;
 
         delete RELAYER_ON_SALE_LIST[coinbase];
         seller.transfer(price);
