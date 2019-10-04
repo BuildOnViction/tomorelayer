@@ -19,7 +19,7 @@ config({
   deployment: {
     accounts: [
       {
-        mnemonic: process.env.MNEMONIC,
+        mnemonic: "some mnemonic for testing",
         addressIndex: 0,
         numAddresses: 9,
         balance: "60000 ether",
@@ -29,7 +29,7 @@ config({
   contracts: {
     RelayerRegistration: {
       fromIndex: 0,
-      args: [2, 4, 22000],
+      args: [2, 4, "22000000000000000000000"],
     },
     Token: { deploy: false, },
     TokenOne: {
@@ -119,8 +119,8 @@ contract('RelayerRegistration', async () => {
     return { status: false, details: err }
   })
 
-  const transfer = async (owner, coinbase, newowner, newcoinbase) => RelayerRegistration
-    .methods.transfer(coinbase, newowner, newcoinbase)
+  const transfer = async (owner, coinbase, newowner) => RelayerRegistration
+    .methods.transfer(coinbase, newowner)
     .send({ from: owner }).then(success => ({
       status: true,
       details: success.events.TransferEvent.returnValues,
@@ -135,12 +135,6 @@ contract('RelayerRegistration', async () => {
     .then(resp => ({ status: true, details: resp.events.ResignEvent.returnValues }))
     .catch(err => ({ status: false, details: err }))
 
-  const getRelayerByOwner = async (owner) => RelayerRegistration
-    .methods.getRelayerByOwner(owner)
-    .call()
-    .then(resp => ({ status: true, details: resp }))
-    .catch(err => ({ status: false, details: err }))
-
   const getRelayerByCoinbase = async (coinbase) => RelayerRegistration
     .methods.getRelayerByCoinbase(coinbase)
     .call()
@@ -152,6 +146,12 @@ contract('RelayerRegistration', async () => {
     .send({ from: owner, gas: '1000000' })
     .then(resp => ({ status: true, details: resp.events.RefundEvent.returnValues }))
     .catch(err => ({ status: false, details: err }))
+
+  const get_coinbases = async () => {
+    const resp = await Promise.all([0, 1, 2, 3].map(async idx => RelayerRegistration.methods.RELAYER_COINBASES(idx).call()))
+    const nonZeroAddresses = resp.filter(a => a !== Address_Zero)
+    return nonZeroAddresses
+  }
 
   beforeEach(async () => {
     response = undefined
@@ -272,45 +272,34 @@ contract('RelayerRegistration', async () => {
       coinbase: [accounts[3]],
     }
 
-    response = await getRelayerByOwner(owner1.address)
-    expect(response.details.length).to.equal(1)
-
-    response = await getRelayerByOwner(owner2.address)
-    expect(response.details.length).to.equal(1)
-
-    response = await transfer(owner1.address, owner2.coinbase[0], owner1.address, accounts[4])
+    response = await transfer(owner1.address, owner2.coinbase[0], owner1.address)
     expect(response.status).to.be.false
 
-    response = await transfer(owner1.address, owner1.coinbase[0], owner1.address, accounts[4])
+    response = await transfer(owner1.address, owner1.coinbase[0], owner1.address)
     expect(response.status).to.be.false
 
-    response = await transfer(owner1.address, accounts[4], owner2.address, accounts[5])
+    response = await transfer(owner1.address, accounts[4], owner2.address)
     expect(response.status).to.be.false
 
-    response = await transfer(owner1.address, owner1.coinbase[0], owner2.address, accounts[4])
+    response = await transfer(owner1.address, owner1.coinbase[0], owner2.address)
     expect(response.status).to.be.true
+    expect(response.details.owner).to.equal(owner2.address)
 
-    response = await getRelayerByOwner(owner2.address)
-    expect(response.details.length).to.equal(2)
-    expect(response.details[1]).to.equal(accounts[4])
-
-    response = await getRelayerByCoinbase(accounts[4])
-    expect(response.details[0]).to.equal(owner2.address)
-
-    response = await getRelayerByOwner(owner1.address)
-    expect(response.details.length).to.equal(1)
-    expect(response.details[0]).to.equal(Address_Zero)
+    response = await getRelayerByCoinbase(owner1.coinbase[0])
+    expect(response.status).to.be.true
+    expect(response.details[1]).to.equal(owner2.address)
 
     // Transfer back to owner1...
-    response = await transfer(owner2.address, accounts[4], owner1.address, accounts[4])
+    response = await transfer(owner2.address, owner1.coinbase[0], owner1.address)
     expect(response.status).to.be.true
+    expect(response.details.owner).to.equal(owner1.address)
   })
 
 
   it('RESIGN: process properly, unlock after designated time, clear all traces of resigned relayer', async () => {
     const owner1 = {
       address: accounts[1],
-      coinbase: [accounts[4]],
+      coinbase: [accounts[8]],
     }
 
     const owner2 = {
@@ -346,6 +335,7 @@ contract('RelayerRegistration', async () => {
 
     const unlock = new Promise(resolve => {
       setTimeout(async () => {
+
         const roundUp = weiAmount => Math.ceil(parseFloat(web3.utils.fromWei(weiAmount)), 0)
 
         response = await refund(owner2.address, owner1.coinbase[0])
@@ -354,17 +344,80 @@ contract('RelayerRegistration', async () => {
         let balance = await web3.eth.getBalance(owner1.address)
         expect(roundUp(balance)).to.equal(37000)
 
+        // Before refund
+        const beforeCoinbases = await get_coinbases()
+        expect(beforeCoinbases.length).to.equal(2)
+        let remainingRelayer = await RelayerRegistration.methods.getRelayerByCoinbase(beforeCoinbases[1]).call()
+        const beforeIndex = remainingRelayer[0]
+        expect(parseInt(beforeIndex, 0)).to.equal(1)
+
+        // Refund
         response = await refund(owner1.address, owner1.coinbase[0])
         expect(response.details.success).to.be.true
 
+        // After refund
+        expect((await get_coinbases()).length).to.equal(1)
+        remainingRelayer = await RelayerRegistration.methods.getRelayerByCoinbase(beforeCoinbases[1]).call()
+        // Index should be changed fromm 1 -> 0
+        const afterIndex = remainingRelayer[0]
+        expect(parseInt(afterIndex, 0)).to.equal(0)
+
         balance = await web3.eth.getBalance(owner1.address)
-        expect(roundUp(balance)).to.equal(60000)
+        expect(roundUp(balance)).to.equal(59000)
 
         resolve()
       }, 1000 * waitingTimeInSeconds + 1000)
     })
 
     await unlock
+  })
+
+  it('TESTING RECONFIGURE CONTRACT', async () => {
+    await RelayerRegistration.methods.reconfigure(5, 100, "25000000000000000000000").send({ from: accounts[0] })
+    const getMaxRelayer = await RelayerRegistration.methods.MaximumRelayers().call()
+    expect(parseInt(getMaxRelayer, 10)).to.equal(5)
+  })
+
+  it('SELLING AND BUYING', async () => {
+
+    const coinbases = await get_coinbases()
+    const activeCoinbase = coinbases[0]
+    let activeRelayer = await RelayerRegistration.methods.getRelayerByCoinbase(activeCoinbase).call()
+
+    const selling = async (owner, price) => RelayerRegistration.methods.sellRelayer(activeCoinbase, price).send({ from: owner })
+    const buying = async (coinbase, buyer, value) => RelayerRegistration.methods.buyRelayer(activeCoinbase)
+                                                                        .send({ from: buyer, value: toWei(value) })
+                                                                        .then(details => ({ details, status: true }))
+                                                                        .catch(details => ({ details, status: false }))
+    // Sell for 1000 TOMO
+    const seller = activeRelayer[1]
+    let price = '1000000000000000000000'
+
+    response = await selling(seller, price)
+    expect(response.status).to.be.true
+
+    let relayerPrice = await RelayerRegistration.methods.RELAYER_ON_SALE_LIST(activeCoinbase).call()
+    expect(relayerPrice).to.equal(price)
+
+    // Change price: sell for 2000 TOMO
+    const new_price = '2000000000000000000000'
+    response = await selling(seller, new_price)
+    expect(response.status).to.be.true
+
+    relayerPrice = await RelayerRegistration.methods.RELAYER_ON_SALE_LIST(activeCoinbase).call()
+    expect(relayerPrice).to.equal(new_price)
+
+    // Cannot buy for less than price-tag
+    const buyer = accounts[1]
+    response = await buying(activeCoinbase, buyer, 1999)
+    expect(response.status).to.be.false
+
+    // Buy success
+    response = await buying(activeCoinbase, buyer, 2000)
+    expect(response.status).to.be.true
+
+    activeRelayer = await RelayerRegistration.methods.getRelayerByCoinbase(activeCoinbase).call()
+    expect(activeRelayer[1]).to.equal(buyer)
   })
 
 })
