@@ -88,7 +88,10 @@ contract RelayerRegistration {
         MaximumRelayers = maxRelayer;
         MaximumTokenList = maxToken;
         MinimumDeposit = minDeposit;
-        emit ConfigEvent(MaximumRelayers,MaximumTokenList, MinimumDeposit);
+
+        emit ConfigEvent(MaximumRelayers,
+                         MaximumTokenList,
+                         MinimumDeposit);
     }
 
 
@@ -113,7 +116,10 @@ contract RelayerRegistration {
 
         RelayerCount++;
 
-        emit RegisterEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._tradeFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
+        emit RegisterEvent(RELAYER_LIST[coinbase]._deposit,
+                           RELAYER_LIST[coinbase]._tradeFee,
+                           RELAYER_LIST[coinbase]._fromTokens,
+                           RELAYER_LIST[coinbase]._toTokens);
     }
 
 
@@ -126,7 +132,10 @@ contract RelayerRegistration {
         RELAYER_LIST[coinbase]._fromTokens = fromTokens;
         RELAYER_LIST[coinbase]._toTokens = toTokens;
 
-        emit UpdateEvent(RELAYER_LIST[coinbase]._deposit, RELAYER_LIST[coinbase]._tradeFee, RELAYER_LIST[coinbase]._fromTokens, RELAYER_LIST[coinbase]._toTokens);
+        emit UpdateEvent(RELAYER_LIST[coinbase]._deposit,
+                         RELAYER_LIST[coinbase]._tradeFee,
+                         RELAYER_LIST[coinbase]._fromTokens,
+                         RELAYER_LIST[coinbase]._toTokens);
     }
 
 
@@ -135,20 +144,18 @@ contract RelayerRegistration {
         require(RELAYER_LIST[new_owner]._tradeFee == 0, "Owner address must not be currently used as relayer-coinbase");
 
         RELAYER_LIST[coinbase]._owner = new_owner;
-        emit TransferEvent(
-            RELAYER_LIST[coinbase]._owner,
-            RELAYER_LIST[coinbase]._deposit,
-            RELAYER_LIST[coinbase]._tradeFee,
-            RELAYER_LIST[coinbase]._fromTokens,
-            RELAYER_LIST[coinbase]._toTokens);
+        emit TransferEvent(RELAYER_LIST[coinbase]._owner,
+                           RELAYER_LIST[coinbase]._deposit,
+                           RELAYER_LIST[coinbase]._tradeFee,
+                           RELAYER_LIST[coinbase]._fromTokens,
+                           RELAYER_LIST[coinbase]._toTokens);
     }
 
 
     function depositMore(address coinbase) public payable relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) notForSale(coinbase) nonZeroValue {
         require(msg.value >= 1 ether, "At least 1 TOMO is required for a deposit request");
         RELAYER_LIST[coinbase]._deposit.add(msg.value);
-        emit UpdateEvent(
-                         RELAYER_LIST[coinbase]._deposit,
+        emit UpdateEvent(RELAYER_LIST[coinbase]._deposit,
                          RELAYER_LIST[coinbase]._tradeFee,
                          RELAYER_LIST[coinbase]._fromTokens,
                          RELAYER_LIST[coinbase]._toTokens);
@@ -158,8 +165,10 @@ contract RelayerRegistration {
     function resign(address coinbase) public relayerOwnerOnly(coinbase) notForSale(coinbase) {
         require(RELAYER_LIST[coinbase]._deposit > 0, "No relayer associated with this address");
         require(RESIGN_REQUESTS[coinbase] == 0, "Request already received");
+        /// @notice: for testing contract, change `4 weeks` to 4 seconds only
         RESIGN_REQUESTS[coinbase] = now + 4 weeks;
-        emit ResignEvent(RESIGN_REQUESTS[coinbase], RELAYER_LIST[coinbase]._deposit);
+        emit ResignEvent(RESIGN_REQUESTS[coinbase],
+                         RELAYER_LIST[coinbase]._deposit);
     }
 
 
@@ -172,18 +181,24 @@ contract RelayerRegistration {
             delete RELAYER_LIST[coinbase];
             delete RESIGN_REQUESTS[coinbase];
             /// @notice swap last relayer's index with the deleting relayer's index
-            address last_coinbase = RELAYER_COINBASES[RelayerCount-1];
-            Relayer memory last_relayer = RELAYER_LIST[last_coinbase];
-            last_relayer._index = deleting_index;
+            address last_coinbase = RELAYER_COINBASES[RelayerCount - 1];
+            delete RELAYER_COINBASES[RelayerCount - 1];
+
+            RELAYER_COINBASES[deleting_index] = last_coinbase;
+            RELAYER_LIST[last_coinbase]._index = deleting_index;
+
             RelayerCount--;
             msg.sender.transfer(amount);
-            emit RefundEvent(true, 0, amount);
+            emit RefundEvent(true,
+                             0,
+                             amount);
         } else {
             /// Not yet, remind user about the remaining time...
-            emit RefundEvent(false, RESIGN_REQUESTS[coinbase] - now, amount);
+            emit RefundEvent(false,
+                             RESIGN_REQUESTS[coinbase] - now,
+                             amount);
         }
     }
-
 
     /// @dev SELLING/BUYING RELAYERS
     // NOTE: Putting a relayer on sale will immediately halt all the state-changing actions on this relayer...
