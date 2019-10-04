@@ -1,0 +1,22 @@
+{
+  "contracts": ["contracts/**"],
+  "buildDir": "dist/",
+  "config": {
+    "contracts": "ebconfig/contracts.js",
+    "blockchain": "ebconfig/blockchain.js",
+    "storage": false,
+    "communication": false,
+    "webserver": false
+  },
+  "versions": {
+    "web3": "1.2.1",
+    "solc": "0.4.24"
+  },
+  "options": {
+    "solc": {
+      "optimize": true,
+      "optimize-runs": 200
+    }
+  },
+  "generationDir": "embarkArtifacts"
+}
