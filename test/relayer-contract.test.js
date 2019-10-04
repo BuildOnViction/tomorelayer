@@ -147,6 +147,12 @@ contract('RelayerRegistration', async () => {
     .then(resp => ({ status: true, details: resp.events.RefundEvent.returnValues }))
     .catch(err => ({ status: false, details: err }))
 
+  const get_coinbases = async () => {
+    const resp = await Promise.all([0, 1, 2, 3].map(async idx => RelayerRegistration.methods.RELAYER_COINBASES(idx).call()))
+    const nonZeroAddresses = resp.filter(a => a !== Address_Zero)
+    return nonZeroAddresses
+  }
+
   beforeEach(async () => {
     response = undefined
     minDeposit = 22000
@@ -330,12 +336,6 @@ contract('RelayerRegistration', async () => {
     const unlock = new Promise(resolve => {
       setTimeout(async () => {
 
-        const get_coinbases = async () => {
-          const resp = await Promise.all([0, 1, 2, 3].map(async idx => RelayerRegistration.methods.RELAYER_COINBASES(idx).call()))
-          const nonZeroAddresses = resp.filter(a => a !== Address_Zero)
-          return nonZeroAddresses
-        }
-
         const roundUp = weiAmount => Math.ceil(parseFloat(web3.utils.fromWei(weiAmount)), 0)
 
         response = await refund(owner2.address, owner1.coinbase[0])
@@ -376,6 +376,48 @@ contract('RelayerRegistration', async () => {
     await RelayerRegistration.methods.reconfigure(5, 100, "25000000000000000000000").send({ from: accounts[0] })
     const getMaxRelayer = await RelayerRegistration.methods.MaximumRelayers().call()
     expect(parseInt(getMaxRelayer, 10)).to.equal(5)
+  })
+
+  it('SELLING AND BUYING', async () => {
+
+    const coinbases = await get_coinbases()
+    const activeCoinbase = coinbases[0]
+    let activeRelayer = await RelayerRegistration.methods.getRelayerByCoinbase(activeCoinbase).call()
+
+    const selling = async (owner, price) => RelayerRegistration.methods.sellRelayer(activeCoinbase, price).send({ from: owner })
+    const buying = async (coinbase, buyer, value) => RelayerRegistration.methods.buyRelayer(activeCoinbase)
+                                                                        .send({ from: buyer, value: toWei(value) })
+                                                                        .then(details => ({ details, status: true }))
+                                                                        .catch(details => ({ details, status: false }))
+    // Sell for 1000 TOMO
+    const seller = activeRelayer[1]
+    let price = '1000000000000000000000'
+
+    response = await selling(seller, price)
+    expect(response.status).to.be.true
+
+    let relayerPrice = await RelayerRegistration.methods.RELAYER_ON_SALE_LIST(activeCoinbase).call()
+    expect(relayerPrice).to.equal(price)
+
+    // Change price: sell for 2000 TOMO
+    const new_price = '2000000000000000000000'
+    response = await selling(seller, new_price)
+    expect(response.status).to.be.true
+
+    relayerPrice = await RelayerRegistration.methods.RELAYER_ON_SALE_LIST(activeCoinbase).call()
+    expect(relayerPrice).to.equal(new_price)
+
+    // Cannot buy for less than price-tag
+    const buyer = accounts[1]
+    response = await buying(activeCoinbase, buyer, 1999)
+    expect(response.status).to.be.false
+
+    // Buy success
+    response = await buying(activeCoinbase, buyer, 2000)
+    expect(response.status).to.be.true
+
+    activeRelayer = await RelayerRegistration.methods.getRelayerByCoinbase(activeCoinbase).call()
+    expect(activeRelayer[1]).to.equal(buyer)
   })
 
 })
