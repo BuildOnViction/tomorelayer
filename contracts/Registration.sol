@@ -1,6 +1,9 @@
 pragma solidity 0.4.24;
 
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.0.1/contracts/math/SafeMath.sol";
+
 contract RelayerRegistration {
+    using SafeMath for uint;
 
     /// @dev constructor arguments
     address public CONTRACT_OWNER;
@@ -45,8 +48,7 @@ contract RelayerRegistration {
         RelayerCount = 0;
         MaximumRelayers = maxRelayers;
         MaximumTokenList = maxTokenList;
-        uint baseEth = 1 ether;
-        MinimumDeposit = minDeposit * baseEth;
+        MinimumDeposit = minDeposit;
         CONTRACT_OWNER = msg.sender;
     }
 
@@ -80,13 +82,12 @@ contract RelayerRegistration {
 
     /// @dev Contract Config Modifications
     function reconfigure(uint maxRelayer, uint maxToken, uint minDeposit) public contractOwnerOnly {
-        require(maxRelayer > RelayerCount);
+        require(maxRelayer >= RelayerCount);
         require(maxToken > 4 && maxToken < 1001);
         require(minDeposit > 10000);
         MaximumRelayers = maxRelayer;
         MaximumTokenList = maxToken;
-        uint256 baseEth = 1 ether;
-        MinimumDeposit = minDeposit * baseEth;
+        MinimumDeposit = minDeposit;
         emit ConfigEvent(MaximumRelayers,MaximumTokenList, MinimumDeposit);
     }
 
@@ -143,9 +144,9 @@ contract RelayerRegistration {
     }
 
 
-    function depositMore(address coinbase) public payable relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) notForSale(coinbase)  nonZeroValue {
+    function depositMore(address coinbase) public payable relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) notForSale(coinbase) nonZeroValue {
         require(msg.value >= 1 ether, "At least 1 TOMO is required for a deposit request");
-        RELAYER_LIST[coinbase]._deposit += msg.value;
+        RELAYER_LIST[coinbase]._deposit.add(msg.value);
         emit UpdateEvent(
                          RELAYER_LIST[coinbase]._deposit,
                          RELAYER_LIST[coinbase]._tradeFee,
@@ -170,18 +171,13 @@ contract RelayerRegistration {
         if (RESIGN_REQUESTS[coinbase] < now) {
             delete RELAYER_LIST[coinbase];
             delete RESIGN_REQUESTS[coinbase];
-
-            for (uint index = deleting_index; index < RelayerCount; index++) {
-                //? @dev Shifting all relayers to the left
-                address next_coinbase = RELAYER_COINBASES[index + 1];
-                RELAYER_COINBASES[index] = next_coinbase;
-                RELAYER_LIST[next_coinbase]._index = index;
-            }
-
+            /// @notice swap last relayer's index with the deleting relayer's index
+            address last_coinbase = RELAYER_COINBASES[RelayerCount-1];
+            Relayer memory last_relayer = RELAYER_LIST[last_coinbase];
+            last_relayer._index = deleting_index;
             RelayerCount--;
             msg.sender.transfer(amount);
             emit RefundEvent(true, 0, amount);
-
         } else {
             /// Not yet, remind user about the remaining time...
             emit RefundEvent(false, RESIGN_REQUESTS[coinbase] - now, amount);
@@ -194,10 +190,8 @@ contract RelayerRegistration {
     // ...including Update, Deposit, Resign, Refund and Transfer
     function sellRelayer(address coinbase, uint256 price) public relayerOwnerOnly(coinbase) onlyActiveRelayer(coinbase) {
         // NOTE: calling this function more than once will act like changing Price-tag
-        // Min-price shall be 1 TOMO
         require(price > 0, "Price tag must be different than Zero(0)");
-        uint baseEth = 1 ether;
-        RELAYER_ON_SALE_LIST[coinbase] = price * baseEth;
+        RELAYER_ON_SALE_LIST[coinbase] = price;
         emit SellEvent(true, coinbase, price);
     }
 
@@ -220,12 +214,12 @@ contract RelayerRegistration {
         delete RELAYER_ON_SALE_LIST[coinbase];
         seller.transfer(price);
         emit BuyEvent(true, coinbase, msg.value);
-
     }
 
 
-    function getRelayerByCoinbase(address coinbase) public view returns (address, uint256, uint16, address[] memory, address[] memory) {
-        return (RELAYER_LIST[coinbase]._owner,
+    function getRelayerByCoinbase(address coinbase) public view returns (uint, address, uint256, uint16, address[] memory, address[] memory) {
+        return (RELAYER_LIST[coinbase]._index,
+                RELAYER_LIST[coinbase]._owner,
                 RELAYER_LIST[coinbase]._deposit,
                 RELAYER_LIST[coinbase]._tradeFee,
                 RELAYER_LIST[coinbase]._fromTokens,
