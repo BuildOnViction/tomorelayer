@@ -3,6 +3,8 @@
  */
 export const isFunction = (t) => typeof t === 'function'
 
+export const isString = (str) => typeof str === 'string'
+
 // Compose from left-most to right-most
 export const compose = (...functions) => (lastArg) =>
   functions.filter(isFunction).reduce((returned, currentFunc) => currentFunc(returned), lastArg)
@@ -34,12 +36,22 @@ export const strEqual = (...args) => {
   if (args.length >= 2) {
     const stringA = args[0]
     const stringB = args[1]
+
+    if (!isString(stringA) || !isString(stringB)) {
+      return false
+    }
+
     return stringA.toLowerCase() === stringB.toLowerCase()
   }
 
   if (args.length === 1) {
     const stringA = args[0]
-    const compare = (stringB) => stringA.toLowerCase() === stringB.toLowerCase()
+
+    if (!isString(stringA)) {
+      return () => false
+    }
+
+    const compare = (stringB) => isString(stringB) && stringA.toLowerCase() === stringB.toLowerCase()
     return compare
   }
 }
@@ -76,10 +88,12 @@ export const unique = (array) => array.filter((item, index) => array.indexOf(ite
 
 export const uniqueBy = (...args) => {
   const baseFunc = (array, key) => array.filter((item, index) => array.findIndex((i) => i[key] === item[key]) === index)
+
   if (args.length === 2) {
     return baseFunc(...args)
   }
 
+  // When more than one argument, we use curry
   if (args.length === 1 && typeof args[0] === 'string') {
     const key = args[0]
     return (array) => baseFunc(array, key)
