@@ -4,13 +4,9 @@ import { connect } from 'redux-zero/react'
 import { BrowserRouter, HashRouter, Switch } from 'react-router-dom'
 import { Container } from '@material-ui/core'
 import { SITE_MAP, IS_DEV } from 'service/constant'
+import * as _ from 'service/helper'
 import { AppInitialization } from './shared/actions'
-
-import {
-  Protected,
-  MainAppLoader,
-} from 'component/utility'
-
+import { Protected, MainAppLoader } from 'component/utility'
 import PageHeader from 'component/shared/PageHeader'
 import PageFooter from 'component/shared/PageFooter'
 import Alert from 'component/shared/Alert'
@@ -62,6 +58,18 @@ class App extends React.Component {
       )
     }
 
+    let authenticateRedirect = SITE_MAP.Register
+    let dashboardRedirect = SITE_MAP.Authentication
+
+    if (userLoggedIn) {
+      dashboardRedirect = userRelayers[0] ? `${SITE_MAP.Dashboard}/${userRelayers[0].coinbase}` : SITE_MAP.Register
+    }
+
+    if (userRelayers[0]) {
+      const firstCoinbase = userRelayers[0].coinbase
+      authenticateRedirect = `${SITE_MAP.Dashboard}/${firstCoinbase}`
+    }
+
     return (
       <Router>
         <div>
@@ -80,7 +88,7 @@ class App extends React.Component {
                 path={SITE_MAP.Authentication}
                 component={Authentication}
                 condition={!userLoggedIn}
-                redirect={SITE_MAP.Dashboard}
+                redirect={authenticateRedirect}
               />
               <Protected
                 path={SITE_MAP.Profile}
@@ -96,9 +104,15 @@ class App extends React.Component {
               />
               <Protected
                 path={SITE_MAP.Dashboard}
-                render={Dashboard}
-                condition={userLoggedIn}
-                redirect={SITE_MAP.Authentication}
+                condition={false}
+                redirect={dashboardRedirect}
+                exact
+              />
+              <Protected
+                path={`${SITE_MAP.Dashboard}/:coinbase`}
+                component={Dashboard}
+                condition={userLoggedIn && !_.isEmpty(userRelayers)}
+                redirect={dashboardRedirect}
               />
               <Protected
                 path={SITE_MAP.Logout}

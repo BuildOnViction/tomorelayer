@@ -46,38 +46,37 @@ export const AppInitialization = async (state) => {
 
   const pouch = new PouchDB('tomorelayer', { adapter: 'memory' })
 
-  await Promise.all([
-    ...Contracts.map(async c => pouch.put({
-      ...c,
-      _id: 'contract' + c.id.toString(),
-      type: 'contract',
-      fuzzy: [c.owner, c.address, c.name].join(','),
-    })),
-    ...Tokens.map(async c => pouch.put({
-      ...c,
-      _id: 'token' + c.id.toString(),
-      type: 'token',
-      fuzzy: [c.name, c.symbol, c.address].join(',')
-    })),
-    ...Relayers.map(async c => pouch.put({
-      ...c,
-      _id: 'relayer' + c.id.toString(),
-      type: 'relayer',
-      fuzzy: [
-        c.name,
-        c.owner,
-        c.coinbase,
-        c.address,
-      ].join(','),
-    })),
-  ])
+  await Promise.all(Contracts.map(async c => pouch.put({
+    ...c,
+    _id: 'contract' + c.id.toString(),
+    type: 'contract',
+    // We create a joined-string for `fuzzy searching`,
+    // including all fields that we want user to be able to search
+    fuzzy: [c.owner, c.address, c.name].join(','),
+  })))
+
+  await Promise.all(Tokens.map(async c => pouch.put({
+    ...c,
+    _id: 'token' + c.id.toString(),
+    type: 'token',
+    fuzzy: [c.name, c.symbol, c.address].join(',')
+  })))
+
+  await Promise.all(Relayers.map(async c => pouch.put({
+    ...c,
+    _id: 'relayer' + c.id.toString(),
+    type: 'relayer',
+    fuzzy: [
+      c.name,
+      c.owner,
+      c.coinbase,
+      c.address,
+    ].join(','),
+  })))
 
   await pouch.createIndex({
     index: {
-      fields: [
-        '_id',
-        'fuzzy',
-      ],
+      fields: [ '_id', 'fuzzy' ],
     },
   })
 

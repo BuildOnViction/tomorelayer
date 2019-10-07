@@ -59,9 +59,15 @@ class RelayerStat extends React.Component {
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
 
+  async componentDidUpdate(prevProps, prevState) {
+    console.log('Update')
+  }
+
   async componentDidMount() {
+    console.log('Mount')
     const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
     const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}`).get().json()
+
     this.props.saveStat({
       type: 'trades',
       data: {
@@ -73,6 +79,7 @@ class RelayerStat extends React.Component {
       },
       coinbase: this.props.relayer.coinbase,
     })
+
     this.setState({ loading: false })
   }
 
@@ -118,7 +125,6 @@ class RelayerStat extends React.Component {
 
     const avatarClassName = cx({ 'empty-avatar': _.isEmpty(relayer.logo) })
 
-    console.log(stats)
     const shouldShowOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
     const shouldShowTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
 

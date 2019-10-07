@@ -6,7 +6,6 @@ import {
   Tab as MuiTab,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { AdapterLink } from 'component/shared/Adapters'
 
 const AppBar = withStyles(theme => ({
   root: {
@@ -38,42 +37,21 @@ const Tab = withStyles(theme => ({
   }
 }))(MuiTab)
 
-const mapRouteToValue = path => {
-  if (path.includes('config')) {
-    return 1
-  }
-
-  if (path.includes('feedback')) {
-    return 2
-  }
-
-  return 0
-}
-
-const FeedBack = React.forwardRef((props, ref) => (
-  <AdapterLink
-    {...props}
-    innerRef={ref}
-    style={{
-      marginRight: 10,
-      marginLeft: 'auto',
-      minWidth: 'auto',
-    }}
-  />
-))
-
 const TabMenu = ({
-  location,
+  onChange,
+  value,
 }) => {
-
-  const path = location.pathname
 
   return (
     <AppBar position="static">
-      <Tabs value={mapRouteToValue(path)}>
-        <Tab label="Relayer Page" component={AdapterLink} to={path.replace(/\/(config|feedback)/i, '')} />
-        <Tab label="Configurations" component={AdapterLink} to={path.replace('/feedback', '') + '/config'} />
-        <Tab label="Feedback" component={FeedBack} to={path.replace('/config', '') + '/feedback'} />
+      <Tabs value={value} onChange={onChange} aria-label="relayer-dashboard-tabs">
+        <Tab label="Relayer Page" />
+        <Tab label="Configurations" />
+        <Tab label="Feedback" style={{
+          marginRight: 10,
+          marginLeft: 'auto',
+          minWidth: 'auto',
+        }} />
       </Tabs>
     </AppBar>
   )
