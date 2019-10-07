@@ -12,10 +12,6 @@ import wretch from 'wretch'
 import { withStyles } from '@material-ui/styles'
 
 import placeholder from 'asset/image-placeholder.png'
-import networkFeeIcon from 'asset/icon-network-fees.png'
-import networkVolIcon from 'asset/icon-network-volume.png'
-import tradeIcon from 'asset/icon-trades.png'
-import tomoPriceIcon from 'asset/icon-tomo-price.png'
 
 import {
   StyledLink,
@@ -24,11 +20,11 @@ import * as _ from 'service/helper'
 import { PushAlert } from 'service/frontend'
 
 import TableControl from 'component/shared/TableControl'
-import StatCard from './StatCard'
-import VolumeChart from './VolumeChart'
-import TokenChart from './TokenChart'
-import OrderTable from './OrderTable'
-import TokenTable from './TokenTable'
+import BlockStat from './StatComponents/BlockStat'
+import VolumeChart from './StatComponents/VolumeChart'
+import TokenChart from './StatComponents/TokenChart'
+import OrderTable from './StatComponents/OrderTable'
+import TokenTable from './StatComponents/TokenTable'
 
 import {
   GetStats,
@@ -64,23 +60,7 @@ class RelayerStat extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('Mount')
-    const coinbase = '0x0D3ab14BBaD3D99F4203bd7a11aCB94882050E7e' || this.props.relayer.coinbase
-    const trades = await wretch(`http://167.71.222.219/api/trades/listByDex/${coinbase}`).get().json()
-
-    this.props.saveStat({
-      type: 'trades',
-      data: {
-        ...trades,
-        items: {
-          1: trades.items.slice(0, 10),
-          2: trades.items.slice(10, 20),
-        }
-      },
-      coinbase: this.props.relayer.coinbase,
-    })
-
-    this.setState({ loading: false })
+    console.log('Mounted')
   }
 
   requestData = type => async page => {
@@ -153,13 +133,7 @@ class RelayerStat extends React.Component {
         </Grid>
 
         <Grid item xs={12} container direction="column">
-          <Grid item container spacing={4}>
-            <StatCard icon={networkVolIcon} stat="$ 4389" helpText="Relayer Volume 24h" />
-            <StatCard icon={networkFeeIcon} stat="290 TOMO" helpText="Relayer Fee 24h" />
-            <StatCard icon={tradeIcon} stat="5323" helpText="Trades(24h)" />
-            <StatCard icon={tomoPriceIcon} stat={`$ ${stats.tomousd}`} helpText="Tomo Price" />
-          </Grid>
-
+          <BlockStat />
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
               <VolumeChart data={stats.volume} />
