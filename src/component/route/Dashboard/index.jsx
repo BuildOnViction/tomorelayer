@@ -4,7 +4,7 @@ import { Box } from '@material-ui/core'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
-import FeedBack from './FeedBack'
+// import FeedBack from './FeedBack'
 
 
 const Dashboard = ({
@@ -22,7 +22,6 @@ const Dashboard = ({
       <Box className="mt-2">
         {tabValue === 0 && <RelayerStat relayer={relayer} />}
         {tabValue === 1 && <RelayerConfig relayer={relayer} />}
-        {tabValue === 2 && <FeedBack />}
       </Box>
     </Box>
   )

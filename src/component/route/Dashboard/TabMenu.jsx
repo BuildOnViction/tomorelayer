@@ -47,11 +47,6 @@ const TabMenu = ({
       <Tabs value={value} onChange={onChange} aria-label="relayer-dashboard-tabs">
         <Tab label="Relayer Page" />
         <Tab label="Configurations" />
-        <Tab label="Feedback" style={{
-          marginRight: 10,
-          marginLeft: 'auto',
-          minWidth: 'auto',
-        }} />
       </Tabs>
     </AppBar>
   )
