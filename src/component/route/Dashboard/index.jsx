@@ -6,25 +6,46 @@ import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
 // import FeedBack from './FeedBack'
 
+class Dashboard extends React.Component {
+  state = {
+    tabValue: 0,
+  }
 
-const Dashboard = ({
-  relayers,
-  match,
-}) => {
+  switchTab = (_, tabValue) => this.setState({ tabValue })
 
-  const [tabValue, changeTabValue] = React.useState(0)
-  const switchTab = (event, newValue) => changeTabValue(newValue)
-  const relayer = relayers[match.params.coinbase] || relayers[0]
+  async componentDidMount() {
+    await this.updateRelayerStat(this.props.match.params.coinbase)
+  }
 
-  return (
-    <Box style={{ transform: 'translateY(-30px)' }}>
-      <TabMenu onChange={switchTab} value={tabValue} />
-      <Box className="mt-2">
-        {tabValue === 0 && <RelayerStat relayer={relayer} />}
-        {tabValue === 1 && <RelayerConfig relayer={relayer} />}
+  async componentDidUpdate(prevProps) {
+    if (prevProps.match.params.coinbase !== this.props.match.params.coinbase) {
+      await this.updateRelayerStat(this.props.match.params.coinbase)
+    }
+  }
+
+  async updateRelayerStat(coinbase) {
+    console.log('request coinbase stat', coinbase)
+  }
+
+  render() {
+
+    const {
+      relayers,
+      match,
+    } = this.props
+
+    const relayer = relayers[match.params.coinbase] || relayers[0]
+
+    return (
+      <Box style={{ transform: 'translateY(-30px)' }}>
+        <TabMenu onChange={this.switchTab} value={this.state.tabValue} />
+        <Box className="mt-2">
+          {this.state.tabValue === 0 && <RelayerStat relayer={relayer} />}
+          {this.state.tabValue === 1 && <RelayerConfig relayer={relayer} />}
+        </Box>
       </Box>
-    </Box>
-  )
+    )
+  }
 }
 
 const mapProps = state => ({

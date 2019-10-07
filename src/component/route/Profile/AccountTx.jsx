@@ -121,18 +121,6 @@ const TxTable = ({ txs }) => (
 )
 
 
-const NoTx = () => (
-  <React.Fragment>
-    <Typography component="h3">
-      No transaction records
-    </Typography>
-    <Typography component="div">
-      Register a relayer <CustomLink to="/register">here</CustomLink>
-    </Typography>
-  </React.Fragment>
-)
-
-
 export default class AccountTx extends React.Component {
   state = {
     currentTab: TxTypes.deposit,
@@ -160,26 +148,34 @@ export default class AccountTx extends React.Component {
       currentTab,
     } = this.state
 
+    if (isEmpty(tx.items || tx)) {
+      return (
+        <Box display="flex" flexDirection="column">
+          <Typography component="h3">
+            No transaction records
+          </Typography>
+          <Typography component="div">
+            Register a relayer <CustomLink to="/register">here</CustomLink>
+          </Typography>
+        </Box>
+      )
+    }
+
     return (
       <Box display="flex" flexDirection="column">
         <TxTabs value={currentTab} onChange={this.handleChangeTab} aria-label="tx types">
           {Object.keys(TxTypes).map(type => <TxTab key={type} label={type} />)}
         </TxTabs>
-        {isEmpty(tx.items || tx) ? 
-          <NoTx /> : 
-          <React.Fragment>
-            <TxTable txs={tx.items} />
-            <Paginator
-              rowsPerPage={tx.perPage}
-              activePage={tx.currentPage}
-              totalPages={tx.pages}
-              onNext={onNext}
-              onPrev={onPrev}
-              onBegin={onBegin}
-              onEnd={onEnd} 
-            />
-          </React.Fragment>
-        }
+        <TxTable txs={tx.items} />
+        <Paginator
+          rowsPerPage={tx.perPage}
+          activePage={tx.currentPage}
+          totalPages={tx.pages}
+          onNext={onNext}
+          onPrev={onPrev}
+          onBegin={onBegin}
+          onEnd={onEnd}
+        />
       </Box>
     )
   }
