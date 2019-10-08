@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import {
   AppBar as MuiAppbar,
+  Button,
   Tabs as MuiTabs,
   Tab as MuiTab,
 } from '@material-ui/core'
@@ -37,9 +38,26 @@ const Tab = withStyles(theme => ({
   }
 }))(MuiTab)
 
+const FloatButton = withStyles(theme => ({
+  root: {
+    color: theme.palette.maintitle,
+    position: 'absolute',
+    right: 0,
+    padding: 0,
+    top: 15,
+    textTransform: 'none',
+    fontWeight: 500,
+    fontSize: 16,
+    '&:hover': {
+      color: theme.palette.subtitle,
+    }
+  }
+}))(Button)
+
 const TabMenu = ({
   onChange,
   value,
+  switchFeedback,
 }) => {
 
   return (
@@ -48,6 +66,7 @@ const TabMenu = ({
         <Tab label="Relayer Page" />
         <Tab label="Configurations" />
       </Tabs>
+      <FloatButton onClick={switchFeedback}>Feedback</FloatButton>
     </AppBar>
   )
 }

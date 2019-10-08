@@ -4,14 +4,20 @@ import { Box } from '@material-ui/core'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
-// import FeedBack from './FeedBack'
+import FeedBack from './FeedBack'
 
 class Dashboard extends React.Component {
   state = {
     tabValue: 0,
+    showFeedback: false,
   }
 
-  switchTab = (_, tabValue) => this.setState({ tabValue })
+  switchTab = (_, tabValue) => this.setState({
+    tabValue,
+    showFeedback: false,
+  })
+
+  switchFeedback = () => this.setState({ showFeedback: true })
 
   async componentDidMount() {
     await this.updateRelayerStat(this.props.match.params.coinbase)
@@ -34,14 +40,20 @@ class Dashboard extends React.Component {
       match,
     } = this.props
 
+    const {
+      tabValue,
+      showFeedback,
+    } = this.state
+
     const relayer = relayers[match.params.coinbase] || relayers[0]
 
     return (
       <Box style={{ transform: 'translateY(-30px)' }}>
-        <TabMenu onChange={this.switchTab} value={this.state.tabValue} />
+        <TabMenu onChange={this.switchTab} value={tabValue} switchFeedback={this.switchFeedback} />
         <Box className="mt-2">
-          {this.state.tabValue === 0 && <RelayerStat relayer={relayer} />}
-          {this.state.tabValue === 1 && <RelayerConfig relayer={relayer} />}
+          {!showFeedback && tabValue === 0 && <RelayerStat relayer={relayer} />}
+          {!showFeedback && tabValue === 1 && <RelayerConfig relayer={relayer} />}
+          {this.state.showFeedback && <FeedBack />}
         </Box>
       </Box>
     )
