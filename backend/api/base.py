@@ -3,12 +3,48 @@ import traceback
 from peewee import PeeweeException
 from logzero import logger
 from tornado.web import HTTPError, ErrorHandler as TorErrorHandler, RequestHandler
+from cerberus import Validator
 from settings import settings, is_production
 from exception import CustomException
 
 
+
+class CustomValidator(Validator):
+
+    web3 = None
+
+    def __init__(self, *args, **kwargs):
+        """
+        Inject ready-made web3 client
+        """
+        super(CustomValidator, self).__init__(*args, **kwargs)
+        self.web3 = kwargs['web3']
+
+
+    def _validate_is_address(self, is_address, field, value):
+
+        if is_address and bool(value):
+            try:
+                address = self.web3.toChecksumAddress(value.lower())
+                balance = self.web3.eth.getBalance(address)
+            except Exception as err:
+                self._error(field, "Not a valid address")
+
+
+
 class BaseHandler(RequestHandler):
+
+    validator = None
+
+    schema = None
+
     request_body = None
+
+    def __init__(self, *args, **kwargs):
+        super(BaseHandler, self).__init__(*args, **kwargs)
+
+        if self.schema:
+            self.validator = CustomValidator(self.schema, purge_unknown=True, web3=self.application.blockchain.web3)
 
     def set_default_headers(self):
         if not is_production:

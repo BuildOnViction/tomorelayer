@@ -20,6 +20,7 @@ web3 = "*"
 logzero = "*"
 pyjwt = "*"
 aioredis = "*"
+cerberus = "*"
 
 [requires]
 python_version = "3.7"
