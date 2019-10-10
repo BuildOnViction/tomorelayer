@@ -1,4 +1,4 @@
-import { getDexTrades } from 'service/backend'
+import wretch from 'wretch'
 
 export const UpdateRelayer = async (state, relayer) => {
   const Relayers = Array.from(state.Relayers)
@@ -31,12 +31,19 @@ export const UpdateRelayer = async (state, relayer) => {
   }
 }
 
-export const GetStats = async (state, url) => {
+export const GetStats = async (state, { coinbase, tokens }) => {
+  const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${encodeURI(pairName)}`
 
-  const orders = await getDexTrades(url, {
-    sortType: 'dec',
+  const relayer = state.user.relayers[coinbase]
+
+  relayer.from_tokens.forEach(async (fromTokenAddr, idx) => {
+    const toTokenAddr = relayer.to_tokens[idx]
+    const pairName = tokens[fromTokenAddr].symbol + '%2F' + tokens[toTokenAddr].symbol
+    const [error, data] = await wretch(statServiceUrl(pairName)).get().json().then(resp => [null, resp]).catch(t => [t, null])
+    console.log('Err', error)
+    console.log('Err', data)
   })
-  console.log(orders)
+
 
   return {}
 }
