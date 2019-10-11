@@ -92,11 +92,12 @@ $ npm run backend
 ```
 
 
-Testing Contract
-1. Modify **Lock-time** of Contract refund from 4 weeks to, like, 4 (seconds).
-2. Filling a development **mnemonic** for testing to `$ tomorelayer/ebconfig/contract.js`
-2. Run test with *Embark* `$ npm run ctest`
-3. Check if all tests passed.
+**Testing Contract**
+
+1. Modify **Lock-time** of Relayer Contract's *refund* function from `4 weeks` to, like, `4` (seconds).
+2. Filling a development **mnemonic** for testing to `ebconfig/contract.js` and `test/relayer-contract.test.js`
+2. Run test with *Embark* using command `npm run ctest`
+3. Check if all tests are passed.
 
 For any installation/running problem, check out [Troubleshooting](#trouble) guide
 
