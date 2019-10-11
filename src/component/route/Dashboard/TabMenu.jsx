@@ -2,11 +2,11 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import {
   AppBar as MuiAppbar,
+  Button,
   Tabs as MuiTabs,
   Tab as MuiTab,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { AdapterLink } from 'component/shared/Adapters'
 
 const AppBar = withStyles(theme => ({
   root: {
@@ -38,43 +38,35 @@ const Tab = withStyles(theme => ({
   }
 }))(MuiTab)
 
-const mapRouteToValue = path => {
-  if (path.includes('config')) {
-    return 1
+const FloatButton = withStyles(theme => ({
+  root: {
+    color: theme.palette.maintitle,
+    position: 'absolute',
+    right: 0,
+    padding: 0,
+    top: 15,
+    textTransform: 'none',
+    fontWeight: 500,
+    fontSize: 16,
+    '&:hover': {
+      color: theme.palette.subtitle,
+    }
   }
-
-  if (path.includes('feedback')) {
-    return 2
-  }
-
-  return 0
-}
-
-const FeedBack = React.forwardRef((props, ref) => (
-  <AdapterLink
-    {...props}
-    innerRef={ref}
-    style={{
-      marginRight: 10,
-      marginLeft: 'auto',
-      minWidth: 'auto',
-    }}
-  />
-))
+}))(Button)
 
 const TabMenu = ({
-  location,
+  onChange,
+  value,
+  switchFeedback,
 }) => {
-
-  const path = location.pathname
 
   return (
     <AppBar position="static">
-      <Tabs value={mapRouteToValue(path)}>
-        <Tab label="Relayer Page" component={AdapterLink} to={path.replace(/\/(config|feedback)/i, '')} />
-        <Tab label="Configurations" component={AdapterLink} to={path.replace('/feedback', '') + '/config'} />
-        <Tab label="Feedback" component={FeedBack} to={path.replace('/config', '') + '/feedback'} />
+      <Tabs value={value} onChange={onChange} aria-label="relayer-dashboard-tabs">
+        <Tab label="Relayer Page" />
+        <Tab label="Configurations" />
       </Tabs>
+      <FloatButton onClick={switchFeedback}>Feedback</FloatButton>
     </AppBar>
   )
 }

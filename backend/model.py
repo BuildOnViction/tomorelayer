@@ -34,7 +34,7 @@ class Relayer(PwModel):
     owner = pw.CharField(max_length=200)
     name = pw.CharField(unique=True, max_length=200)
     coinbase = pw.CharField(unique=True, max_length=200)
-    deposit = pw.IntegerField()
+    deposit = pw.CharField()
     trade_fee = pw.IntegerField(default=1)
     from_tokens = ArrayField(pw.CharField, default=[])
     to_tokens = ArrayField(pw.CharField, default=[])

@@ -220,12 +220,6 @@ export const notifyDex = async (dexUrl) =>
     })
     .catch(error => ({ error }))
 
-export const getDexTrades = async (dexUrl, queryParams) =>
-  HttpClient()
-    .get(`${dexUrl}/api/trades?${qs.stringify(queryParams)}`)
-    .then(getPayload)
-    .catch(logging)
-
 // STATIC EXTERNAL LINK
 export const ExternalLinks = {
   transaction: (tx) => ApiFix(`https://scan.testnet.tomochain.com/txs/${tx}`),

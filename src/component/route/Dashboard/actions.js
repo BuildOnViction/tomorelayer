@@ -1,4 +1,5 @@
-import { getDexTrades } from 'service/backend'
+import wretch from 'wretch'
+import * as _ from 'service/helper'
 
 export const UpdateRelayer = async (state, relayer) => {
   const Relayers = Array.from(state.Relayers)
@@ -31,12 +32,40 @@ export const UpdateRelayer = async (state, relayer) => {
   }
 }
 
-export const GetStats = async (state, url) => {
+export const GetStats = async (state, { coinbase, tokens }) => {
+  const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${encodeURI(pairName)}`
 
-  const orders = await getDexTrades(url, {
-    sortType: 'dec',
-  })
-  console.log(orders)
+  const relayer = state.user.relayers[coinbase]
 
-  return {}
+  let tradeStat = await Promise.all(relayer.from_tokens.map(async (fromTokenAddr, idx) => {
+    const toTokenAddr = relayer.to_tokens[idx]
+    const pairName = tokens[fromTokenAddr].symbol + '%2F' + tokens[toTokenAddr].symbol
+    const [error, data] = await wretch(statServiceUrl(pairName)).get().json().then(resp => [null, resp]).catch(t => [t, null])
+    return error || data
+  }))
+
+  tradeStat = tradeStat.filter(_.isTruthy).reduce((result, current) => ({
+    volume24h: result.volume24h + current.volume24h,
+    tradeNumber: result.tradeNumber + current.tradeNumber,
+    totalFee: result.totalFee + current.totalFee,
+  }))
+
+  const relayerWithStat = {
+    ...state.user.relayers[coinbase],
+    stat: {
+      ...state.user.relayers[coinbase].stat,
+      ...tradeStat,
+      tomoprice: state.network_info.tomousd,
+    }
+  }
+
+  return {
+    user: {
+      ...state.user,
+      relayers: {
+        ...state.user.relayers,
+        [coinbase]: relayerWithStat
+      }
+    }
+  }
 }

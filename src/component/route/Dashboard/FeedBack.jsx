@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  Container,
-  Grid,
-  Typography,
-} from '@material-ui/core'
+import { Container, Grid, Typography } from '@material-ui/core'
 import { StyledLink } from 'component/shared/Adapters'
 
 export default class FeedBack extends React.Component {
@@ -11,7 +7,7 @@ export default class FeedBack extends React.Component {
   render() {
 
     return (
-      <Container maxWidth="sm" className="pt-2">
+      <Container maxWidth="sm" className="pt-2" style={{ height: '60vh' }}>
         <Grid container justify="center">
 
           <Grid item xs={12}>
