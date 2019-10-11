@@ -91,6 +91,13 @@ $ npm start
 $ npm run backend
 ```
 
+
+Testing Contract
+1. Modify **Lock-time** of Contract refund from 4 weeks to, like, 4 (seconds).
+2. Filling a development **mnemonic** for testing to `$ tomorelayer/ebconfig/contract.js`
+2. Run test with *Embark* `$ npm run ctest`
+3. Check if all tests passed.
+
 For any installation/running problem, check out [Troubleshooting](#trouble) guide
 
 
