@@ -27,18 +27,18 @@ const StatCard = ({
 
 const BlockStat = ({ data }) => (
   <Grid item container spacing={4}>
-    <StatCard icon={networkVolIcon} stat={`$ ${data.volume}`} helpText="Relayer Volume 24h" />
-    <StatCard icon={networkFeeIcon} stat={`${data.fee} TOMO`} helpText="Relayer Fee 24h" />
-    <StatCard icon={tradeIcon} stat={data.trades} helpText="Trades(24h)" />
+    <StatCard icon={networkVolIcon} stat={`$ ${data.volume24h}`} helpText="Relayer Volume 24h" />
+    <StatCard icon={networkFeeIcon} stat={`${data.totalFee} TOMO`} helpText="Relayer Fee 24h" />
+    <StatCard icon={tradeIcon} stat={data.tradeNumber} helpText="Trades(24h)" />
     <StatCard icon={tomoPriceIcon} stat={`$ ${data.tomoprice}`} helpText="Tomo Price" />
   </Grid>
 )
 
 BlockStat.defaultProps = {
   data: {
-    volume: 0,
-    fee: 0,
-    trades: 0,
+    volume24h: 0,
+    totalFee: 0,
+    tradeNumber: 0,
     tomoprice: 0,
   }
 }

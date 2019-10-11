@@ -1,4 +1,5 @@
 import wretch from 'wretch'
+import * as _ from 'service/helper'
 
 export const UpdateRelayer = async (state, relayer) => {
   const Relayers = Array.from(state.Relayers)
@@ -36,14 +37,35 @@ export const GetStats = async (state, { coinbase, tokens }) => {
 
   const relayer = state.user.relayers[coinbase]
 
-  relayer.from_tokens.forEach(async (fromTokenAddr, idx) => {
+  let tradeStat = await Promise.all(relayer.from_tokens.map(async (fromTokenAddr, idx) => {
     const toTokenAddr = relayer.to_tokens[idx]
     const pairName = tokens[fromTokenAddr].symbol + '%2F' + tokens[toTokenAddr].symbol
     const [error, data] = await wretch(statServiceUrl(pairName)).get().json().then(resp => [null, resp]).catch(t => [t, null])
-    console.log('Err', error)
-    console.log('Err', data)
-  })
+    return error || data
+  }))
 
+  tradeStat = tradeStat.filter(_.isTruthy).reduce((result, current) => ({
+    volume24h: result.volume24h + current.volume24h,
+    tradeNumber: result.tradeNumber + current.tradeNumber,
+    totalFee: result.totalFee + current.totalFee,
+  }))
 
-  return {}
+  const relayerWithStat = {
+    ...state.user.relayers[coinbase],
+    stat: {
+      ...state.user.relayers[coinbase].stat,
+      ...tradeStat,
+      tomoprice: state.network_info.tomousd,
+    }
+  }
+
+  return {
+    user: {
+      ...state.user,
+      relayers: {
+        ...state.user.relayers,
+        [coinbase]: relayerWithStat
+      }
+    }
+  }
 }
