@@ -11,10 +11,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
 import { fromWei } from 'service/blockchain'
 import { ExternalLinks } from 'service/backend'
-import {
-  CustomLink,
-  StyledLink,
-} from 'component/shared/Adapters'
+import { StyledLink } from 'component/shared/Adapters'
 import Paginator from 'component/shared/Paginator'
 
 const TableHeaders = [
@@ -153,9 +150,6 @@ export default class AccountTx extends React.Component {
         <Box display="flex" flexDirection="column">
           <Typography component="h3">
             No transaction records
-          </Typography>
-          <Typography component="div">
-            Register a relayer <CustomLink to="/register">here</CustomLink>
           </Typography>
         </Box>
       )
