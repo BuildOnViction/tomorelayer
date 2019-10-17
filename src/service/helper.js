@@ -56,8 +56,8 @@ export const strEqual = (...args) => {
   }
 }
 
-export const ThrowOn = (shit, message) => {
-  if (shit) {
+export const ThrowOn = (error, message) => {
+  if (error) {
     throw message
   }
 }
@@ -105,9 +105,7 @@ export const sequence = (from = 0, to = 10, mapper = i => i) => Array.from({ len
                                                                      .map((_, idx) => idx + from)
                                                                      .map(mapper)
 
-export const times = (func, nth) => {
-  return Array.from({ length: nth }).map(func)
-}
+export const times = (func, length) => Array.from({ length }).map(func)
 
 export class TabMap {
   constructor(...args) {

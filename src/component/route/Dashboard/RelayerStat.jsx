@@ -42,8 +42,8 @@ class RelayerStat extends React.Component {
                             .map(t => AvailableTokens.find(token => token.address === t))
                             .filter(_.isTruthy)
 
-    const shouldShowOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
-    const shouldShowTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
+    const showOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
+    const showTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
 
     return (
       <Grid container spacing={4}>
@@ -70,13 +70,13 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {shouldShowOrderTable && (
+            {showOrderTable && (
               <OrderTable
                 data={stats[relayer.coinbase].trades}
                 requestData={this.requestData('trades')}
               />
             )}
-            {shouldShowTokenTable && (
+            {showTokenTable && (
               <TokenTable
                 tokens={tokenTableData}
                 relayer={relayer}
