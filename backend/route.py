@@ -1,5 +1,5 @@
 from tornado.routing import HostMatches
-from api.main import MainHandler
+from api.main import SocketHandler
 from api.auth import AuthHandler
 from api.token import TokenHandler
 from api.relayer import RelayerHandler
@@ -12,8 +12,9 @@ from api.redis import RedisHandler
 ALLOWED_HOSTS = HostMatches(r'.*(tomochain.com|localhost)')
 
 route = [(ALLOWED_HOSTS, [
-    ("/socket", MainHandler),
-    ("/api/auth", AuthHandler), # reserved for mobile/external interaction other than socket channels
+    ("/socket", SocketHandler),
+    # reserved for mobile/external interaction other than socket channels
+    ("/api/auth", AuthHandler),
     ("/api/contract", ContractHandler),
     ("/api/relayer", RelayerHandler),
     ("/api/token", TokenHandler),

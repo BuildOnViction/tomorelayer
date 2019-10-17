@@ -5,7 +5,7 @@ from .auth import AuthSocketHandler
 from .socket import SocketClient
 
 
-class MainHandler(WebSocketHandler):
+class SocketHandler(WebSocketHandler):
 
     socket_id = None
 
