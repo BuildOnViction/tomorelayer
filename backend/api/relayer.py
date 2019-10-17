@@ -1,6 +1,4 @@
-from logzero import logger
 from playhouse.shortcuts import model_to_dict
-from peewee import ProgrammingError
 from model import Relayer
 from exception import InvalidValueException, MissingArgumentException
 from util.decorator import authenticated, save_redis
@@ -42,6 +40,7 @@ RELAYER_SCHEMA = {
         },
         'minlength': 0,
         'required': True,
+        'empty': True,
     },
     'to_tokens': {
         'type': 'list',
@@ -51,6 +50,7 @@ RELAYER_SCHEMA = {
         },
         'minlength': 0,
         'required': True,
+        'empty': True,
     },
     'logo': {
         'type': 'string',

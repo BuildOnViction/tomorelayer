@@ -73,7 +73,7 @@ describe('Testing backend API', () => {
     const owner = '0x070aa7ad03b89b3278f19d34f119dd3c2a244675'
     const signature =
       '0x534a82e3de6fda201c54126be6892f035918fb6266637063a94c169411cfbf13283e95eb26587ace6d97a09430deff6cf96e6a39a880b4cfc63cabf3a9a0126c1b'
-    const jwt = await http.getAuthenticated(owner, signature)
+      const jwt = await http.getAuthenticated(owner, signature)
 
     expect(jwt.token.length).toBeTruthy()
 
@@ -81,12 +81,12 @@ describe('Testing backend API', () => {
 
     const relayer = {
       owner: owner + 'invalid_owner',
-      deposit: 25000,
+      deposit: "25000",
       name: 'Dummy Dex',
-      coinbase: faker.finance.bitcoinAddress(),
+      coinbase: "0xdD596FfB7f7A6123C36ecEf2F8a48AfEc6D7B889",
       trade_fee: 2,
-      from_tokens: _.unique(_.times(faker.finance.bitcoinAddress, 3)),
-      to_tokens: _.unique(_.times(faker.finance.bitcoinAddress, 3)),
+      from_tokens: [],
+      to_tokens: [], // _.unique(_.times(faker.finance.ethereumAddress, 3)), ethereumAddress is not yet available in Fakerjs
     }
 
     const { error } = await http.createRelayer(relayer)
