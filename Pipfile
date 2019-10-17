@@ -9,6 +9,7 @@ flake8 = "*"
 pylint = "*"
 autopep8 = "*"
 bpython = "*"
+rope = "*"
 
 [packages]
 tornado = "*"
