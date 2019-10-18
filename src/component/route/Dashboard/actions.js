@@ -40,7 +40,7 @@ export const StoreUnrecognizedTokens = async (state, tokens) => {
 }
 
 export const GetStats = async (state, { coinbase, tokens }) => {
-  const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${encodeURI(pairName)}`
+  const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${pairName}`
 
   const relayer = state.user.relayers[coinbase]
 
