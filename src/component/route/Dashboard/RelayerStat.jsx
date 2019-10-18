@@ -1,10 +1,6 @@
 import React from 'react'
 import { connect } from 'redux-zero/react'
-import {
-  Box,
-  CircularProgress,
-  Grid,
-} from '@material-ui/core'
+import { Box, CircularProgress, Grid } from '@material-ui/core'
 import * as _ from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import RelayerHeader from './StatComponents/RelayerHeader'
@@ -30,7 +26,7 @@ class RelayerStat extends React.Component {
     const {
       relayer,
       stats,
-      AvailableTokens,
+      Tokens,
     } = this.props
 
     const {
@@ -39,7 +35,7 @@ class RelayerStat extends React.Component {
     } = this.state
 
     const tokenTableData = _.unique(relayer.from_tokens.concat(relayer.to_tokens))
-                            .map(t => AvailableTokens.find(token => token.address === t))
+                            .map(t => Tokens.find(token => token.address === t))
                             .filter(_.isTruthy)
 
     const showOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
@@ -94,7 +90,7 @@ const mapProps = state => ({
     ...state.user.stats,
     tomousd: state.network_info.tomousd,
   },
-  AvailableTokens: state.Tokens,
+  Tokens: state.Tokens,
 })
 
 export default connect(mapProps)(RelayerStat)

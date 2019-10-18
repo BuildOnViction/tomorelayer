@@ -1,9 +1,9 @@
 /*
  * Basic function helpers
  */
-export const isFunction = (t) => typeof t === 'function'
+export const isFunction = t => Boolean(t) && typeof t === 'function'
 
-export const isString = (str) => typeof str === 'string'
+export const isString = str => Boolean(str) && typeof str === 'string'
 
 // Compose from left-most to right-most
 export const compose = (...functions) => (lastArg) =>
@@ -106,6 +106,17 @@ export const sequence = (from = 0, to = 10, mapper = i => i) => Array.from({ len
                                                                      .map(mapper)
 
 export const times = (func, length) => Array.from({ length }).map(func)
+
+export const toDict = (list, ...args) => {
+  const baseFunc = key => {
+    const result = {}
+    list.forEach(item => { result[item[key]] = item })
+    return result
+  }
+
+  const curried = str => baseFunc(str)
+  return isString(args[0]) ? baseFunc(args[0]) : curried
+}
 
 export class TabMap {
   constructor(...args) {

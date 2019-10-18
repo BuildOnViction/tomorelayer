@@ -2,18 +2,18 @@ import React from 'react'
 import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
 import * as _ from 'service/helper'
+import { ERC20TokenInfo as getTokenInfo } from 'service/blockchain'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
 import FeedBack from './FeedBack'
-import { GetStats } from './actions'
+import { GetStats, StoreUnrecognizedTokens } from './actions'
 
 
 class Dashboard extends React.Component {
   state = {
     tabValue: 0,
     showFeedback: false,
-    tokenMap: {},
   }
 
   switchTab = (_, tabValue) => this.setState({
@@ -30,48 +30,43 @@ class Dashboard extends React.Component {
   async componentDidUpdate(prevProps) {
     const {
       match,
+      Tokens,
     } = this.props
 
     const {
       match: prevMatch,
+      Tokens: prevTokens,
     } = prevProps
 
     const coinbaseChanged = prevMatch.params.coinbase !== match.params.coinbase
+    const tokensUpdated = Tokens.length !== prevTokens.length
 
-    if (coinbaseChanged) {
+    if (coinbaseChanged || tokensUpdated) {
       await this.updateRelayerStat(this.props.match.params.coinbase)
     }
   }
 
   async updateRelayerStat(coinbase) {
     const {
-      AvailableTokens: Tokens,
+      Tokens,
       relayers,
     } = this.props
 
-    const {
-      tokenMap,
-    } = this.state
-
     const relayer = relayers[coinbase]
-    const uniqueTokens = _.unique(relayer.from_tokens.concat(relayer.to_tokens))
+    const uniqueTokens = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
+    const unrecognizedTokens = uniqueTokens.filter(addr => !Tokens.find(t => _.strEqual(t.address, addr)))
 
-    const unrecognizedTokens = uniqueTokens.filter(addr => Object.keys(tokenMap).indexOf(addr) === -1)
-    const tokenMetas = unrecognizedTokens.reduce((acc, t) => {
-      const meta = Tokens.find(token => _.strEqual(token.address, t))
-      return { ...acc, [t]: meta }
-    }, {})
-
-    const synchronousGetStat = tokens => () => {
-      this.props.GetStats({ coinbase, tokens })
+    // NOTE: check for any remaining unrecognized tokens, get their Meta and save to Database first
+    if (!_.isEmpty(unrecognizedTokens)) {
+      const newTokensInfo = await Promise.all(unrecognizedTokens.map(getTokenInfo))
+      return this.props.StoreUnrecognizedTokens(newTokensInfo)
     }
 
-    if (unrecognizedTokens.length > 0) {
-      const updatedTokenMap = { ...tokenMap, ...tokenMetas }
-      return this.setState({ tokenMap: updatedTokenMap }, synchronousGetStat(updatedTokenMap))
-    }
-
-    return synchronousGetStat(tokenMap)
+    const tokenMap = {}
+    uniqueTokens.forEach(t => {
+      tokenMap[t] = Tokens.find(item => _.strEqual(item.address, t))
+    })
+    return this.props.GetStats({ coinbase, tokens: tokenMap })
   }
 
   render() {
@@ -103,11 +98,12 @@ class Dashboard extends React.Component {
 
 const mapProps = state => ({
   relayers: state.user.relayers,
-  AvailableTokens: state.Tokens,
+  Tokens: state.Tokens,
 })
 
 const actions = {
   GetStats,
+  StoreUnrecognizedTokens,
 }
 
 export default connect(mapProps, actions)(Dashboard)
