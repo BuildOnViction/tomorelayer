@@ -8,7 +8,6 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
-import faker from 'faker'
 import datefns from 'date-fns'
 import {
   VOLUME_CHART as volChartCfg,
@@ -102,7 +101,7 @@ export default class VolumeChart extends React.Component {
     // MOCK
     const mockdata = () => Array.from({ length: 30 }).fill().map((_, idx) => ({
       label: datefns.format(datefns.addDays(datefns.subDays(Date.now(), 100), idx), 'MMMM DD'),
-      value: faker.random.number(),
+      value: 1,
     }))
 
     const renderChart = (chartData = [], chartId) => {

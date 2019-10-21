@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "1-liners": "^0.4.2",
     "@material-ui/core": "^4.0.2",
     "@material-ui/icons": "^4.0.1",
     "@vutr/purser-core": "^2.1.6",
@@ -18,7 +17,6 @@
     "downshift": "^3.2.12",
     "ethers": "^4.0.27",
     "formik": "^1.5.4",
-    "p-timeout": "^3.1.0",
     "pouchdb": "^7.1.1",
     "pouchdb-adapter-memory": "^7.1.1",
     "pouchdb-find": "^7.1.1",
