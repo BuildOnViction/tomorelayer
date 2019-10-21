@@ -66,12 +66,6 @@ class FormInfo extends React.Component {
 
     const avatarClassName = cx('mr-1', { 'empty-avatar': isEmpty(values.logo) })
 
-    const helpTextRelayerName = errors.name ? (
-      <i className="text-alert">{errors.name}</i>
-    ) : (
-      <Typography variant="subtitle2" style={{ float: 'right' }}>Max 200 chars</Typography>
-    )
-
     return (
       <Container>
         {relayer.resigning && (
@@ -113,14 +107,16 @@ class FormInfo extends React.Component {
                 label="Relayer Name"
                 value={values.name || ''}
                 onChange={handleChange}
-                error={Boolean(errors.name)}
+                error={Boolean(errors.name) && <i className="text-alert">{errors.name}</i>}
                 id="relayer-name"
                 name="name"
                 variant="outlined"
-                helperText={helpTextRelayerName}
                 disabled={inputDisabled}
                 fullWidth
               />
+              <Typography variant="subtitle2" className="mt-1">
+                {errors.name || 'Max 200 chars'}
+              </Typography>
             </Grid>
             <Grid item>
               <TextField
