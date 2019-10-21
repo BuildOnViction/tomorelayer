@@ -40,6 +40,11 @@ export const StoreUnrecognizedTokens = async (state, tokens) => {
 }
 
 export const GetStats = async (state, { coinbase, tokens }) => {
+  const exchangeRatesToUSD = {
+    TOMO: state.network_info.tomousd,
+    BTC: state.network_info.btcusd,
+  }
+
   const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${pairName}`
 
   const relayer = state.user.relayers[coinbase]
@@ -48,7 +53,13 @@ export const GetStats = async (state, { coinbase, tokens }) => {
     const toTokenAddr = relayer.to_tokens[idx].toLowerCase()
     const pairName = tokens[fromTokenAddr].symbol + '%2F' + tokens[toTokenAddr].symbol
     const [error, data] = await wretch(statServiceUrl(pairName)).get().json().then(resp => [null, resp]).catch(t => [t, null])
-    return error || { ...data, from: tokens[fromTokenAddr].symbol, to: tokens[toTokenAddr].symbol }
+    return error || {
+      from: tokens[fromTokenAddr].symbol,
+      to: tokens[toTokenAddr].symbol,
+      volume24h: data.volume24h * exchangeRatesToUSD[tokens[toTokenAddr].symbol],
+      totalFee: data.totalFee * exchangeRatesToUSD[tokens[toTokenAddr].symbol],
+      tradeNumber: data.tradeNumber,
+    }
   }))
 
   // NOTE: summary of today's statistic
