@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'redux-zero/react'
 import { Box, CircularProgress, Grid } from '@material-ui/core'
 import * as _ from 'service/helper'
 import TableControl from 'component/shared/TableControl'
@@ -25,8 +24,6 @@ class RelayerStat extends React.Component {
 
     const {
       relayer,
-      stats,
-      Tokens,
     } = this.props
 
     const {
@@ -34,12 +31,10 @@ class RelayerStat extends React.Component {
       loading,
     } = this.state
 
-    const tokenTableData = _.unique(relayer.from_tokens.concat(relayer.to_tokens))
-                            .map(t => Tokens.find(token => token.address === t))
-                            .filter(_.isTruthy)
+    const tokenTableData = Object.values(relayer.tokenMap || {})
 
-    const showOrderTable = tab === TOPICS.orders && Boolean(stats[relayer.coinbase])
-    const showTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
+    const showOrderTable = tab === TOPICS.orders && Boolean(relayer.stat && relayer.stat.orders)
+    const showTokenTable = tab === TOPICS.tokens && Boolean(relayer.stat && relayer.stat.tokenMap)
 
     const formattedStat = {
       volume24h: relayer.stat && relayer.stat.volume24h ? `$ ${_.round(relayer.stat.volume24h, 3)}` : 'requesting data',
@@ -56,10 +51,10 @@ class RelayerStat extends React.Component {
           <BlockStat data={formattedStat} />
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
-              <VolumeChart data={stats.volume} />
+              <VolumeChart data={null} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart data={stats.token} />
+              <TokenChart data={null} />
             </Grid>
           </Grid>
         </Grid>
@@ -74,18 +69,8 @@ class RelayerStat extends React.Component {
           />
           <Box className="mt-0" display="flex" justifyContent="center">
             {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {showOrderTable && (
-              <OrderTable
-                data={stats[relayer.coinbase].trades}
-                requestData={this.requestData('trades')}
-              />
-            )}
-            {showTokenTable && (
-              <TokenTable
-                tokens={tokenTableData}
-                relayer={relayer}
-              />
-            )}
+            {showOrderTable && <OrderTable data={null} />}
+            {showTokenTable && <TokenTable relayer={null} />}
           </Box>
         </Grid>
       </Grid>
@@ -93,12 +78,4 @@ class RelayerStat extends React.Component {
   }
 }
 
-const mapProps = state => ({
-  stats: {
-    ...state.user.stats,
-    tomousd: state.network_info.tomousd,
-  },
-  Tokens: state.Tokens,
-})
-
-export default connect(mapProps)(RelayerStat)
+export default RelayerStat

@@ -53,19 +53,23 @@ class Dashboard extends React.Component {
     } = this.props
 
     const relayer = relayers[coinbase]
-    const uniqueTokens = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
-    const unrecognizedTokens = uniqueTokens.filter(addr => !Tokens.find(t => _.strEqual(t.address, addr)))
+    const tokenMap = relayer.tokenMap || {}
 
-    // NOTE: check for any remaining unrecognized tokens, get their Meta and save to Database first
-    if (!_.isEmpty(unrecognizedTokens)) {
-      const newTokensInfo = await Promise.all(unrecognizedTokens.map(getTokenInfo))
-      return this.props.StoreUnrecognizedTokens(newTokensInfo)
+    if (_.isEmpty(tokenMap)) {
+      const uniqueTokens = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
+      const unrecognizedTokens = uniqueTokens.filter(addr => !Tokens.find(t => _.strEqual(t.address, addr)))
+
+      // NOTE: check for any remaining unrecognized tokens, get their Meta and save to Database first
+      if (!_.isEmpty(unrecognizedTokens)) {
+        const newTokensInfo = await Promise.all(unrecognizedTokens.map(getTokenInfo))
+        return this.props.StoreUnrecognizedTokens(newTokensInfo)
+      }
+
+      uniqueTokens.forEach(t => {
+        tokenMap[t] = Tokens.find(item => _.strEqual(item.address, t))
+      })
     }
 
-    const tokenMap = {}
-    uniqueTokens.forEach(t => {
-      tokenMap[t] = Tokens.find(item => _.strEqual(item.address, t))
-    })
     return this.props.GetStats({ coinbase, tokens: tokenMap })
   }
 
@@ -85,7 +89,11 @@ class Dashboard extends React.Component {
 
     return (
       <Box style={{ transform: 'translateY(-30px)' }}>
-        <TabMenu onChange={this.switchTab} value={tabValue} switchFeedback={this.switchFeedback} />
+        <TabMenu
+          onChange={this.switchTab}
+          value={tabValue}
+          switchFeedback={this.switchFeedback}
+        />
         <Box className="mt-2">
           {!showFeedback && tabValue === 0 && <RelayerStat relayer={relayer} />}
           {!showFeedback && tabValue === 1 && <RelayerConfig relayer={relayer} />}

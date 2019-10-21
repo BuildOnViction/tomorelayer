@@ -59,6 +59,7 @@ export const GetStats = async (state, { coinbase, tokens }) => {
 
   const relayerWithStat = {
     ...state.user.relayers[coinbase],
+    tokenMap: tokens,
     stat: {
       ...state.user.relayers[coinbase].stat,
       ...tradeStat,
