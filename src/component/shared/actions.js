@@ -1,5 +1,5 @@
 import { bindActions } from 'redux-zero/utils'
-
+import wretch from 'wretch'
 import PouchDB from 'pouchdb'
 import pouchMemory from 'pouchdb-adapter-memory'
 import pouchQuery from 'pouchdb-find'
@@ -35,9 +35,15 @@ export const AppInitialization = async (state) => {
     },
   ]
 
+  const [getBitcoinError, bitcoinStat] = await wretch('https://api.coingecko.com/api/v3/coins/bitcoin?localization=false')
+    .get().json().then(resp => [null, resp]).catch(t => [t, null])
+
+  ThrowOn(getBitcoinError, 'Error getting bitcoin stat')
+
   const network_info = {
     ...state.network_info,
     tomousd: tomoPriceError ? NaN : tomochain.usd,
+    btcusd: bitcoinStat.market_data.current_price.usd,
   }
 
   // INIT POUCHDB FOR FRONTEND-SEARCHING
