@@ -54,8 +54,10 @@ export const GetStats = async (state, { coinbase, tokens }) => {
     const pairName = tokens[fromTokenAddr].symbol + '%2F' + tokens[toTokenAddr].symbol
     const [error, data] = await wretch(statServiceUrl(pairName)).get().json().then(resp => [null, resp]).catch(t => [t, null])
     return error || {
-      from: tokens[fromTokenAddr].symbol,
-      to: tokens[toTokenAddr].symbol,
+      fromAddr: fromTokenAddr,
+      fromSymbol: tokens[fromTokenAddr].symbol,
+      toAddr: toTokenAddr,
+      toSymbol: tokens[toTokenAddr].symbol,
       volume24h: data.volume24h * exchangeRatesToUSD[tokens[toTokenAddr].symbol],
       totalFee: data.totalFee * exchangeRatesToUSD[tokens[toTokenAddr].symbol],
       tradeNumber: data.tradeNumber,
@@ -70,20 +72,39 @@ export const GetStats = async (state, { coinbase, tokens }) => {
   }))
 
   // NOTE: Token market share over 24h
-  let tokenShares_24h = {}
+  const tokenStat24h = {}
   const totalVolume24h = todayTotal.volume24h
   tradeStat.filter(_.isTruthy).forEach(t => {
-    if (!(t.from in tokenShares_24h)) {
-      tokenShares_24h[t.from] = t.volume24h/totalVolume24h * 100
+    if (!(t.fromSymbol in tokenStat24h)) {
+      tokenStat24h[t.fromSymbol] = {
+        volume: t.volume24h,
+        trades: t.tradeNumber,
+        fee: t.totalFee,
+        address: t.fromAddr,
+      }
     } else {
-      tokenShares_24h[t.from] = t.volume24h/totalVolume24h * 100 + tokenShares_24h[t.from]
+      tokenStat24h[t.fromSymbol] = {
+        volume: t.volume24h + tokenStat24h[t.fromSymbol].volume,
+        trades: t.tradeNumber + tokenStat24h[t.fromSymbol].trades,
+        fee: t.totalFee + tokenStat24h[t.fromSymbol].fee,
+        address: t.fromAddr,
+      }
     }
   })
 
-  tokenShares_24h = Object.keys(tokenShares_24h).map(k => ({
-    label: k,
-    value: _.round(tokenShares_24h[k], 0)
+  const chartTokenShares24h = Object.keys(tokenStat24h).map(symbol => ({
+    label: symbol,
+    value: _.round(tokenStat24h[symbol].volume / totalVolume24h * 100, 0)
   })).sort((a, b) => parseInt(a.value, 10) < parseInt(b.value, 10) ? 1 : -1)
+
+  // NOTE: tokenTableData
+  const tokenTableData = Object.keys(tokenStat24h).map(symbol => ({
+    address: tokenStat24h[symbol].address,
+    symbol: symbol,
+    price: 0,
+    trades: tokenStat24h[symbol].trades,
+    volume: _.round(tokenStat24h[symbol].volume, 3),
+  })).sort((a, b) => parseFloat(a.volume) > parseFloat(b.volume) ? -1 : 1)
 
   // NOTE: save all the stats
   const relayerWithStat = {
@@ -92,8 +113,9 @@ export const GetStats = async (state, { coinbase, tokens }) => {
     stat: {
       ...state.user.relayers[coinbase].stat,
       ...todayTotal,
+      tokenTableData,
       tokenShares: {
-        _24h: tokenShares_24h
+        _24h: chartTokenShares24h,
       },
       tomoprice: state.network_info.tomousd,
     }

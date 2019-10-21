@@ -15,7 +15,6 @@ class RelayerStat extends React.Component {
 
   state = {
     tab: TOPICS.orders,
-    loading: true,
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
@@ -28,13 +27,12 @@ class RelayerStat extends React.Component {
 
     const {
       tab,
-      loading,
     } = this.state
 
     const tokenTableData = Object.values(relayer.tokenMap || {})
 
-    const showOrderTable = tab === TOPICS.orders && Boolean(relayer.stat && relayer.stat.orders)
-    const showTokenTable = tab === TOPICS.tokens && Boolean(relayer.stat && relayer.stat.tokenMap)
+    const showOrderTable = tab === TOPICS.orders && Boolean(relayer.stat && relayer.stat.orderTableData)
+    const showTokenTable = tab === TOPICS.tokens && Boolean(relayer.stat && relayer.stat.tokenTableData)
 
     const formattedStat = {
       volume24h: relayer.stat && relayer.stat.volume24h ? `$ ${_.round(relayer.stat.volume24h, 3)}` : 'requesting data',
@@ -68,9 +66,9 @@ class RelayerStat extends React.Component {
             style={{ marginBottom: 20 }}
           />
           <Box className="mt-0" display="flex" justifyContent="center">
-            {loading && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
+            {!showOrderTable && !showTokenTable && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
             {showOrderTable && <OrderTable data={null} />}
-            {showTokenTable && <TokenTable relayer={null} />}
+            {showTokenTable && <TokenTable tokens={relayer.stat.tokenTableData} coinbase={relayer.coinbase} />}
           </Box>
         </Grid>
       </Grid>
