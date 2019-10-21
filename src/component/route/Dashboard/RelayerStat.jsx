@@ -42,11 +42,11 @@ class RelayerStat extends React.Component {
     const showTokenTable = tab === TOPICS.tokens && Boolean(stats[relayer.coinbase])
 
     const formattedStat = {
-      volume24h: relayer.stat.volume24h ? `$ ${_.round(relayer.stat.volume24h, 3)}` : 'requesting data',
+      volume24h: relayer.stat && relayer.stat.volume24h ? `$ ${_.round(relayer.stat.volume24h, 3)}` : 'requesting data',
       // NOTE: if fee too small, format to wei/gwei
-      totalFee: relayer.stat.totalFee ? `${_.round(relayer.stat.totalFee, 3)} TOMO` : 'requesting data',
-      tradeNumber: relayer.stat.tradeNumber,
-      tomoprice: `$ ${_.round(relayer.stat.tomoprice, 3)}`,
+      totalFee: relayer.stat && relayer.stat.totalFee ? `${_.round(relayer.stat.totalFee, 3)} TOMO` : 'requesting data',
+      tradeNumber: relayer.stat && relayer.stat.tradeNumber,
+      tomoprice: relayer.stat && relayer.stat.tomoprice ? `$ ${_.round(relayer.stat.tomoprice, 3)}` : 'requesting data',
     }
 
     return (
