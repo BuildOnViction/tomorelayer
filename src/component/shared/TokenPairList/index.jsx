@@ -49,7 +49,7 @@ class TokenPairList extends React.Component {
 
   makeCheckList = (pairs, pairMapping, value) => {
     const result = Array.from(pairs)
-    const mappingKeys = value.from_tokens.map((from, idx) => `${from}${value.to_tokens[idx]}`)
+    const mappingKeys = value.from_tokens.map((from, idx) => `${from.toLowerCase()}${value.to_tokens[idx].toLowerCase()}`)
     mappingKeys.forEach(key => {
       const pairIndex = pairMapping[key]
 
@@ -195,7 +195,7 @@ export const mapProps = state => {
    * type Pair = {
    *   from: address,
    *   to: address,
-   *   toString: () SYMBOL_A/SYMBOL_B,
+   *   toString: () => SYMBOL_A / SYMBOL_B,
    *   checked: boolean,
    *   toAddrString: () => address-address,
    * }
@@ -216,7 +216,7 @@ export const mapProps = state => {
       to: toToken,
       toString: () => `${fromToken.symbol} / ${toToken.symbol}`,
       checked: false,
-      toAddrString: () => `${fromToken.address}-${toToken.address}`,
+      toAddrString: () => `${fromToken.address.toLowerCase()}-${toToken.address.toLowerCase()}`,
     }))
   })
 
@@ -241,7 +241,7 @@ export const mapProps = state => {
   })
 
   pairs.forEach((p, idx) => {
-    pairMapping[`${p.from.address}${p.to.address}`] = idx
+    pairMapping[`${p.from.address.toLowerCase()}${p.to.address.toLowerCase()}`] = idx
   })
 
   return {
