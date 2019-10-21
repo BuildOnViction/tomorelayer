@@ -44,25 +44,45 @@ export const GetStats = async (state, { coinbase, tokens }) => {
 
   const relayer = state.user.relayers[coinbase]
 
-  let tradeStat = await Promise.all(relayer.from_tokens.map(t => t.toLowerCase()).map(async (fromTokenAddr, idx) => {
+  const tradeStat = await Promise.all(relayer.from_tokens.map(t => t.toLowerCase()).map(async (fromTokenAddr, idx) => {
     const toTokenAddr = relayer.to_tokens[idx].toLowerCase()
     const pairName = tokens[fromTokenAddr].symbol + '%2F' + tokens[toTokenAddr].symbol
     const [error, data] = await wretch(statServiceUrl(pairName)).get().json().then(resp => [null, resp]).catch(t => [t, null])
-    return error || data
+    return error || { ...data, from: tokens[fromTokenAddr].symbol, to: tokens[toTokenAddr].symbol }
   }))
 
-  tradeStat = tradeStat.filter(_.isTruthy).reduce((result, current) => ({
+  // NOTE: summary of today's statistic
+  const todayTotal = tradeStat.filter(_.isTruthy).reduce((result, current) => ({
     volume24h: result.volume24h + current.volume24h,
     tradeNumber: result.tradeNumber + current.tradeNumber,
     totalFee: result.totalFee + current.totalFee,
   }))
+
+  // NOTE: Token market share over 24h
+  let tokenShares_24h = {}
+  const totalVolume24h = todayTotal.volume24h
+  tradeStat.filter(_.isTruthy).forEach(t => {
+    if (!(t.from in tokenShares_24h)) {
+      tokenShares_24h[t.from] = t.volume24h/totalVolume24h * 100
+    } else {
+      tokenShares_24h[t.from] = t.volume24h/totalVolume24h * 100 + tokenShares_24h[t.from]
+    }
+  })
+
+  tokenShares_24h = Object.keys(tokenShares_24h).map(k => ({
+    label: k,
+    value: _.round(tokenShares_24h[k], 0)
+  })).sort((a, b) => parseInt(a.value, 10) < parseInt(b.value, 10) ? 1 : -1)
 
   const relayerWithStat = {
     ...state.user.relayers[coinbase],
     tokenMap: tokens,
     stat: {
       ...state.user.relayers[coinbase].stat,
-      ...tradeStat,
+      ...todayTotal,
+      tokenShares: {
+        _24h: tokenShares_24h
+      },
       tomoprice: state.network_info.tomousd,
     }
   }

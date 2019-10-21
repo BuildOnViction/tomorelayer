@@ -54,7 +54,7 @@ class RelayerStat extends React.Component {
               <VolumeChart data={null} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart data={null} />
+              <TokenChart data={relayer.stat && relayer.stat.tokenShares} />
             </Grid>
           </Grid>
         </Grid>
