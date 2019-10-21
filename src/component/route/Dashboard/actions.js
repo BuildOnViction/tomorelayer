@@ -74,6 +74,7 @@ export const GetStats = async (state, { coinbase, tokens }) => {
     value: _.round(tokenShares_24h[k], 0)
   })).sort((a, b) => parseInt(a.value, 10) < parseInt(b.value, 10) ? 1 : -1)
 
+  // NOTE: save all the stats
   const relayerWithStat = {
     ...state.user.relayers[coinbase],
     tokenMap: tokens,

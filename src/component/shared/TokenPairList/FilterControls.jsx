@@ -154,7 +154,13 @@ export default class FilterControls extends React.Component {
       <FilterControlContainer item container justify="space-evenly" alignItems="center" spacing={3} className="pt-1 pr-1 pl-1">
         <Grid item xs={7}>
           <TabControls value={activeFilter}>
-            <TokenTab key={'ALL'} value={'ALL'} label={'ALL'} className={activeFilter === 'ALL' ? 'selected' : ''} />
+            <TokenTab
+              key={'ALL'}
+              value={'ALL'}
+              label={'ALL'}
+              onClick={this.onTokenTabClick('ALL')}
+              className={activeFilter === 'ALL' ? 'selected' : ''}
+            />
             {quoteTokens.map(token => (
               <TokenTab
                 key={token.symbol}
