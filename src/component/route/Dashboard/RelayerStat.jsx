@@ -34,12 +34,19 @@ class RelayerStat extends React.Component {
     const showOrderTable = tab === TOPICS.orders && Boolean(relayer.stat && relayer.stat.orderTableData)
     const showTokenTable = tab === TOPICS.tokens && Boolean(relayer.stat && relayer.stat.tokenTableData)
 
+    const {
+      volume24h,
+      totalFee,
+      tradeNumber,
+      tomoprice,
+    } = (relayer.stat || {})
+
     const formattedStat = {
-      volume24h: relayer.stat && relayer.stat.volume24h ? `$ ${_.round(relayer.stat.volume24h, 3)}` : 'requesting data',
+      volume24h: volume24h ? `$ ${_.round(volume24h, 3).toLocaleString({ useGrouping: true })}` : 'requesting data',
       // NOTE: if fee too small, format to wei/gwei
-      totalFee: relayer.stat && relayer.stat.totalFee ? `$ ${_.round(relayer.stat.totalFee, 3)}` : 'requesting data',
-      tradeNumber: relayer.stat && relayer.stat.tradeNumber ? relayer.stat.tradeNumber : 'requesting data',
-      tomoprice: relayer.stat && relayer.stat.tomoprice ? `$ ${_.round(relayer.stat.tomoprice, 3)}` : 'requesting data',
+      totalFee: totalFee ? `$ ${_.round(totalFee, 3).toLocaleString({ useGrouping: true })}` : 'requesting data',
+      tradeNumber: tradeNumber ? tradeNumber : 'requesting data',
+      tomoprice: tomoprice ? `$ ${_.round(tomoprice, 3).toLocaleString({ useGrouping: true })}` : 'requesting data',
     }
 
     return (

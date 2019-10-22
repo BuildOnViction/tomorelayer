@@ -80,7 +80,7 @@ const TokenTable = ({ tokens, coinbase }) => {
                 {item.trades}
               </Grid>
               <Grid item xs={5} container justify="center">
-                {parseFloat(item.volume).toLocaleString({ useGrouping: true })}
+                {item.volume.toLocaleString({ useGrouping: true })}
               </Grid>
             </Grid>
           </StyledPaper>

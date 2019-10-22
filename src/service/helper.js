@@ -27,9 +27,10 @@ export const isEmpty = (something) => {
 
 export const isTruthy = (something) => Boolean(something)
 
-export const round = (value, precision) => {
-  const multiplier = 10 ** (precision || 0)
-  return (Math.round(value * multiplier) / multiplier).toFixed(precision)
+export const round = (value, precision = 0) => {
+  const multiplier = 10 ** precision
+  const result = (Math.round(value * multiplier) / multiplier).toFixed(precision)
+  return precision === 0 ? parseInt(result, 10) : parseFloat(result)
 }
 
 export const strEqual = (...args) => {

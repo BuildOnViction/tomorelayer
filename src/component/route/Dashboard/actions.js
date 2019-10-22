@@ -95,7 +95,7 @@ export const GetStats = async (state, { coinbase, tokens }) => {
   const chartTokenShares24h = Object.keys(tokenStat24h).map(symbol => ({
     label: symbol,
     value: _.round(tokenStat24h[symbol].volume / totalVolume24h * 100, 0)
-  })).sort((a, b) => parseInt(a.value, 10) < parseInt(b.value, 10) ? 1 : -1)
+  })).sort((a, b) => a.value < b.value ? 1 : -1)
 
   // NOTE: tokenTableData
   const tokenTableData = Object.keys(tokenStat24h).map(symbol => ({
@@ -104,7 +104,7 @@ export const GetStats = async (state, { coinbase, tokens }) => {
     price: 0,
     trades: tokenStat24h[symbol].trades,
     volume: _.round(tokenStat24h[symbol].volume, 3),
-  })).sort((a, b) => parseFloat(a.volume) > parseFloat(b.volume) ? -1 : 1)
+  })).sort((a, b) => a.volume > b.volume ? -1 : 1)
 
   // NOTE: save all the stats
   const relayerWithStat = {
