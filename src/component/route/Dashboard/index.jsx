@@ -11,6 +11,9 @@ import { GetStats, StoreUnrecognizedTokens } from './actions'
 
 
 class Dashboard extends React.Component {
+  UNIQUE_TOKENS = []
+  FREQUENT_UPDATE = undefined
+
   state = {
     tabValue: 0,
     showFeedback: false,
@@ -23,8 +26,22 @@ class Dashboard extends React.Component {
 
   switchFeedback = () => this.setState({ showFeedback: true })
 
+  createUniqueTokenList = () => {
+    const {
+      match,
+      relayers,
+    } = this.props
+    const coinbase = match.params.coinbase
+    const relayer = relayers[coinbase]
+    this.UNIQUE_TOKENS = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
+    this.UNIQUE_TOKENS = this.UNIQUE_TOKENS
+    return this.UNIQUE_TOKENS
+  }
+
   async componentDidMount() {
-    await this.updateRelayerStat(this.props.match.params.coinbase)
+    this.createUniqueTokenList()
+    await this.updateRelayerStat()
+    this.FREQUENT_UPDATE = setInterval(async () => this.updateRelayerStat(), 5000)
   }
 
   async componentDidUpdate(prevProps) {

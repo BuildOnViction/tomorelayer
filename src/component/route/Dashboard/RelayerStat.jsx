@@ -39,6 +39,7 @@ class RelayerStat extends React.Component {
       totalFee,
       tradeNumber,
       tomoprice,
+      tokenShares,
     } = (relayer.stat || {})
 
     const formattedStat = {
@@ -59,7 +60,7 @@ class RelayerStat extends React.Component {
               <VolumeChart data={null} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart data={relayer.stat && relayer.stat.tokenShares} />
+              <TokenChart data={tokenShares} />
             </Grid>
           </Grid>
         </Grid>

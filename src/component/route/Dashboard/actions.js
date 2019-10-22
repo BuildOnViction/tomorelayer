@@ -131,3 +131,51 @@ export const GetStats = async (state, { coinbase, tokens }) => {
     }
   }
 }
+
+export const getTradePairStat = async (
+  from_tokens = [],
+  to_tokens = [],
+  tokenMap = {},
+  exchangeRates = {},
+  coinbase = ''
+) => {
+
+  if (!from_tokens.length) {
+    return {}
+  }
+
+  const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${pairName}`
+
+  const result = { error: [] }
+
+  const request = from_tokens.map(async (addr, idx) => {
+    const fromAddress = addr.toLowerCase()
+    const toAddress = to_tokens[idx].toLowerCase()
+    const fromSymbol = tokenMap[fromAddress].symbol
+    const toSymbol = tokenMap[toAddress].symbol
+
+    const pairName = fromSymbol + '%2F' + toSymbol
+
+    const [error, data] = await wretch(statServiceUrl(pairName))
+      .get().json()
+      .then(resp => [null, resp])
+      .catch(t => [t, null])
+
+    if (error) {
+      result.error = [ ...result.error, error ]
+    } else {
+      result[fromAddress] = {
+        fromAddress,
+        toAddress,
+        fromSymbol,
+        toSymbol,
+        volume24h: data.volume24h * exchangeRates[toSymbol] + (result[fromAddress] || { volume24h: 0 }).volume24h,
+        totalFee: data.totalFee * exchangeRates[toSymbol] + (result[fromAddress] || { totalFee: 0 }).totalFee,
+        tradeNumber: data.tradeNumber,
+      }
+    }
+  })
+
+  await Promise.all(request)
+  return result
+}
