@@ -24,4 +24,7 @@ if __name__ == "__main__":
     app.blockchain = Blockchain()
     logger.warning('Running on port: %s', options.port)
     app.listen(options.port)
-    IOLoop.current().start()
+    try:
+        IOLoop.current().start()
+    except KeyboardInterrupt:
+        IOLoop.current().stop()
