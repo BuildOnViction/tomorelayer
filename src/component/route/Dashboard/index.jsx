@@ -2,21 +2,31 @@ import React from 'react'
 import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
 import * as _ from 'service/helper'
-import { ERC20TokenInfo as getTokenInfo } from 'service/blockchain'
+// import { ERC20TokenInfo as getTokenInfo } from 'service/blockchain'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
 import FeedBack from './FeedBack'
-import { GetStats, StoreUnrecognizedTokens } from './actions'
+import {
+  StoreUnrecognizedTokens,
+  getTradePairStat,
+} from './actions'
 
 
 class Dashboard extends React.Component {
   UNIQUE_TOKENS = []
-  FREQUENT_UPDATE = undefined
+  TOKEN_MAP = {}
+  INTERVAL_UPDATE = undefined
 
   state = {
     tabValue: 0,
     showFeedback: false,
+    blockStats: {
+      volume24h: 'requesting data',
+      totalFee: 'requesting data',
+      tradeNumber: 'requesting data',
+      tomoprice: 'requesting data',
+    },
   }
 
   switchTab = (_, tabValue) => this.setState({
@@ -30,18 +40,22 @@ class Dashboard extends React.Component {
     const {
       match,
       relayers,
+      Tokens,
     } = this.props
     const coinbase = match.params.coinbase
     const relayer = relayers[coinbase]
     this.UNIQUE_TOKENS = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
-    this.UNIQUE_TOKENS = this.UNIQUE_TOKENS
-    return this.UNIQUE_TOKENS
+    this.TOKEN_MAP = Tokens.reduce((map, tk) => ({
+      ...map,
+      [tk.symbol]: tk,
+      [tk.address.toLowerCase()]: tk,
+    }), {})
   }
 
   async componentDidMount() {
     this.createUniqueTokenList()
     await this.updateRelayerStat()
-    this.FREQUENT_UPDATE = setInterval(async () => this.updateRelayerStat(), 5000)
+    this.INTERVAL_UPDATE = setInterval(async () => this.updateRelayerStat(), 10000)
   }
 
   async componentDidUpdate(prevProps) {
@@ -59,35 +73,53 @@ class Dashboard extends React.Component {
     const tokensUpdated = Tokens.length !== prevTokens.length
 
     if (coinbaseChanged || tokensUpdated) {
-      await this.updateRelayerStat(this.props.match.params.coinbase)
+      await this.updateRelayerStat()
     }
   }
 
-  async updateRelayerStat(coinbase) {
+  componentWillUnmount() {
+    if (this.INTERVAL_UPDATE) {
+      clearInterval(this.INTERVAL_UPDATE)
+    }
+  }
+
+  async updateRelayerStat() {
     const {
-      Tokens,
       relayers,
+      match,
+      exchangeRates,
     } = this.props
 
+    const coinbase = match.params.coinbase
     const relayer = relayers[coinbase]
-    const tokenMap = relayer.tokenMap || {}
 
-    if (_.isEmpty(tokenMap)) {
-      const uniqueTokens = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
-      const unrecognizedTokens = uniqueTokens.filter(addr => !Tokens.find(t => _.strEqual(t.address, addr)))
+    const stat = await getTradePairStat(
+      relayer.from_tokens,
+      relayer.to_tokens,
+      this.TOKEN_MAP,
+      exchangeRates,
+      coinbase,
+    )
 
-      // NOTE: check for any remaining unrecognized tokens, get their Meta and save to Database first
-      if (!_.isEmpty(unrecognizedTokens)) {
-        const newTokensInfo = await Promise.all(unrecognizedTokens.map(getTokenInfo))
-        return this.props.StoreUnrecognizedTokens(newTokensInfo)
-      }
+    // NOTE: summary of 24h stat
+    const summaryStat24h = relayer.from_tokens.reduce((acc, addr) => ({
+      volume24h: (acc.volume24h || 0) + stat[addr.toLowerCase()].volume24h,
+      totalFee: (acc.totalFee || 0) + stat[addr.toLowerCase()].totalFee,
+      tradeNumber: (acc.tradeNumber || 0) + stat[addr.toLowerCase()].tradeNumber,
+      tomoprice: exchangeRates.TOMO,
+    }))
 
-      uniqueTokens.forEach(t => {
-        tokenMap[t] = Tokens.find(item => _.strEqual(item.address, t))
-      })
+    const blockStats = {
+      volume24h: `$ ${_.round(summaryStat24h.volume24h, 3).toLocaleString({ useGrouping: true })}`,
+      // NOTE: if fee too small, format to wei/gwei
+      totalFee: `$ ${_.round(summaryStat24h.totalFee, 3).toLocaleString({ useGrouping: true })}`,
+      tradeNumber: summaryStat24h.tradeNumber,
+      tomoprice: `$ ${_.round(summaryStat24h.tomoprice, 3).toLocaleString({ useGrouping: true })}`,
     }
 
-    return this.props.GetStats({ coinbase, tokens: tokenMap })
+    console.log('Updating...', blockStats)
+
+    this.setState({ blockStats })
   }
 
   render() {
@@ -98,6 +130,7 @@ class Dashboard extends React.Component {
     } = this.props
 
     const {
+      blockStats,
       tabValue,
       showFeedback,
     } = this.state
@@ -112,7 +145,7 @@ class Dashboard extends React.Component {
           switchFeedback={this.switchFeedback}
         />
         <Box className="mt-2">
-          {!showFeedback && tabValue === 0 && <RelayerStat relayer={relayer} />}
+          {!showFeedback && tabValue === 0 && <RelayerStat relayer={{ ...relayer, blockStats }} />}
           {!showFeedback && tabValue === 1 && <RelayerConfig relayer={relayer} />}
           {this.state.showFeedback && <FeedBack />}
         </Box>
@@ -124,10 +157,13 @@ class Dashboard extends React.Component {
 const mapProps = state => ({
   relayers: state.user.relayers,
   Tokens: state.Tokens,
+  exchangeRates: {
+    TOMO: state.network_info.tomousd,
+    BTC: state.network_info.btcusd,
+  }
 })
 
 const actions = {
-  GetStats,
   StoreUnrecognizedTokens,
 }
 

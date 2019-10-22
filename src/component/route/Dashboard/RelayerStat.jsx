@@ -34,33 +34,17 @@ class RelayerStat extends React.Component {
     const showOrderTable = tab === TOPICS.orders && Boolean(relayer.stat && relayer.stat.orderTableData)
     const showTokenTable = tab === TOPICS.tokens && Boolean(relayer.stat && relayer.stat.tokenTableData)
 
-    const {
-      volume24h,
-      totalFee,
-      tradeNumber,
-      tomoprice,
-      tokenShares,
-    } = (relayer.stat || {})
-
-    const formattedStat = {
-      volume24h: volume24h ? `$ ${_.round(volume24h, 3).toLocaleString({ useGrouping: true })}` : 'requesting data',
-      // NOTE: if fee too small, format to wei/gwei
-      totalFee: totalFee ? `$ ${_.round(totalFee, 3).toLocaleString({ useGrouping: true })}` : 'requesting data',
-      tradeNumber: tradeNumber ? tradeNumber : 'requesting data',
-      tomoprice: tomoprice ? `$ ${_.round(tomoprice, 3).toLocaleString({ useGrouping: true })}` : 'requesting data',
-    }
-
     return (
       <Grid container spacing={4}>
         <RelayerHeader relayer={relayer} />
         <Grid item xs={12} container direction="column">
-          <BlockStat data={formattedStat} />
+          <BlockStat data={relayer.blockStats} />
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
               <VolumeChart data={null} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <TokenChart data={tokenShares} />
+              <TokenChart data={null} />
             </Grid>
           </Grid>
         </Grid>
