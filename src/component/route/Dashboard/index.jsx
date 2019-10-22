@@ -27,6 +27,8 @@ class Dashboard extends React.Component {
       tradeNumber: 'requesting data',
       tomoprice: 'requesting data',
     },
+    tokenChartData: {},
+    tokenTableData: [],
   }
 
   switchTab = (_, tabValue) => this.setState({
@@ -117,9 +119,20 @@ class Dashboard extends React.Component {
       tomoprice: `$ ${_.round(summaryStat24h.tomoprice, 3).toLocaleString({ useGrouping: true })}`,
     }
 
-    console.log('Updating...', blockStats)
+    // NOTE: tokenn data:
+    const tokenData = relayer.from_tokens.map(tk => ({
+      label: this.TOKEN_MAP[tk.toLowerCase()].symbol,
+      value: _.round(stat[tk.toLowerCase()].volume24h * 100 / summaryStat24h.volume24h),
+    })).sort((a, b) => a.value > b.value ? -1 : 1)
 
-    this.setState({ blockStats })
+    console.log(tokenData)
+    this.setState({
+      blockStats,
+      tokenChartData: {
+        ...this.state.tokenChartData,
+        _24h: tokenData,
+      }
+    })
   }
 
   render() {
@@ -133,6 +146,7 @@ class Dashboard extends React.Component {
       blockStats,
       tabValue,
       showFeedback,
+      tokenChartData,
     } = this.state
 
     const relayer = relayers[match.params.coinbase] || relayers[0]
@@ -145,7 +159,7 @@ class Dashboard extends React.Component {
           switchFeedback={this.switchFeedback}
         />
         <Box className="mt-2">
-          {!showFeedback && tabValue === 0 && <RelayerStat relayer={{ ...relayer, blockStats }} />}
+          {!showFeedback && tabValue === 0 && <RelayerStat relayer={{ ...relayer, blockStats, tokenChartData }} />}
           {!showFeedback && tabValue === 1 && <RelayerConfig relayer={relayer} />}
           {this.state.showFeedback && <FeedBack />}
         </Box>

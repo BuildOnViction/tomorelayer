@@ -9,6 +9,7 @@ import {
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import { isEmpty } from 'service/helper'
 import {
   TOKEN_CHART as tokChartCfg,
 } from './charts.config'
@@ -65,15 +66,19 @@ export default class TokenChart extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.data) {
-      return
+    if (this.props.data && this.props.data._24h) {
+      this.initChart()
     }
-    this.initChart()
   }
 
   componentDidUpdate(prevProps) {
-    const shouldInitChart = !Boolean(prevProps.data) && Boolean(this.props.data)
-    return shouldInitChart ? this.initChart() : undefined
+    const newData = Boolean((this.props.data._24h || []).length)
+    if (newData && !this.TOKEN_CHART) {
+      return this.initChart()
+    }
+    if (newData && this.TOKEN_CHART) {
+      return this.updateChart()
+    }
   }
 
   initChart() {
@@ -100,6 +105,10 @@ export default class TokenChart extends React.Component {
       period,
     } = this.state
 
+    const {
+      data,
+    } = this.props
+
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={2}>
@@ -114,7 +123,7 @@ export default class TokenChart extends React.Component {
             </PeriodTabs>
           </Grid>
           <Grid item sm={12} style={{ height: 180 }} container justify="center" alignItems="center">
-            {!Boolean(this.props.data) ? (
+            {isEmpty(data) ? (
               <CircularProgress
                 style={{ height: 50, width: 50 }}
               />
