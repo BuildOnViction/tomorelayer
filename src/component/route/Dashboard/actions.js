@@ -177,5 +177,8 @@ export const getTradePairStat = async (
   })
 
   await Promise.all(request)
+  if (!result.error.length) {
+    delete result['error']
+  }
   return result
 }

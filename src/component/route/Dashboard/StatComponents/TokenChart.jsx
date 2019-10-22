@@ -94,7 +94,11 @@ export default class TokenChart extends React.Component {
   }
 
   updateChart() {
-
+    const period = `_${this.state.period}`
+    const data = this.props.data[period].slice(0, 6)
+    this.TOKEN_CHART.data.labels = data.map(t => t.label)
+    this.TOKEN_CHART.data.datasets[0].data = data.map(t => t.value)
+    this.TOKEN_CHART.update({ duration: 0 })
   }
 
   changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })

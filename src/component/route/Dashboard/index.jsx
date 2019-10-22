@@ -104,7 +104,8 @@ class Dashboard extends React.Component {
     )
 
     // NOTE: summary of 24h stat
-    const summaryStat24h = relayer.from_tokens.reduce((acc, addr) => ({
+    const uniqueFromTokens = _.unique(relayer.from_tokens)
+    const summaryStat24h = uniqueFromTokens.reduce((acc, addr) => ({
       volume24h: (acc.volume24h || 0) + stat[addr.toLowerCase()].volume24h,
       totalFee: (acc.totalFee || 0) + stat[addr.toLowerCase()].totalFee,
       tradeNumber: (acc.tradeNumber || 0) + stat[addr.toLowerCase()].tradeNumber,
@@ -120,12 +121,11 @@ class Dashboard extends React.Component {
     }
 
     // NOTE: tokenn data:
-    const tokenData = relayer.from_tokens.map(tk => ({
+    const tokenData = uniqueFromTokens.map(tk => ({
       label: this.TOKEN_MAP[tk.toLowerCase()].symbol,
       value: _.round(stat[tk.toLowerCase()].volume24h * 100 / summaryStat24h.volume24h),
     })).sort((a, b) => a.value > b.value ? -1 : 1)
 
-    console.log(tokenData)
     this.setState({
       blockStats,
       tokenChartData: {
