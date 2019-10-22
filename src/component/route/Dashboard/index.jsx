@@ -120,18 +120,33 @@ class Dashboard extends React.Component {
       tomoprice: `$ ${_.round(summaryStat24h.tomoprice, 3).toLocaleString({ useGrouping: true })}`,
     }
 
-    // NOTE: tokenn data:
+    // NOTE: preparing visual data
     const tokenData = uniqueFromTokens.map(tk => ({
       label: this.TOKEN_MAP[tk.toLowerCase()].symbol,
+      // NOTE: value is actually percentage of the token'share used in Token Chart
       value: _.round(stat[tk.toLowerCase()].volume24h * 100 / summaryStat24h.volume24h),
-    })).sort((a, b) => a.value > b.value ? -1 : 1)
+      // NOTE: the remaining keys are used in Token Table
+      address: tk,
+      symbol: this.TOKEN_MAP[tk.toLowerCase()].symbol,
+      volume: _.round(stat[tk.toLowerCase()].volume24h, 3),
+      trades: stat[tk.toLowerCase()].tradeNumber,
+      // NOTE: price not calculated yet
+      price: 0,
+    })).sort((a, b) => {
+      if (a.value > b.value) {
+        return -1
+      }
+
+      return a.volume > b.volume ? -1 : 1
+    })
 
     this.setState({
       blockStats,
       tokenChartData: {
         ...this.state.tokenChartData,
         _24h: tokenData,
-      }
+      },
+      tokenTableData: tokenData,
     })
   }
 
@@ -147,9 +162,17 @@ class Dashboard extends React.Component {
       tabValue,
       showFeedback,
       tokenChartData,
+      tokenTableData,
     } = this.state
 
     const relayer = relayers[match.params.coinbase] || relayers[0]
+
+    const statObject = {
+      ...relayer,
+      blockStats,
+      tokenChartData,
+      tokenTableData,
+    }
 
     return (
       <Box style={{ transform: 'translateY(-30px)' }}>
@@ -159,7 +182,7 @@ class Dashboard extends React.Component {
           switchFeedback={this.switchFeedback}
         />
         <Box className="mt-2">
-          {!showFeedback && tabValue === 0 && <RelayerStat relayer={{ ...relayer, blockStats, tokenChartData }} />}
+          {!showFeedback && tabValue === 0 && <RelayerStat relayer={statObject} />}
           {!showFeedback && tabValue === 1 && <RelayerConfig relayer={relayer} />}
           {this.state.showFeedback && <FeedBack />}
         </Box>
