@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, CircularProgress, Grid } from '@material-ui/core'
+import { Box, Grid } from '@material-ui/core'
 import * as _ from 'service/helper'
 import TableControl from 'component/shared/TableControl'
 import RelayerHeader from './StatComponents/RelayerHeader'
@@ -15,9 +15,14 @@ class RelayerStat extends React.Component {
 
   state = {
     tab: TOPICS.orders,
+    totalOrders: 0,
   }
 
   onTabChange = (_, tab) => this.setState({ tab: TOPICS[tab] })
+
+  updateTotalOrders = totalOrders => {
+    this.setState({ totalOrders })
+  }
 
   render() {
 
@@ -27,11 +32,10 @@ class RelayerStat extends React.Component {
 
     const {
       tab,
+      totalOrders,
     } = this.state
 
-    const tokenTableData = Object.values(relayer.tokenMap || {})
-
-    const showOrderTable = tab === TOPICS.orders && !_.isEmpty(relayer.orderTableData)
+    const showOrderTable = tab === TOPICS.orders
     const showTokenTable = tab === TOPICS.tokens && !_.isEmpty(relayer.tokenTableData)
 
     return (
@@ -54,12 +58,11 @@ class RelayerStat extends React.Component {
             tabValue={TOPICS.getIndex(tab)}
             onTabChange={this.onTabChange}
             topics={TOPICS.values}
-            textMask={['Orders', `Tokens (${tokenTableData.length})`]}
+            textMask={[`Orders (${totalOrders})`, `Tokens (${relayer.tokenTableData.length})`]}
             style={{ marginBottom: 20 }}
           />
           <Box className="mt-0" display="flex" justifyContent="center">
-            {!showOrderTable && !showTokenTable && <CircularProgress style={{ width: 50, height: 50, margin: '10em auto' }}/>}
-            {showOrderTable && <OrderTable data={null} />}
+            {showOrderTable && <OrderTable coinbase={relayer.coinbase} updateTotal={this.updateTotalOrders} />}
             {showTokenTable && <TokenTable tokens={relayer.tokenTableData} coinbase={relayer.coinbase} />}
           </Box>
         </Grid>

@@ -182,3 +182,21 @@ export const getTradePairStat = async (
   }
   return result
 }
+
+
+export const getOrdersByCoinbase = async (
+  coinbase = '',
+  page = 1,
+  limit = 10
+) => {
+  const url = `https://scan.devnet.tomochain.com/api/trades/listByDex/${coinbase}`
+  const [error, response] = await wretch(url).query({ page, limit })
+                                    .get().json()
+                                    .then(r => [null, r])
+                                    .catch(e => [e, null])
+  if (error) {
+    return null
+  }
+
+  return response
+}

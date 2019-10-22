@@ -12,6 +12,7 @@ import {
 import { withStyles } from '@material-ui/core/styles'
 import { round } from 'service/helper'
 import Paginator from 'component/shared/Paginator'
+import { getOrdersByCoinbase } from '../actions'
 
 const StyledPaper = withStyles(theme => ({
   root: {
@@ -41,24 +42,40 @@ class OrderTable extends React.Component {
 
   state = {
     currentPage: 1,
+    items: [],
+    pages: 0,
+    perPage: 10,
+    total: 0,
+    error: false,
+    loading: true,
+  }
+
+  async componentDidMount() {
+    this.setExactPage(1)
   }
 
   setPage = num => () => this.setState({ currentPage: this.state.currentPage + num })
 
   setExactPage = async page => {
-    if (page * 10 > this.props.data.items.length) {
-      const apiPage = Math.ceil(page * 10 / 20)
-      await this.props.requestData(apiPage)
+    const result = await getOrdersByCoinbase(this.props.coinbase, page, this.state.perPage)
+    if (!result) {
+      return this.setState({ error: true, loading: false })
     }
-    this.setState({ currentPage: page })
+    this.props.updateTotal(result.total)
+    this.setState({ ...result, loading: false })
   }
 
   render() {
 
-    const { data } = this.props
-    const { currentPage } = this.state
+    const {
+      currentPage,
+      items,
+      perPage,
+      pages,
+      loading,
+    } = this.state
 
-    if (!data || !data.items) {
+    if (loading) {
       return (
         <Grid container direction="column" justify="center">
           <CircularProgress style={{ width: 80, height: 80, margin: '10em auto' }} />
@@ -66,13 +83,11 @@ class OrderTable extends React.Component {
       )
     }
 
-    const slicedData = data.items[currentPage]
-
-    if (!slicedData.length) {
+    if (!loading && !items.length) {
       return (
         <Box>
           <Typography variant="body2" className="mt-3">
-            No data to show yet...
+            No data to show...
           </Typography>
         </Box>
       )
@@ -82,14 +97,14 @@ class OrderTable extends React.Component {
       <Grid container direction="column">
         <Hidden xsDown>
           <Grid item container className="mb-1" className="p-1">
-            <Grid sm="1" container justify="center">#</Grid>
-            <Grid sm="3" container justify="center">Date</Grid>
-            <Grid sm="3" container justify="center">Make Fee</Grid>
-            <Grid sm="3" container justify="center">Take Fee</Grid>
-            <Grid sm="2" container justify="center">Amount</Grid>
+            <Grid item sm={1} container justify="center">#</Grid>
+            <Grid item sm={3} container justify="center">Date</Grid>
+            <Grid item sm={3} container justify="center">Make Fee</Grid>
+            <Grid item sm={3} container justify="center">Take Fee</Grid>
+            <Grid item sm={2} container justify="center">Amount</Grid>
           </Grid>
         </Hidden>
-        {slicedData.map((item, index) => (
+        {items.map((item, index) => (
           <Grid item key={index}>
             <StyledPaper elevation={0}>
               <Grid container>
@@ -113,13 +128,13 @@ class OrderTable extends React.Component {
           </Grid>
         ))}
         <Paginator
-          rowsPerPage={10}
+          rowsPerPage={perPage}
           activePage={currentPage}
-          totalPages={data.total}
-          onNext={this.setPage(1)}
-          onPrev={this.setPage(-1)}
+          totalPages={pages}
+          onNext={() => this.setExactPage(currentPage + 1)}
+          onPrev={() => this.setExactPage(currentPage - 1)}
           onBegin={() => this.setExactPage(1)}
-          onEnd={() => this.setExactPage(Math.ceil(data.total / 10))}
+          onEnd={() => this.setExactPage(pages)}
           onPageClick={this.setExactPage}
         />
       </Grid>
