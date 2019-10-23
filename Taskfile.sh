@@ -53,7 +53,7 @@ function dep {
                   then
                       echo ">> SWAPPING BACKEND CODE"
                       # TODO: unconfirmed!
-                      scp ./deploy/supervisord.conf tor:/srv/www/tomorelayer/deploy/
+                      # scp ./deploy/supervisord.conf tor:/srv/www/tomorelayer/deploy/
                       scp ./.env.production tor:/srv/www/tomorelayer/
                       scp -r ./backend tor:/srv/www/tomorelayer/
                       ssh tor "supervisorctl reread"
