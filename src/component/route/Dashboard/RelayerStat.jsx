@@ -45,7 +45,7 @@ class RelayerStat extends React.Component {
           <BlockStat data={relayer.blockStats} />
           <Grid item className="mt-2" container spacing={4}>
             <Grid item xs={12} md={7}>
-              <VolumeChart data={null} />
+              <VolumeChart data={relayer.volumeChartData} />
             </Grid>
             <Grid item xs={12} md={5}>
               <TokenChart data={relayer.tokenChartData} />

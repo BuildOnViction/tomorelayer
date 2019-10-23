@@ -12,7 +12,7 @@ import {
 import { withStyles } from '@material-ui/core/styles'
 import { round } from 'service/helper'
 import Paginator from 'component/shared/Paginator'
-import { getOrdersByCoinbase } from '../actions'
+import { getTradesByCoinbase } from '../actions'
 
 const StyledPaper = withStyles(theme => ({
   root: {
@@ -57,7 +57,7 @@ class OrderTable extends React.Component {
   setPage = num => () => this.setState({ currentPage: this.state.currentPage + num })
 
   setExactPage = async page => {
-    const result = await getOrdersByCoinbase(this.props.coinbase, page, this.state.perPage)
+    const result = await getTradesByCoinbase(this.props.coinbase, page, this.state.perPage)
     if (!result) {
       return this.setState({ error: true, loading: false })
     }

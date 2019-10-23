@@ -1,5 +1,6 @@
 import wretch from 'wretch'
 import * as _ from 'service/helper'
+import * as d from 'date-fns'
 import { createTokens } from 'service/backend'
 
 export const UpdateRelayer = async (state, relayer) => {
@@ -137,7 +138,8 @@ export const getTradePairStat = async (
   to_tokens = [],
   tokenMap = {},
   exchangeRates = {},
-  coinbase = ''
+  coinbase = '',
+  query = {},
 ) => {
 
   if (!from_tokens.length) {
@@ -157,9 +159,13 @@ export const getTradePairStat = async (
     const pairName = fromSymbol + '%2F' + toSymbol
 
     const [error, data] = await wretch(statServiceUrl(pairName))
-      .get().json()
+      .query(query).get().json()
       .then(resp => [null, resp])
       .catch(t => [t, null])
+
+    if (!error && !data) {
+      return
+    }
 
     if (error) {
       result.error = [ ...result.error, error ]
@@ -184,19 +190,39 @@ export const getTradePairStat = async (
 }
 
 
-export const getOrdersByCoinbase = async (
+export const getTradesByCoinbase = async (
   coinbase = '',
   page = 1,
   limit = 10
 ) => {
   const url = `https://scan.devnet.tomochain.com/api/trades/listByDex/${coinbase}`
   const [error, response] = await wretch(url).query({ page, limit })
-                                    .get().json()
-                                    .then(r => [null, r])
-                                    .catch(e => [e, null])
+                                             .get().json()
+                                             .then(r => [null, r])
+                                             .catch(e => [e, null])
   if (error) {
     return null
   }
 
   return response
+}
+
+
+export const getVolumesOverTime = async (
+  from_tokens = [],
+  to_tokens = [],
+  tokenMap = {},
+  exchangeRates = {},
+  coinbase,
+) => {
+  const seq = _.sequence(0, 30)
+  const dates = seq.map(n => d.format(d.subDays(Date.now(), n), "YYYY-MM-DD")).reverse()
+  const requests = dates.map(async date => {
+    const result = await getTradePairStat(from_tokens, to_tokens, tokenMap, exchangeRates, coinbase, { date })
+    const value = Object.keys(result).reduce((sum, t) => sum + result[t].volume24h * exchangeRates[result[t].toSymbol], 0)
+    return { label: d.format(date, "MMMM DD"), value: _.round(value) }
+  })
+
+  const result = await Promise.all(requests)
+  return result
 }

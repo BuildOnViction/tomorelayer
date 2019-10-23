@@ -8,7 +8,6 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
-import datefns from 'date-fns'
 import {
   VOLUME_CHART as volChartCfg,
 } from './charts.config'
@@ -73,7 +72,7 @@ const TopicTab = withStyles(theme => ({
 
 
 const TimePeriod = {
-  _24h: '24h',
+  // _24h: '24h',
   _7d: '7d',
   _1M: '1M',
 }
@@ -89,21 +88,18 @@ export default class VolumeChart extends React.Component {
   FILLS_CHART = undefined
 
   state = {
-    period: TimePeriod._24h,
+    period: TimePeriod._7d,
     topic: Topic._volume,
   }
 
-  componentDidMount() {
-    if (this.props.loading) {
-      return
+  componentDidUpdate() {
+    const shouldInitChart = this.props.data._7d && !this.VOLUME_CHART
+    if (shouldInitChart) {
+      return shouldInitChart ? this.initChart() : undefined
     }
+  }
 
-    // MOCK
-    const mockdata = () => Array.from({ length: 30 }).fill().map((_, idx) => ({
-      label: datefns.format(datefns.addDays(datefns.subDays(Date.now(), 100), idx), 'MMMM DD'),
-      value: 1,
-    }))
-
+  initChart() {
     const renderChart = (chartData = [], chartId) => {
 
       const ctx = document.getElementById(chartId).getContext('2d')
@@ -121,12 +117,18 @@ export default class VolumeChart extends React.Component {
       return chart
     }
 
-    this.VOLUME_CHART = renderChart(this.props.volumeData || mockdata(), 'volume-chart')
-    this.FILLS_CHART = renderChart(this.props.fillData || mockdata(), 'fills-chart')
-
+    this.VOLUME_CHART = renderChart(this.props.data._7d, 'volume-chart')
+    // this.FILLS_CHART = renderChart(this.props.fillData || mockdata(), 'fills-chart')
   }
 
-  changeTimePeriod = (_, periodIndex) => this.setState({ period: Object.values(TimePeriod)[periodIndex] })
+  changeTimePeriod = (_, periodIndex) => {
+    const period = Object.values(TimePeriod)[periodIndex]
+    this.setState({ period })
+    const data = this.props.data[`_${period}`]
+    this.VOLUME_CHART.data.labels = data.map(t => t.label)
+    this.VOLUME_CHART.data.datasets[0].data = data.map(t => t.value)
+    this.VOLUME_CHART.update({ duration: 0 })
+  }
 
   changeTopic = (_, topicIndex) => this.setState({ topic: Object.values(Topic)[topicIndex] })
 
@@ -136,9 +138,7 @@ export default class VolumeChart extends React.Component {
       topic,
     } = this.state
 
-    const {
-      loading,
-    } = this.props
+    const loading = !Boolean(this.props.data._7d)
 
     return (
       <StyledPaper elevation={0} >
@@ -146,12 +146,11 @@ export default class VolumeChart extends React.Component {
           <Grid item sm={6} xs={4}>
             <PeriodTabs value={Object.values(Topic).indexOf(topic)} onChange={this.changeTopic}>
               <TopicTab label="Volume" />
-              <TopicTab label="Fills" />
+              {/* <TopicTab label="Fills" /> */}
             </PeriodTabs>
           </Grid>
           <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
-              <PeriodTab label="24h" disabled={loading} />
               <PeriodTab label="7d" disabled={loading} />
               <PeriodTab label="1M" disabled={loading} />
             </PeriodTabs>

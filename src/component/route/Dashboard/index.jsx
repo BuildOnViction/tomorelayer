@@ -10,6 +10,7 @@ import FeedBack from './FeedBack'
 import {
   StoreUnrecognizedTokens,
   getTradePairStat,
+  getVolumesOverTime,
 } from './actions'
 
 
@@ -28,6 +29,7 @@ class Dashboard extends React.Component {
       tomoprice: 'requesting data',
     },
     tokenChartData: {},
+    volumeChartData: {},
     tokenTableData: [],
   }
 
@@ -105,6 +107,19 @@ class Dashboard extends React.Component {
       coinbase,
     )
 
+    const volumeChartData = { ...this.state.volumeChartData }
+    if (!this.state.volumeChartData._7d) {
+      const volumeStat = await getVolumesOverTime(
+        relayer.from_tokens,
+        relayer.to_tokens,
+        this.TOKEN_MAP,
+        exchangeRates,
+        coinbase,
+      )
+      volumeChartData._7d = volumeStat.slice(23)
+      volumeChartData._1M = volumeStat
+    }
+
     // NOTE: summary of 24h stat
     const uniqueFromTokens = _.unique(relayer.from_tokens)
     const summaryStat24h = uniqueFromTokens.reduce((acc, addr) => ({
@@ -138,9 +153,9 @@ class Dashboard extends React.Component {
       if (a.value > b.value) {
         return -1
       }
-
       return a.volume > b.volume ? -1 : 1
     })
+
 
     this.setState({
       blockStats,
@@ -148,6 +163,7 @@ class Dashboard extends React.Component {
         ...this.state.tokenChartData,
         _24h: tokenData,
       },
+      volumeChartData,
       tokenTableData: tokenData,
     })
   }
@@ -165,6 +181,7 @@ class Dashboard extends React.Component {
       showFeedback,
       tokenChartData,
       tokenTableData,
+      volumeChartData,
     } = this.state
 
     const relayer = relayers[match.params.coinbase] || relayers[0]
@@ -174,6 +191,7 @@ class Dashboard extends React.Component {
       blockStats,
       tokenChartData,
       tokenTableData,
+      volumeChartData,
     }
 
     return (
