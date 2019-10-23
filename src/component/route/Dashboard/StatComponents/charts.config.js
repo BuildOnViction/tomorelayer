@@ -1,3 +1,5 @@
+import { bilformat } from 'service/helper'
+
 export const VOLUME_CHART = (data, bgFill, lineFill) => ({
   type: 'line',
   data: {
@@ -32,7 +34,7 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
       mode: 'nearest',
       displayColors: false,
       callbacks: {
-        label: tooltipItem => `$ ${tooltipItem.value}`
+        label: tooltipItem => bilformat(tooltipItem.value, '$')
       }
     },
     scales: {
@@ -49,10 +51,10 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
           },
           ticks: {
             beginAtZero: true,
-            maxTicksLimit: 4,
-            stepSize: 10,
+            maxTicksLimit: 5,
             padding: 20,
             fontColor: '#7473A6',
+            callback: value => bilformat(value, '$')
           },
         },
       ],

@@ -219,8 +219,8 @@ export const getVolumesOverTime = async (
   const dates = seq.map(n => d.format(d.subDays(Date.now(), n), "YYYY-MM-DD")).reverse()
   const requests = dates.map(async date => {
     const result = await getTradePairStat(from_tokens, to_tokens, tokenMap, exchangeRates, coinbase, { date })
-    const value = Object.keys(result).reduce((sum, t) => sum + result[t].volume24h * exchangeRates[result[t].toSymbol], 0)
-    return { label: d.format(date, "MMMM DD"), value: _.round(value) }
+    const value = Object.keys(result).reduce((sum, t) => sum + result[t].volume24h, 0)
+    return { label: d.format(date, "MMM DD"), value: _.round(value) }
   })
 
   const result = await Promise.all(requests)
