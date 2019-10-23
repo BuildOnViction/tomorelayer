@@ -94,7 +94,7 @@ class OrderTable extends React.Component {
     }
 
     return (
-      <Grid container direction="column">
+      <Grid container direction="column" style={{ minHeight: '700px' }}>
         <Hidden xsDown>
           <Grid item container className="mb-1" className="p-1">
             <Grid item sm={1} container justify="center">#</Grid>
