@@ -121,16 +121,18 @@ class Dashboard extends React.Component {
     }
 
     // NOTE: summary of 24h stat
-    const uniqueFromTokens = _.unique(relayer.from_tokens)
-    const summaryStat24h = uniqueFromTokens.reduce((acc, addr) => ({
-      volume24h: (acc.volume24h || 0) + stat[addr.toLowerCase()].volume24h,
-      totalFee: (acc.totalFee || 0) + stat[addr.toLowerCase()].totalFee,
-      tradeNumber: (acc.tradeNumber || 0) + stat[addr.toLowerCase()].tradeNumber,
+    const uniqueFromTokens = _.unique(relayer.from_tokens).map(t => t.toLowerCase())
+    const summaryStat24h = uniqueFromTokens.reduce((acc, address) => ({
+      volume24h: (acc.volume24h || 0) + stat[address].volume24h,
+      totalFee: (acc.totalFee || 0) + stat[address].totalFee,
+      tradeNumber: (acc.tradeNumber || 0) + stat[address].tradeNumber,
       tomoprice: exchangeRates.TOMO,
     }))
 
+    const totalVolume24h = summaryStat24h.volume24h
+
     const blockStats = {
-      volume24h: `$ ${_.round(summaryStat24h.volume24h, 3).toLocaleString({ useGrouping: true })}`,
+      volume24h: `$ ${_.round(totalVolume24h, 3).toLocaleString({ useGrouping: true })}`,
       // NOTE: if fee too small, format to wei/gwei
       totalFee: `$ ${_.round(summaryStat24h.totalFee, 3).toLocaleString({ useGrouping: true })}`,
       tradeNumber: summaryStat24h.tradeNumber,
@@ -138,15 +140,15 @@ class Dashboard extends React.Component {
     }
 
     // NOTE: preparing visual data
-    const tokenData = uniqueFromTokens.map(tk => ({
-      label: this.TOKEN_MAP[tk.toLowerCase()].symbol,
+    const tokenData = uniqueFromTokens.map(address => ({
+      label: this.TOKEN_MAP[address].symbol,
       // NOTE: value is actually percentage of the token'share used in Token Chart
-      value: _.round(stat[tk.toLowerCase()].volume24h * 100 / summaryStat24h.volume24h),
+      value: totalVolume24h > 0 ? _.round(stat[address].volume24h * 100 / totalVolume24h) : 0,
       // NOTE: the remaining keys are used in Token Table
-      address: tk,
-      symbol: this.TOKEN_MAP[tk.toLowerCase()].symbol,
-      volume: _.round(stat[tk.toLowerCase()].volume24h, 3),
-      trades: stat[tk.toLowerCase()].tradeNumber,
+      address: address,
+      symbol: this.TOKEN_MAP[address].symbol,
+      volume: _.round(stat[address].volume24h, 3),
+      trades: stat[address].tradeNumber,
       // NOTE: price not calculated yet
       price: 0,
     })).sort((a, b) => {

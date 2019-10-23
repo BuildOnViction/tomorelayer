@@ -113,6 +113,8 @@ export default class TokenChart extends React.Component {
       data,
     } = this.props
 
+    console.log(data)
+
     return (
       <StyledPaper elevation={0} >
         <Grid container alignItems="center" spacing={2}>
