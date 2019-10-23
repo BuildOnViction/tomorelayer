@@ -5,6 +5,7 @@ import {
   Paper,
   Tab,
   Tabs,
+  Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Chart from 'chart.js'
@@ -66,18 +67,22 @@ export default class TokenChart extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.data && this.props.data._24h) {
+    const data = this.props.data
+    if (data && data._24h && data._24h.some(t => t.value > 0)) {
       this.initChart()
     }
   }
 
   componentDidUpdate(prevProps) {
-    const newData = Boolean((this.props.data._24h || []).length)
-    if (newData && !this.TOKEN_CHART) {
-      return this.initChart()
+    if (!this.TOKEN_CHART && prevProps.data !== this.props.data) {
+      const dataNotAllZero = this.props.data._24h.some(t => t.value > 0)
+      return dataNotAllZero ? this.initChart() : undefined
     }
-    if (newData && this.TOKEN_CHART) {
-      return this.updateChart()
+
+    if (this.props.data._24h) {
+      const period = `_${this.state.period}`
+      const data = this.props.data[period]
+      return data.some(t => t.value > 0) ? this.updateChart(data.slice(0, 6)) : undefined
     }
   }
 
@@ -93,9 +98,7 @@ export default class TokenChart extends React.Component {
     this.TOKEN_CHART = new Chart(ctx, config)
   }
 
-  updateChart() {
-    const period = `_${this.state.period}`
-    const data = this.props.data[period].slice(0, 6)
+  updateChart(data) {
     this.TOKEN_CHART.data.labels = data.map(t => t.label)
     this.TOKEN_CHART.data.datasets[0].data = data.map(t => t.value)
     this.TOKEN_CHART.update({ duration: 0 })
@@ -113,7 +116,7 @@ export default class TokenChart extends React.Component {
       data,
     } = this.props
 
-    console.log(data)
+    const allZeroData = data && data._24h && data._24h.every(t => t.value === 0)
 
     return (
       <StyledPaper elevation={0} >
@@ -124,21 +127,12 @@ export default class TokenChart extends React.Component {
           <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
               <PeriodTab label="24h" />
-              <PeriodTab label="7d" />
-              <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
           <Grid item sm={12} style={{ height: 180 }} container justify="center" alignItems="center">
-            {isEmpty(data) ? (
-              <CircularProgress
-                style={{ height: 50, width: 50 }}
-              />
-            ) : (
-              <canvas
-                id="token-chart"
-                style={{ height: '100%', width: '100%' }}
-              />
-            )}
+            {isEmpty(data) && <CircularProgress style={{ height: 50, width: 50 }} />}
+            {allZeroData && <Typography variant="body2">No trade yet</Typography>}
+            {!isEmpty(data) && !allZeroData && <canvas id="token-chart" style={{ height: '100%', width: '100%' }} />}
           </Grid>
         </Grid>
       </StyledPaper>

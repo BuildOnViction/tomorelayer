@@ -87,7 +87,7 @@ class OrderTable extends React.Component {
       return (
         <Box>
           <Typography variant="body2" className="mt-3">
-            No data to show...
+            No data to show
           </Typography>
         </Box>
       )
