@@ -28,7 +28,8 @@ class TokenPairList extends React.Component {
   state = {
     isRefreshing: false,
     isNotifying: false,
-    filterFunction: p => p
+    filterFunction: p => p,
+    selectedOnly: false,
   }
 
   manualNotifyDex = async () => {
@@ -127,6 +128,11 @@ class TokenPairList extends React.Component {
 
   setFilter = func => this.setState({ filterFunction: func })
 
+  setSelectedOnly = () => {
+    debugger
+    this.setState({ selectedOnly: !this.state.selectedOnly })
+  }
+
   onItemChange = pair => e => {
     e.stopPropagation()
     const index = this.props.pairs.indexOf(pair)
@@ -151,14 +157,17 @@ class TokenPairList extends React.Component {
       filterFunction,
       isRefreshing,
       isNotifying,
+      selectedOnly,
     } = this.state
+
+    const combinedFilterFunction = t => selectedOnly ? filterFunction(t) && t.checked : filterFunction(t)
 
     return (
       <Paper elevation={0}>
         <Grid container direction="column">
           {!viewOnly && <FilterControls onChange={this.setFilter} quoteTokens={quoteTokens} />}
-          <PairList>
-            {checkList.filter(filterFunction).map(p => (
+          <PairList setSelectedOnly={this.setSelectedOnly} selectedOnly={selectedOnly}>
+            {checkList.filter(combinedFilterFunction).map(p => (
               <PairItem
                 key={p.toAddrString()}
                 pair={p}

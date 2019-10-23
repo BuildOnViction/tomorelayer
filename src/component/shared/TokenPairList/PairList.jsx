@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   Box,
+  Checkbox,
   List,
   Typography,
 } from '@material-ui/core'
@@ -23,11 +24,36 @@ const ListBoxWrapper = withStyles(theme => ({
   }
 }))(Box)
 
+const SmallCheckbox = withStyles(theme => ({
+  root: {
+    color: theme.palette.maintitle,
+    height: 5,
+    width: 5,
+    marginLeft: 5,
+    opacity: .3,
+    '& svg': {
+      fontSize: '1rem',
+    }
+  },
+  checked: {
+    opacity: 1,
+    '& svg': {
+      color: theme.palette.link,
+    }
+  },
+  disabled: {
+    opacity: 1,
+    color: `${theme.palette.maintitle}33 !important`,
+  }
+}))(Checkbox)
+
 export default class PairList extends React.Component {
 
   render() {
     const {
       children,
+      selectedOnly,
+      setSelectedOnly,
     } = this.props
 
     return (
@@ -40,7 +66,7 @@ export default class PairList extends React.Component {
           </Box>
           <Box>
             <Typography variant="body2">
-              Volume 7 days ($)
+              Selected only <SmallCheckbox disableRipple checked={selectedOnly} onChange={setSelectedOnly} />
             </Typography>
           </Box>
         </ListHeader>
