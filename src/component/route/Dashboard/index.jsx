@@ -48,6 +48,7 @@ class Dashboard extends React.Component {
     } = this.props
     const coinbase = match.params.coinbase
     const relayer = relayers[coinbase]
+    // TODO: detect unrecognize token and save it to DB
     this.UNIQUE_TOKENS = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
     this.TOKEN_MAP = Tokens.reduce((map, tk) => ({
       ...map,
@@ -123,20 +124,24 @@ class Dashboard extends React.Component {
     // NOTE: summary of 24h stat
     const uniqueFromTokens = _.unique(relayer.from_tokens).map(t => t.toLowerCase())
     const summaryStat24h = uniqueFromTokens.reduce((acc, address) => ({
-      volume24h: (acc.volume24h || 0) + stat[address].volume24h,
-      totalFee: (acc.totalFee || 0) + stat[address].totalFee,
-      tradeNumber: (acc.tradeNumber || 0) + stat[address].tradeNumber,
+      volume24h: acc.volume24h + stat[address].volume24h,
+      totalFee: acc.totalFee + stat[address].totalFee,
+      tradeNumber: acc.tradeNumber + stat[address].tradeNumber,
       tomoprice: exchangeRates.TOMO,
-    }))
+    }), {
+      volume24h: 0,
+      totalFee: 0,
+      tradeNumber: 0,
+      tomoprice: exchangeRates.TOMO,
+    })
 
     const totalVolume24h = summaryStat24h.volume24h
-
     const blockStats = {
       volume24h: `$ ${_.round(totalVolume24h, 3).toLocaleString({ useGrouping: true })}`,
       // NOTE: if fee too small, format to wei/gwei
       totalFee: `$ ${_.round(summaryStat24h.totalFee, 3).toLocaleString({ useGrouping: true })}`,
       tradeNumber: summaryStat24h.tradeNumber,
-      tomoprice: `$ ${_.round(summaryStat24h.tomoprice, 3).toLocaleString({ useGrouping: true })}`,
+      tomoprice: `$ ${_.round(summaryStat24h.tomoprice, 3)}`,
     }
 
     // NOTE: preparing visual data
@@ -157,7 +162,6 @@ class Dashboard extends React.Component {
       }
       return a.volume > b.volume ? -1 : 1
     })
-
 
     this.setState({
       blockStats,
