@@ -57,6 +57,8 @@ class Dashboard extends React.Component {
   async componentDidMount() {
     this.createUniqueTokenList()
     await this.updateRelayerStat()
+    // NOTE: to be more informative, we update data every 10 seconds
+    // in the future, user may be able to adjust this updating interval
     this.INTERVAL_UPDATE = setInterval(async () => this.updateRelayerStat(), 10000)
   }
 
