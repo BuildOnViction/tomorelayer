@@ -33,6 +33,25 @@ export const round = (value, precision = 0) => {
   return precision === 0 ? parseInt(result, 10) : parseFloat(result)
 }
 
+export const bilformat = (value, prefix = '') => {
+  /*
+   * format very big value to Billion/Million/Thousand as B/M/K
+   */
+  const unit = {
+    1000000000: 'B',
+    1000000: 'M',
+    1000: 'K',
+  }
+
+  const unitFound = Object.keys(unit).reverse().find(k => value >= parseInt(k, 10))
+  if (!unitFound) {
+    return `${prefix} ${value}`
+  } else {
+    const rounded = round(value / parseInt(unitFound, 10), 2)
+    return `${prefix} ${rounded}${unit[unitFound]}`
+  }
+}
+
 export const strEqual = (...args) => {
   if (args.length >= 2) {
     const stringA = args[0]
