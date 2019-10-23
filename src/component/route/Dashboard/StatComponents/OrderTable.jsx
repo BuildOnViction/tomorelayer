@@ -99,8 +99,8 @@ class OrderTable extends React.Component {
           <Grid item container className="mb-1" className="p-1">
             <Grid item sm={1} container justify="center">#</Grid>
             <Grid item sm={3} container justify="center">Date</Grid>
-            <Grid item sm={3} container justify="center">Make Fee</Grid>
-            <Grid item sm={3} container justify="center">Take Fee</Grid>
+            <Grid item sm={3} container justify="center">Trade Fee</Grid>
+            <Grid item sm={3} container justify="center">Price</Grid>
             <Grid item sm={2} container justify="center">Amount</Grid>
           </Grid>
         </Hidden>
@@ -114,11 +114,11 @@ class OrderTable extends React.Component {
                 <Cell item sm={3} data-label="Date" container justify="center">
                   {format(new Date(item.updatedAt), 'DD MMM  YYYY')}
                 </Cell>
-                <Cell item sm={3} data-label="Maker Fee" container justify="center">
-                  {round(item.makeFee, 5) + ` ${item.pairName.split('/')[0]}`}
+                <Cell item sm={3} data-label="Trade Fee" container justify="center">
+                  {round(item.makeFee, 5) + ` ${item.pairName.split('/')[1]}`}
                 </Cell>
                 <Cell item sm={3} data-label="Taker Fee" container justify="center">
-                  {round(item.takeFee, 5) + ` ${item.pairName.split('/')[1]}`}
+                  {round(item.pricepoint, 5)}
                 </Cell>
                 <Cell item sm={2} data-label="Fee" container justify="center">
                   {round(item.amount, 5)}
