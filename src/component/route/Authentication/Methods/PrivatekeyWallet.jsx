@@ -69,7 +69,6 @@ export default class SoftwareWallet extends React.Component {
               onChange={this.changeSecret}
               type="password"
               error={Boolean(errorAlert)}
-              helperText={errorAlert && <i className="text-alert">{errorAlert}</i>}
               variant="outlined"
               className="mb-1"
               fullWidth

@@ -78,12 +78,6 @@ export default class SoftwareWallet extends React.Component {
       wallet,
     } = this.state
 
-    const HDPathHelpText = (
-      <span className="text-hint">
-        To unlock the wallet, try paths <span className="text-alert">{DEFAULT_HD_PATH}</span> or <span className="text-alert">m/44'/889'/0'/0/0</span>
-      </span>
-    )
-
     if (!wallet) {
       return (
         <Container maxWidth="sm">
@@ -113,7 +107,6 @@ export default class SoftwareWallet extends React.Component {
                 type="text"
                 className="mb-1"
                 error={Boolean(errorAlert)}
-                helperText={errorAlert ? <i className="text-alert">{errorAlert}</i> : HDPathHelpText}
                 variant="outlined"
                 fullWidth
               />
