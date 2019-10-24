@@ -80,7 +80,7 @@ export default class FilterControls extends React.Component {
     SEARCH: str => pair => {
       if (!str || !str.length) {return true}
       const regex = new RegExp(str, 'i')
-      const searchField = `${pair.toString()}${pair.from.name}${pair.to.name}`
+      const searchField = pair.from.name
       return regex.exec(searchField)
     }
   }
@@ -97,7 +97,7 @@ export default class FilterControls extends React.Component {
   componentDidMount() {
     this.props.quoteTokens.forEach(t => {
       const symbol = t.symbol
-      this.FILTER_CONTROLS[symbol] = pair => pair.from.symbol === symbol || pair.to.symbol === symbol
+      this.FILTER_CONTROLS[symbol] = pair => pair.to.symbol === symbol
     })
   }
 
