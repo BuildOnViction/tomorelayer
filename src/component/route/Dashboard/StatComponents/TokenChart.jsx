@@ -83,9 +83,6 @@ export default class TokenChart extends React.Component {
       const period = `_${this.state.period}`
       const data = this.props.data[period]
       const dataNotAllZero = data.some(t => t.value > 0)
-      console.log(this.props.data)
-      console.log(data)
-      console.log(dataNotAllZero)
       return dataNotAllZero ? this.updateChart(data.slice(0, 6)) : undefined
     }
   }
