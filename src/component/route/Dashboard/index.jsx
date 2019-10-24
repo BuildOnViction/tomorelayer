@@ -3,6 +3,7 @@ import { connect } from 'redux-zero/react'
 import { Box } from '@material-ui/core'
 import * as _ from 'service/helper'
 // import { ERC20TokenInfo as getTokenInfo } from 'service/blockchain'
+import { CircleSpinner } from 'component/utility'
 import TabMenu from './TabMenu'
 import RelayerStat from './RelayerStat'
 import RelayerConfig from './RelayerConfig'
@@ -23,10 +24,10 @@ class Dashboard extends React.Component {
     tabValue: 0,
     showFeedback: false,
     blockStats: {
-      volume24h: 'requesting data',
-      totalFee: 'requesting data',
-      tradeNumber: 'requesting data',
-      tomoprice: 'requesting data',
+      volume24h: <CircleSpinner />,
+      totalFee: <CircleSpinner />,
+      tradeNumber: <CircleSpinner />,
+      tomoprice: <CircleSpinner />,
     },
     tokenChartData: {},
     volumeChartData: {},
