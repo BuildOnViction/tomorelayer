@@ -56,6 +56,12 @@ class OrderTable extends React.Component {
     this.setExactPage(1)
   }
 
+  async componentDidUpdate(prevProps) {
+    if (prevProps.coinbase !== this.props.coinbase) {
+      return this.setExactPage(1)
+    }
+  }
+
   setPage = num => () => this.setState({ currentPage: this.state.currentPage + num })
 
   setExactPage = async page => {
