@@ -115,7 +115,7 @@ class OrderTable extends React.Component {
                   {format(new Date(item.updatedAt), 'DD MMM  YYYY')}
                 </Cell>
                 <Cell item sm={3} data-label="Trade Fee" container justify="center">
-                  {round(item.makeFee, 8) + ` ${item.pairName.split('/')[1]}`}
+                  {round(item.makeFee.toLocaleString('fullwide', {useGrouping:false}), 8) + ` ${item.pairName.split('/')[1]}`}
                 </Cell>
                 <Cell item sm={3} data-label="Taker Fee" container justify="center">
                   {round(item.pricepoint, 5)}

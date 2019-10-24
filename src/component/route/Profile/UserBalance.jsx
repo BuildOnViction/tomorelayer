@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+import { fromWei } from 'service/blockchain'
 import { isEmpty, sequence } from 'service/helper'
 import { CustomLink, AdapterLink } from 'component/shared/Adapters'
 
@@ -78,7 +79,7 @@ const RelayerTable = ({ relayers }) => {
                 </CustomLink>
               </BodyTableCell>
               <BodyTableCell>
-                {row.deposit} TOMO
+                {fromWei(row.deposit)} TOMO
               </BodyTableCell>
               <BodyTableCell>
                 <RelayerStatus resigning={row.resigning} />

@@ -84,8 +84,6 @@ const logging = async (error) => {
   }
 }
 
-const ApiFix = (api) => api.replace('.testnet', process.env.REACT_APP_APIFIX)
-
 const API = {
   auth: '/api/auth',
   contract: '/api/contract',
@@ -94,7 +92,7 @@ const API = {
   mailer: '/api/mailer',
   public: '/api/public',
   external: {
-    tomoprice: ApiFix('https://scan.testnet.tomochain.com/api/setting/usd'),
+    tomoprice: `${process.env.REACT_APP_STAT_SERVICE_URL}/api/setting/usd`,
     accountTx: (params) => {
       const { ownerAddress, contractAddress, limit, page, type } = params
       const paramsEncoded = qs.stringify({
@@ -103,12 +101,12 @@ const API = {
         page,
         limit,
       })
-      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/txs/listByAccount'
-      return ApiFix(`${baseEndpoint}/${ownerAddress}?${paramsEncoded}`)
+      const baseEndpoint = `${process.env.REACT_APP_STAT_SERVICE_URL}/api/txs/listByAccount`
+      return `${baseEndpoint}/${ownerAddress}?${paramsEncoded}`
     },
     getTokenInfo: (tokenAddress) => {
-      const baseEndpoint = 'https://scan.testnet.tomochain.com/api/tokens'
-      return ApiFix(`${baseEndpoint}/${tokenAddress}`)
+      const baseEndpoint = `${process.env.REACT_APP_STAT_SERVICE_URL}/api/tokens`
+      return `${baseEndpoint}/${tokenAddress}`
     },
   },
 }
@@ -210,7 +208,7 @@ export const getTokenInfo = async (tokenAddress) =>
 
 export const notifyDex = async (dexUrl) =>
   HttpClient()
-    .put(`${dexUrl}/api/relayer`)
+    .put(`${dexUrl}/api/relayer`.replace('//', '/'))
     .then(resp => {
       try {
         return resp
@@ -222,6 +220,6 @@ export const notifyDex = async (dexUrl) =>
 
 // STATIC EXTERNAL LINK
 export const ExternalLinks = {
-  transaction: (tx) => ApiFix(`https://scan.testnet.tomochain.com/txs/${tx}`),
-  token: (token) => ApiFix(`https://scan.testnet.tomochain.com/tokens/${token}`),
+  transaction: (tx) => `${process.env.REACT_APP_STAT_SERVICE_URL}/txs/${tx}`,
+  token: (token) => `${process.env.REACT_APP_STAT_SERVICE_URL}/tokens/${token}`,
 }
