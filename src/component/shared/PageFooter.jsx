@@ -58,7 +58,7 @@ const PageFooter = () => (
     <Grid container>
       <Grid item sm={12} md={6}>
         <Box>
-          Tomorelayer 2019 - v1.0.0
+          TomoRelayer 2019 - v1.0.0
         </Box>
         <Box className="footer-links">
           {FooterLinks.map(item => (

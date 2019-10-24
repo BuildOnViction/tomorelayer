@@ -84,7 +84,7 @@ class FormInfo extends React.Component {
               <Grid item sm={6} md={8} container direction="column" spacing={2}>
                 <Grid item>
                   <TextField
-                    label="Relayer Logo"
+                    label="Logo"
                     value={values.logo || ''}
                     onChange={handleChange}
                     error={Boolean(errors.logo)}
@@ -104,7 +104,7 @@ class FormInfo extends React.Component {
             </Grid>
             <Grid item>
               <TextField
-                label="Relayer Name"
+                label="Name"
                 value={values.name || ''}
                 onChange={handleChange}
                 error={Boolean(errors.name) && <i className="text-alert">{errors.name}</i>}
@@ -120,7 +120,7 @@ class FormInfo extends React.Component {
             </Grid>
             <Grid item>
               <TextField
-                label="Website"
+                label="Url"
                 value={values.link || ''}
                 id="relayer-link"
                 name="link"
