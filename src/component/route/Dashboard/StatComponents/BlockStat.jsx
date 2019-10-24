@@ -7,6 +7,8 @@ import tradeIcon from 'asset/icon-trades.png'
 import tomoPriceIcon from 'asset/icon-tomo-price.png'
 
 class StatCard extends React.Component {
+  STYLE_INTERVAL = undefined
+
   state = {
     hightlight: false,
   }
@@ -14,7 +16,16 @@ class StatCard extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.stat !== this.props.stat) {
       this.setState({ hightlight: true })
-      setTimeout(() => this.setState({ hightlight: false }), 1000)
+      this.STYLE_INTERVAL = setTimeout(() => {
+        this.setState({ hightlight: false })
+        clearInterval(this.STYLE_INTERVAL)
+      }, 1000)
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.STYLE_INTERVAL) {
+      clearInterval(this.STYLE_INTERVAL)
     }
   }
 
