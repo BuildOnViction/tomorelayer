@@ -48,7 +48,7 @@ export const toWei = (number) => {
 }
 
 export const fromWei = (number) => {
-  const stringified = number.toString()
-  const toEth = ethers.utils.formatEther(stringified, { commify: true, pad: false })
+  const stringified = typeof number === 'string' ? number : number.toString()
+  const toEth = ethers.utils.formatEther(stringified)
   return toEth
 }

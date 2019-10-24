@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
-import { getBalance } from 'service/blockchain'
+import { getBalance, fromWei } from 'service/blockchain'
 import { compose } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
@@ -19,10 +19,8 @@ class FormDeposit extends React.Component {
 
   constructor(props) {
     super(props)
-    // FIXME: this deposit may change over time and must present the latest result
-    // call contract on componentDidMount
+
     this.state = {
-      remainingDeposit: props.relayer.deposit,
       userBalance: 0,
     }
   }
@@ -31,6 +29,9 @@ class FormDeposit extends React.Component {
     const address = await this.props.wallet.getAddress()
     const userBalance = await getBalance(address)
     this.setState({ userBalance })
+    // FIXME: this deposit may change over time and must present the latest result
+    // call contract on componentDidMount
+    // TODO: get the latest deposit of relayer from contract and update to DB
   }
 
   render() {
@@ -68,7 +69,7 @@ class FormDeposit extends React.Component {
                 Deposit
               </Typography>
               <Grid item>
-                Remaining deposit: {relayer.deposit} TOMO
+                Remaining deposit: {fromWei(relayer.deposit)} TOMO
               </Grid>
             </Grid>
             <Grid item container direction="column" spacing={2} className="mt-2">
