@@ -222,4 +222,5 @@ export const notifyDex = async (dexUrl) =>
 export const ExternalLinks = {
   transaction: (tx) => `${process.env.REACT_APP_STAT_SERVICE_URL}/txs/${tx}`,
   token: (token) => `${process.env.REACT_APP_STAT_SERVICE_URL}/tokens/${token}`,
+  trades: tradeHash => `${process.env.REACT_APP_STAT_SERVICE_URL}/trades/${tradeHash}`,
 }
