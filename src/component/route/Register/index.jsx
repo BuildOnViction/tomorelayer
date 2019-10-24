@@ -78,6 +78,7 @@ export class Register extends React.Component {
         })
       }
 
+      payload.deposit = blk.toWei(payload.deposit).toString()
       const newRelayer = await http.createRelayer(payload)
 
       this.props.saveNewRelayer(newRelayer)
