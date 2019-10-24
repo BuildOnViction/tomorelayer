@@ -92,10 +92,15 @@ export default class VolumeChart extends React.Component {
     topic: Topic._volume,
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const shouldInitChart = this.props.data._7d && !this.VOLUME_CHART
     if (shouldInitChart) {
       return shouldInitChart ? this.initChart() : undefined
+    }
+
+    if (this.props.data._7d) {
+      const data = this.props.data[`_${this.state.period}`]
+      return this.updateChart(data)
     }
   }
 
@@ -121,13 +126,17 @@ export default class VolumeChart extends React.Component {
     // this.FILLS_CHART = renderChart(this.props.fillData || mockdata(), 'fills-chart')
   }
 
+  updateChart(data) {
+    this.VOLUME_CHART.data.labels = data.map(t => t.label)
+    this.VOLUME_CHART.data.datasets[0].data = data.map(t => t.value)
+    this.VOLUME_CHART.update({ duration: 0 })
+  }
+
   changeTimePeriod = (_, periodIndex) => {
     const period = Object.values(TimePeriod)[periodIndex]
     this.setState({ period })
     const data = this.props.data[`_${period}`]
-    this.VOLUME_CHART.data.labels = data.map(t => t.label)
-    this.VOLUME_CHART.data.datasets[0].data = data.map(t => t.value)
-    this.VOLUME_CHART.update({ duration: 0 })
+    this.updateChart(data)
   }
 
   changeTopic = (_, topicIndex) => this.setState({ topic: Object.values(Topic)[topicIndex] })

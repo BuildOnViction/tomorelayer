@@ -79,10 +79,14 @@ export default class TokenChart extends React.Component {
       return dataNotAllZero ? this.initChart() : undefined
     }
 
-    if (this.props.data._24h) {
+    if (this.props.data._24h && this.TOKEN_CHART) {
       const period = `_${this.state.period}`
       const data = this.props.data[period]
-      return data.some(t => t.value > 0) ? this.updateChart(data.slice(0, 6)) : undefined
+      const dataNotAllZero = data.some(t => t.value > 0)
+      console.log(this.props.data)
+      console.log(data)
+      console.log(dataNotAllZero)
+      return dataNotAllZero ? this.updateChart(data.slice(0, 6)) : undefined
     }
   }
 
@@ -132,7 +136,7 @@ export default class TokenChart extends React.Component {
           <Grid item sm={12} style={{ height: 180 }} container justify="center" alignItems="center">
             {isEmpty(data) && <CircularProgress style={{ height: 50, width: 50 }} />}
             {allZeroData && <Typography variant="body2">No trade yet</Typography>}
-            {!isEmpty(data) && !allZeroData && <canvas id="token-chart" style={{ height: '100%', width: '100%' }} />}
+            <canvas id="token-chart" style={{ height: '100%', width: '100%', display: allZeroData ? 'none' : 'initial' }} />
           </Grid>
         </Grid>
       </StyledPaper>

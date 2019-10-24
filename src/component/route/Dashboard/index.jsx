@@ -109,18 +109,16 @@ class Dashboard extends React.Component {
       coinbase,
     )
 
-    const volumeChartData = { ...this.state.volumeChartData }
-    if (!this.state.volumeChartData._7d) {
-      const volumeStat = await getVolumesOverTime(
-        relayer.from_tokens,
-        relayer.to_tokens,
-        this.TOKEN_MAP,
-        exchangeRates,
-        coinbase,
-      )
-      volumeChartData._7d = volumeStat.slice(23)
-      volumeChartData._1M = volumeStat
-    }
+    const volumeChartData = {}
+    const volumeStat = await getVolumesOverTime(
+      relayer.from_tokens,
+      relayer.to_tokens,
+      this.TOKEN_MAP,
+      exchangeRates,
+      coinbase,
+    )
+    volumeChartData._7d = volumeStat.slice(23)
+    volumeChartData._1M = volumeStat
 
     // NOTE: summary of 24h stat
     const uniqueFromTokens = _.unique(relayer.from_tokens).map(t => t.toLowerCase())
