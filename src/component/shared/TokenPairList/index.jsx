@@ -129,7 +129,6 @@ class TokenPairList extends React.Component {
   setFilter = func => this.setState({ filterFunction: func })
 
   setSelectedOnly = () => {
-    debugger
     this.setState({ selectedOnly: !this.state.selectedOnly })
   }
 

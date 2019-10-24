@@ -80,7 +80,7 @@ export default class FilterControls extends React.Component {
     SEARCH: str => pair => {
       if (!str || !str.length) {return true}
       const regex = new RegExp(str, 'i')
-      const searchField = pair.from.name
+      const searchField = `${pair.from.name}${pair.from.symbol}`
       return regex.exec(searchField)
     }
   }
@@ -110,7 +110,12 @@ export default class FilterControls extends React.Component {
 
   onTokenTabClick = symbol => () => {
     const { activeFilter } = this.state
-    this.setState({ activeFilter: activeFilter === symbol ? 'ALL' : symbol }, this.setFilter)
+    this.setState({
+      activeFilter: activeFilter === symbol ? 'ALL' : symbol,
+      debounceText: '',
+      searchText: '',
+      isSearching: false
+    }, this.setFilter)
   }
 
   searchInputChange = e => {
