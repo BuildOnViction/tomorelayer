@@ -224,6 +224,7 @@ const mapProps = state => ({
   exchangeRates: {
     TOMO: state.network_info.tomousd,
     BTC: state.network_info.btcusd,
+    ETH: state.network_info.ethusd,
   }
 })
 

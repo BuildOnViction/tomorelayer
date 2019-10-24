@@ -40,10 +40,16 @@ export const AppInitialization = async (state) => {
 
   ThrowOn(getBitcoinError, 'Error getting bitcoin stat')
 
+  const [getEthError, ethStat] = await wretch('https://api.coingecko.com/api/v3/coins/ethereum?localization=false')
+    .get().json().then(resp => [null, resp]).catch(t => [t, null])
+
+  ThrowOn(getEthError, 'Error getting ethereum stat')
+
   const network_info = {
     ...state.network_info,
     tomousd: tomoPriceError ? NaN : tomochain.usd,
     btcusd: bitcoinStat.market_data.current_price.usd,
+    ethusd: ethStat.market_data.current_price.usd,
   }
 
   // INIT POUCHDB FOR FRONTEND-SEARCHING
