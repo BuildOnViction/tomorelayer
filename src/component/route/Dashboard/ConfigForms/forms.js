@@ -32,7 +32,10 @@ export const wrappers = {
     },
 
     handleSubmit: async (values, meta) => {
-      const relayer = await http.updateRelayer({ ...values, id: meta.props.relayer.id })
+      const relayer = await http.updateRelayer({
+        ...meta.props.relayer,
+        ...values,
+      })
 
       if (relayer.error) {
         meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error })
@@ -106,6 +109,7 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
         const relayer = await http.updateRelayer({
+          ...meta.props.relayer,
           owner: meta.props.relayer.owner,
           deposit: meta.props.relayer.deposit + values.deposit,
           id: meta.props.relayer.id,
@@ -167,6 +171,7 @@ export const wrappers = {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
         const relayer = await http.updateRelayer({
+          ...meta.props.relayer,
           new_owner: values.owner,
           owner: meta.props.relayer.owner,
           coinbase: values.coinbase,
