@@ -27,6 +27,14 @@ export const isEmpty = (something) => {
 
 export const isTruthy = (something) => Boolean(something)
 
+export const last = list => {
+  if (list.length) {
+    return list[list.lenght - 1]
+  }
+  return list[0] || list
+  // NOTE: might handle strinng or object as well
+}
+
 export const round = (value, precision = 0) => {
   const multiplier = 10 ** precision
   const result = (Math.round(value * multiplier) / multiplier).toFixed(precision)
