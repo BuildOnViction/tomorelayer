@@ -128,6 +128,8 @@ export default class TokenChart extends React.Component {
           <Grid item container justify="flex-end" sm={6} xs={8}>
             <PeriodTabs value={Object.values(TimePeriod).indexOf(period)} onChange={this.changeTimePeriod}>
               <PeriodTab label="24h" />
+              <PeriodTab label="7d" />
+              <PeriodTab label="1M" />
             </PeriodTabs>
           </Grid>
           <Grid item sm={12} style={{ height: 180 }} container justify="center" alignItems="center">

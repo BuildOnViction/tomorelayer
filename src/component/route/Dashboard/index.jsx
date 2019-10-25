@@ -59,10 +59,10 @@ class Dashboard extends React.Component {
 
   async componentDidMount() {
     this.createUniqueTokenList()
-    await this.updateRelayerStat()
+    await this.requestRelayerStat()
     // NOTE: to be more informative, we update data every 10 seconds
     // in the future, user may be able to adjust this updating interval
-    this.INTERVAL_UPDATE = setInterval(async () => this.updateRelayerStat(), 10000)
+    // this.INTERVAL_UPDATE = setInterval(async () => this.requestRelayerStat(), 10000)
   }
 
   async componentDidUpdate(prevProps) {
@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
     const tokensUpdated = Tokens.length !== prevTokens.length
 
     if (coinbaseChanged || tokensUpdated) {
-      await this.updateRelayerStat()
+      await this.requestRelayerStat()
     }
   }
 
@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
     }
   }
 
-  async updateRelayerStat() {
+  async requestRelayerStat() {
     const {
       relayers,
       match,
@@ -101,7 +101,7 @@ class Dashboard extends React.Component {
     const relayer = relayers[coinbase]
 
     const volumeChartData = {}
-    const [volumeStat, TokenShares] = await getVolumesOverTime(
+    const [volumeStat, tokenChartData, blockStats, tokenTableData] = await getVolumesOverTime(
       relayer.from_tokens,
       relayer.to_tokens,
       this.TOKEN_MAP,
@@ -111,58 +111,11 @@ class Dashboard extends React.Component {
     volumeChartData._7d = volumeStat.slice(23)
     volumeChartData._1M = volumeStat
 
-    const tokenStat24h = TokenShares._7d
-
-    // NOTE: summary of 24h tokenStat24h
-    const uniqueFromTokens = _.unique(relayer.from_tokens).map(t => t.toLowerCase())
-    const summaryStat24h = uniqueFromTokens.reduce((acc, address) => ({
-      volume24h: acc.volume24h + tokenStat24h[address].volume24h,
-      totalFee: acc.totalFee + tokenStat24h[address].totalFee,
-      tradeNumber: acc.tradeNumber + tokenStat24h[address].tradeNumber,
-      tomoprice: exchangeRates.TOMO,
-    }), {
-      volume24h: 0,
-      totalFee: 0,
-      tradeNumber: 0,
-      tomoprice: exchangeRates.TOMO,
-    })
-
-    const totalVolume24h = summaryStat24h.volume24h
-    const blockStats = {
-      volume24h: `$ ${_.round(totalVolume24h, 3).toLocaleString({ useGrouping: true })}`,
-      // NOTE: if fee too small, format to wei/gwei
-      totalFee: `$ ${_.round(summaryStat24h.totalFee, 3).toLocaleString({ useGrouping: true })}`,
-      tradeNumber: summaryStat24h.tradeNumber,
-      tomoprice: `$ ${_.round(summaryStat24h.tomoprice, 3)}`,
-    }
-
-    // NOTE: preparing visual data
-    const tokenData = uniqueFromTokens.map(address => ({
-      label: this.TOKEN_MAP[address].symbol,
-      // NOTE: value is actually percentage of the token'share used in Token Chart
-      value: totalVolume24h > 0 ? _.round(tokenStat24h[address].volume24h * 100 / totalVolume24h) : 0,
-      // NOTE: the remaining keys are used in Token Table
-      address: address,
-      symbol: this.TOKEN_MAP[address].symbol,
-      volume: _.round(tokenStat24h[address].volume24h, 3),
-      trades: tokenStat24h[address].tradeNumber,
-      // NOTE: price not calculated yet
-      price: 0,
-    })).sort((a, b) => {
-      if (a.value > b.value) {
-        return -1
-      }
-      return a.volume > b.volume ? -1 : 1
-    })
-
     this.setState({
       blockStats,
-      tokenChartData: {
-        ...this.state.tokenChartData,
-        _24h: tokenData,
-      },
+      tokenChartData,
       volumeChartData,
-      tokenTableData: tokenData,
+      tokenTableData,
     })
   }
 

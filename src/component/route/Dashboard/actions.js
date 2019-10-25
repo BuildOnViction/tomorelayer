@@ -130,31 +130,86 @@ export const getVolumesOverTime = async (
   exchangeRates = {},
   coinbase,
 ) => {
-  const TokenShares = {}
+
+  const TokenShares = {
+    _24h: [],
+    _7d: {},
+    _1M: {},
+  }
+
+  let Last24hStat = {}
+
+  let TokenTableData = []
+
   const seq = _.sequence(0, 30)
   const dates = seq.map(n => d.format(d.subDays(Date.now(), n), "YYYY-MM-DD")).reverse()
   const requests = dates.map(async (date, idx) => {
     const result = await getTradePairStat(from_tokens, to_tokens, tokenMap, exchangeRates, coinbase, { date })
     const value = Object.keys(result).reduce((sum, t) => sum + result[t].volume24h, 0)
-    if (idx === 29) {
+
+    // NOTE: calculating 30 & 7 day token shares
+    if (!_.isEmpty(TokenShares._1M)) {
+
+      Object.keys(result).forEach(tk => {
+        TokenShares._1M[tk].volume24h += result[tk].volume24h
+        if (!_.isEmpty(TokenShares._7d) && idx >= 23) {
+          TokenShares._7d[tk].volume24h += result[tk].volume24h
+        }
+      })
+
+    } else {
+      TokenShares._1M = result
+    }
+
+    if (_.isEmpty(TokenShares._7d) && idx >= 23) {
       TokenShares._7d = result
     }
+
+    if (idx === 29) {
+      // NOTE: calculating the last 24h market data
+      TokenTableData = Object.values(result).map(meta => ({
+        address: meta.fromAddress,
+        symbol: meta.fromSymbol,
+        volume: _.round(meta.volume24h, 3),
+        trades: meta.tradeNumber,
+        price: 0,
+      }))
+
+      const volume24hTotal = Object.values(result).reduce((acc, meta) => meta.volume24h + acc, 0)
+      const totalFee24hTotal = Object.values(result).reduce((acc, meta) => meta.totalFee + acc, 0)
+      const tradeNumber24hTotal = Object.values(result).reduce((acc, meta) => meta.tradeNumber + acc, 0)
+
+      Last24hStat = {
+        volume24h: `$ ${_.round(volume24hTotal, 3).toLocaleString({ useGrouping: true })}`,
+        // NOTE: if fee too small, format to wei/gwei
+        totalFee: `$ ${_.round(totalFee24hTotal, 3).toLocaleString({ useGrouping: true })}`,
+        tradeNumber: tradeNumber24hTotal,
+        tomoprice: `$ ${_.round(exchangeRates.TOMO, 3)}`,
+      }
+
+      TokenShares._24h = Object.values(result).map(pair => ({
+        label: pair.fromSymbol,
+        value: volume24hTotal > 0 ? _.round(pair.volume24h * 100 / volume24hTotal, 1) : 0
+      })).sort((a, b) => a.value > b.value ? -1 : 1)
+    }
+
     return { label: d.format(date, "MMM DD"), value: _.round(value) }
   })
-
   const result = await Promise.all(requests)
-  return [result, TokenShares]
+
+  // Summarizing weekly & monthly
+  const VolumeMonthlyTotal = Object.values(TokenShares._1M).reduce((sum, t) => sum + t.volume24h, 0)
+  const VolumeWeeklyTotal = Object.values(TokenShares._7d).reduce((sum, t) => sum + t.volume24h, 0)
+
+  TokenShares._1M = Object.values(TokenShares._1M).map(pair => ({
+    label: pair.fromSymbol,
+    value: VolumeMonthlyTotal > 0 ? _.round(pair.volume24h * 100 / VolumeMonthlyTotal, 1) : 0,
+  })).sort((a, b) => a.value > b.value ? -1 : 1)
+
+  TokenShares._7d = Object.values(TokenShares._7d).map(pair => ({
+    label: pair.fromSymbol,
+    value: VolumeWeeklyTotal > 0 ? _.round(pair.volume24h * 100 / VolumeWeeklyTotal, 1) : 0,
+  })).sort((a, b) => a.value > b.value ? -1 : 1)
+
+  return [result, TokenShares, Last24hStat, TokenTableData]
 }
-/*
- * export const getTokenShareOverTime = async (
- *   from_tokens = [],
- *   to_tokens = [],
- *   tokenMap = {},
- *   exchangeRates = {},
- *   coinbase,
- * ) => {
- *   const weeklyStat = {}
- *   const monthlyStat = {}
- *   const weeklyUri = ''
- *   const monthlyUri = ''
- * } */
