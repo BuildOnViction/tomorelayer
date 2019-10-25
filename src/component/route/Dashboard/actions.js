@@ -71,6 +71,15 @@ export const getTradePairStat = async (
       .catch(t => [t, null])
 
     if (!error && !data) {
+      result[fromAddress] = {
+        fromAddress,
+        toAddress,
+        fromSymbol,
+        toSymbol,
+        volume24h: 0,
+        totalFee: 0,
+        tradeNumber: 0,
+      }
       return
     }
 
@@ -121,16 +130,20 @@ export const getVolumesOverTime = async (
   exchangeRates = {},
   coinbase,
 ) => {
+  const TokenShares = {}
   const seq = _.sequence(0, 30)
   const dates = seq.map(n => d.format(d.subDays(Date.now(), n), "YYYY-MM-DD")).reverse()
-  const requests = dates.map(async date => {
+  const requests = dates.map(async (date, idx) => {
     const result = await getTradePairStat(from_tokens, to_tokens, tokenMap, exchangeRates, coinbase, { date })
     const value = Object.keys(result).reduce((sum, t) => sum + result[t].volume24h, 0)
+    if (idx === 29) {
+      TokenShares._7d = result
+    }
     return { label: d.format(date, "MMM DD"), value: _.round(value) }
   })
 
   const result = await Promise.all(requests)
-  return result
+  return [result, TokenShares]
 }
 /*
  * export const getTokenShareOverTime = async (
