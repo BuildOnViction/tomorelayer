@@ -10,7 +10,6 @@ import RelayerConfig from './RelayerConfig'
 import FeedBack from './FeedBack'
 import {
   StoreUnrecognizedTokens,
-  getTradePairStat,
   getVolumesOverTime,
 } from './actions'
 
@@ -101,16 +100,8 @@ class Dashboard extends React.Component {
     const coinbase = match.params.coinbase
     const relayer = relayers[coinbase]
 
-    const stat = await getTradePairStat(
-      relayer.from_tokens,
-      relayer.to_tokens,
-      this.TOKEN_MAP,
-      exchangeRates,
-      coinbase,
-    )
-
     const volumeChartData = {}
-    const volumeStat = await getVolumesOverTime(
+    const [volumeStat, TokenShares] = await getVolumesOverTime(
       relayer.from_tokens,
       relayer.to_tokens,
       this.TOKEN_MAP,
@@ -120,12 +111,14 @@ class Dashboard extends React.Component {
     volumeChartData._7d = volumeStat.slice(23)
     volumeChartData._1M = volumeStat
 
-    // NOTE: summary of 24h stat
+    const tokenStat24h = TokenShares._7d
+
+    // NOTE: summary of 24h tokenStat24h
     const uniqueFromTokens = _.unique(relayer.from_tokens).map(t => t.toLowerCase())
     const summaryStat24h = uniqueFromTokens.reduce((acc, address) => ({
-      volume24h: acc.volume24h + stat[address].volume24h,
-      totalFee: acc.totalFee + stat[address].totalFee,
-      tradeNumber: acc.tradeNumber + stat[address].tradeNumber,
+      volume24h: acc.volume24h + tokenStat24h[address].volume24h,
+      totalFee: acc.totalFee + tokenStat24h[address].totalFee,
+      tradeNumber: acc.tradeNumber + tokenStat24h[address].tradeNumber,
       tomoprice: exchangeRates.TOMO,
     }), {
       volume24h: 0,
@@ -147,12 +140,12 @@ class Dashboard extends React.Component {
     const tokenData = uniqueFromTokens.map(address => ({
       label: this.TOKEN_MAP[address].symbol,
       // NOTE: value is actually percentage of the token'share used in Token Chart
-      value: totalVolume24h > 0 ? _.round(stat[address].volume24h * 100 / totalVolume24h) : 0,
+      value: totalVolume24h > 0 ? _.round(tokenStat24h[address].volume24h * 100 / totalVolume24h) : 0,
       // NOTE: the remaining keys are used in Token Table
       address: address,
       symbol: this.TOKEN_MAP[address].symbol,
-      volume: _.round(stat[address].volume24h, 3),
-      trades: stat[address].tradeNumber,
+      volume: _.round(tokenStat24h[address].volume24h, 3),
+      trades: tokenStat24h[address].tradeNumber,
       // NOTE: price not calculated yet
       price: 0,
     })).sort((a, b) => {
