@@ -93,7 +93,7 @@ export const getTradePairStat = async (
         toSymbol,
         volume24h: data.volume24h * exchangeRates[toSymbol] + (result[fromAddress] || { volume24h: 0 }).volume24h,
         totalFee: data.totalFee * exchangeRates[toSymbol] + (result[fromAddress] || { totalFee: 0 }).totalFee,
-        tradeNumber: data.tradeNumber,
+        tradeNumber: data.tradeNumber + (result[fromAddress] || { tradeNumber: 0 }).tradeNumber,
       }
     }
   })
@@ -137,10 +137,6 @@ export const getVolumesOverTime = async (
     _1M: {},
   }
 
-  let Last24hStat = {}
-
-  let TokenTableData = []
-
   const seq = _.sequence(0, 30)
   const dates = seq.map(n => d.format(d.subDays(Date.now(), n), "YYYY-MM-DD")).reverse()
   const requests = dates.map(async (date, idx) => {
@@ -167,25 +163,7 @@ export const getVolumesOverTime = async (
 
     if (idx === 29) {
       // NOTE: calculating the last 24h market data
-      TokenTableData = Object.values(result).map(meta => ({
-        address: meta.fromAddress,
-        symbol: meta.fromSymbol,
-        volume: _.round(meta.volume24h, 3),
-        trades: meta.tradeNumber,
-        price: 0,
-      }))
-
       const volume24hTotal = Object.values(result).reduce((acc, meta) => meta.volume24h + acc, 0)
-      const totalFee24hTotal = Object.values(result).reduce((acc, meta) => meta.totalFee + acc, 0)
-      const tradeNumber24hTotal = Object.values(result).reduce((acc, meta) => meta.tradeNumber + acc, 0)
-
-      Last24hStat = {
-        volume24h: `$ ${_.round(volume24hTotal, 3).toLocaleString({ useGrouping: true })}`,
-        // NOTE: if fee too small, format to wei/gwei
-        totalFee: `$ ${_.round(totalFee24hTotal, 3).toLocaleString({ useGrouping: true })}`,
-        tradeNumber: tradeNumber24hTotal,
-        tomoprice: `$ ${_.round(exchangeRates.TOMO, 3)}`,
-      }
 
       TokenShares._24h = Object.values(result).map(pair => ({
         label: pair.fromSymbol,
@@ -211,5 +189,5 @@ export const getVolumesOverTime = async (
     value: VolumeWeeklyTotal > 0 ? _.round(pair.volume24h * 100 / VolumeWeeklyTotal, 1) : 0,
   })).sort((a, b) => a.value > b.value ? -1 : 1)
 
-  return [result, TokenShares, Last24hStat, TokenTableData]
+  return [result, TokenShares]
 }
