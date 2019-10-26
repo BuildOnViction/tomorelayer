@@ -1,6 +1,7 @@
 import wretch from 'wretch'
 import * as _ from 'service/helper'
 import * as d from 'date-fns'
+import * as http from 'service/backend'
 import { createTokens } from 'service/backend'
 
 export const UpdateRelayer = async (state, relayer) => {
@@ -53,56 +54,63 @@ export const getTradePairStat = async (
     return {}
   }
 
-  const statServiceUrl = pairName => `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${pairName}`
+  const summary = {
+    volume24h: 0,
+    totalFee: 0,
+    tradeNumber: 0,
+    tomoprice: exchangeRates.TOMO,
+  }
 
-  const result = { error: [] }
+  const tokenSymbolCheck = {}
+  let tokenData = []
+
+  const defaultForNull = {
+    volume24h: 0,
+    totalFee: 0,
+    tradeNumber: 0
+  }
 
   const request = from_tokens.map(async (addr, idx) => {
     const fromAddress = addr.toLowerCase()
     const toAddress = to_tokens[idx].toLowerCase()
     const fromSymbol = tokenMap[fromAddress].symbol
     const toSymbol = tokenMap[toAddress].symbol
+    const pairName = fromSymbol + '/' + toSymbol
 
-    const pairName = fromSymbol + '%2F' + toSymbol
+    const data = await http.getPairStat(coinbase, pairName)
+    const volume24h = (data || defaultForNull).volume24h * exchangeRates[toSymbol]
+    const totalFee = (data || defaultForNull).totalFee * exchangeRates[toSymbol]
+    const tradeNumber = (data || defaultForNull).tradeNumber
 
-    const [error, data] = await wretch(statServiceUrl(pairName))
-      .query(query).get().json()
-      .then(resp => [null, resp])
-      .catch(t => [t, null])
+    summary.volume24h += volume24h
+    summary.totalFee += totalFee
+    summary.tradeNumber += tradeNumber
 
-    if (!error && !data) {
-      result[fromAddress] = {
-        fromAddress,
-        toAddress,
-        fromSymbol,
-        toSymbol,
-        volume24h: 0,
-        totalFee: 0,
-        tradeNumber: 0,
+    if (!(fromSymbol in tokenSymbolCheck)) {
+      const meta = {
+        address: fromAddress,
+        symbol: fromSymbol,
+        volume24h,
+        tradeNumber,
+        percent: 0,
       }
-      return
-    }
 
-    if (error) {
-      result.error = [ ...result.error, error ]
+      tokenData = [...tokenData, meta]
+      tokenSymbolCheck[fromSymbol] = tokenData.length - 1
     } else {
-      result[fromAddress] = {
-        fromAddress,
-        toAddress,
-        fromSymbol,
-        toSymbol,
-        volume24h: data.volume24h * exchangeRates[toSymbol] + (result[fromAddress] || { volume24h: 0 }).volume24h,
-        totalFee: data.totalFee * exchangeRates[toSymbol] + (result[fromAddress] || { totalFee: 0 }).totalFee,
-        tradeNumber: data.tradeNumber + (result[fromAddress] || { tradeNumber: 0 }).tradeNumber,
-      }
+      const meta = tokenData[tokenSymbolCheck[fromSymbol]]
+      meta.volume24h += volume24h
+      meta.tradeNumber += tradeNumber
+      tokenData[tokenSymbolCheck[fromSymbol]] = meta
     }
   })
 
   await Promise.all(request)
-  if (!result.error.length) {
-    delete result['error']
-  }
-  return result
+  tokenData.sort((a, b) => a.volume24h > b.volume24h ? -1 : 1)
+  tokenData.forEach(meta => {
+    meta.percent = summary.volume24h > 0 ? (meta.volume24h * 100 / summary.volume24h) : 0
+  })
+  return { summary, tokens: tokenData }
 }
 
 export const getTradesByCoinbase = async (

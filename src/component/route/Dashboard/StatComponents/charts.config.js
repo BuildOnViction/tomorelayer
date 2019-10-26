@@ -85,12 +85,12 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
 export const TOKEN_CHART = (data, fills) => ({
   type: 'horizontalBar',
   data: {
-    labels: data.map((t) => t.label),
+    labels: data.map((t) => t.symbol),
     datasets: [
       {
         borderColor: 'transparent',
         backgroundColor: fills,
-        data: data.map((t) => t.value),
+        data: data.map((t) => t.percent),
         yAxisID: 'yAxis1',
       },
     ],
@@ -130,7 +130,7 @@ export const TOKEN_CHART = (data, fills) => ({
           },
           ticks: {
             display: false,
-            max: data[0].value * 1.1,
+            max: data[0].percent * 1.1,
           },
         },
       ],

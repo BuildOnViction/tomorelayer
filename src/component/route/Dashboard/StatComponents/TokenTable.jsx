@@ -1,16 +1,10 @@
 import React from 'react'
-import {
-  Grid,
-  Paper,
-} from '@material-ui/core'
+import { Grid, Paper } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { isEmpty } from 'service/helper'
 import { SITE_MAP } from 'service/constant'
 import { ExternalLinks } from 'service/backend'
-import {
-  CustomLink,
-  StyledLink,
-} from 'component/shared/Adapters'
+import { CustomLink, StyledLink } from 'component/shared/Adapters'
 
 const StyledPaper = withStyles(theme => ({
   root: {
@@ -39,30 +33,21 @@ const EmptyTokenTable = ({ coinbase }) => (
   </Grid>
 )
 
-const TokenTable = ({ tokens, coinbase }) => {
+const rowStyle = { width: '20%', textAlign: 'center' }
 
-  const headerWith = title => {
-    switch (title) {
-      case 'Rank':
-        return 1
-      case 'Volumes ($)':
-        return 5
-      default:
-        return 2
-    }
-  }
+const TokenTable = ({ tokens, coinbase }) => {
 
   return isEmpty(tokens) ? <EmptyTokenTable coinbase={coinbase} /> : (
     <Grid container direction="column">
       <Grid item container className="mb-1" className="p-1">
-        {TableHeads.map(h => <Grid key={h} item xs={headerWith(h)} container justify="center">{h}</Grid>)}
+        {TableHeads.map(h => <Grid key={h} item style={rowStyle}>{h}</Grid>)}
       </Grid>
       {tokens.map((item, index) => (
         <Grid item key={index}>
           <StyledPaper elevation={0}>
             <Grid container>
-              <Grid item xs={1} container justify="center">{index + 1}</Grid>
-              <Grid item xs={2} container justify="center">
+              <Grid item style={rowStyle}>{index + 1}</Grid>
+              <Grid item style={rowStyle}>
                 <StyledLink
                   href={ExternalLinks.token(item.address)}
                   rel="noopener noreferrer"
@@ -73,14 +58,14 @@ const TokenTable = ({ tokens, coinbase }) => {
                   {item.symbol}
                 </StyledLink>
               </Grid>
-              <Grid item xs={2} container justify="center">
+              <Grid item style={rowStyle}>
                 {item.price}
               </Grid>
-              <Grid item xs={2} container justify="center">
-                {item.trades}
+              <Grid item style={rowStyle}>
+                {item.tradeNumber}
               </Grid>
-              <Grid item xs={5} container justify="center">
-                {item.volume.toLocaleString({ useGrouping: true })}
+              <Grid item style={rowStyle}>
+                {item.volume24h.toLocaleString({ useGrouping: true })}
               </Grid>
             </Grid>
           </StyledPaper>
