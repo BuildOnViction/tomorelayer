@@ -15,7 +15,6 @@ const StyledPaper = withStyles(theme => ({
 }))(Paper)
 
 const TableHeads = [
-  'Rank',
   'Token',
   'Price ($)',
   'Trades (24h)',
@@ -33,21 +32,26 @@ const EmptyTokenTable = ({ coinbase }) => (
   </Grid>
 )
 
-const rowStyle = { width: '20%', textAlign: 'center' }
+const indexColumnStyle = { width: '10%', textAlign: 'center' }
 
 const TokenTable = ({ tokens, coinbase }) => {
 
   return isEmpty(tokens) ? <EmptyTokenTable coinbase={coinbase} /> : (
     <Grid container direction="column">
       <Grid item container className="mb-1" className="p-1">
-        {TableHeads.map(h => <Grid key={h} item style={rowStyle}>{h}</Grid>)}
+        <Grid item style={indexColumnStyle}>Rank</Grid>
+        {TableHeads.map(h => (
+          <Grid key={h} item xs container justify="center">
+            {h}
+          </Grid>
+        ))}
       </Grid>
       {tokens.map((item, index) => (
         <Grid item key={index}>
           <StyledPaper elevation={0}>
             <Grid container>
-              <Grid item style={rowStyle}>{index + 1}</Grid>
-              <Grid item style={rowStyle}>
+              <Grid item style={indexColumnStyle}>{index + 1}</Grid>
+              <Grid item xs container justify="center">
                 <StyledLink
                   href={ExternalLinks.token(item.address)}
                   rel="noopener noreferrer"
@@ -58,13 +62,13 @@ const TokenTable = ({ tokens, coinbase }) => {
                   {item.symbol}
                 </StyledLink>
               </Grid>
-              <Grid item style={rowStyle}>
+              <Grid item xs container justify="center">
                 {item.price}
               </Grid>
-              <Grid item style={rowStyle}>
+              <Grid item xs container justify="center">
                 {item.tradeNumber}
               </Grid>
-              <Grid item style={rowStyle}>
+              <Grid item xs container justify="center">
                 {item.volume24h.toLocaleString({ useGrouping: true })}
               </Grid>
             </Grid>

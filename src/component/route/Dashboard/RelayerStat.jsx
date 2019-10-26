@@ -9,7 +9,7 @@ import TokenChart from './StatComponents/TokenChart'
 import OrderTable from './StatComponents/OrderTable'
 import TokenTable from './StatComponents/TokenTable'
 
-const TOPICS = new _.TabMap('Orders', 'Tokens')
+const TOPICS = new _.TabMap('Trades', 'Tokens')
 
 class RelayerStat extends React.Component {
 
@@ -35,7 +35,7 @@ class RelayerStat extends React.Component {
       totalOrders,
     } = this.state
 
-    const showOrderTable = tab === TOPICS.orders
+    const showOrderTable = tab === TOPICS.trades
     const showTokenTable = tab === TOPICS.tokens && !_.isEmpty(relayer.tokenTableData)
 
     return (
@@ -58,7 +58,7 @@ class RelayerStat extends React.Component {
             tabValue={TOPICS.getIndex(tab)}
             onTabChange={this.onTabChange}
             topics={TOPICS.values}
-            textMask={[`Orders (${totalOrders})`, `Tokens (${relayer.tokenTableData.length})`]}
+            textMask={[`Trades (${totalOrders})`, `Tokens (${relayer.tokenTableData.length})`]}
             style={{ marginBottom: 20 }}
           />
           <Box className="mt-0" display="flex" justifyContent="center">
