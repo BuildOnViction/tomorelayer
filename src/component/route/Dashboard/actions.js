@@ -42,6 +42,7 @@ export const StoreUnrecognizedTokens = async (state, tokens) => {
 }
 
 export const getTradePairStat = async (
+  // NOTE: non-reducer action
   from_tokens = [],
   to_tokens = [],
   tokenMap = {},
@@ -139,63 +140,95 @@ export const getVolumesOverTime = async (
   coinbase,
 ) => {
 
-  const TokenShares = {
-    _24h: [],
-    _7d: {},
-    _1M: {},
+  const fromTokensLoweredCase = from_tokens.map(t => t.toLowerCase())
+  const toTokensLoweredCase = to_tokens.map(t => t.toLowerCase())
+
+  const uniqueTokensLength = _.unique(from_tokens).length
+
+  const TokenStat = {
+    _7d: new Array(uniqueTokensLength),
+    _1M: new Array(uniqueTokensLength),
   }
 
-  const seq = _.sequence(0, 30)
-  const dates = seq.map(n => d.format(d.subDays(Date.now(), n), "YYYY-MM-DD")).reverse()
-  const requests = dates.map(async (date, idx) => {
-    const result = await getTradePairStat(from_tokens, to_tokens, tokenMap, exchangeRates, coinbase, { date })
-    const value = Object.keys(result).reduce((sum, t) => sum + result[t].volume24h, 0)
+  const VolumeStat = {
+    _7d: new Array(7),
+    _1M: new Array(30),
+  }
 
-    // NOTE: calculating 30 & 7 day token shares
-    if (!_.isEmpty(TokenShares._1M)) {
+  let MonthlyTotalVolume = 0
+  let WeeklyTotalVolume = 0
 
-      Object.keys(result).forEach(tk => {
-        TokenShares._1M[tk].volume24h += result[tk].volume24h
-        if (!_.isEmpty(TokenShares._7d) && idx >= 23) {
-          TokenShares._7d[tk].volume24h += result[tk].volume24h
-        }
-      })
+  const defaultForNull = {
+    volume24h: 0,
+    totalFee: 0,
+    tradeNumber: 0
+  }
 
-    } else {
-      TokenShares._1M = result
+  const MonthlyVolumeByToken = {}
+  const WeeklyVolumeByToken = {}
+
+  const dateSeq = new Array(30).fill(undefined)
+
+  const result = await Promise.all(dateSeq.map(async (_, dateIndex) => {
+    const reverseIdx = 0 - dateIndex
+    const date = d.format(d.addDays(Date.now(), reverseIdx), "YYYY-MM-DD")
+    const dateOnChart = d.format(d.addDays(Date.now(), reverseIdx), "MMM DD")
+    let volumeByDate = 0
+
+    const requests = fromTokensLoweredCase.map(async (tk, idx) => {
+      const toToken = toTokensLoweredCase[idx]
+      const fromTokenSymbol = tokenMap[tk].symbol
+      const toTokenSymbol = tokenMap[toToken].symbol
+      const pair = fromTokenSymbol + '/' + toTokenSymbol
+      const stat = await http.getPairStat(coinbase, pair, { date })
+
+      const defaultValue = stat || defaultForNull
+      const resolved = {
+        date: dateOnChart,
+        tradeNumber: defaultValue.tradeNumber,
+        from: fromTokenSymbol,
+        to: toTokenSymbol,
+        volume24h: defaultValue.volume24h * exchangeRates[toTokenSymbol],
+        totalFee: defaultValue.totalFee * exchangeRates[toTokenSymbol],
+      }
+
+      volumeByDate += resolved.volume24h
+
+      if (!(fromTokenSymbol in MonthlyVolumeByToken)) {
+        MonthlyVolumeByToken[fromTokenSymbol] = 0
+      }
+
+      if (!(fromTokenSymbol in WeeklyVolumeByToken)) {
+        WeeklyVolumeByToken[fromTokenSymbol] = 0
+      }
+
+      MonthlyTotalVolume += volumeByDate
+      MonthlyVolumeByToken[fromTokenSymbol] += volumeByDate
+
+      if (reverseIdx >= -6) {
+        WeeklyTotalVolume += volumeByDate
+        WeeklyVolumeByToken[fromTokenSymbol] += volumeByDate
+      }
+    })
+
+    await Promise.all(requests)
+    const dailyVolumeStat = { date: dateOnChart, volume: volumeByDate }
+    VolumeStat._1M[29 - dateIndex] = dailyVolumeStat
+    if (reverseIdx >= -6) {
+      VolumeStat._7d[6 - dateIndex] = dailyVolumeStat
     }
+  }))
 
-    if (_.isEmpty(TokenShares._7d) && idx >= 23) {
-      TokenShares._7d = result
-    }
+  await Promise.all(result)
+  TokenStat._7d = Object.keys(WeeklyVolumeByToken).map(symbol => ({
+    symbol,
+    percent: WeeklyTotalVolume > 0 ? _.round(WeeklyVolumeByToken[symbol] * 100 / WeeklyTotalVolume, 1) : 0
+  })).sort((a, b) => a.percent > b.percent ? -1 : 1)
 
-    if (idx === 29) {
-      // NOTE: calculating the last 24h market data
-      const volume24hTotal = Object.values(result).reduce((acc, meta) => meta.volume24h + acc, 0)
+  TokenStat._1M = Object.keys(MonthlyVolumeByToken).map(symbol => ({
+    symbol,
+    percent: MonthlyTotalVolume > 0 ? _.round(MonthlyVolumeByToken[symbol] * 100 / WeeklyTotalVolume, 1) : 0
+  })).sort((a, b) => a.percent > b.percent ? -1 : 1)
 
-      TokenShares._24h = Object.values(result).map(pair => ({
-        label: pair.fromSymbol,
-        value: volume24hTotal > 0 ? _.round(pair.volume24h * 100 / volume24hTotal, 1) : 0
-      })).sort((a, b) => a.value > b.value ? -1 : 1)
-    }
-
-    return { label: d.format(date, "MMM DD"), value: _.round(value) }
-  })
-  const result = await Promise.all(requests)
-
-  // Summarizing weekly & monthly
-  const VolumeMonthlyTotal = Object.values(TokenShares._1M).reduce((sum, t) => sum + t.volume24h, 0)
-  const VolumeWeeklyTotal = Object.values(TokenShares._7d).reduce((sum, t) => sum + t.volume24h, 0)
-
-  TokenShares._1M = Object.values(TokenShares._1M).map(pair => ({
-    label: pair.fromSymbol,
-    value: VolumeMonthlyTotal > 0 ? _.round(pair.volume24h * 100 / VolumeMonthlyTotal, 1) : 0,
-  })).sort((a, b) => a.value > b.value ? -1 : 1)
-
-  TokenShares._7d = Object.values(TokenShares._7d).map(pair => ({
-    label: pair.fromSymbol,
-    value: VolumeWeeklyTotal > 0 ? _.round(pair.volume24h * 100 / VolumeWeeklyTotal, 1) : 0,
-  })).sort((a, b) => a.value > b.value ? -1 : 1)
-
-  return [result, TokenShares]
+  return {VolumeStat, TokenStat}
 }

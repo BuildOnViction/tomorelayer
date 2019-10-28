@@ -29,7 +29,7 @@ export const isTruthy = (something) => Boolean(something)
 
 export const last = list => {
   if (list.length) {
-    return list[list.lenght - 1]
+    return list[list.length - 1]
   }
   return list[0] || list
   // NOTE: might handle strinng or object as well

@@ -1,13 +1,13 @@
 // placeholder
 import {
   getTradePairStat,
-  // getVolumesOverTime,
 } from 'component/route/Dashboard/actions'
 import * as http from 'service/backend'
 
+
 describe('Verifying functions that query from scan api and make market statistic data', () => {
 
-  it('Converting 24h Pairs info to Correct data', async () => {
+  it('Converting latest 24h Pairs info to Correct data', async () => {
     // Test tokens
     const AddressTokenA = 'address_token_a'
     const AddressTokenB = 'address_token_b'

@@ -14,7 +14,7 @@ const TOPICS = new _.TabMap('Trades', 'Tokens')
 class RelayerStat extends React.Component {
 
   state = {
-    tab: TOPICS.orders,
+    tab: TOPICS.trades,
     totalOrders: 0,
   }
 
