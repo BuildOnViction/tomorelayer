@@ -92,6 +92,8 @@ export default class TokenChart extends React.Component {
     const data = this.props.data[period].slice(0, 6)
     this.TOKEN_CHART.data.labels = data.map(t => t.symbol)
     this.TOKEN_CHART.data.datasets[0].data = data.map(t => t.percent)
+    // NOTE: change tick config
+    this.TOKEN_CHART.options.scales.xAxes[0].ticks.suggestedMax = data[0].percent * 1.1
     this.TOKEN_CHART.update({ duration: 0 })
   }
 

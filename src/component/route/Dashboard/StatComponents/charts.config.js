@@ -91,7 +91,6 @@ export const TOKEN_CHART = (data, fills) => ({
         borderColor: 'transparent',
         backgroundColor: fills,
         data: data.map((t) => t.percent),
-        yAxisID: 'yAxis1',
       },
     ],
   },
@@ -105,10 +104,9 @@ export const TOKEN_CHART = (data, fills) => ({
     scales: {
       yAxes: [
         {
-          id: 'yAxis1',
           type: 'category',
           categoryPercentage: 1,
-          barPercentage: 0.2,
+          barPercentage: 0.4,
           gridLines: {
             drawBorder: false,
             drawOnChartArea: false,
@@ -118,7 +116,6 @@ export const TOKEN_CHART = (data, fills) => ({
             padding: 20,
             fontColor: '#7473A6',
           },
-          position: 'left',
         },
       ],
       xAxes: [
@@ -129,9 +126,11 @@ export const TOKEN_CHART = (data, fills) => ({
             drawTicks: false,
           },
           ticks: {
+            beginAtZero: true,
+            padding: 0,
             display: false,
-            max: data[0].percent * 1.1,
-          },
+            suggestedMax: data[0].percent * 1.1,
+          }
         },
       ],
     },

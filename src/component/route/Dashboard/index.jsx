@@ -71,7 +71,7 @@ class Dashboard extends React.Component {
     await this.requestRelayerStat()
     // NOTE: to be more informative, we update data every 10 seconds
     // in the future, user may be able to adjust this updating interval
-    this.INTERVAL_UPDATE = setInterval(async () => this.updateRelayerStat(), 10000)
+    this.INTERVAL_UPDATE = setInterval(async () => this.updateRelayerStat(), 20000)
   }
 
   async componentDidUpdate(prevProps) {
@@ -151,10 +151,10 @@ class Dashboard extends React.Component {
 
   async updateRelayerStat() {
     const [blockStats, tokenTableData] = await this.getBlockStatAndTokenTableData()
-    const [volumeChartData, tokenChartDataMonthly] = await this.getVolumesOverTime()
+    // const [volumeChartData, tokenChartDataMonthly] = await this.getVolumesOverTime()
 
     const tokenChartData = {
-      ...tokenChartDataMonthly,
+      ...this.state.tokenChartData,
       _24h: tokenTableData,
     }
 
@@ -162,7 +162,6 @@ class Dashboard extends React.Component {
       blockStats,
       tokenTableData,
       tokenChartData,
-      volumeChartData,
     })
   }
 
