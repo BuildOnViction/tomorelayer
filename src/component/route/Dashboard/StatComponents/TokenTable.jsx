@@ -9,7 +9,6 @@ import { CustomLink, StyledLink } from 'component/shared/Adapters'
 const StyledPaper = withStyles(theme => ({
   root: {
     padding: 10,
-    marginBottom: 15,
     paddingLeft: 20
   }
 }))(Paper)
@@ -47,7 +46,7 @@ const TokenTable = ({ tokens, coinbase }) => {
         ))}
       </Grid>
       {tokens.map((item, index) => (
-        <Grid item key={index}>
+        <Grid item key={index} style={{ height: 50 }}>
           <StyledPaper elevation={0}>
             <Grid container>
               <Grid item style={indexColumnStyle}>{index + 1}</Grid>
