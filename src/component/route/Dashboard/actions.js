@@ -109,7 +109,7 @@ export const getTradePairStat = async (
   await Promise.all(request)
   tokenData.sort((a, b) => a.volume24h > b.volume24h ? -1 : 1)
   tokenData.forEach(meta => {
-    meta.percent = summary.volume24h > 0 ? (meta.volume24h * 100 / summary.volume24h) : 0
+    meta.percent = summary.volume24h > 0 ? _.round(meta.volume24h * 100 / summary.volume24h, 1) : 0
   })
   return { summary, tokens: tokenData }
 }

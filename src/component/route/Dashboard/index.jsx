@@ -12,7 +12,7 @@ import FeedBack from './FeedBack'
 import {
   StoreUnrecognizedTokens,
   getTradePairStat,
-  // getVolumesOverTime,
+  getVolumesOverTime,
 } from './actions'
 
 
@@ -35,7 +35,10 @@ class Dashboard extends React.Component {
       _7d: [],
       _1M: [],
     },
-    volumeChartData: {},
+    volumeChartData: {
+      _7d: [],
+      _1M: [],
+    },
     tokenTableData: [],
   }
 
@@ -106,7 +109,7 @@ class Dashboard extends React.Component {
     const coinbase = match.params.coinbase
     const relayer = relayers[coinbase]
 
-    const {summary, tokens} = await getTradePairStat(
+    const {summary, tokens: tokenTableData} = await getTradePairStat(
       relayer.from_tokens,
       relayer.to_tokens,
       this.TOKEN_MAP,
@@ -121,14 +124,37 @@ class Dashboard extends React.Component {
       tomoprice: `$ ${_.round(exchangeRates.TOMO, 3)}`,
     }
 
-    return [Last24hStat, tokens]
+    return [Last24hStat, tokenTableData]
+  }
+
+  async getVolumesOverTime() {
+    // NOTE: produce Volume of 7d/1M and Token 7d/1M
+    const {
+      relayers,
+      match,
+      exchangeRates,
+    } = this.props
+
+    const coinbase = match.params.coinbase
+    const relayer = relayers[coinbase]
+
+    const { VolumeStat, TokenStat } = await getVolumesOverTime(
+      relayer.from_tokens,
+      relayer.to_tokens,
+      this.TOKEN_MAP,
+      exchangeRates,
+      coinbase,
+    )
+
+    return [VolumeStat, TokenStat]
   }
 
   async updateRelayerStat() {
     const [blockStats, tokenTableData] = await this.getBlockStatAndTokenTableData()
+    const [volumeChartData, tokenChartDataMonthly] = await this.getVolumesOverTime()
 
     const tokenChartData = {
-      ...this.state.tokenChartData,
+      ...tokenChartDataMonthly,
       _24h: tokenTableData,
     }
 
@@ -136,14 +162,16 @@ class Dashboard extends React.Component {
       blockStats,
       tokenTableData,
       tokenChartData,
+      volumeChartData,
     })
   }
 
   async requestRelayerStat() {
     const [blockStats, tokenTableData] = await this.getBlockStatAndTokenTableData()
+    const [volumeChartData, tokenChartDataMonthly] = await this.getVolumesOverTime()
 
     const tokenChartData = {
-      ...this.state.tokenChartData,
+      ...tokenChartDataMonthly,
       _24h: tokenTableData,
     }
 
@@ -151,6 +179,7 @@ class Dashboard extends React.Component {
       blockStats,
       tokenTableData,
       tokenChartData,
+      volumeChartData,
     })
   }
 

@@ -127,8 +127,8 @@ export default class VolumeChart extends React.Component {
   }
 
   updateChart(data) {
-    this.VOLUME_CHART.data.labels = data.map(t => t.label)
-    this.VOLUME_CHART.data.datasets[0].data = data.map(t => t.value)
+    this.VOLUME_CHART.data.labels = data.map(t => t.date)
+    this.VOLUME_CHART.data.datasets[0].data = data.map(t => t.volume)
     this.VOLUME_CHART.update({ duration: 0 })
   }
 

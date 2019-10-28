@@ -3,13 +3,13 @@ import { bilformat } from 'service/helper'
 export const VOLUME_CHART = (data, bgFill, lineFill) => ({
   type: 'line',
   data: {
-    labels: data.map((t) => t.label),
+    labels: data.map((t) => t.date),
     datasets: [
       {
         backgroundColor: bgFill,
         borderColor: lineFill,
         borderWidth: 2,
-        data: data.map((t) => t.value),
+        data: data.map((t) => t.volume),
         fill: 'start',
         lineTension: 0,
         radius: 0,
