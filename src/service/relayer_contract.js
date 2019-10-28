@@ -15,6 +15,16 @@ export default class RelayerContract {
     return this
   }
 
+  async getRelayerByCoinbase(coinbase) {
+    try {
+      const result = await this.contractWithSigner.getRelayerByCoinbase(coinbase)
+      return result
+    } catch (e) {
+      console.error(e)
+      return undefined
+    }
+  }
+
   async register(payload, config = {}) {
     try {
       const parsedPayload = [payload.coinbase, payload.trade_fee, payload.from_tokens, payload.to_tokens]

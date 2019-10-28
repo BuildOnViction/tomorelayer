@@ -106,11 +106,11 @@ class OrderTable extends React.Component {
         <Hidden xsDown>
           <Grid item container className="mb-1" className="p-1">
             <Grid item xs={1} container justify="center">#</Grid>
-            <Grid item xs={2} container justify="center">Date</Grid>
-            <Grid item xs={2} container justify="center">Pair</Grid>
-            <Grid item xs={2} container justify="center">Trade Fee</Grid>
-            <Grid item xs={2} container justify="center">Price</Grid>
-            <Grid item xs={3} container justify="center">Amount</Grid>
+            <Grid item xs container justify="center">Date</Grid>
+            <Grid item xs container justify="center">Pair</Grid>
+            <Grid item xs container justify="center">Trade Fee</Grid>
+            <Grid item xs container justify="center">Price</Grid>
+            <Grid item xs container justify="center">Amount</Grid>
           </Grid>
         </Hidden>
         {items.map((item, index) => (
@@ -128,19 +128,19 @@ class OrderTable extends React.Component {
                     {1 + index + (currentPage * 10 - 10)}
                   </StyledLink>
                 </Cell>
-                <Cell item xs={2} data-label="Date" container justify="center">
+                <Cell item xs data-label="Date" container justify="center">
                   {format(new Date(item.updatedAt), 'DD MMM  YYYY')}
                 </Cell>
-                <Cell item xs={2} data-label="Pair" container justify="center">
+                <Cell item xs data-label="Pair" container justify="center">
                   {item.pairName.replace('/', ' / ')}
                 </Cell>
-                <Cell item xs={2} data-label="Trade Fee" container justify="center">
+                <Cell item xs data-label="Trade Fee" container justify="center">
                   {round(item.makeFee.toLocaleString('fullwide', {useGrouping:false}), 5) + ` ${item.pairName.split('/')[1]}`}
                 </Cell>
-                <Cell item xs={2} data-label="Taker Fee" container justify="center">
+                <Cell item xs data-label="Taker Fee" container justify="center">
                   {round(item.pricepoint, 5)}
                 </Cell>
-                <Cell item xs={3} data-label="Fee" container justify="center">
+                <Cell item xs data-label="Fee" container justify="center">
                   {round(item.amount, 5)}
                 </Cell>
               </Grid>

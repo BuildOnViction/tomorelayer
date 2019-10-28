@@ -3,13 +3,13 @@ import { bilformat } from 'service/helper'
 export const VOLUME_CHART = (data, bgFill, lineFill) => ({
   type: 'line',
   data: {
-    labels: data.map((t) => t.label),
+    labels: data.map((t) => t.date),
     datasets: [
       {
         backgroundColor: bgFill,
         borderColor: lineFill,
         borderWidth: 2,
-        data: data.map((t) => t.value),
+        data: data.map((t) => t.volume),
         fill: 'start',
         lineTension: 0,
         radius: 0,
@@ -85,13 +85,12 @@ export const VOLUME_CHART = (data, bgFill, lineFill) => ({
 export const TOKEN_CHART = (data, fills) => ({
   type: 'horizontalBar',
   data: {
-    labels: data.map((t) => t.label),
+    labels: data.map((t) => t.symbol),
     datasets: [
       {
         borderColor: 'transparent',
         backgroundColor: fills,
-        data: data.map((t) => t.value),
-        yAxisID: 'yAxis1',
+        data: data.map((t) => t.percent),
       },
     ],
   },
@@ -105,10 +104,9 @@ export const TOKEN_CHART = (data, fills) => ({
     scales: {
       yAxes: [
         {
-          id: 'yAxis1',
           type: 'category',
           categoryPercentage: 1,
-          barPercentage: 0.2,
+          barPercentage: 0.4,
           gridLines: {
             drawBorder: false,
             drawOnChartArea: false,
@@ -118,7 +116,6 @@ export const TOKEN_CHART = (data, fills) => ({
             padding: 20,
             fontColor: '#7473A6',
           },
-          position: 'left',
         },
       ],
       xAxes: [
@@ -129,9 +126,11 @@ export const TOKEN_CHART = (data, fills) => ({
             drawTicks: false,
           },
           ticks: {
+            beginAtZero: true,
+            padding: 0,
             display: false,
-            max: data[0].value * 1.1,
-          },
+            suggestedMax: data[0].percent * 1.1,
+          }
         },
       ],
     },

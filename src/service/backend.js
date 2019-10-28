@@ -108,6 +108,12 @@ const API = {
       const baseEndpoint = `${process.env.REACT_APP_STAT_SERVICE_URL}/api/tokens`
       return `${baseEndpoint}/${tokenAddress}`
     },
+    getPairStat: (coinbase, pair, query = {}) => {
+      const fixedPairName = pair.replace('/', '%2F')
+      const url = `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/stats/${coinbase}/${fixedPairName}`
+      const params = qs.stringify(query)
+      return `${url}?${params}`
+    }
   },
 }
 
@@ -198,6 +204,11 @@ export const getTomoPrice = async () =>
 
 export const getAccountTx = async (params) =>
   fetch(proxiedAPI.external.accountTx(params))
+    .then(genericHandler)
+    .catch(logging)
+
+export const getPairStat = async (coinbase, pairs, query = {}) =>
+  fetch(proxiedAPI.external.getPairStat(coinbase, pairs, query))
     .then(genericHandler)
     .catch(logging)
 
