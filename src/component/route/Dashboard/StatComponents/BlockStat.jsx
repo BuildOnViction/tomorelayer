@@ -62,9 +62,9 @@ class StatCard extends React.Component {
 
 const BlockStat = ({ data }) => (
   <Grid item container spacing={4}>
-    <StatCard icon={networkVolIcon} stat={data.volume24h} helpText="Relayer Volume 24h" />
-    <StatCard icon={networkFeeIcon} stat={data.totalFee} helpText="Relayer Fee 24h" />
-    <StatCard icon={tradeIcon} stat={data.tradeNumber} helpText="Trades(24h)" />
+    <StatCard icon={networkVolIcon} stat={data.volume24h} helpText="Volume 24h" />
+    <StatCard icon={networkFeeIcon} stat={data.totalFee} helpText="Fee 24h" />
+    <StatCard icon={tradeIcon} stat={data.tradeNumber} helpText="Trades 24h" />
     <StatCard icon={tomoPriceIcon} stat={data.tomoprice} helpText="Tomo Price" />
   </Grid>
 )
