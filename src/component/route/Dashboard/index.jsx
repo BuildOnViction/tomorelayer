@@ -17,7 +17,7 @@ import {
 
 
 class Dashboard extends React.Component {
-  UNIQUE_TOKENS = []
+  // UNIQUE_TOKENS = []
   TOKEN_MAP = {}
   INTERVAL_UPDATE = undefined
 
@@ -51,14 +51,14 @@ class Dashboard extends React.Component {
 
   createUniqueTokenList = () => {
     const {
-      match,
-      relayers,
+      // match,
+      // relayers,
       Tokens,
     } = this.props
-    const coinbase = match.params.coinbase
-    const relayer = relayers[coinbase]
+    // const coinbase = match.params.coinbase
+    // const relayer = relayers[coinbase]
     // TODO: detect unrecognize token and save it to DB
-    this.UNIQUE_TOKENS = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
+    // this.UNIQUE_TOKENS = _.unique(relayer.from_tokens.concat(relayer.to_tokens)).map(t => t.toLowerCase())
     this.TOKEN_MAP = Tokens.reduce((map, tk) => ({
       ...map,
       [tk.symbol]: tk,
