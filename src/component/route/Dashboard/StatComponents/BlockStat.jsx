@@ -46,7 +46,7 @@ class StatCard extends React.Component {
       <Grid item xs={6} md={3}>
         <Paper elevation={0} style={{ padding: 20 }}>
           <Box display="flex" flexDirection="column" alignItems="center">
-            <img alt="" src={icon} height="27px" />
+            <img alt="" src={icon} height="100%" />
             <Typography variant="h6" className={cls}>
               {stat}
             </Typography>
