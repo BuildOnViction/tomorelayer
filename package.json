@@ -73,7 +73,8 @@
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
     "request": "^2.88.0",
-    "sequelize": "^5.8.10"
+    "sequelize": "^5.8.10",
+    "url-join": "^4.0.1"
   },
   "husky": {
     "hooks": {
