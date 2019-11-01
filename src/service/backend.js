@@ -220,7 +220,7 @@ export const getTokenInfo = async (tokenAddress) =>
 
 export const notifyDex = async (dexUrl) =>
   HttpClient()
-    .put(urljoin(dexUrl, `/api/relayer`)
+    .put(urljoin(dexUrl, `/api/relayer`))
     .then(resp => {
       try {
         return resp
