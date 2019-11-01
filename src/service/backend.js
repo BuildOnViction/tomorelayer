@@ -1,4 +1,5 @@
 import qs from 'qs'
+import urljoin from 'url-join'
 
 export const BACKEND_URI = ((env) => {
   switch (env) {
@@ -219,7 +220,7 @@ export const getTokenInfo = async (tokenAddress) =>
 
 export const notifyDex = async (dexUrl) =>
   HttpClient()
-    .put(`${dexUrl}/api/relayer`.replace('//', '/'))
+    .put(urljoin(dexUrl, `/api/relayer`)
     .then(resp => {
       try {
         return resp
