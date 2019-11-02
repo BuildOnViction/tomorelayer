@@ -54,7 +54,7 @@ export const wrappers = {
     validateOnChange: false,
     mapPropsToValues: (props) => ({
       owner: props.relayer.owner,
-      trade_fee: props.relayer.trade_fee / 100,
+      trade_fee: props.relayer.trade_fee / 10,
       from_tokens: props.relayer.from_tokens,
       to_tokens: props.relayer.to_tokens,
     }),
@@ -63,7 +63,7 @@ export const wrappers = {
       const payload = {
         ...meta.props.relayer,
         ...values,
-        trade_fee: values.trade_fee * 100,
+        trade_fee: values.trade_fee * 10,
       }
 
       const { status, details } = await meta.props.RelayerContract.update(payload)

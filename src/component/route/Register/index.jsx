@@ -31,7 +31,7 @@ export class Register extends React.Component {
         deposit: MISC.MinimumDeposit,
         coinbase: '',
         name: '',
-        trade_fee: 0.01,
+        trade_fee: 0.1,
         from_tokens: [],
         to_tokens: [],
       }
@@ -60,7 +60,7 @@ export class Register extends React.Component {
   confirmRegister = async () => {
     const payload = {
       ...this.state.payload,
-      trade_fee: _.round(this.state.payload.trade_fee * 100, 0),
+      trade_fee: _.round(this.state.payload.trade_fee * 10, 0),
     }
 
     try {
