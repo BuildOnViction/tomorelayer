@@ -12,12 +12,31 @@ import {
   ethers,
   Wallet as WalletSigner,
 } from 'ethers'
+import { withStyles } from '@material-ui/styles'
 import {
   getBalance,
 } from 'service/blockchain'
 
 
 const DEFAULT_HD_PATH = "m/44'/60'/0'/0/0"
+
+const HdPathNote = withStyles({
+  root: {
+    marginTop: 5,
+    fontSize: 12,
+    color: '#7473a6',
+    lineHeight: '18px',
+
+    '& span': {
+      cursor: 'pointer',
+      color: '#cfcde1',
+
+      '&:hover': {
+        color: '#fff'
+      }
+    }
+  }
+})(Typography)
 
 export default class SoftwareWallet extends React.Component {
 
@@ -38,6 +57,8 @@ export default class SoftwareWallet extends React.Component {
     derivationPath: e.target.value,
     errorAlert: undefined,
   })
+
+  chooseDerivationPath = derivationPath => this.setState({ derivationPath })
 
   changeAddress = () => this.setState({
     wallet: undefined,
@@ -105,11 +126,13 @@ export default class SoftwareWallet extends React.Component {
                 value={this.state.derivationPath}
                 onChange={this.changeDerivationPath}
                 type="text"
-                className="mb-1"
                 error={Boolean(errorAlert)}
                 variant="outlined"
                 fullWidth
               />
+              <HdPathNote component="div">
+                To unlock the wallet, try paths <span onClick={() => this.chooseDerivationPath("m/44'/60'/0'")}>m/44'/60'/0'</span> or <span onClick={() => this.chooseDerivationPath("m/44'/60'/0'/0")}>m/44'/60'/0'/0</span> or <span onClick={() => this.chooseDerivationPath("m/44'/889'/0'/0")}>m/44'/889'/0'/0</span>.
+              </HdPathNote>
             </Box>
             <Box justifyContent="center" display="flex" className="mt-2">
               <Button onClick={this.importWallet} variant="contained">
