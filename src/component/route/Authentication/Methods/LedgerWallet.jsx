@@ -28,6 +28,24 @@ const AddressItem = withStyles({
   }
 })(FormControlLabel)
 
+const HdPathNote = withStyles({
+  root: {
+    marginTop: 5,
+    fontSize: 12,
+    color: '#7473a6',
+    lineHeight: '18px',
+
+    '& span': {
+      cursor: 'pointer',
+      color: '#cfcde1',
+
+      '&:hover': {
+        color: '#fff'
+      }
+    }
+  }
+})(Typography)
+
 
 export default class LedgerWallet extends React.Component {
 
@@ -42,6 +60,8 @@ export default class LedgerWallet extends React.Component {
   changePath = e => this.setState({
     hdpath: e.target.value,
   })
+
+  choosePath = hdpath => this.setState({ hdpath })
 
   unlock = async () => {
     const ledgerWallet = await ledger.open({ customDerivationPath: this.state.hdpath })
@@ -105,9 +125,11 @@ export default class LedgerWallet extends React.Component {
                 value={hdpath}
                 onChange={this.changePath}
                 variant="outlined"
-                disabled
                 fullWidth
               />
+              <HdPathNote component="div">
+                To unlock the wallet, try paths <span onClick={() => this.choosePath("m/44'/60'/0'")}>m/44'/60'/0'</span> or <span onClick={() => this.choosePath("m/44'/60'/0'/0")}>m/44'/60'/0'/0</span> with Ethereum App, or try path <span onClick={() => this.choosePath("m/44'/889'/0'/0")}>m/44'/889'/0'/0</span> with TomoChain App (on Ledger).
+              </HdPathNote>
             </Grid>
             <Grid item>
               <Button onClick={this.unlock} variant="contained">
