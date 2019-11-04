@@ -13,10 +13,20 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/styles'
 import ledger from '@vutr/purser-ledger'
 import { ethers } from 'ethers'
 import WalletSigner from 'service/wallet'
 import * as blk from 'service/blockchain'
+
+const AddressItem = withStyles({
+  root: {
+    '& span': {
+      marginBottom: 0,
+      fontFamily: 'monospace',
+    }
+  }
+})(FormControlLabel)
 
 
 export default class LedgerWallet extends React.Component {
@@ -148,7 +158,7 @@ export default class LedgerWallet extends React.Component {
               onChange={this.setDefaultAddress}
             >
               {ledgerWallet && ledgerWallet.otherAddresses.map(r => (
-                <FormControlLabel
+                <AddressItem
                   key={r}
                   value={r}
                   control={<Radio />}
