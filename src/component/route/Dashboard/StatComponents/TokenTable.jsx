@@ -37,7 +37,7 @@ const TokenTable = ({ tokens, coinbase }) => {
 
   return isEmpty(tokens) ? <EmptyTokenTable coinbase={coinbase} /> : (
     <Grid container direction="column">
-      <Grid item container className="mb-1" className="p-1">
+      <Grid item container className="mb-1 p-1">
         <Grid item style={indexColumnStyle}>Rank</Grid>
         {TableHeads.map(h => (
           <Grid key={h} item xs container justify="center">
