@@ -42,16 +42,16 @@ const FormTrade = ({
               onChange={handleChange}
               error={errors.trade_fee}
               type="number"
-              variant="outlined"
-              inputProps={{
-                step: 0.1,
-                max: 9.99,
-                min: 0.1,
-              }}
+              variant="outlined"              
               fullWidth
               disabled={isSubmitting}
               InputProps={{
-                endAdornment: '%'
+                endAdornment: '%',
+                inputProps: {
+                  step: 0.1,
+                  max: 9.99,
+                  min: 0.1,
+                }
               }}
             />
           </Grid>

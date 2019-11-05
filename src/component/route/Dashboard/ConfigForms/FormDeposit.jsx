@@ -83,10 +83,10 @@ class FormDeposit extends React.Component {
                   name="deposit"
                   variant="outlined"
                   InputProps={{
-                    endAdornment: 'TOMO'
-                  }}
-                  inputProps={{
-                    'data-testid': 'deposit-input'
+                    endAdornment: 'TOMO',
+                    inputProps: {
+                      'data-testid': 'deposit-input'
+                    }
                   }}
                   fullWidth
                   disabled={isSubmitting || relayer.resigning}
