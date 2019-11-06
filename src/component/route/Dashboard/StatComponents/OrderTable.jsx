@@ -104,7 +104,7 @@ class OrderTable extends React.Component {
     return (
       <Grid container direction="column" style={{ minHeight: '700px' }}>
         <Hidden xsDown>
-          <Grid item container className="mb-1" className="p-1">
+          <Grid item container className="mb-1 p-1">
             <Grid item xs={1} container justify="center">#</Grid>
             <Grid item xs container justify="center">Date</Grid>
             <Grid item xs container justify="center">Pair</Grid>

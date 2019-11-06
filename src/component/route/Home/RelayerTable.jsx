@@ -43,7 +43,7 @@ export default class RelayerTable extends React.Component {
 
     return (
       <Grid container direction="column">
-        <Grid item container className="mb-1" className="p-1">
+        <Grid item container className="mb-1 p-1">
           {TableHeads.map(h => <Grid key={h} item sm={h === 'Rank' ? 2 : 3} container justify="center">{h}</Grid>)}
         </Grid>
         {mock.map((item, index) => (
