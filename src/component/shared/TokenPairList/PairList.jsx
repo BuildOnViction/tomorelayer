@@ -4,6 +4,7 @@ import {
   Checkbox,
   List,
   Typography,
+  InputLabel,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -29,7 +30,7 @@ const SmallCheckbox = withStyles(theme => ({
     color: theme.palette.maintitle,
     height: 5,
     width: 5,
-    marginLeft: 5,
+    marginLeft: 10,
     opacity: .3,
     '& svg': {
       fontSize: '1rem',
@@ -46,6 +47,14 @@ const SmallCheckbox = withStyles(theme => ({
     color: `${theme.palette.maintitle}33 !important`,
   }
 }))(Checkbox)
+
+const SelectedOnlyLabel = withStyles(theme => ({
+  root: {
+    display: 'inline-block',
+    color: theme.palette.subtitle,
+    cursor: 'pointer'
+  }
+}))(InputLabel)
 
 export default class PairList extends React.Component {
 
@@ -66,7 +75,8 @@ export default class PairList extends React.Component {
           </Box>
           <Box>
             <Typography variant="body2">
-              Selected only <SmallCheckbox disableRipple checked={selectedOnly} onChange={setSelectedOnly} />
+              <SelectedOnlyLabel htmlFor="selected-only">Selected only</SelectedOnlyLabel> 
+              <SmallCheckbox id="selected-only" disableRipple checked={selectedOnly} onChange={setSelectedOnly} />
             </Typography>
           </Box>
         </ListHeader>

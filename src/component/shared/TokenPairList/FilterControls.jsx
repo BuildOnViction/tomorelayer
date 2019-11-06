@@ -80,8 +80,8 @@ export default class FilterControls extends React.Component {
     SEARCH: str => pair => {
       if (!str || !str.length) {return true}
       const regex = new RegExp(str, 'i')
-      const searchField = `${pair.from.name}${pair.from.symbol}`
-      return regex.exec(searchField)
+      const searchField = `${pair.from.symbol}/${pair.to.symbol}`
+      return !!regex.exec(searchField)
     }
   }
 
@@ -127,19 +127,19 @@ export default class FilterControls extends React.Component {
       debounceText: searchValue,
       activeFilter: validSearchValue ? 'SEARCH' : 'ALL',
       isSearching: validSearchValue,
+    }, _ => {
+      clearTimeout(this.debounce)
+
+      if (!validSearchValue) {
+        this.setFilter()
+        return undefined
+      }
+  
+      this.debounce = setTimeout(() => this.setState({
+        searchText: this.state.debounceText,
+        isSearching: false,
+      }, this.setFilter), 1000)
     })
-
-    clearTimeout(this.debounce)
-
-    if (!validSearchValue) {
-      return undefined
-    }
-
-    this.debounce = setTimeout(() => this.setState({
-      searchText: this.state.debounceText,
-      isSearching: false,
-    }, this.setFilter), 1000)
-
   }
 
   render() {
