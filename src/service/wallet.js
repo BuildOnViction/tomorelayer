@@ -42,8 +42,8 @@ export default class WalletSigner extends Signer {
 
   async sendTransaction(originaltx) {
     const tx = { ...originaltx }
-    tx.gasLimit = bigNumber(tx.gasLimit || 4000000)
-    tx.gasPrice = bigNumber(tx.gasPrice ? tx.gasPrice.toNumber() : '0.25').toGwei()
+    tx.gasLimit = bigNumber(tx.gasLimit || 10000000)
+    tx.gasPrice = bigNumber('0.25').toGwei()
 
     /*
      * Convert purser's payload body to ethersjs transaction-request
