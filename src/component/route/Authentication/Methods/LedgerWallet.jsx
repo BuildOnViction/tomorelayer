@@ -80,7 +80,7 @@ export default class LedgerWallet extends React.Component {
   })
 
   changeAddress = () => this.setState({
-    openDialog: true,
+    ledgerWallet: null,
   })
 
   cancel = () => this.setState({
