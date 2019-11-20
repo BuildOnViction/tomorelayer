@@ -64,3 +64,4 @@ try:
 except Exception as err:
     logger.debug(err)
     logger.info('No need creating tables')
+    database.rollback()
