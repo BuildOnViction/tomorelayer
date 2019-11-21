@@ -44,8 +44,7 @@ class BaseHandler(RequestHandler):
             self.validator = CustomValidator(self.schema, purge_unknown=True, web3=self.application.blockchain.web3)
 
     def set_default_headers(self):
-        if not is_production:
-            self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type,x-requested-with")
         self.set_header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, DELETE, OPTIONS')
 

@@ -67,7 +67,7 @@ export const wrappers = {
     validateOnChange: false,
     validate: (values) => {
       const errors = {}
-      if (values.trade_fee > 9.99 || values.trade_fee < 0.1) {
+      if (values.trade_fee > 10 || values.trade_fee < 0.01) {
         errors.trade_fee = true
       }
       return errors
