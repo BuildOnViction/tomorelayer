@@ -25,6 +25,7 @@ database = PooledPostgresqlExtDatabase(
     password=getenv('DB_PASSWORD'),
     host=getenv('DB_HOST'),
     port=getenv('DB_PORT'),
+    autorollback=True,
 )
 
 objects = Manager(database)
