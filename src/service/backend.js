@@ -5,10 +5,8 @@ export const BACKEND_URI = ((env) => {
   switch (env) {
     case 'test':
       return 'http://localhost:8889'
-    case 'production':
-      return window.location.origin
     default:
-      return 'http://localhost:8888'
+      return window.location.origin
   }
 })(process.env.NODE_ENV)
 

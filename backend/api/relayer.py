@@ -126,9 +126,6 @@ class RelayerHandler(BaseHandler):
             relayer['owner'] = relayer['new_owner']
             del relayer['new_owner']
 
-        if not self.validator.validate(relayer):
-            raise InvalidValueException(str(self.validator.document_error_tree))
-
         normalized_relayer = self.validator.normalized(relayer)
 
         try:
