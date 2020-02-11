@@ -19,7 +19,7 @@ export const TransferNotice = ({ confirm }) => (
       <img alt="" src={transferImage} width="150px" height="150px" />
     </Grid>
     <Grid item xs={12} sm={12} md={8}>
-      You are transferring your relayer ownership. Once transferred, you will no longer receive trading fees through your Relayer. You will not be able to withdraw the remainning deposit. The address that you transfer to will become the new owner of the relayer, including both the deposit and the fees received from the future trades.
+      You are transferring your relayer ownership. Once transferred, you will no longer receive trading fees through your Relayer. You will not be able to withdraw the remaining deposit. The address that you transfer to will become the new owner of the relayer, including both the deposit and the fees received from the future trades.
     </Grid>
     <Grid item container justify="center" className="mt-3">
       <Button onClick={confirm} color="primary" variant="contained">
