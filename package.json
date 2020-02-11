@@ -35,7 +35,7 @@
     "wretch": "^1.5.4"
   },
   "scripts": {
-    "start": "HTTPS=true react-app-rewired start",
+    "start": "react-app-rewired start",
     "docker": "docker-compose up -d",
     "backend": "NODE_ENV=local node custom-script.js",
     "backend:test": "NODE_ENV=test node custom-script.js",
@@ -46,7 +46,7 @@
     "pylint": "pipenv run pylint backend/*",
     "ctest": "embark test test/relayer-contract.test.js"
   },
-  "proxy": "http://localhost:8888",
+  "proxy": "http://localhost:3003",
   "eslintConfig": {
     "extends": "react-app"
   },
