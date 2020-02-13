@@ -40,7 +40,7 @@ const FormTransfer = props => {
     submitForm()
   }
 
-  const transferDisabled = isSubmitting || values.owner === relayer.owner || isEmpty(values.owner) || isEmpty(values.coinbase)
+  const transferDisabled = isSubmitting || values.owner === relayer.owner || isEmpty(values.owner)
 
   const nextStep = () => setStep(1)
 
@@ -73,7 +73,7 @@ const FormTransfer = props => {
               </Typography>
             </Grid>
             <Grid item>
-              Which address and coinbase would you like to transfer to?
+              Which owner address would you like to transfer to?
             </Grid>
             <Grid item container direction="column" spacing={2}>
               <Grid item>
@@ -88,21 +88,6 @@ const FormTransfer = props => {
                     'data-testid': 'new-owner-input'
                   }}
                   helperText={errors.owner && <i className="text-alert">{errors.owner}</i>}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  label="New Coinbase"
-                  value={values.coinbase}
-                  onChange={handleChange}
-                  error={Boolean(errors.coinbase)}
-                  name="coinbase"
-                  variant="outlined"
-                  inputProps={{
-                    'data-testid': 'new-coinbase-input'
-                  }}
-                  helperText={errors.coinbase && <i className="text-alert">{errors.coinbase}</i>}
                   fullWidth
                 />
               </Grid>
@@ -128,7 +113,7 @@ const FormTransfer = props => {
             <DialogTitle id="alert-dialog-title">WARNING!</DialogTitle>
             <DialogContent>
               <Typography id="alert-dialog-description" variant="body2">
-                If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill.
+                You are transferring your relayer ownership. Once transferred, you will no longer receive trading fees through your Relayer. You will not be able to withdraw the remaining deposit. The address that you transfer to will become the new owner of the relayer, including both the deposit and the fees received from the future trades. Do NOT transfer to an exchange address or a smart contract address.
               </Typography>
             </DialogContent>
             <Box display="flex" justifyContent="space-between" className="p-1">
@@ -157,9 +142,7 @@ const FormTransfer = props => {
 }
 
 const mapProps = state => ({
-  RelayerContract: state.blk.RelayerContract,
-  invalidCoinbases: state.Relayers.map(t => t.owner).concat(state.Relayers.map(t => t.coinbase)),
-  invalidOwnerAddresses: state.Relayers.map(t => t.coinbase),
+  RelayerContract: state.blk.RelayerContract
 })
 
 const actions = {

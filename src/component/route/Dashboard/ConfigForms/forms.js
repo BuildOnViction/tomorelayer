@@ -136,29 +136,11 @@ export const wrappers = {
     validate: (values, props) => {
       const errors = {}
 
-      validateCoinbase(values.coinbase, (isValid) => {
-        if (!isValid) {
-          errors.coinbase = 'invalid addresss'
-        }
-      })
-
       validateCoinbase(values.owner, (isValid) => {
         if (!isValid) {
           errors.owner = 'invalid addresss'
         }
       })
-
-      if (values.coinbase !== props.relayer.coinbase && props.invalidCoinbases.includes(values.coinbase)) {
-        errors.coinbase = 'invalid coinbase'
-      }
-
-      if (props.invalidOwnerAddresses.includes(values.owner)) {
-        errors.owner = 'invalid owner address'
-      }
-
-      if (values.coinbase === values.owner) {
-        errors.coinbase = errors.owner = 'coinbase cannot be the same as owner address'
-      }
 
       return errors
     },

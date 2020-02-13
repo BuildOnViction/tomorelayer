@@ -53,7 +53,7 @@ export default class RelayerContract {
 
   async transfer(payload, config = {}) {
     try {
-      const parsedPayload = [payload.currentCoinbase, payload.owner, payload.coinbase]
+      const parsedPayload = [payload.currentCoinbase, payload.owner]
 
       const tx = await this.contractWithSigner.transfer(...parsedPayload, config)
       const details = await tx.wait()
