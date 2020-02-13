@@ -108,10 +108,12 @@ export const wrappers = {
       if (!status) {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
+        const result = await meta.props.RelayerContract.getRelayerByCoinbase(meta.props.relayer.coinbase)
+
         const relayer = await http.updateRelayer({
           ...meta.props.relayer,
           owner: meta.props.relayer.owner,
-          deposit: meta.props.relayer.deposit + values.deposit,
+          deposit: result[2].toString(10),
           id: meta.props.relayer.id,
         })
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'new deposit has been made' })
