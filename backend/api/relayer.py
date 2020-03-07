@@ -143,7 +143,7 @@ class RelayerHandler(BaseHandler):
             b = Blockchain()
             r = b.getRelayerByCoinbase(db_relayer['coinbase'])
 
-            if r[1].lower() != user.lower():
+            if r[1].lower() != relayer['owner'].lower():
                 raise InvalidValueException('owner required')
 
             query = (Relayer.update(**normalized_relayer).where(Relayer.id == relayer_id).returning(Relayer))
