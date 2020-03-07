@@ -20,7 +20,6 @@ aiopg = "*"
 web3 = "*"
 logzero = "*"
 pyjwt = "*"
-aioredis = "*"
 cerberus = "*"
 
 [requires]

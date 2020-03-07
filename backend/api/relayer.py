@@ -1,7 +1,7 @@
 from playhouse.shortcuts import model_to_dict
 from model import Relayer
 from exception import InvalidValueException, MissingArgumentException
-from util.decorator import authenticated, save_redis
+from util.decorator import authenticated
 from .base import BaseHandler
 
 
@@ -92,7 +92,6 @@ class RelayerHandler(BaseHandler):
         self.json_response(relayers)
 
     @authenticated
-    @save_redis(field='relayer')
     async def post(self, user):
         """Add new relayer"""
         relayer = self.request_body
@@ -108,7 +107,6 @@ class RelayerHandler(BaseHandler):
         self.json_response(model_to_dict(obj))
 
     @authenticated
-    @save_redis(field='relayer')
     async def patch(self, user):
         """Update existing relayer"""
         relayer = self.request_body
@@ -129,6 +127,12 @@ class RelayerHandler(BaseHandler):
         normalized_relayer = self.validator.normalized(relayer)
 
         try:
+            db_relayer = Relayer.select().where(Relayer.id == relayer_id).get()
+
+            db_relayer = model_to_dict[db_relayer]
+            if (user.lower() != relayer_owner.lower()) or (user.lower() != db_relayer['owner'].lower()):
+                raise MissingArgumentException('wrong owner')
+
             query = (Relayer.update(**normalized_relayer).where(Relayer.id == relayer_id).returning(Relayer))
             cursor = query.execute()
             self.json_response(model_to_dict(cursor[0]))
@@ -136,7 +140,6 @@ class RelayerHandler(BaseHandler):
             raise InvalidValueException('relayer id={param} does not exist'.format(param=str(relayer_id)))
 
     @authenticated
-    @save_redis(field='relayer')
     async def delete(self, user):
         """Delete a relayer"""
         relayer_id = self.get_argument('id', None)
@@ -146,6 +149,11 @@ class RelayerHandler(BaseHandler):
 
         try:
             relayer = Relayer.select().where(Relayer.owner == user, Relayer.id == relayer_id).get()
+            db_relayer = model_to_dict(relayer)
+
+            if user.lower() != db_relayer['owner'].lower():
+                raise MissingArgumentException('wrong owner')
+
             relayer.delete_instance()
             self.json_response({})
         except Exception:

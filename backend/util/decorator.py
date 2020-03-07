@@ -94,25 +94,3 @@ MODEL_TYPE = {
     'contract': Contract,
     'relayer': Relayer,
 }
-
-def save_redis(key='public_res', field=None):
-
-    def wrapped(handler):
-
-        async def wrapped_handler(request_handler, *args, **kwargs):
-            await handler(request_handler, *args, **kwargs)
-
-            if not field:
-                return
-
-            dbmodel = MODEL_TYPE[field]
-            hfield = field.capitalize() + 's'
-
-            entities = [model_to_dict(entity or {}) for entity in dbmodel.select()]
-            await request_handler.application.redis.hmset_dict('public_res', {hfield: json.dumps(entities)})
-            logger.debug('Save new %s to redis', field)
-
-
-        return wrapped_handler
-
-    return wrapped

@@ -5,7 +5,6 @@ from api.token import TokenHandler
 from api.relayer import RelayerHandler
 from api.contract import ContractHandler
 from api.public import PublicHandler
-from api.redis import RedisHandler
 # from api.mailer import MailHandler
 
 # HostMatches
@@ -19,5 +18,4 @@ route = [(ALLOWED_HOSTS, [
     ("/api/relayer", RelayerHandler),
     ("/api/token", TokenHandler),
     ("/api/public", PublicHandler),
-    ("/api/redis", RedisHandler),
 ])]

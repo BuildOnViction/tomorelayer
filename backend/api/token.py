@@ -1,6 +1,6 @@
 from playhouse.shortcuts import model_to_dict
 from model import Token
-from util.decorator import authenticated, common_authenticated, save_redis
+from util.decorator import authenticated, common_authenticated
 from exception import InvalidValueException
 from .base import BaseHandler
 
@@ -14,7 +14,6 @@ class TokenHandler(BaseHandler):
         self.json_response(tokens)
 
     @common_authenticated
-    @save_redis(field='token')
     async def post(self, user=None):
         """Add new tokens"""
         tokens = self.request_body

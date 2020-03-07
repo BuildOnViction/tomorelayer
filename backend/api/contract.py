@@ -2,7 +2,7 @@ from peewee import ProgrammingError
 from playhouse.shortcuts import model_to_dict
 from model import Contract
 from exception import InvalidValueException
-from util.decorator import admin_required, authenticated, save_redis
+from util.decorator import admin_required, authenticated
 from .base import BaseHandler
 
 
@@ -15,7 +15,6 @@ class ContractHandler(BaseHandler):
         self.json_response(contracts)
 
     @admin_required
-    @save_redis(field='contract')
     async def post(self):
         contracts = self.request_body
 
@@ -37,7 +36,6 @@ class ContractHandler(BaseHandler):
             return self.json_response(result)
 
     @admin_required
-    @save_redis(field='contract')
     async def patch(self):
         contract = self.request_body
         contract_id = contract.get('id', None)

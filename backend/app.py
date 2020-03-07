@@ -19,8 +19,6 @@ if __name__ == "__main__":
     parse_command_line()
     app = Application(route, default_handler_class=NotFoundHandler, **settings)
     app.objects = settings['objects']
-    app.redis = IOLoop.current().run_sync(settings['redis'])
-    logger.debug(app.redis)
     app.blockchain = Blockchain()
     logger.warning('Running on port: %s', options.port)
     app.listen(options.port)
