@@ -3,6 +3,7 @@ from model import Relayer
 from exception import InvalidValueException, MissingArgumentException
 from util.decorator import authenticated
 from .base import BaseHandler
+from blockchain import Blockchain
 
 
 RELAYER_SCHEMA = {
@@ -103,6 +104,12 @@ class RelayerHandler(BaseHandler):
 
         normalized_relayer = self.validator.normalized(relayer)
 
+        b = Blockchain()
+        r = b.getRelayerByCoinbase(relayer['coinbase'])
+
+        if r[1].lower() != user.lower():
+            raise InvalidValueException('owner required')
+
         obj = await self.application.objects.create(Relayer, **normalized_relayer)
         self.json_response(model_to_dict(obj))
 
@@ -133,6 +140,12 @@ class RelayerHandler(BaseHandler):
             if (user.lower() != relayer_owner.lower()) or (user.lower() != db_relayer['owner'].lower()):
                 raise MissingArgumentException('wrong owner')
 
+            b = Blockchain()
+            r = b.getRelayerByCoinbase(db_relayer['coinbase'])
+
+            if r[1].lower() != user.lower():
+                raise InvalidValueException('owner required')
+
             query = (Relayer.update(**normalized_relayer).where(Relayer.id == relayer_id).returning(Relayer))
             cursor = query.execute()
             self.json_response(model_to_dict(cursor[0]))
@@ -153,6 +166,13 @@ class RelayerHandler(BaseHandler):
 
             if user.lower() != db_relayer['owner'].lower():
                 raise MissingArgumentException('wrong owner')
+
+            b = Blockchain()
+            r = b.getRelayerByCoinbase(db_relayer['coinbase'])
+
+            if r[1].lower() != user.lower():
+                raise InvalidValueException('owner required')
+
 
             relayer.delete_instance()
             self.json_response({})
