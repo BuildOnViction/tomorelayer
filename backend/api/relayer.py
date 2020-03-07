@@ -129,7 +129,7 @@ class RelayerHandler(BaseHandler):
         try:
             db_relayer = Relayer.select().where(Relayer.id == relayer_id).get()
 
-            db_relayer = model_to_dict[db_relayer]
+            db_relayer = model_to_dict(db_relayer)
             if (user.lower() != relayer_owner.lower()) or (user.lower() != db_relayer['owner'].lower()):
                 raise MissingArgumentException('wrong owner')
 
