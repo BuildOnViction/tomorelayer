@@ -9,21 +9,13 @@ import { AdapterLink } from 'component/shared/Adapters'
 
 const FooterLinks = [
   {
-    text: 'Need helps?',
-    link: '/help',
-  },
-  {
     text: 'Privacy Policy',
-    link: '/policy',
+    link: 'https://docs.tomochain.com/legal/privacy',
   },
   {
-    text: 'Term of services',
-    link: '/terms-and-services',
-  },
-  {
-    text: 'API Documents',
-    link: '/documents',
-  },
+    text: 'Terms of Use',
+    link: 'https://docs.tomochain.com/legal/terms-of-use',
+  }
 ]
 
 const FooterButtons = [
