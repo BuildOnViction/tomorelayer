@@ -22,6 +22,6 @@ class Blockchain:
     def getRelayerByCoinbase(self, coinbase):
         contract = model_to_dict(Contract.select().where(Contract.name == 'RelayerRegistration').get())
         c = self.web3.eth.contract(address=contract['address'], abi=contract['abi'])
-        relayer = c.functions.getRelayerByCoinbase(coinbase).call()
+        relayer = c.functions.getRelayerByCoinbase(self.web3.toChecksumAddress(coinbase)).call()
         logger.info('Relayer %s', relayer)
         return relayer
