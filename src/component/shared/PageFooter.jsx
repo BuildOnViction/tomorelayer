@@ -9,21 +9,13 @@ import { AdapterLink } from 'component/shared/Adapters'
 
 const FooterLinks = [
   {
-    text: 'Need helps?',
-    link: '/help',
-  },
-  {
     text: 'Privacy Policy',
-    link: '/policy',
+    link: 'https://docs.tomochain.com/legal/privacy',
   },
   {
-    text: 'Term of services',
-    link: '/terms-and-services',
-  },
-  {
-    text: 'API Documents',
-    link: '/documents',
-  },
+    text: 'Terms of Use',
+    link: 'https://docs.tomochain.com/legal/terms-of-use',
+  }
 ]
 
 const FooterButtons = [
@@ -62,8 +54,8 @@ const PageFooter = () => (
         </Box>
         <Box className="footer-links">
           {FooterLinks.map(item => (
-            <Link to={item.link} key={item.link} component={AdapterLink}>
-              {item.text}
+            <Link href={item.link} underline="none" rel="noopener noreferrer" target="_blank">
+                {item.text}
             </Link>
           ))}
         </Box>
