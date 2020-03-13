@@ -5,7 +5,6 @@ import {
   Grid,
   Link,
 } from '@material-ui/core'
-import { AdapterLink } from 'component/shared/Adapters'
 
 const FooterLinks = [
   {

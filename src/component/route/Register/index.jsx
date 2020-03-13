@@ -60,7 +60,7 @@ export class Register extends React.Component {
   confirmRegister = async () => {
     const payload = {
       ...this.state.payload,
-      trade_fee: _.round(this.state.payload.trade_fee * 10, 0),
+      trade_fee: _.round(this.state.payload.trade_fee * 100, 0),
     }
 
     try {
