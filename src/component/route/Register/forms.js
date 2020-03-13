@@ -21,7 +21,7 @@ export const wrappers = {
         }
       })
 
-      if (_.strEqual(values.coinbase, props.userAddress)) {
+      if (_.strEqual(values.coinbase.toLowerCase(), props.userAddress.toLowerCase())) {
         errors.coinbase = 'coinbase cannot be the same as owner address'
       }
 
