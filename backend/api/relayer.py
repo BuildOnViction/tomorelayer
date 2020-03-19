@@ -99,9 +99,6 @@ class RelayerHandler(BaseHandler):
 
         verify_user(user, relayer['owner'])
 
-        if not self.validator.validate(relayer):
-            raise InvalidValueException(str(self.validator.document_error_tree))
-
         normalized_relayer = self.validator.normalized(relayer)
 
         b = Blockchain()
