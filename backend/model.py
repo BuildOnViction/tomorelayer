@@ -26,7 +26,6 @@ class Contract(PwModel):
     name = pw.CharField(max_length=200)
     owner = pw.CharField(max_length=200)
     address = pw.CharField(unique=True, max_length=200)
-    abi = BinaryJSONField()
     obsolete = pw.BooleanField(default=False)
 
 
