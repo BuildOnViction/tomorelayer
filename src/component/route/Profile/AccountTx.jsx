@@ -94,7 +94,7 @@ const TxTable = ({ txs }) => (
         {Object.values(txs).map(row => (
           <GridRow item key={row.hash} container className="table-row">
             <LimitedGridItem>
-              {(row.timestamp || '').slice(0, 10)}
+              {new Date(row.timestamp).toUTCString()}
             </LimitedGridItem>
             <LimitedGridItem>
               {row.from}
