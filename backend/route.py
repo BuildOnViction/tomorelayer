@@ -3,7 +3,6 @@ from api.main import SocketHandler
 from api.auth import AuthHandler
 from api.token import TokenHandler
 from api.relayer import RelayerHandler
-from api.contract import ContractHandler
 from api.public import PublicHandler
 # from api.mailer import MailHandler
 
@@ -14,7 +13,6 @@ route = [(ALLOWED_HOSTS, [
     ("/socket", SocketHandler),
     # reserved for mobile/external interaction other than socket channels
     ("/api/auth", AuthHandler),
-    ("/api/contract", ContractHandler),
     ("/api/relayer", RelayerHandler),
     ("/api/token", TokenHandler),
     ("/api/public", PublicHandler),

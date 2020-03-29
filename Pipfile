@@ -21,6 +21,7 @@ web3 = "*"
 logzero = "*"
 pyjwt = "*"
 cerberus = "*"
+tornado-crontab = "*"
 
 [requires]
 python_version = "3.7"

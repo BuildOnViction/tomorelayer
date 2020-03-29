@@ -3,7 +3,7 @@ import json
 from logzero import logger
 from tornado.web import HTTPError
 from playhouse.shortcuts import model_to_dict
-from model import Token, Relayer, Contract
+from model import Token, Relayer
 from exception import AdminAuthorizationException, UserAuthorizationException
 from .jwt_encoder import decode_token
 
@@ -91,6 +91,5 @@ def deprecated(_handler):
 
 MODEL_TYPE = {
     'token': Token,
-    'contract': Contract,
     'relayer': Relayer,
 }

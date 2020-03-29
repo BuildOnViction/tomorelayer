@@ -22,13 +22,6 @@ class Admin(PwModel):
     address = pw.CharField(unique=True, max_length=200)
 
 
-class Contract(PwModel):
-    name = pw.CharField(max_length=200)
-    owner = pw.CharField(max_length=200)
-    address = pw.CharField(unique=True, max_length=200)
-    obsolete = pw.BooleanField(default=False)
-
-
 class Relayer(PwModel):
     owner = pw.CharField(max_length=200)
     name = pw.CharField(unique=True, max_length=200)
@@ -49,6 +42,7 @@ class Token(PwModel):
     logo = pw.CharField(null=True)
     address = pw.CharField(unique=True, max_length=200)
     total_supply = pw.CharField()
+    decimals = pw.CharField(null=True)
     is_major = pw.BooleanField(default=False)
 
 
@@ -56,7 +50,6 @@ database.connect()
 try:
     database.create_tables([
         Admin,
-        Contract,
         Relayer,
         Token,
     ])

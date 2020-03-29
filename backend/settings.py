@@ -40,4 +40,6 @@ settings = {
     'static_path': base_path + '/static',
     'stg': getenv('STG'),
     'template_path': base_path + '/template',
+    'relayerregistration_addr': getenv('RELAYERREGISTRATION_ADDR'),
+    'tomoxlisting_addr': getenv('TOMOXLISTING_ADDR')
 }
