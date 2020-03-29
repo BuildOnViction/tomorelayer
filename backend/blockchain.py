@@ -62,6 +62,7 @@ class Blockchain:
             trade_fee=relayer[3],
             from_tokens=relayer[4],
             to_tokens=relayer[5],
+            link='https://relayer' + str(relayer[0]) + '.devnet.tomochain.com',
             resigning=False).on_conflict(
             conflict_target=(Relayer.coinbase,),
             update={

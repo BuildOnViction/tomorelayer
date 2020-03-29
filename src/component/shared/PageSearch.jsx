@@ -84,7 +84,7 @@ const renderSuggestion = (suggestionProps) => {
 
   const routeParser = suggestedItem => {
 
-    const tomoscanUrl = 'https://scan.tomochain.com'
+    const tomoscanUrl = process.env.REACT_APP_STAT_SERVICE_URL
     const tomorelayerUrl = window.location.origin
 
     switch (suggestedItem.type) {
