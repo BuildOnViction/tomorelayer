@@ -10,7 +10,6 @@ class PublicHandler(BaseHandler):
 
     async def get(self):
         relayers = [model_to_dict(relayer or {}) for relayer in Relayer.select()]
-        contracts = [model_to_dict(c or {}) for c in Contract.select().where(Contract.obsolete == False)]
         tokens = [model_to_dict(token or {}) for token in Token.select()]
         contracts = Blockchain.contracts
 
