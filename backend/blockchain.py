@@ -62,7 +62,7 @@ class Blockchain:
             trade_fee=relayer[3],
             from_tokens=relayer[4],
             to_tokens=relayer[5],
-            link='https://relayer' + str(relayer[0]) + '.devnet.tomochain.com',
+            link=self.createDomain(relayer[0]),
             resigning=False).on_conflict(
             conflict_target=(Relayer.coinbase,),
             update={
@@ -108,6 +108,9 @@ class Blockchain:
                     Relayer.resigning: False}
                ).execute())
 
+    def createDomain(self, idx):
+        return 'https://' + format(idx, '03d') + '.' + settings['domain_suffix']
+
     def updateTokens(self, address):
         if address != '0x0000000000000000000000000000000000000001':
             t = self.web3.eth.contract(address=self.web3.toChecksumAddress(address), abi=self.TRC21ABI)
@@ -138,4 +141,4 @@ class Blockchain:
 	    update={Token.is_major: is_major}
 	   ).execute())
  
-
+    
