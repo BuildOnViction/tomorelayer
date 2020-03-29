@@ -29,6 +29,8 @@ export default class RelayerContract {
     try {
       const parsedPayload = [payload.coinbase, payload.trade_fee, payload.from_tokens, payload.to_tokens]
 
+        console.log(parsedPayload)
+        console.log(this.contractWithSigner)
       const tx = await this.contractWithSigner.register(...parsedPayload, config)
       const details = await tx.wait()
       return { status: true, details }

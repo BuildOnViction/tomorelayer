@@ -162,7 +162,7 @@ export const RelayerMenu = ({ relayers }) => {
               onClick={handleClose}
               routeTo={`/dashboard/${r.coinbase}`}
               key={r.coinbase}
-              text={r.name}
+              text={r.name || r.coinbase}
             />
           ))}
           <RouteMenuItem

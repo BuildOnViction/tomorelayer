@@ -29,7 +29,7 @@ class Blockchain:
             'id': 2,
             'name': 'RelayerRegistration',
             'address': settings['relayerregistration_addr'],
-            'abi': TOMOXListingABI
+            'abi': RegistrationABI
         }
     ]
 
@@ -47,11 +47,39 @@ class Blockchain:
         logger.info('Relayer %s', relayer)
         return relayer
 
+    def updateRelayer(self, coinbase):
+        coinbase = self.web3.toChecksumAddress(coinbase)
+        c = self.web3.eth.contract(address=self.web3.toChecksumAddress(settings['relayerregistration_addr']), abi=self.RegistrationABI)
+        logger.info('UpdateRelayer coinbase %s', coinbase)
+        relayer = c.functions.getRelayerByCoinbase(coinbase).call()
+
+        Relayer.insert(
+            id=relayer[0],
+            coinbase=coinbase,
+            owner=relayer[1],
+            name='',
+            deposit=relayer[2],
+            trade_fee=relayer[3],
+            from_tokens=relayer[4],
+            to_tokens=relayer[5],
+            resigning=False).on_conflict(
+            conflict_target=(Relayer.coinbase,),
+            update={
+        	Relayer.owner: relayer[1],
+        	Relayer.deposit: relayer[2],
+        	Relayer.trade_fee: relayer[3],
+        	Relayer.from_tokens: relayer[4],
+        	Relayer.to_tokens: relayer[5],
+        	Relayer.resigning: False}
+           ).execute()
+        
     def updateRelayers(self):
         c = self.web3.eth.contract(address=self.web3.toChecksumAddress(settings['relayerregistration_addr']), abi=self.RegistrationABI)
         relayer_count = c.functions.RelayerCount().call()
+        logger.info('Relayer count %s', relayer_count)
         for n in range(relayer_count):
             coinbase = c.functions.RELAYER_COINBASES(n).call()
+            logger.info('Relayer coinbase %s', coinbase)
             relayer = c.functions.getRelayerByCoinbase(coinbase).call()
 
             for t in relayer[4]:
@@ -97,6 +125,7 @@ class Blockchain:
         if symbol == 'BTC' or symbol == 'USDT' or symbol == 'TOMO':
             is_major = True
 
+        logger.info('Token address %s symbol %s', address, symbol)
         rl = (Token.insert(
 	    address=address,
 	    name=name,

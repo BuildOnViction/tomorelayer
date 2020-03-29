@@ -38,7 +38,7 @@ const RelayerHeader = ({ relayer }) => {
         <Box display="flex" flexDirection="column">
           <Box>
             <Typography variant="h6" className="mb-0">
-              {relayer.name}
+              {relayer.name || relayer.coinbase}
             </Typography>
           </Box>
           <Box>

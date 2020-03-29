@@ -102,13 +102,17 @@ class RelayerHandler(BaseHandler):
         normalized_relayer = self.validator.normalized(relayer)
 
         b = Blockchain()
-        r = b.getRelayerByCoinbase(relayer['coinbase'])
+        coinbase = b.web3.toChecksumAddress(relayer['coinbase'])
+        r = b.getRelayerByCoinbase(coinbase)
 
         if r[1].lower() != user.lower():
             raise InvalidValueException('owner required')
 
-        obj = await self.application.objects.create(Relayer, **normalized_relayer)
-        self.json_response(model_to_dict(obj))
+        b.updateRelayer(coinbase)
+
+        query = (Relayer.update(**normalized_relayer).where(Relayer.coinbase == coinbase).returning(Relayer))
+        cursor = query.execute()
+        self.json_response(model_to_dict(cursor[0]))
 
     @authenticated
     async def patch(self, user):
@@ -138,10 +142,13 @@ class RelayerHandler(BaseHandler):
                 raise MissingArgumentException('wrong owner')
 
             b = Blockchain()
-            r = b.getRelayerByCoinbase(db_relayer['coinbase'])
+            coinbase = b.web3.toChecksumAddress(db_relayer['coinbase'])
+            r = b.getRelayerByCoinbase(coinbase)
 
             if r[1].lower() != relayer['owner'].lower():
                 raise InvalidValueException('owner required')
+
+            b.updateRelayer(coinbase)
 
             query = (Relayer.update(**normalized_relayer).where(Relayer.id == relayer_id).returning(Relayer))
             cursor = query.execute()
