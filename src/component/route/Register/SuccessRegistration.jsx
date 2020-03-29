@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Box, Button, Typography, Icon } from '@material-ui/core'
+import { Box, Button, Typography, Icon } from '@material-ui/core'
 import { AdapterLink, StyledLink } from 'component/shared/Adapters'
 
 const SuccessRegistration = ({ navigate, deposit }) => (
