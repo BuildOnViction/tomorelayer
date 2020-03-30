@@ -104,6 +104,20 @@ class FormInfo extends React.Component {
             </Grid>
             <Grid item>
               <TextField
+                label="Relayer Address (coinbase)"
+                value={values.coinbase}
+                id="relayer-name"
+                inputProps={{ readOnly: true }}
+                name="coinbase"
+                variant="outlined"
+                fullWidth
+              />
+              <Typography variant="subtitle2" className="mt-1">
+                {'Your relayer identity'}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <TextField
                 label="Name"
                 value={values.name || ''}
                 onChange={handleChange}

@@ -13,6 +13,7 @@ export const wrappers = {
     validateOnChange: false,
     mapPropsToValues: (props) => ({
       owner: props.relayer.owner,
+      coinbase: props.relayer.coinbase,
       name: props.relayer.name,
       link: props.relayer.link,
       logo: props.relayer.logo,
@@ -88,9 +89,13 @@ export const wrappers = {
   depositForm: withFormik({
     displayName: 'RelayerDepositForm',
     validateOnChange: false,
-    mapPropsToValues: () => ({
-      deposit: 0,
-    }),
+    mapPropsToValues: async (props) => {
+        const result = await props.RelayerContract.getRelayerByCoinbase(props.relayer.coinbase)
+        const deposit = result[2].toString(10)
+        return {
+          deposit: deposit
+        }
+    },
 
     validate: (values) => {
       const errors = {}

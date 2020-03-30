@@ -29,9 +29,6 @@ class FormDeposit extends React.Component {
     const address = await this.props.wallet.getAddress()
     const userBalance = await getBalance(address)
     this.setState({ userBalance })
-    // FIXME: this deposit may change over time and must present the latest result
-    // call contract on componentDidMount
-    // TODO: get the latest deposit of relayer from contract and update to DB
   }
 
   render() {
