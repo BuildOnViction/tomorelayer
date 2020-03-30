@@ -4,6 +4,7 @@ from web3.auto import w3
 from logzero import logger
 from settings import settings
 from model import Relayer, Token
+import requests
 
 is_production = os.getenv('STG') == 'production'
 
@@ -73,6 +74,8 @@ class Blockchain:
         	Relayer.to_tokens: relayer[5],
         	Relayer.resigning: False}
            ).execute()
+
+        requests.put(settings['tomodex'] + '?relayerAddress=' + coinbase)
         
     def updateRelayers(self):
         c = self.web3.eth.contract(address=self.web3.toChecksumAddress(settings['relayerregistration_addr']), abi=self.RegistrationABI)
