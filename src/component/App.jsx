@@ -12,8 +12,9 @@ import PageFooter from 'component/shared/PageFooter'
 import Alert from 'component/shared/Alert'
 import Authentication from 'component/route/Authentication'
 import Home from 'component/route/Home'
+import ListRelayer from 'component/route/ListRelayer'
 import Profile from 'component/route/Profile'
-import Dashboard from 'component/route/Dashboard'
+// import Dashboard from 'component/route/Dashboard'
 import Register from 'component/route/Register'
 import Logout from 'component/route/Logout'
 
@@ -60,14 +61,17 @@ class App extends React.Component {
 
     let authenticateRedirect = SITE_MAP.Register
     let dashboardRedirect = SITE_MAP.Authentication
+    let listRelayerRedirect = SITE_MAP.Authentication
 
     if (userLoggedIn) {
-      dashboardRedirect = userRelayers[0] ? `${SITE_MAP.Dashboard}/${userRelayers[0].coinbase}` : SITE_MAP.Register
+      // dashboardRedirect = userRelayers[0] ? `${SITE_MAP.Dashboard}/${userRelayers[0].coinbase}` : SITE_MAP.Register
+      listRelayerRedirect = userRelayers[0] ? `${SITE_MAP.ListRelayer}/${userRelayers[0].coinbase}` : SITE_MAP.Register
     }
 
     if (userRelayers[0]) {
       const firstCoinbase = userRelayers[0].coinbase
-      authenticateRedirect = `${SITE_MAP.Dashboard}/${firstCoinbase}`
+      // authenticateRedirect = `${SITE_MAP.Dashboard}/${firstCoinbase}`
+      authenticateRedirect = `${SITE_MAP.ListRelayer}/${firstCoinbase}`
     }
 
     return (
@@ -108,11 +112,17 @@ class App extends React.Component {
                 redirect={dashboardRedirect}
                 exact
               />
-              <Protected
+              {/* <Protected
                 path={`${SITE_MAP.Dashboard}/:coinbase`}
                 component={Dashboard}
                 condition={userLoggedIn && !_.isEmpty(userRelayers)}
                 redirect={dashboardRedirect}
+              /> */}
+              <Protected
+                path={`${SITE_MAP.ListRelayer}/:coinbase`}
+                component={ListRelayer}
+                condition={userLoggedIn && !_.isEmpty(userRelayers)}
+                redirect={listRelayerRedirect}
               />
               <Protected
                 path={SITE_MAP.Logout}
