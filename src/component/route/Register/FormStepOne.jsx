@@ -19,6 +19,8 @@ const FormStepOne = props => {
       <Box display="flex" flexDirection="column" className="mb-2">
         <div>You are required to deposit a minimum {MISC.MinimumDeposit} TOMO as relayer operating cost</div>
         <div>This deposit will be locked during the operation of your relayer</div>
+        <div>The relayer coinbase is an address to identify your relayer in the network</div>
+        <div>The relayer coinbase can be a random wallet</div>
         <div>The logged-in address must be different from the relayer coinbase</div>
       </Box>
       <TextField

@@ -2,6 +2,7 @@ import { withFormik } from 'formik'
 import { validateCoinbase, bigNumberify } from 'service/blockchain'
 import { MISC } from 'service/constant'
 import * as _ from 'service/helper'
+import { ethers } from 'ethers'
 
 const MINIMUM_DEPOSIT = MISC.MinimumDeposit
 
@@ -9,10 +10,14 @@ export const wrappers = {
   depositAndCoinbaseForm: withFormik({
     displayName: 'FormStepOne',
     validateOnChange: false,
-    mapPropsToValues: (props) => ({
-      deposit: props.deposit,
-      coinbase: props.coinbase,
-    }),
+    mapPropsToValues: (props) => {
+      const randomWallet = ethers.Wallet.createRandom()
+      const coinbase = randomWallet.address
+      return {
+        deposit: props.deposit,
+        coinbase: coinbase,
+      }
+    },
     validate: (values, props) => {
       const errors = {}
       validateCoinbase(values.coinbase, (isValid) => {
