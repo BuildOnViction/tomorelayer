@@ -5,6 +5,7 @@ import {
   Grid,
   TextField,
   Typography,
+  Box,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
 import { compose } from 'service/helper'
@@ -27,6 +28,23 @@ const FormTrade = ({
   const setPairsValues = pairs => {
     setFieldValue('from_tokens', pairs.map(p => p.from.address))
     setFieldValue('to_tokens', pairs.map(p => p.to.address))
+    let quoteTokens = pairs.map(p => p.to.symbol)
+  
+    quoteTokens = [...new Set(quoteTokens)]
+    let quoteNoTomoPairs = quoteTokens.filter(q => {
+      let ps = pairs.filter(p => {
+        let b = (q === p.to.symbol && 'TOMO' === p.from.symbol)
+        b = b || (q === p.from.symbol && 'TOMO' === p.to.symbol)
+        return b
+      })
+      return !(ps.length > 0) && q !== 'TOMO'
+    })
+
+    errors.quoteToken = ''
+    if (quoteNoTomoPairs.length > 0) {
+      errors.quoteToken = `Quote tokens ${quoteNoTomoPairs} required to be paires with TOMO`
+    }
+  
   }
 
   return (
@@ -70,9 +88,14 @@ const FormTrade = ({
                 dexUrl={relayer.link}
               />
             </Grid>
+            <Grid item>
+              <Box component="span" display="block">
+                <i className="text-alert">{ errors.quoteToken }</i>
+              </Box>
+            </Grid>
           </Grid>
           <Grid item container justify="center">
-            <Button color="primary" variant="contained" type="submit" disabled={isSubmitting} data-testid="save-button">
+            <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
               Save
             </Button>
           </Grid>
