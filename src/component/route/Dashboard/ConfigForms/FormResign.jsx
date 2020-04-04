@@ -59,6 +59,13 @@ const FormResign = props => {
       lock_time: timeFormat(addDays(Date.now(), 28), 'X'),
     })
 
+    if (!status) {
+      let alert = { variant: AlertVariant.error, message: details }
+      PushAlert(alert)
+    } else {
+      PushAlert({ variant: AlertVariant.success, message: 'relayer resigned' })
+    }
+
     return updateRelayer(resigningRelayer)
   }
 

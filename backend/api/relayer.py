@@ -123,7 +123,7 @@ class RelayerHandler(BaseHandler):
 
         verify_user(user, relayer_owner)
 
-        if not relayer_id:
+        if relayer_id == None:
             raise MissingArgumentException('missing relayer id')
 
         del relayer['id']
