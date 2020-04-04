@@ -84,41 +84,44 @@ class Blockchain:
     def updateRelayers(self):
         c = self.web3.eth.contract(address=self.web3.toChecksumAddress(settings['relayerregistration_addr']), abi=self.RegistrationABI)
 
-        try:
-            relayer_count = c.functions.RelayerCount().call()
-            logger.info('Relayer count %s', relayer_count)
-            for n in range(relayer_count):
-                coinbase = c.functions.RELAYER_COINBASES(n).call()
-                logger.info('Relayer coinbase %s', coinbase)
-                relayer = c.functions.getRelayerByCoinbase(coinbase).call()
+        relayer_count = c.functions.RelayerCount().call()
+        logger.info('Relayer count %s', relayer_count)
+        for n in range(relayer_count):
+            coinbase = c.functions.RELAYER_COINBASES(n).call()
+            logger.info('Relayer coinbase %s', coinbase)
+            relayer = c.functions.getRelayerByCoinbase(coinbase).call()
+            lock_time = c.functions.RESIGN_REQUESTS(coinbase).call()
+            logger.info('Relayer resign request %s', lock_time)
 
-                logger.info('Relayer owner %s', relayer[1])
-                for t in relayer[4]:
-                    self.updateTokens(t)
-                for t in relayer[5]:
-                    self.updateTokens(t)
+            resigning = True if (lock_time) else False
 
-                rl = (Relayer.insert(
-                    id=relayer[0],
-                    coinbase=coinbase,
-                    owner=relayer[1],
-                    name='Relayer' + relayer[0],
-                    deposit=relayer[2],
-                    trade_fee=relayer[3],
-                    from_tokens=relayer[4],
-                    to_tokens=relayer[5],
-                    resigning=False).on_conflict(
-                    conflict_target=(Relayer.coinbase,),
-                    update={
-                        Relayer.owner: relayer[1],
-                        Relayer.deposit: relayer[2],
-                        Relayer.trade_fee: relayer[3],
-                        Relayer.from_tokens: relayer[4],
-                        Relayer.to_tokens: relayer[5],
-                        Relayer.resigning: False}
-                   ).execute())
-        except:
-            logger.error('updateRelayers failed')
+            logger.info('Relayer owner %s', relayer[1])
+            for t in relayer[4]:
+                self.updateTokens(t)
+            for t in relayer[5]:
+                self.updateTokens(t)
+
+            rl = (Relayer.insert(
+                id=relayer[0],
+                coinbase=coinbase,
+                owner=relayer[1],
+                name='Relayer' + str(relayer[0]),
+                deposit=relayer[2],
+                trade_fee=relayer[3],
+                from_tokens=relayer[4],
+                to_tokens=relayer[5],
+                resigning=resigning,
+                lock_time=lock_time).on_conflict(
+                conflict_target=(Relayer.coinbase,),
+                update={
+                    Relayer.owner: relayer[1],
+                    Relayer.deposit: relayer[2],
+                    Relayer.trade_fee: relayer[3],
+                    Relayer.from_tokens: relayer[4],
+                    Relayer.to_tokens: relayer[5],
+                    Relayer.resigning: resigning,
+                    Relayer.lock_time: lock_time}
+               ).execute())
 
     def createDomain(self, idx):
         return 'https://' + format(idx, '03d') + '.' + settings['domain_suffix']
