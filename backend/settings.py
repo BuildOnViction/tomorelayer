@@ -43,5 +43,6 @@ settings = {
     'relayerregistration_addr': getenv('RELAYERREGISTRATION_ADDR'),
     'tomoxlisting_addr': getenv('TOMOXLISTING_ADDR'),
     'domain_suffix': getenv('DOMAIN_SUFFIX'),
-    'tomodex': getenv('TOMODEX')
+    'tomodex': getenv('TOMODEX'),
+    'tomodex_auth': getenv('TOMODEX_AUTH')
 }

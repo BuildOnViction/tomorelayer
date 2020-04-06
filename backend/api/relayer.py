@@ -1,9 +1,14 @@
 from playhouse.shortcuts import model_to_dict
+from logzero import logger
 from model import Relayer
 from exception import InvalidValueException, MissingArgumentException
 from util.decorator import authenticated
 from .base import BaseHandler
 from blockchain import Blockchain
+from settings import settings
+from urllib.parse import urljoin
+import requests
+
 
 
 RELAYER_SCHEMA = {
@@ -120,6 +125,7 @@ class RelayerHandler(BaseHandler):
         relayer = self.request_body
         relayer_id = relayer.get('id', None)
         relayer_owner = relayer.get('owner', None)
+        name = relayer.get('name', None)
 
         verify_user(user, relayer_owner)
 
@@ -149,6 +155,11 @@ class RelayerHandler(BaseHandler):
                 raise InvalidValueException('owner required')
 
             b.updateRelayer(coinbase)
+
+            try:
+                requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress=' + coinbase + '&relayerName=' + name + '&authKey=' + settings['tomodex_auth'])
+            except:
+                logger.error('Update tomodex failed')
 
             query = (Relayer.update(**normalized_relayer).where(Relayer.id == relayer_id).returning(Relayer))
             cursor = query.execute()

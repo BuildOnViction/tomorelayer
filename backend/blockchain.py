@@ -4,7 +4,6 @@ from web3.auto import w3
 from logzero import logger
 from settings import settings
 from model import Relayer, Token
-import requests
 
 is_production = os.getenv('STG') == 'production'
 
@@ -56,17 +55,22 @@ class Blockchain:
         try:
             relayer = c.functions.getRelayerByCoinbase(coinbase).call()
 
+            name='Relayer' + str(relayer[0])
+            lock_time = c.functions.RESIGN_REQUESTS(coinbase).call()
+            resigning = True if (lock_time) else False
+
             Relayer.insert(
                 id=relayer[0],
                 coinbase=coinbase,
                 owner=relayer[1],
-                name='',
+                name=name,
                 deposit=relayer[2],
                 trade_fee=relayer[3],
                 from_tokens=relayer[4],
                 to_tokens=relayer[5],
                 link=self.createDomain(relayer[0]),
-                resigning=False).on_conflict(
+                resigning=resigning,
+                lock_time=lock_time).on_conflict(
                 conflict_target=(Relayer.coinbase,),
                 update={
                     Relayer.owner: relayer[1],
@@ -74,10 +78,10 @@ class Blockchain:
                     Relayer.trade_fee: relayer[3],
                     Relayer.from_tokens: relayer[4],
                     Relayer.to_tokens: relayer[5],
-                    Relayer.resigning: False}
+                    Relayer.resigning: resigning,
+                    Relayer.lock_time: lock_time}
                ).execute()
 
-            requests.put(settings['tomodex'] + '?relayerAddress=' + coinbase)
         except:
             logger.error('UpdateRelayer failed')
         
