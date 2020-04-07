@@ -54,7 +54,7 @@ const PageFooter = () => (
         <Box className="footer-links">
           {FooterLinks.map(item => (
             <Link href={item.link} underline="none" rel="noopener noreferrer" target="_blank" key="item.link">
-                {item.text}
+              {item.text}
             </Link>
           ))}
         </Box>

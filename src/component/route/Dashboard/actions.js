@@ -121,9 +121,9 @@ export const getTradesByCoinbase = async (
 ) => {
   const url = `${process.env.REACT_APP_STAT_SERVICE_URL}/api/trades/listByDex/${coinbase}`
   const [error, response] = await wretch(url).query({ page, limit })
-                                             .get().json()
-                                             .then(r => [null, r])
-                                             .catch(e => [e, null])
+    .get().json()
+    .then(r => [null, r])
+    .catch(e => [e, null])
   if (error) {
     return null
   }

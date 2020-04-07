@@ -66,6 +66,8 @@ const FormResign = props => {
       PushAlert({ variant: AlertVariant.success, message: 'relayer resigned' })
     }
 
+    relayer.resigning = resigningRelayer.resigning
+    relayer.lock_time = resigningRelayer.lock_time
     return updateRelayer(resigningRelayer)
   }
 

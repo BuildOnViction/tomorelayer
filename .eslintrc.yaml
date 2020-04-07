@@ -1,5 +1,6 @@
 extends: react-app
 rules:
+  indent: ["error", 2]
   semi: ["error", "never"]
   eqeqeq: ["error", "always"]
   curly: ["error", "all"]

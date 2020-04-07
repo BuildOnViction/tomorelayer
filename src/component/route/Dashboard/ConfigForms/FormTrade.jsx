@@ -53,7 +53,7 @@ const FormTrade = ({
         <Grid item container direction="column" spacing={8}>
           <Grid item>
             <TextField
-              label="Choose Trade Fee (min: 0.01%, max: 10%)"
+              label="Choose Trade Fee (min: 0%, max: 10%)"
               name="trade_fee"
               id="trade_fee-input"
               value={values.trade_fee}
@@ -68,7 +68,7 @@ const FormTrade = ({
                 inputProps: {
                   step: 0.01,
                   max: 10,
-                  min: 0.01,
+                  min: 0,
                 }
               }}
             />

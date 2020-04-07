@@ -27,7 +27,7 @@ const FormStepThree = props => {
       <Box display="flex" className="mb-1">
         <TextField
           name="trade_fee"
-          label="Trading Fee (Min: 0.01%, Max: 10.0%)"
+          label="Trading Fee (Min: 0%, Max: 10.0%)"
           id="trade_fee-input"
           value={values.trade_fee}
           onChange={handleChange}
@@ -40,7 +40,7 @@ const FormStepThree = props => {
             inputProps: {
               step: 0.01,
               max: 10.0,
-              min: 0.01,
+              min: 0,
             }
           }}
         />

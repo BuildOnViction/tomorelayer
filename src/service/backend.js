@@ -3,10 +3,10 @@ import urljoin from 'url-join'
 
 export const BACKEND_URI = ((env) => {
   switch (env) {
-    case 'test':
-      return 'http://localhost:8889'
-    default:
-      return window.location.origin
+  case 'test':
+    return 'http://localhost:8889'
+  default:
+    return window.location.origin
   }
 })(process.env.NODE_ENV)
 
