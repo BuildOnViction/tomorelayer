@@ -5,10 +5,12 @@ import {
   Paper,
 } from '@material-ui/core'
 import {
-  getTokenInfo,
   createTokens,
   notifyDex,
 } from 'service/backend'
+import {
+  ERC20TokenInfo,
+} from 'service/blockchain'
 import {
   AlertVariant,
   PushAlert,
@@ -94,16 +96,17 @@ class TokenPairList extends React.Component {
       })
     }
 
-    const result = await Promise.all(missingTokens.map(getTokenInfo))
+    const result = await Promise.all(missingTokens.map(ERC20TokenInfo))
     const payload = result.map(token => ({
-      address: token.hash.toLowerCase(),
+      address: token.address.toLowerCase(),
       name: token.name,
       symbol: token.symbol,
       total_supply: token.totalSupply,
     }))
+
     const newTokens = await createTokens(payload)
 
-    await Promise.all(...newTokens.map(async token => this.props.pouch.put({
+    await Promise.all(newTokens.map(async token => this.props.pouch.put({
       ...token,
       _id: 'token' + token.id.toString(),
       type: 'token',
