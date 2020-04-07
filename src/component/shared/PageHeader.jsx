@@ -45,7 +45,7 @@ class PageHeader extends React.Component {
 
       pouch.changes({
           filter: function (doc) {
-              return doc.type === 'relayer';
+              return doc.type === 'relayer'
           }}
       ).on('change', async (data) => {
           let r = await pouch.get(data.id) 
