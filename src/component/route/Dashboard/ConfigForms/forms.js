@@ -38,6 +38,21 @@ export const wrappers = {
         ...values,
       })
 
+        let c = relayer
+        let r = await meta.props.pouch.get('relayer' + c.id.toString())
+        meta.props.pouch.put({
+            ...c,
+            _id: 'relayer' + c.id.toString(),
+            _rev: r._rev,
+            type: 'relayer',
+            fuzzy: [
+                c.name,
+                c.owner,
+                c.coinbase,
+                c.address,
+            ].join(','),
+        })
+
       if (relayer.error) {
         meta.props.PushAlert({ variant: AlertVariant.error, message: relayer.error })
       } else {
