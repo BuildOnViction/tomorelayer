@@ -40,7 +40,7 @@ export const wrappers = {
 
       let c = relayer
       let r = await meta.props.pouch.get('relayer' + c.id.toString())
-      meta.props.pouch.put({
+      await meta.props.pouch.put({
         ...c,
         _id: 'relayer' + c.id.toString(),
         _rev: r._rev,
