@@ -88,14 +88,14 @@ const renderSuggestion = (suggestionProps) => {
     const tomorelayerUrl = window.location.origin
 
     switch (suggestedItem.type) {
-      case 'contract':
-        return `${tomoscanUrl}/address/${suggestedItem.address}`
-      case 'token':
-        return `${tomoscanUrl}/tokens/${suggestedItem.address}`
-      case 'relayer':
-        return `${tomorelayerUrl}/dashboard/${suggestedItem.coinbase}`
-      default:
-        return ''
+    case 'contract':
+      return `${tomoscanUrl}/address/${suggestedItem.address}`
+    case 'token':
+      return `${tomoscanUrl}/tokens/${suggestedItem.address}`
+    case 'relayer':
+      return `${tomorelayerUrl}/dashboard/${suggestedItem.coinbase}`
+    default:
+      return ''
     }
   }
 

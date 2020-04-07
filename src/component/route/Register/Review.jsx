@@ -17,8 +17,8 @@ import { withStyles } from '@material-ui/core/styles'
 
 const tableData = (meta, pairs) => {
   const fixPairList = pairs.map(p => p.toString().replace(' ', ''))
-                           .sort((a,b) => a.localeCompare(b))
-                           .join('   ')
+    .sort((a,b) => a.localeCompare(b))
+    .join('   ')
   return [
     { key: 'Relayer Name', value: meta.name },
     { key: 'Coinbase', value: meta.coinbase },

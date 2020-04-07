@@ -40,20 +40,20 @@ class PageHeader extends React.Component {
       const fixedAddr = address.slice(0, 5) + ' ... ' + address.slice(-4)
       this.setState({ address: fixedAddr })
     }
-      let pouch = this.props.pouch
-      let relayers = this.props.relayers
+    let pouch = this.props.pouch
+    let relayers = this.props.relayers
 
-      pouch.changes({
-          filter: function (doc) {
-              return doc.type === 'relayer'
-          }}
-      ).on('change', async (data) => {
-          let r = await pouch.get(data.id) 
-          if (relayers[r.id]) {
-              relayers[r.id]= r
-              relayers[r.coinbase]= r
-          }
-      })
+    pouch.changes({
+      filter: function (doc) {
+        return doc.type === 'relayer'
+      }}
+    ).on('change', async (data) => {
+      let r = await pouch.get(data.id) 
+      if (relayers[r.id]) {
+        relayers[r.id]= r
+        relayers[r.coinbase]= r
+      }
+    })
 
 
   }

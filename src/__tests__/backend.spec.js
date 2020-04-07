@@ -73,7 +73,7 @@ describe('Testing backend API', () => {
     const owner = '0x070aa7ad03b89b3278f19d34f119dd3c2a244675'
     const signature =
       '0x534a82e3de6fda201c54126be6892f035918fb6266637063a94c169411cfbf13283e95eb26587ace6d97a09430deff6cf96e6a39a880b4cfc63cabf3a9a0126c1b'
-      const jwt = await http.getAuthenticated(owner, signature)
+    const jwt = await http.getAuthenticated(owner, signature)
 
     expect(jwt.token.length).toBeTruthy()
 

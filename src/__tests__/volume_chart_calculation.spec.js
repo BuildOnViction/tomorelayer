@@ -35,11 +35,11 @@ describe('Verifying functions that query from scan api and make market statistic
     }
 
     http.getPairStat = jest.fn()
-                           .mockResolvedValueOnce({ volume24h: 3, totalFee: 1, tradeNumber: 1 }) // A-C
-                           .mockResolvedValueOnce({ volume24h: 1, totalFee: 1, tradeNumber: 2 }) // B-D
-                           .mockResolvedValueOnce({ volume24h: 2, totalFee: 2, tradeNumber: 3 }) // C-E
-                           .mockResolvedValueOnce({ volume24h: 1, totalFee: 5, tradeNumber: 4 }) // A-E
-                           .mockResolvedValueOnce(null) // C-D
+      .mockResolvedValueOnce({ volume24h: 3, totalFee: 1, tradeNumber: 1 }) // A-C
+      .mockResolvedValueOnce({ volume24h: 1, totalFee: 1, tradeNumber: 2 }) // B-D
+      .mockResolvedValueOnce({ volume24h: 2, totalFee: 2, tradeNumber: 3 }) // C-E
+      .mockResolvedValueOnce({ volume24h: 1, totalFee: 5, tradeNumber: 4 }) // A-E
+      .mockResolvedValueOnce(null) // C-D
 
     const expectedResult = {
       summary: {
