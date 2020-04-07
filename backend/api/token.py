@@ -3,6 +3,7 @@ from model import Token
 from util.decorator import authenticated, common_authenticated
 from exception import InvalidValueException
 from .base import BaseHandler
+from blockchain import Blockchain
 
 
 class TokenHandler(BaseHandler):
@@ -21,16 +22,19 @@ class TokenHandler(BaseHandler):
         if not tokens:
             raise InvalidValueException('Invalid empty payload')
 
+        b = Blockchain()
         if not isinstance(tokens, list):
             token = tokens
-            obj = await self.application.objects.create(Token, **token)
+            address = b.web3.toChecksumAddress(token['address'])
+            b.updateToken(address)
+            obj = Token.select().where(Token.address == address).get()
             return self.json_response(model_to_dict(obj))
 
-        async with self.application.objects.atomic():
-            result = []
-            for token in tokens:
-                # required_fields = ['name', 'symbol', 'address', 'total_supply']
-                obj = await self.application.objects.create(Token, **token)
-                result.append(model_to_dict(obj))
+        result = []
+        for token in tokens:
+            address = b.web3.toChecksumAddress(token['address'])
+            b.updateToken(address)
+            obj = Token.select().where(Token.address == address).get()
+            result.append(model_to_dict(obj))
 
-            self.json_response(result)
+        self.json_response(result)

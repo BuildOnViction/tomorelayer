@@ -101,9 +101,9 @@ class Blockchain:
 
             logger.info('Relayer owner %s', relayer[1])
             for t in relayer[4]:
-                self.updateTokens(t)
+                self.updateToken(t)
             for t in relayer[5]:
-                self.updateTokens(t)
+                self.updateToken(t)
 
             rl = (Relayer.insert(
                 id=relayer[0],
@@ -130,7 +130,7 @@ class Blockchain:
     def createDomain(self, idx):
         return 'https://' + format(idx, '03d') + '.' + settings['domain_suffix']
 
-    def updateTokens(self, address):
+    def updateToken(self, address):
         if address != '0x0000000000000000000000000000000000000001':
             t = self.web3.eth.contract(address=self.web3.toChecksumAddress(address), abi=self.TRC21ABI)
             total_supply = t.functions.totalSupply().call()
