@@ -101,6 +101,7 @@ class RelayerHandler(BaseHandler):
     async def post(self, user):
         """Add new relayer"""
         relayer = self.request_body
+        name = relayer.get('name', None)
 
         verify_user(user, relayer['owner'])
 
@@ -117,6 +118,12 @@ class RelayerHandler(BaseHandler):
 
         query = (Relayer.update(**normalized_relayer).where(Relayer.coinbase == coinbase).returning(Relayer))
         cursor = query.execute()
+
+        try:
+            requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress=' + coinbase + '&relayerName=' + name + '&authKey=' + settings['tomodex_auth'])
+        except:
+            logger.error('Update tomodex failed')
+
         self.json_response(model_to_dict(cursor[0]))
 
     @authenticated
