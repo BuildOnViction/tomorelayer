@@ -58,20 +58,6 @@ const RefreshControl = ({
             Refresh now
           </RefreshButton>
         </Box>
-        {notifyDex && (
-          <React.Fragment>
-            <Box>
-              <Typography variant="body2" className="m-0">
-                or manually
-              </Typography>
-            </Box>
-            <Box>
-              <RefreshButton onClick={notifyDex}>
-                notify your DEX
-              </RefreshButton>
-            </Box>
-          </React.Fragment>
-        )}
       </React.Fragment>
     )}
   </RefreshControlContainer>
