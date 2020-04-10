@@ -32,6 +32,7 @@ class PageHeader extends React.Component {
   state = {
     searchResult: [],
     address: undefined,
+    userAddress: undefined
   }
 
   async componentDidUpdate(prevProps) {
@@ -39,6 +40,7 @@ class PageHeader extends React.Component {
       const address = await this.props.user.wallet.getAddress()
       const fixedAddr = address.slice(0, 5) + ' ... ' + address.slice(-4)
       this.setState({ address: fixedAddr })
+      this.setState({ userAddress: address})
     }
     let pouch = this.props.pouch
     let relayers = this.props.relayers
@@ -49,9 +51,12 @@ class PageHeader extends React.Component {
       }}
     ).on('change', async (data) => {
       let r = await pouch.get(data.id) 
-      if (relayers[r.id]) {
-        relayers[r.id]= r
-        relayers[r.coinbase]= r
+      if (relayers[r.coinbase] && (this.state.userAddress.toLowerCase() === r.owner.toLowerCase())) {
+        Object.keys(relayers).forEach(k => {
+          if (relayers[k].coinbase === r.coinbase) {
+            relayers[k] = r
+          }
+        })
       }
     })
 
