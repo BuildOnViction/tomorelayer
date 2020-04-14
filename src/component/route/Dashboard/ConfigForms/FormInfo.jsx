@@ -1,7 +1,7 @@
 import React from 'react'
-import cx from 'classnames'
+// import cx from 'classnames'
 import {
-  Avatar,
+//   Avatar,
   Box,
   Button,
   Container,
@@ -13,20 +13,23 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/styles'
+// import { withStyles } from '@material-ui/styles'
+import { StyledLink } from 'component/shared/Adapters'
+
 /*
    import TextIcon from '@material-ui/icons/TextRotationNone'
    import WebIcon from '@material-ui/icons/Web'
    import ImageIcon from '@material-ui/icons/InsertPhoto'
  */
 import { connect } from 'redux-zero/react'
-import placeholder from 'asset/image-placeholder.png'
-import { compose, isEmpty } from 'service/helper'
+// import placeholder from 'asset/image-placeholder.png'
+// import { compose, isEmpty } from 'service/helper'
+import { compose } from 'service/helper'
 import { PushAlert } from 'service/frontend'
 import { UpdateRelayer } from '../actions'
 import { wrappers } from './forms'
 
-const StyledAvatar = withStyles(theme => ({
+/* const StyledAvatar = withStyles(theme => ({
   root: {
     width: '100%',
     height: '100%',
@@ -35,7 +38,7 @@ const StyledAvatar = withStyles(theme => ({
       padding: 40,
     }
   }
-}))(Avatar)
+}))(Avatar) */
 
 class FormInfo extends React.Component {
 
@@ -64,7 +67,7 @@ class FormInfo extends React.Component {
 
     const inputDisabled = isSubmitting || relayer.resigning
 
-    const avatarClassName = cx('mr-1', { 'empty-avatar': isEmpty(values.logo) })
+    // const avatarClassName = cx('mr-1', { 'empty-avatar': isEmpty(values.logo) })
 
     return (
       <Container>
@@ -77,7 +80,7 @@ class FormInfo extends React.Component {
         )}
         <form>
           <Grid item container spacing={6} direction="column">
-            <Grid item container>
+            {/* <Grid item container>
               <Grid item sm={6} md={4} className="pr-2">
                 <StyledAvatar alt={values.name} src={values.logo || placeholder} className={avatarClassName} />
               </Grid>
@@ -101,7 +104,7 @@ class FormInfo extends React.Component {
                   <div>Recommended size 300x300</div>
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <TextField
                 label="Relayer Address (coinbase)"
@@ -145,6 +148,12 @@ class FormInfo extends React.Component {
                 disabled={inputDisabled}
                 fullWidth
               />
+            </Grid>
+            <Grid item>
+              <Typography component="div" variant="body2" style={{ lineHeight: 1.5 }}>
+                To launch your own DEX using TomoX-SDK, follow this <StyledLink href="https://docs.tomochain.com/masternode/tomox-sdk/" rel="noopener noreferrer" target="_blank">link</StyledLink> for detailed instructions.<br />
+                If you need to have a consultant from <b>TomoChain Enterprise</b> team, please send an email to <StyledLink href="mailto:admin@tomochain.com">admin@tomochain.com</StyledLink>.
+              </Typography>
             </Grid>
             <Grid item container justify="center">
               <Button color="primary" variant="contained" onClick={this.openConfirmDiaglog} type="button">

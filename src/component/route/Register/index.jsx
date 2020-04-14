@@ -48,10 +48,12 @@ export class Register extends React.Component {
     })
   }
 
-  handleSubmit = values => this.setState({
-    step: this.state.step + 1,
-    payload: { ...this.state.payload, ...values }
-  })
+    handleSubmit = values => {
+      this.setState({
+        step: this.state.step + 1,
+        payload: { ...this.state.payload, ...values }
+      })
+    }
 
   goBack = () => this.setState({
     step: this.state.step - 1
@@ -82,8 +84,10 @@ export class Register extends React.Component {
       const newRelayer = await http.createRelayer(payload)
 
       this.props.saveNewRelayer(newRelayer)
+      this.payload.link = newRelayer.link
       this.setState({
         step: 6,
+        payload: { ...this.state.payload },
         isRegistering: false,
       })
 
@@ -187,6 +191,7 @@ export class Register extends React.Component {
               <SuccessRegistration
                 navigate={`${SITE_MAP.Dashboard}/${payload.coinbase}`}
                 deposit={payload.deposit}
+                link={payload.link}
               />
             )}
           </div>

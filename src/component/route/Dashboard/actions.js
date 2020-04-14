@@ -79,8 +79,8 @@ export const getTradePairStat = async (
     const pairName = fromSymbol + '/' + toSymbol
 
     const data = await http.getPairStat(coinbase, pairName)
-    const volume24h = (data || defaultForNull).volume24h * exchangeRates[toSymbol]
-    const totalFee = (data || defaultForNull).totalFee * exchangeRates[toSymbol]
+    const volume24h = ((data || defaultForNull).volume24h * exchangeRates[toSymbol]) || 0
+    const totalFee = ((data || defaultForNull).totalFee * exchangeRates[toSymbol]) || 0
     const tradeNumber = (data || defaultForNull).tradeNumber
 
     summary.volume24h += volume24h
@@ -188,8 +188,8 @@ export const getVolumesOverTime = async (
         tradeNumber: defaultValue.tradeNumber,
         from: fromTokenSymbol,
         to: toTokenSymbol,
-        volume24h: defaultValue.volume24h * exchangeRates[toTokenSymbol],
-        totalFee: defaultValue.totalFee * exchangeRates[toTokenSymbol],
+        volume24h: (defaultValue.volume24h * exchangeRates[toTokenSymbol]) || 0,
+        totalFee: (defaultValue.totalFee * exchangeRates[toTokenSymbol]) || 0,
       }
 
       volumeByDate += resolved.volume24h
