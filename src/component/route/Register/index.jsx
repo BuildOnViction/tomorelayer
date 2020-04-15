@@ -84,7 +84,7 @@ export class Register extends React.Component {
       const newRelayer = await http.createRelayer(payload)
 
       this.props.saveNewRelayer(newRelayer)
-      this.payload.link = newRelayer.link
+      this.state.payload.link = newRelayer.link
       this.setState({
         step: 6,
         payload: { ...this.state.payload },
