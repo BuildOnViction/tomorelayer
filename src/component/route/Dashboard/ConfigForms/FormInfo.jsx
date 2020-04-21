@@ -149,6 +149,15 @@ class FormInfo extends React.Component {
                 fullWidth
               />
             </Grid>
+
+            <Grid item>
+              <Typography component="div" variant="body2" style={{ lineHeight: 1.5 }}>
+                To set up domain { values.link.replace('https://', '').replace('http://','') },
+                    you must configure a CNAME record that points the domain to { values.domain.replace('https://', '').replace('http://','') } with your DNS provider.<br />
+                Note: DNS changes can take up to 24 hours to propagate.
+              </Typography>
+            </Grid>
+
             <Grid item>
               <Typography component="div" variant="body2" style={{ lineHeight: 1.5 }}>
                 To launch your own DEX using TomoX-SDK, follow this <StyledLink href="https://docs.tomochain.com/masternode/tomox-sdk/" rel="noopener noreferrer" target="_blank">link</StyledLink> for detailed instructions.<br />

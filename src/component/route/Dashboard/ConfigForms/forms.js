@@ -16,6 +16,7 @@ export const wrappers = {
       coinbase: props.relayer.coinbase,
       name: props.relayer.name,
       link: props.relayer.link,
+      domain: props.relayer.domain,
       logo: props.relayer.logo,
     }),
 
