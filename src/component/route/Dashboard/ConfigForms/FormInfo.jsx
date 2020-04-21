@@ -162,7 +162,8 @@ class FormInfo extends React.Component {
               <Typography component="div" variant="body2" style={{ lineHeight: 1.5 }}>
                 To launch your own DEX using TomoX-SDK, follow this <StyledLink href="https://docs.tomochain.com/masternode/tomox-sdk/" rel="noopener noreferrer" target="_blank">link</StyledLink> for detailed instructions.<br />
                 To manage your relayer with full options that are provided by TomoX Protocol, you can use <StyledLink href="https://github.com/tomochain/tomojs" rel="noopener noreferrer" target="_blank">tomo-cli</StyledLink>.<br />
-                If you need to have a consultant from <b>TomoChain Enterprise</b> team, please send an email to <StyledLink href="mailto:admin@tomochain.com">admin@tomochain.com</StyledLink>.
+                If you need to have a consultant from <b>TomoChain Enterprise</b> team, please send an email to <StyledLink href="mailto:admin@tomochain.com">admin@tomochain.com</StyledLink>.<br />
+                If you have any technical question, you can join Telegram channel <StyledLink href="https://t.me/TomoX">https://t.me/TomoX</StyledLink>.
               </Typography>
             </Grid>
             <Grid item container justify="center">
