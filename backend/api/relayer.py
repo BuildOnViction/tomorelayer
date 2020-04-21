@@ -164,7 +164,10 @@ class RelayerHandler(BaseHandler):
             b.updateRelayer(coinbase)
 
             try:
-                requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress=' + coinbase + '&relayerName=' + name + '&authKey=' + settings['tomodex_auth'])
+                requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress='+ coinbase
+                        + '&relayerName=' + name
+                        + '&relayerUrl=' + db_relayer['link']
+                        + '&authKey=' + settings['tomodex_auth'])
             except:
                 logger.error('Update tomodex failed')
 
@@ -177,26 +180,22 @@ class RelayerHandler(BaseHandler):
     @authenticated
     async def delete(self, user):
         """Delete a relayer"""
-        relayer_id = self.get_argument('id', None)
+        coinbase = self.get_argument('coinbase', None)
+        b = Blockchain()
+        coinbase = b.web3.toChecksumAddress(coinbase)
 
-        if not relayer_id:
-            raise MissingArgumentException('missing relayer id')
+
+        if not coinbase:
+            raise MissingArgumentException('missing relayer coinbase')
 
         try:
-            relayer = Relayer.select().where(Relayer.owner == user, Relayer.id == relayer_id).get()
+            relayer = Relayer.select().where(Relayer.coinbase == coinbase).get()
             db_relayer = model_to_dict(relayer)
 
             if user.lower() != db_relayer['owner'].lower():
                 raise MissingArgumentException('wrong owner')
 
-            b = Blockchain()
-            r = b.getRelayerByCoinbase(db_relayer['coinbase'])
-
-            if r[1].lower() != user.lower():
-                raise InvalidValueException('owner required')
-
-
             relayer.delete_instance()
             self.json_response({})
         except Exception:
-            raise InvalidValueException('invalid relayer: relayer with id={} or owner={} does not exist'.format(relayer_id, user))
+            raise InvalidValueException('invalid relayer: relayer with id={} or owner={} does not exist'.format(coinbase, user))

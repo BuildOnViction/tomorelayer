@@ -80,8 +80,10 @@ const FormResign = props => {
       return PushAlert(alert)
     }
 
-    await http.deleteRelayer(relayer.id)
-    await PouchDelete(this.props.pouch, `relayer${relayer.id}`)
+    await http.deleteRelayer(relayer.coinbase)
+    await PouchDelete(props.pouch, `relayer${relayer.id}`)
+    await PushAlert({ variant: AlertVariant.success, message: 'refunded successfully' })
+    window.location.reload()
     return refundRelayer(relayer.id)
   }
 

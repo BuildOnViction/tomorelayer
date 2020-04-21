@@ -170,9 +170,9 @@ export const updateRelayer = async (relayer) =>
     .then(getPayload)
     .catch(logging)
 
-export const deleteRelayer = async (relayerId) =>
+export const deleteRelayer = async (relayerCoinbase) =>
   HttpClient()
-    .delete(`${proxiedAPI.relayer}?id=${relayerId}`)
+    .delete(`${proxiedAPI.relayer}?coinbase=${relayerCoinbase}`)
     .then(getPayload)
     .catch(logging)
 

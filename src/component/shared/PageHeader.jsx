@@ -45,20 +45,22 @@ class PageHeader extends React.Component {
     let pouch = this.props.pouch
     let relayers = this.props.relayers
 
-    pouch.changes({
-      filter: function (doc) {
-        return doc.type === 'relayer'
-      }}
-    ).on('change', async (data) => {
-      let r = await pouch.get(data.id) 
-      if (relayers[r.coinbase] && (this.state.userAddress.toLowerCase() === r.owner.toLowerCase())) {
-        Object.keys(relayers).forEach(k => {
-          if (relayers[k].coinbase === r.coinbase) {
-            relayers[k] = r
-          }
-        })
-      }
-    })
+    if (pouch) {
+      pouch.changes({
+        filter: function (doc) {
+          return doc.type === 'relayer'
+        }}
+      ).on('change', async (data) => {
+        let r = await pouch.get(data.id) 
+        if (relayers[r.coinbase] && (this.state.userAddress.toLowerCase() === r.owner.toLowerCase())) {
+          Object.keys(relayers).forEach(k => {
+            if (relayers[k].coinbase === r.coinbase) {
+              relayers[k] = r
+            }
+          })
+        }
+      })
+    }
 
 
   }

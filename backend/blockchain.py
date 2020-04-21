@@ -3,7 +3,8 @@ import json
 from web3.auto import w3
 from logzero import logger
 from settings import settings
-from model import Relayer, Token
+from model import Relayer, Token, Domain
+from playhouse.shortcuts import model_to_dict
 
 is_production = os.getenv('STG') == 'production'
 
@@ -59,8 +60,9 @@ class Blockchain:
             lock_time = c.functions.RESIGN_REQUESTS(coinbase).call()
             resigning = True if (lock_time) else False
 
+            domain = self.createDomain(relayer[0], coinbase, resigning)
             Relayer.insert(
-                id=relayer[0],
+                idx=relayer[0],
                 coinbase=coinbase,
                 owner=relayer[1],
                 name=name,
@@ -68,7 +70,8 @@ class Blockchain:
                 trade_fee=relayer[3],
                 from_tokens=relayer[4],
                 to_tokens=relayer[5],
-                link=self.createDomain(relayer[0]),
+                link=domain,
+                domain=domain,
                 resigning=resigning,
                 lock_time=lock_time).on_conflict(
                 conflict_target=(Relayer.coinbase,),
@@ -105,8 +108,9 @@ class Blockchain:
             for t in relayer[5]:
                 self.updateToken(t)
 
+            domain = self.createDomain(relayer[0], coinbase, resigning)
             rl = (Relayer.insert(
-                id=relayer[0],
+                idx=relayer[0],
                 coinbase=coinbase,
                 owner=relayer[1],
                 name='Relayer' + str(relayer[0]),
@@ -114,10 +118,13 @@ class Blockchain:
                 trade_fee=relayer[3],
                 from_tokens=relayer[4],
                 to_tokens=relayer[5],
+                link=domain,
+                domain=domain,
                 resigning=resigning,
                 lock_time=lock_time).on_conflict(
                 conflict_target=(Relayer.coinbase,),
                 update={
+                    Relayer.idx: relayer[0],
                     Relayer.owner: relayer[1],
                     Relayer.deposit: relayer[2],
                     Relayer.trade_fee: relayer[3],
@@ -127,8 +134,29 @@ class Blockchain:
                     Relayer.lock_time: lock_time}
                ).execute())
 
-    def createDomain(self, idx):
-        return 'https://' + format(idx, '03d') + '.' + settings['domain_suffix']
+    def createDomain(self, idx, coinbase, resigning):
+        used = not resigning
+        b = False
+        try:
+            try:
+                db_relayer = Relayer.select().where(Relayer.coinbase == coinbase).get()
+            except Relayer.DoesNotExist:
+                b = True
+            db_relayer = model_to_dict(db_relayer)
+            Domain.update(used=used, coinbase=coinbase).where(Domain.domain == db_relayer['domain']).execute()
+        except:
+            pass
+
+        try: 
+            db_domain = Domain.select().where(Domain.used == False).order_by(Domain.id.asc()).get()
+            db_domain = model_to_dict(db_domain)
+            if b == True:
+                Domain.update(used=True, coinbase=coinbase).where(Domain.domain == db_domain['domain']).execute()
+            return db_domain['domain']
+        except:
+            domain =  'https://' + format(idx, '03d') + '.' + settings['domain_suffix']
+            Domain.insert(domain=domain, used=True, coinbase=coinbase).on_conflict_ignore(True).execute()
+            return domain
 
     def updateToken(self, address):
         if address != '0x0000000000000000000000000000000000000001':
