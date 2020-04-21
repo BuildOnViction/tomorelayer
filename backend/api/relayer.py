@@ -119,8 +119,14 @@ class RelayerHandler(BaseHandler):
         query = (Relayer.update(**normalized_relayer).where(Relayer.coinbase == coinbase).returning(Relayer))
         cursor = query.execute()
 
+        db_relayer = Relayer.select().where(Relayer.coinbase == coinbase).get()
+        db_relayer = model_to_dict(db_relayer)
+
         try:
-            requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress=' + coinbase + '&relayerName=' + name + '&authKey=' + settings['tomodex_auth'])
+            requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress=' + coinbase
+                    + '&relayerName=' + name
+                    + '&relayerUrl=' + db_relayer['link']
+                    + '&authKey=' + settings['tomodex_auth'])
         except:
             logger.error('Update tomodex failed')
 
@@ -130,14 +136,14 @@ class RelayerHandler(BaseHandler):
     async def patch(self, user):
         """Update existing relayer"""
         relayer = self.request_body
-        relayer_id = relayer.get('id', None)
+        relayer_coinbase = relayer.get('coinbase', None)
         relayer_owner = relayer.get('owner', None)
         name = relayer.get('name', None)
 
         verify_user(user, relayer_owner)
 
-        if relayer_id == None:
-            raise MissingArgumentException('missing relayer id')
+        if relayer_coinbase == None:
+            raise MissingArgumentException('missing relayer coinbase')
 
         del relayer['id']
 
@@ -148,14 +154,15 @@ class RelayerHandler(BaseHandler):
         normalized_relayer = self.validator.normalized(relayer)
 
         try:
-            db_relayer = Relayer.select().where(Relayer.id == relayer_id).get()
+            b = Blockchain()
+            coinbase = b.web3.toChecksumAddress(relayer_coinbase)
 
+            db_relayer = Relayer.select().where(Relayer.coinbase == coinbase).get()
             db_relayer = model_to_dict(db_relayer)
+
             if (user.lower() != relayer_owner.lower()) or (user.lower() != db_relayer['owner'].lower()):
                 raise MissingArgumentException('wrong owner')
 
-            b = Blockchain()
-            coinbase = b.web3.toChecksumAddress(db_relayer['coinbase'])
             r = b.getRelayerByCoinbase(coinbase)
 
             if r[1].lower() != relayer['owner'].lower():
@@ -163,19 +170,20 @@ class RelayerHandler(BaseHandler):
 
             b.updateRelayer(coinbase)
 
+            query = (Relayer.update(**normalized_relayer).where(Relayer.coinbase == coinbase).returning(Relayer))
+            cursor = query.execute()
+
             try:
                 requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress='+ coinbase
                         + '&relayerName=' + name
-                        + '&relayerUrl=' + db_relayer['link']
+                        + '&relayerUrl=' + relayer['link']
                         + '&authKey=' + settings['tomodex_auth'])
             except:
                 logger.error('Update tomodex failed')
 
-            query = (Relayer.update(**normalized_relayer).where(Relayer.id == relayer_id).returning(Relayer))
-            cursor = query.execute()
             self.json_response(model_to_dict(cursor[0]))
         except IndexError:
-            raise InvalidValueException('relayer id={param} does not exist'.format(param=str(relayer_id)))
+            raise InvalidValueException('relayer id={param} does not exist'.format(param=str(relayer_coinbase)))
 
     @authenticated
     async def delete(self, user):
