@@ -83,6 +83,10 @@ const FormResign = props => {
     await http.deleteRelayer(relayer.coinbase)
     await PouchDelete(props.pouch, `relayer${relayer.id}`)
     await PushAlert({ variant: AlertVariant.success, message: 'refunded successfully' })
+    const sleep = (milliseconds) => {
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(10000)
     window.location.reload()
     return refundRelayer(relayer.id)
   }
