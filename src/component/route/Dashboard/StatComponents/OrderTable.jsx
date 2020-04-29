@@ -132,10 +132,10 @@ class OrderTable extends React.Component {
                   {format(new Date(item.updatedAt), 'DD MMM  YYYY')}
                 </Cell>
                 <Cell item xs data-label="Pair" container justify="center">
-                  {item.pairName.replace('/', ' / ')}
+                  {(item.pairName || '').replace('/', ' / ')}
                 </Cell>
                 <Cell item xs data-label="Trade Fee" container justify="center">
-                  {round(item.makeFee.toLocaleString('fullwide', {useGrouping:false}), 5) + ` ${item.pairName.split('/')[1]}`}
+                  {round(item.makeFee.toLocaleString('fullwide', {useGrouping:false}), 5) + ` ${(item.pairName || '').split('/')[1]}`}
                 </Cell>
                 <Cell item xs data-label="Taker Fee" container justify="center">
                   {round(item.pricepoint, 5)}
