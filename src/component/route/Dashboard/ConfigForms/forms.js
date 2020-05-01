@@ -175,14 +175,18 @@ export const wrappers = {
       if (!status) {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
+        let sleep = (time) => new Promise((resolve) => setTimeout(resolve, time))
+
         const relayer = await http.updateRelayer({
           ...meta.props.relayer,
           new_owner: values.owner,
           owner: meta.props.relayer.owner,
-          coinbase: values.coinbase,
+          coinbase: meta.props.relayer.coinbase,
           id: meta.props.relayer.id,
         })
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer transfered successfuly' })
+        await sleep(5000)
+        window.location.reload()
         await meta.props.UpdateRelayer(relayer)
       }
 

@@ -160,7 +160,7 @@ class RelayerHandler(BaseHandler):
             db_relayer = Relayer.select().where(Relayer.coinbase == coinbase).get()
             db_relayer = model_to_dict(db_relayer)
 
-            if (user.lower() != relayer_owner.lower()) or (user.lower() != db_relayer['owner'].lower()):
+            if user.lower() != db_relayer['owner'].lower():
                 raise MissingArgumentException('wrong owner')
 
             r = b.getRelayerByCoinbase(coinbase)
@@ -168,10 +168,10 @@ class RelayerHandler(BaseHandler):
             if r[1].lower() != relayer['owner'].lower():
                 raise InvalidValueException('owner required')
 
-            b.updateRelayer(coinbase)
-
             query = (Relayer.update(**normalized_relayer).where(Relayer.coinbase == coinbase).returning(Relayer))
             cursor = query.execute()
+
+            b.updateRelayer(coinbase)
 
             try:
                 requests.put(urljoin(settings['tomodex'], '/api/relayer') + '?relayerAddress='+ coinbase
