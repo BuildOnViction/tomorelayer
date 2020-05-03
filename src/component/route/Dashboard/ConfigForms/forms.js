@@ -102,6 +102,45 @@ export const wrappers = {
     },
   }),
 
+  lendForm: withFormik({
+    displayName: 'RelayerLendOptionForm',
+    enableReinitialize: true,
+    validateOnChange: false,
+    mapPropsToValues: (props) => {
+      return {
+        owner: props.relayer.owner,
+        trade_fee: props.relayer.trade_fee / 100,
+        from_tokens: props.relayer.from_tokens,
+        to_tokens: props.relayer.to_tokens,
+      }
+    },
+
+    handleSubmit: async (values, meta) => {
+      const payload = {
+        ...meta.props.relayer,
+        ...values,
+        trade_fee: values.trade_fee * 100,
+      }
+
+      const { status, details } = await meta.props.RelayerContract.update(payload)
+
+      if (!status) {
+        meta.props.PushAlert({ variant: AlertVariant.error, message: details })
+      } else {
+        const relayer = await http.updateRelayer(payload)
+
+        if (meta.props.relayer.link) {
+          await http.notifyDex(relayer.link)
+        }
+
+        meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer trade options updated' })
+        await meta.props.UpdateRelayer(relayer)
+      }
+
+      meta.setSubmitting(false)
+    },
+  }),
+
   depositForm: withFormik({
     displayName: 'RelayerDepositForm',
     validateOnChange: false,

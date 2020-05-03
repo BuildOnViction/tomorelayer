@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/styles'
 import FormInfo from './ConfigForms/FormInfo'
 import FormDeposit from './ConfigForms/FormDeposit'
 import FormTrade from './ConfigForms/FormTrade'
+import FormLend from './ConfigForms/FormLend'
 import FormTransfer from './ConfigForms/FormTransfer'
 import FormResign from './ConfigForms/FormResign'
 
@@ -30,6 +31,7 @@ const StyledListItem = withStyles(theme => ({
 const SIDE_MENU_ITEMS = {
   info: 'Information',
   trade: 'Trade Options',
+  lend: 'Lend Options',
   deposit: 'Deposit',
   transfer: 'Transfer',
   resign: 'Shutdown',
@@ -60,6 +62,7 @@ const ConfigBoard = ({ relayer }) => {
         <Grid item xs={12} sm={8} md={10} lg={6} className="mt-1">
           {formstep === SIDE_MENU_ITEMS.info && <FormInfo relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.trade && <FormTrade relayer={relayer} />}
+          {formstep === SIDE_MENU_ITEMS.lend && <FormLend relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.deposit && <FormDeposit relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.transfer && <FormTransfer relayer={relayer} />}
           {formstep === SIDE_MENU_ITEMS.resign && <FormResign relayer={relayer} />}
