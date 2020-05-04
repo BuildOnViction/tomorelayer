@@ -30,8 +30,8 @@ const StyledListItem = withStyles(theme => ({
 
 const SIDE_MENU_ITEMS = {
   info: 'Information',
-  trade: 'Trade Options',
-  lend: 'Lend Options',
+  trade: 'Spot Options',
+  lend: 'Lending Options',
   deposit: 'Deposit',
   transfer: 'Transfer',
   resign: 'Shutdown',
