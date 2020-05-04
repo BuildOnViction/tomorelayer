@@ -6,7 +6,7 @@ import { createTokens } from 'service/backend'
 
 export const UpdateRelayer = async (state, relayer) => {
   const Relayers = Array.from(state.Relayers)
-  const index = Relayers.findIndex((r) => r.id === relayer.id)
+  const index = Relayers.findIndex((r) => r.coinbase.toLowerCase() === relayer.coinbase.toLowerCase())
   Relayers[index] = relayer
 
   const user = {
