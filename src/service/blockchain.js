@@ -34,7 +34,7 @@ export const ERC20TokenInfo = async (tokenAddress) => {
   }
 }
 
-const networkInformation = () => {
+export const networkInformation = () => {
   let endpoint = process.env.REACT_APP_RPC
   return new Promise(async (resolve, reject) => {
 

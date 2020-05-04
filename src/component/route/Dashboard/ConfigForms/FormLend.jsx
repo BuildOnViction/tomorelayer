@@ -5,6 +5,7 @@ import {
   Grid,
   TextField,
   FormControlLabel,
+  Button
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'redux-zero/react'
@@ -20,7 +21,8 @@ const SmallCheckbox = withStyles(theme => ({
     height: 5,
     width: 5,
     marginLeft: 10,
-    marginTop: -15,
+    marginRight: 5,
+    marginTop: -17,
     opacity: .3,
     '& svg': {
       fontSize: '1rem',
@@ -49,6 +51,10 @@ class FormLend extends React.Component {
   }
 
   async componentDidMount() {
+    let db = await this.props.pouch.find({
+      selector: { }
+    })
+
     let { terms, bases } = await lendingPairs(this.props.relayer.coinbase)
     let lending = await lendingInfo(this.props.relayer.coinbase)
     let pairs = []
@@ -62,24 +68,42 @@ class FormLend extends React.Component {
             break
           }
         }
-        pairs.push({ t, b, c })
+        let cl = '0x0000000000000000000000000000000000000000'
+        pairs.push({ t, b, c, cl })
       })
     })
-    this.setState( { ...lending, pairs })
+    pairs.forEach(p => {
+      db.docs.forEach(d => {
+        if (p.b.toLowerCase() === (d.address || '').toLowerCase()) {
+          p.symbol = d.symbol
+          p.name = String(Math.floor(parseInt(p.t, 10) / (24 * 60 * 60))) + 'DAY/' + d.symbol
+          return true
+        }
+      })
+    })
+    this.setState( { lending, pairs })
   }
     
   render() {
 
     const {
+      values,
       errors,
-      handleChange,
       handleSubmit,
       isSubmitting,
     } = this.props
-    const { lendingTradeFee, pairs } = this.state
+    const { lending, pairs } = this.state
+    values.lending_fee = (lending || {}).lendingTradeFee || 0
+    values.pairs = pairs
 
     const handleCheck = (event) => {
       pairs[event.target.value].c = !pairs[event.target.value].c
+      this.setState({ ...this.state })
+    }
+
+    const handleChange = (event) => {
+      values.lending_fee = event.target.value
+      lending.lendingTradeFee = event.target.value
       this.setState({ ...this.state })
     }
 
@@ -91,11 +115,11 @@ class FormLend extends React.Component {
             <Grid item>
               <TextField
                 label="Choose Lending Fee (min: 0%, max: 10%)"
-                name="trade_fee"
-                id="trade_fee-input"
-                value={lendingTradeFee}
+                name="lending_fee"
+                id="lending_fee-input"
+                value={values.lending_fee}
                 onChange={handleChange}
-                error={errors.trade_fee}
+                error={errors.lending_fee}
                 type="number"
                 variant="outlined"              
                 fullWidth
@@ -113,11 +137,14 @@ class FormLend extends React.Component {
             <Grid item>
               {(pairs|| []).map((p, i) => (<FormControlLabel
                 control={<SmallCheckbox checked={p.c} onChange={handleCheck} value={i} />}
-                label={p.t + '/' + p.b}
+                label={p.name}
               />))}
 
             </Grid>
             <Grid item container justify="center">
+              <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
+              Save
+              </Button>
             </Grid>
           </Grid>
         </form>
@@ -127,7 +154,8 @@ class FormLend extends React.Component {
 }
 
 const mapProps = state => ({
-  RelayerContract: state.blk.RelayerContract
+  LendingContract: state.blk.LendingContract,
+  pouch: state.pouch
 })
 
 const actions = {

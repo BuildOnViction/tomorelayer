@@ -108,30 +108,38 @@ export const wrappers = {
     validateOnChange: false,
     mapPropsToValues: (props) => {
       return {
-        owner: props.relayer.owner,
-        trade_fee: props.relayer.trade_fee / 100,
-        from_tokens: props.relayer.from_tokens,
-        to_tokens: props.relayer.to_tokens,
+        lending_fee: 0,
+        pairs: {},
       }
     },
 
     handleSubmit: async (values, meta) => {
+      let collaterals = []
+      let lending_tokens = []
+      let terms = []
+      values.pairs.forEach((p) => {
+        if (p.c === true) {
+          terms.push(p.t)
+          collaterals.push(p.cl)
+          lending_tokens.push(p.b)
+        }
+      })
       const payload = {
         ...meta.props.relayer,
-        ...values,
-        trade_fee: values.trade_fee * 100,
+        coinbase: meta.props.relayer.coinbase,
+        lending_tokens: lending_tokens,
+        terms: terms,
+        collaterals: collaterals,
+        lending_fee: values.lending_fee * 100,
       }
+      console.log(payload, meta)
 
-      const { status, details } = await meta.props.RelayerContract.update(payload)
+      const { status, details } = await meta.props.LendingContract.update(payload)
 
       if (!status) {
         meta.props.PushAlert({ variant: AlertVariant.error, message: details })
       } else {
         const relayer = await http.updateRelayer(payload)
-
-        if (meta.props.relayer.link) {
-          await http.notifyDex(relayer.link)
-        }
 
         meta.props.PushAlert({ variant: AlertVariant.success, message: 'relayer trade options updated' })
         await meta.props.UpdateRelayer(relayer)
