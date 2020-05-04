@@ -51,6 +51,7 @@ class FormLend extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.setSubmitting(true)
     let db = await this.props.pouch.find({
       selector: { }
     })
@@ -81,6 +82,7 @@ class FormLend extends React.Component {
         }
       })
     })
+    this.props.setSubmitting(false)
     this.setState( { lending, pairs })
   }
     
