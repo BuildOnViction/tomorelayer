@@ -60,7 +60,7 @@ class Blockchain:
             lock_time = c.functions.RESIGN_REQUESTS(coinbase).call()
             resigning = True if (lock_time) else False
 
-            domain = self.createDomain(relayer[0], coinbase, resigning)
+            domain = self.createDomain(coinbase, resigning)
             Relayer.insert(
                 idx=relayer[0],
                 coinbase=coinbase,
@@ -108,7 +108,7 @@ class Blockchain:
             for t in relayer[5]:
                 self.updateToken(t)
 
-            domain = self.createDomain(relayer[0], coinbase, resigning)
+            domain = self.createDomain(coinbase, resigning)
             rl = (Relayer.insert(
                 idx=relayer[0],
                 coinbase=coinbase,
@@ -134,7 +134,7 @@ class Blockchain:
                     Relayer.lock_time: lock_time}
                ).execute())
 
-    def createDomain(self, idx, coinbase, resigning):
+    def createDomain(self, coinbase, resigning):
         used = not resigning
         b = False
         try:
@@ -154,7 +154,8 @@ class Blockchain:
                 Domain.update(used=True, coinbase=coinbase).where(Domain.domain == db_domain['domain']).execute()
             return db_domain['domain']
         except:
-            domain =  'https://' + format(idx, '03d') + '.' + settings['domain_suffix']
+            countDomain = Domain.select().where(Domain.used == True).count()
+            domain =  'https://' + format(countDomain, '03d') + '.' + settings['domain_suffix']
             Domain.insert(domain=domain, used=True, coinbase=coinbase).on_conflict_ignore(True).execute()
             return domain
 
