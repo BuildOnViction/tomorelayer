@@ -34,7 +34,7 @@ const FormStepFour = ({
 
     errors.quoteToken = ''
     if (quoteNoTomoPairs.length > 0) {
-      errors.quoteToken = `Quote tokens ${quoteNoTomoPairs} required to be paires with TOMO`
+      errors.quoteToken = `The TOMO/${quoteNoTomoPairs} or the ${quoteNoTomoPairs}/TOMO pair must be enabled to use any other USDT pair`
     }
   
   }

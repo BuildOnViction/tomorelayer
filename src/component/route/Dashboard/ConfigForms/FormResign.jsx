@@ -110,7 +110,7 @@ const FormResign = props => {
         </Grid>
         <Grid item container justify="flex-start">
           <Button onClick={requestRefund} disabled={!withdrawalable} color="primary" variant="contained" data-testid="refund-button">
-            Refund
+            Withdraw
           </Button>
         </Grid>
       </Grid>
@@ -129,9 +129,7 @@ const FormResign = props => {
               </Typography>
             </Grid>
             <Grid item>
-              Please take some time to understand some important things for your own safety.
-              We cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).
-              Please review all the below information one more time before proceeding to official resignation.
+              Once resigned, the relayer cannot be reactivated.
             </Grid>
             <Grid item>
               <Paper elevation={0} className="p-1">
@@ -160,8 +158,8 @@ const FormResign = props => {
           >
             <DialogTitle id="alert-dialog-title">WARNING!</DialogTitle>
             <DialogContent>
-              <Typography id="alert-dialog-description" variant="body2">
-                Once resigned, you cannot undo the cancelling process and your business with this relayer will be terminated permanently
+              <Typography id="alert-dialog-description" variant="body2" style={{lineHeight:1.5}}>
+                Resigning this relayer is permanent. Once resigned you will be unable to reinstate your relayer. Your deposit will be available after 28 days, at which point, you must withdraw it from TomoRelayer.
               </Typography>
             </DialogContent>
             <Box display="flex" justifyContent="space-between" className="p-1">

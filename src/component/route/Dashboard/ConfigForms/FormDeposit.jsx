@@ -51,7 +51,7 @@ class FormDeposit extends React.Component {
       return (
         <Box>
           <Typography component="h4">
-            This relayer has been requested to deactivated. Updating relayer is no longer allowed.
+            This relayer is deactivated. Updating relayer is no longer allowed.
           </Typography>
         </Box>
       )
@@ -72,7 +72,7 @@ class FormDeposit extends React.Component {
             <Grid item container direction="column" spacing={2} className="mt-2">
               <Grid item>
                 <TextField
-                  label="How many TOMO would you like to deposit? (minimum 1 TOMO)"
+                  label="How much TOMO do you want to deposit? (minimum 1 TOMO)"
                   value={values.deposit}
                   onChange={handleChange}
                   error={Boolean(errors.deposit)}

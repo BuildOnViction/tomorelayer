@@ -42,7 +42,7 @@ const FormTrade = ({
 
     errors.quoteToken = ''
     if (quoteNoTomoPairs.length > 0) {
-      errors.quoteToken = `Quote tokens ${quoteNoTomoPairs} required to be paires with TOMO`
+      errors.quoteToken = `The TOMO/${quoteNoTomoPairs} or the ${quoteNoTomoPairs}/TOMO pair must be enabled to use any other USDT pair`
     }
   
   }
@@ -76,7 +76,7 @@ const FormTrade = ({
           <Grid item container direction="column" spacing={1}>
             <Grid item container justify="space-between" alignItems="center">
               <Typography variant="body1" className="m-0">
-                Set trade Tokens
+                Set Spot Pairs
               </Typography>
             </Grid>
             <Grid item>

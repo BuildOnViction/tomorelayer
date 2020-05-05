@@ -74,7 +74,7 @@ class FormInfo extends React.Component {
         {relayer.resigning && (
           <Box>
             <Typography component="h4">
-              This relayer has been requested to deactivated. Updating relayer is no longer allowed.
+              This relayer is deactivated. Updating relayer is no longer allowed.
             </Typography>
           </Box>
         )}
@@ -137,7 +137,7 @@ class FormInfo extends React.Component {
             </Grid>
             <Grid item>
               <TextField
-                label="Url"
+                label="Relayer URL"
                 value={values.link || ''}
                 id="relayer-link"
                 name="link"
@@ -153,7 +153,7 @@ class FormInfo extends React.Component {
             <Grid item>
               <Typography component="div" variant="body2" style={{ lineHeight: 1.5, display: (values.link === values.domain) ? 'none' : 'initial' }}>
                 To set up domain { values.link.replace('https://', '').replace('http://','') },
-                    you must configure a CNAME record that points the domain to { values.domain.replace('https://', '').replace('http://','') } with your DNS provider.<br />
+                    you must configure a CNAME record that points the domain to cn.tomochain.com with your DNS provider.<br />
                 Note: DNS changes can take up to 24 hours to propagate.
               </Typography>
             </Grid>
@@ -163,7 +163,7 @@ class FormInfo extends React.Component {
                 To launch your own DEX using TomoX-SDK, follow this <StyledLink href="https://docs.tomochain.com/masternode/tomox-sdk/" rel="noopener noreferrer" target="_blank">link</StyledLink> for detailed instructions.<br />
                 To manage your relayer with full options that are provided by TomoX Protocol, you can use <StyledLink href="https://github.com/tomochain/tomojs" rel="noopener noreferrer" target="_blank">tomo-cli</StyledLink>.<br />
                 If you need to have a consultant from <b>TomoChain Enterprise</b> team, please send an email to <StyledLink href="mailto:admin@tomochain.com">admin@tomochain.com</StyledLink>.<br />
-                If you have any technical question, you can join Telegram channel <StyledLink href="https://t.me/TomoX">https://t.me/TomoX</StyledLink>.
+                If you have any technical questions, please join the Official TomoX Telegram channel: <StyledLink href="https://t.me/TomoX">https://t.me/TomoX</StyledLink>.
               </Typography>
             </Grid>
             <Grid item container justify="center">

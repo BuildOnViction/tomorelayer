@@ -12,7 +12,7 @@ const SuccessRegistration = ({ navigate, deposit, link }) => (
         Successful!
       </Typography>
       <Typography variant="body1" style={{ lineHeight: 1.5 }}>
-        You’ve succesfully deposited {deposit} TOMO to SmartContract.<br />
+        You’ve succesfully deposited {deposit} TOMO.<br />
         Your DEX is temporarily running at <StyledLink href={ link } rel="noopener noreferrer" target="_blank">{link}</StyledLink>.
       </Typography>
       <Typography component="div" variant="body2" style={{ lineHeight: 1.3 }}>

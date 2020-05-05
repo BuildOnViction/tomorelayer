@@ -22,7 +22,7 @@ const FormStepThree = props => {
         Set the trading fee
       </Typography>
       <Typography variant="body2" className="mb-2">
-        The brokerage fee is charged when a trader buy or sell tokens
+        This fee is charged to users for every trade on your Relayer
       </Typography>
       <Box display="flex" className="mb-1">
         <TextField
