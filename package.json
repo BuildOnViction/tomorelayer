@@ -35,6 +35,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
+    "https": "HTTPS=true react-app-rewired start",
     "docker": "docker-compose up -d",
     "backend": "NODE_ENV=local node custom-script.js",
     "backend:test": "NODE_ENV=test node custom-script.js",

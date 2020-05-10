@@ -128,7 +128,7 @@ export default class LedgerWallet extends React.Component {
                 fullWidth
               />
               <HdPathNote component="div">
-                To unlock the wallet, try paths <span onClick={() => this.choosePath("m/44'/60'/0'")}>m/44'/60'/0'</span> or <span onClick={() => this.choosePath("m/44'/60'/0'/0")}>m/44'/60'/0'/0</span> with Ethereum App, or try path <span onClick={() => this.choosePath("m/44'/889'/0'/0")}>m/44'/889'/0'/0</span> with TomoChain App (on Ledger).
+                To unlock the wallet, try paths <span onClick={() => this.choosePath("m/44'/60'/0'")}>m/44'/60'/0'</span> with Ethereum App (on Ledger).
               </HdPathNote>
             </Grid>
             <Grid item>
