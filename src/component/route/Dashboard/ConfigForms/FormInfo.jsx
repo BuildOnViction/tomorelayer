@@ -152,8 +152,8 @@ class FormInfo extends React.Component {
 
             <Grid item>
               <Typography component="div" variant="body2" style={{ lineHeight: 1.5, display: (values.link === values.domain) ? 'none' : 'initial' }}>
-                To set up domain { values.link.replace('https://', '').replace('http://','') },
-                    you must configure a CNAME record that points the domain to cn.tomochain.com with your DNS provider.<br />
+                To set up domain <b>{ values.link.replace('https://', '').replace('http://','') }</b>,
+                    you must configure a <b>CNAME</b> record that points the domain to <b>cn.tomochain.com</b> with your DNS provider.<br />
                 Note: DNS changes can take up to 24 hours to propagate.
               </Typography>
             </Grid>
