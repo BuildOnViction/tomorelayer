@@ -126,11 +126,6 @@ class PageHeader extends React.Component {
                   />
                 )}
               </Hidden>
-              {!auth && (
-                <Link component={AdapterLink} to="/login" className="ml-3">
-                  Help
-                </Link>
-              )}
               {/* <Switch checked={activeTheme === 'dark'} onChange={() => changeTheme()} /> */}
             </Grid>
           </Grid>
