@@ -38,8 +38,10 @@ class BrowserWallet extends React.Component {
       }
     }
 
+    const provider = new ethers.providers.Web3Provider(this.provider)
 
-    const address = this.provider.selectedAddress
+    const signer = provider.getSigner()
+    const address = await signer.getAddress()
     const balance = await blk.getBalance(address)
     this.setState({
       address,
