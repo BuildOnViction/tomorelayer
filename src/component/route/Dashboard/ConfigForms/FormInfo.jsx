@@ -148,6 +148,9 @@ class FormInfo extends React.Component {
                 disabled={inputDisabled}
                 fullWidth
               />
+              <Typography variant="subtitle2" className="mt-1">
+                { 'Your temporary domain is ' + values.domain }
+              </Typography>
             </Grid>
 
             <Grid item>
