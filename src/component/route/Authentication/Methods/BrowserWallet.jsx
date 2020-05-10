@@ -6,13 +6,12 @@ import {
   Button,
   Typography,
 } from '@material-ui/core'
-import metamask from '@vutr/purser-metamask'
 import * as blk from 'service/blockchain'
-import WalletSigner from 'service/wallet'
 
 
 class BrowserWallet extends React.Component {
   wallet = undefined
+   provider = undefined
 
   state = {
     address: undefined,
@@ -21,15 +20,26 @@ class BrowserWallet extends React.Component {
   }
 
   async componentDidMount() {
-    const isMetamaskAvailable = await metamask.detect().then(() => true).catch(() => false)
+    const isMetamaskAvailable = !!window.web3
     if (!isMetamaskAvailable) {
       this.setState({ noMetamaskError: true })
     }
   }
 
   requestMetamask = async () => {
-    this.wallet = await metamask.open()
-    const address = this.wallet.address
+    if (window.ethereum) {
+      await window.ethereum.enable()
+    }
+    if (window.web3) {
+      if (window.web3.currentProvider) {
+        this.provider = window.web3.currentProvider
+      } else {
+        this.provider = window.web3
+      }
+    }
+
+
+    const address = this.provider.selectedAddress
     const balance = await blk.getBalance(address)
     this.setState({
       address,
@@ -38,8 +48,9 @@ class BrowserWallet extends React.Component {
   }
 
   confirm = async () => {
-    const provider = new ethers.providers.Web3Provider(window.web3.currentProvider)
-    const signer = new WalletSigner(this.wallet, provider, metamask.accountChangeHook)
+    const provider = new ethers.providers.Web3Provider(this.provider)
+    const signer = provider.getSigner()
+
     this.props.onConfirm(signer)
   }
 

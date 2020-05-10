@@ -108,7 +108,7 @@ export default class SoftwareWallet extends React.Component {
                 label="Enter your Mnemonic"
                 value={this.state.secret}
                 onChange={this.changeSecret}
-                type="password"
+                type="text"
                 className="mb-1"
                 error={Boolean(errorAlert)}
                 variant="outlined"

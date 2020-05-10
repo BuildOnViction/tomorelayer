@@ -12,6 +12,10 @@ export default class RelayerContract {
     this.contractWithSigner = new ethers.Contract(contractMeta.address, contractMeta.abi, walletSigner)
     this.wallet = walletSigner
     this.contractOwner = contractMeta.owner
+    this.txParams = {
+      gasPrice: ethers.utils.hexlify(ethers.utils.bigNumberify(250000000)),
+    }
+
     return this
   }
 
@@ -28,6 +32,7 @@ export default class RelayerContract {
   async register(payload, config = {}) {
     try {
       const parsedPayload = [payload.coinbase, payload.trade_fee, payload.from_tokens, payload.to_tokens]
+      config = { ...config, ...this.txParams }
 
       const tx = await this.contractWithSigner.register(...parsedPayload, config)
       const details = await tx.wait()
@@ -41,6 +46,7 @@ export default class RelayerContract {
   async update(payload, config = {}) {
     try {
       const parsedPayload = [payload.coinbase, payload.trade_fee, payload.from_tokens, payload.to_tokens]
+      config = { ...config, ...this.txParams }
 
       const tx = await this.contractWithSigner.update(...parsedPayload, config)
       const details = await tx.wait()
@@ -54,6 +60,7 @@ export default class RelayerContract {
   async transfer(payload, config = {}) {
     try {
       const parsedPayload = [payload.currentCoinbase, payload.owner]
+      config = { ...config, ...this.txParams }
 
       const tx = await this.contractWithSigner.transfer(...parsedPayload, config)
       const details = await tx.wait()
@@ -66,6 +73,7 @@ export default class RelayerContract {
 
   async resign(payload, config = {}) {
     try {
+      config = { ...config, ...this.txParams }
       const tx = await this.contractWithSigner.resign(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
@@ -77,6 +85,7 @@ export default class RelayerContract {
 
   async depositMore(payload, config = {}) {
     try {
+      config = { ...config, ...this.txParams }
       const tx = await this.contractWithSigner.depositMore(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
@@ -88,6 +97,7 @@ export default class RelayerContract {
 
   async refund(payload, config = {}) {
     try {
+      config = { ...config, ...this.txParams }
       const tx = await this.contractWithSigner.refund(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
@@ -99,6 +109,7 @@ export default class RelayerContract {
 
   async sell(payload, config = {}) {
     try {
+      config = { ...config, ...this.txParams }
       const tx = await this.contractWithSigner.sell(payload.coinbase, payload.price, config)
       const details = await tx.wait()
       return { status: true, details }
@@ -110,6 +121,7 @@ export default class RelayerContract {
 
   async cancelSelling(payload, config = {}) {
     try {
+      config = { ...config, ...this.txParams }
       const tx = await this.contractWithSigner.sell(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
@@ -121,6 +133,7 @@ export default class RelayerContract {
 
   async buy(payload, config = {}) {
     try {
+      config = { ...config, ...this.txParams }
       const tx = await this.contractWithSigner.sell(payload.coinbase, config)
       const details = await tx.wait()
       return { status: true, details }
