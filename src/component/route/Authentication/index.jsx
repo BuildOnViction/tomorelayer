@@ -55,8 +55,8 @@ class Authentication extends React.Component {
         UNLOCK_WALLET_METHODS.SoftwareWalletPrivate,
         UNLOCK_WALLET_METHODS.SoftwareWalletMnemonic,
       ].includes(r))
+      this.forceUpdate()
     }
-    // this.getQRCode()
   }
 
   changeMethod = (unlockingMethod) => this.setState({ unlockingMethod })
