@@ -132,7 +132,6 @@ export const wrappers = {
         collaterals: collaterals,
         lending_fee: values.lending_fee * 100,
       }
-      console.log(payload, meta)
 
       const { status, details } = await meta.props.LendingContract.update(payload)
 
