@@ -125,6 +125,9 @@ export default class LedgerWallet extends React.Component {
                 value={hdpath}
                 onChange={this.changePath}
                 variant="outlined"
+                InputProps={{
+                  readOnly: true,
+                }}
                 fullWidth
               />
               <HdPathNote component="div">
