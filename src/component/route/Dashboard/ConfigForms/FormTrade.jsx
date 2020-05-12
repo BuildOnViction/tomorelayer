@@ -5,6 +5,7 @@ import {
   Grid,
   TextField,
   Typography,
+  CircularProgress,
   Box,
 } from '@material-ui/core'
 import { connect } from 'redux-zero/react'
@@ -95,9 +96,15 @@ const FormTrade = ({
             </Grid>
           </Grid>
           <Grid item container justify="center">
-            <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
+            {isSubmitting && (
+              <Box display="flex" alignItems="center" className="pr-1">
+                <span className="mr-1">Requesting...</span>
+                <CircularProgress style={{ width: 20, height: 20 }}/> 
+              </Box>)}  
+            {!isSubmitting && (
+              <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
               Save
-            </Button>
+              </Button>)}
           </Grid>
         </Grid>
       </form>

@@ -5,6 +5,8 @@ import {
   Grid,
   TextField,
   FormControlLabel,
+  CircularProgress,
+  Box,
   Button
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
@@ -51,6 +53,8 @@ class FormLend extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.setSubmitting(false)
+    this.forceUpdate()
     let db = await this.props.pouch.find({
       selector: { }
     })
@@ -82,6 +86,8 @@ class FormLend extends React.Component {
       })
     })
     this.setState( { lending, pairs })
+    this.props.setSubmitting(false)
+    this.forceUpdate()
   }
     
   render() {
@@ -141,9 +147,18 @@ class FormLend extends React.Component {
 
             </Grid>
             <Grid item container justify="center">
-              <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
+              {isSubmitting && (
+                <Box display="flex" alignItems="center" className="pr-1">
+                  <span className="mr-1">Requesting...</span>
+                  <CircularProgress style={{ width: 20, height: 20 }}/>
+                </Box>)}
+
+              {!isSubmitting && (
+
+                <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
               Save
-              </Button>
+                </Button>
+              )}
             </Grid>
           </Grid>
         </form>
