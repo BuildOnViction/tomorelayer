@@ -53,7 +53,7 @@ class FormLend extends React.Component {
   }
 
   async componentDidMount() {
-    this.props.setSubmitting(false)
+    this.props.setSubmitting(true)
     this.forceUpdate()
     let db = await this.props.pouch.find({
       selector: { }
