@@ -53,7 +53,8 @@ class FormLend extends React.Component {
   }
 
   async componentDidMount() {
-    this.props.setSubmitting(true)
+    let isLoading = true
+    this.setState( { isLoading })
     this.forceUpdate()
     let db = await this.props.pouch.find({
       selector: { }
@@ -85,8 +86,8 @@ class FormLend extends React.Component {
         }
       })
     })
-    this.setState( { lending, pairs })
-    this.props.setSubmitting(false)
+    isLoading = false
+    this.setState( { lending, pairs, isLoading })
     this.forceUpdate()
   }
     
@@ -97,7 +98,7 @@ class FormLend extends React.Component {
       handleSubmit,
       isSubmitting,
     } = this.props
-    const { lending, pairs } = this.state
+    const { lending, pairs, isLoading } = this.state
     values.lending_fee = (lending || {}).lendingTradeFee || 0
     values.pairs = pairs
 
@@ -147,13 +148,13 @@ class FormLend extends React.Component {
 
             </Grid>
             <Grid item container justify="center">
-              {isSubmitting && (
+              {(isSubmitting || isLoading) && (
                 <Box display="flex" alignItems="center" className="pr-1">
                   <span className="mr-1">Requesting...</span>
                   <CircularProgress style={{ width: 20, height: 20 }}/>
                 </Box>)}
 
-              {!isSubmitting && (
+              {!(isSubmitting || isLoading) && (
 
                 <Button color="primary" variant="contained" type="submit" disabled={isSubmitting || !!errors.quoteToken} data-testid="save-button">
               Save
