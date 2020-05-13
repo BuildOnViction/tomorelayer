@@ -23,11 +23,6 @@ RELAYER_SCHEMA = {
         'maxlength': 200,
         'required': True,
     },
-    'coinbase': {
-        'type': 'string',
-        'is_address': True,
-        'required': True,
-    },
     'deposit': {
         'type': 'string',
         'required': True,
