@@ -174,7 +174,7 @@ class Blockchain:
             decimals = '18'
             is_major = True
 
-        if symbol == 'BTC' or symbol == 'USDT' or symbol == 'TOMO':
+        if symbol == 'BTC' or symbol == 'USDT' or symbol == 'TOMO' or symbol == 'ETH':
             is_major = True
 
         logger.info('Token address %s symbol %s', address, symbol)
