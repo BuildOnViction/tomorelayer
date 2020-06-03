@@ -177,7 +177,7 @@ class Blockchain:
         if symbol == 'BTC' or symbol == 'USDT' or symbol == 'TOMO' or symbol == 'ETH':
             is_major = True
 
-        logger.info('Token address %s symbol %s', address, symbol)
+        logger.info('Token address %s symbol %s major %s', address, symbol, is_major)
         rl = (Token.insert(
 	    address=address,
 	    name=name,
