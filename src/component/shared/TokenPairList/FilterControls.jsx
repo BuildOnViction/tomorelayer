@@ -41,7 +41,7 @@ const TokenTab = withStyles(theme => ({
     background: theme.palette.tabInactive,
     marginRight: 15,
     minWidth: 32,
-    width: 60,
+    width: 45,
     minHeight: 30,
     height: 30,
     borderRadius: 10,
