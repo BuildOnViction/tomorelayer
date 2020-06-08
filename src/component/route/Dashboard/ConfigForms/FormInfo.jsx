@@ -167,6 +167,13 @@ class FormInfo extends React.Component {
               </Typography>
             </Grid>
 
+            <Grid item>
+              <Typography component="div" variant="body2" style={{ lineHeight: 1.5 }}>
+                Alternative hosting providers: <StyledLink href="https://medium.com/ankr-network/how-to-run-a-tomox-node-on-ankr-f09a65044cf2" target="_blank"><b>Ankr Cloud</b></StyledLink><br />
+                *Note: TomoChain is not responsible for any losses or damages caused when using third-party services.
+              </Typography>
+            </Grid>
+
 
             <Grid item>
               <Typography component="div" variant="body2" style={{ lineHeight: 1.5 }}>
